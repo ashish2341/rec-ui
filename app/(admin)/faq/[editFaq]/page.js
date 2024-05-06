@@ -15,7 +15,7 @@ export default function EditFaq(params) {
     loading,
     error,
   } = useFetch(
-    `${API_BASE_URL}/faq/${params?.params?.editFaq}`
+    `${API_BASE_URL}/faq/faq/${params?.params?.editFaq}`
   );
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");

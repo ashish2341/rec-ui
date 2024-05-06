@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import { ImageString } from "@/api-functions/auth/authAction";
 
 export default function PropertyImagesForm({
   valueForNextPage,
@@ -13,19 +14,43 @@ export default function PropertyImagesForm({
   const imageInputRef = useRef(null);
   const VideoInputRef = useRef(null);
   const documentInputRef = useRef(null);
+  const [mediaShowValue, setMediaShowValue] = useState(false);
+  const [btnShowonInputChange, setBtnShowonInputChange] = useState(false);
 
-  // useEffect(() => {
-  //   // Retrieve data from localStorage
-  //   const localStorageProjectData = JSON.parse(localStorage.getItem('projectData'));
-  //   console.log("localStorageData from localstorage",localStorageProjectData)
-  //   // Update state values if data exists in localStorage
-  //   if (localStorageProjectData) {
-  //     setImage(localStorageProjectData.image || "");
-  //     setVideo(localStorageProjectData.video || "");
-  //     setDocuments(localStorageProjectData.country || "");
-
-  //   }
-  // }, []);
+  useEffect(() => {
+    // Retrieve data from localStorage
+    const sessionStoragePropertyData = JSON.parse(
+      sessionStorage.getItem("EditPropertyData")
+    );
+    console.log(
+      "localStorageData for Media from localstorage",
+      sessionStoragePropertyData
+    );
+    //  Update state values if data exists in localStorage
+    if (sessionStoragePropertyData) {
+      console.log(
+        "localStorageData for Image from localstorage",
+        sessionStoragePropertyData?.Images?.map((item) => {
+          return item.URL;
+        })
+      );
+      setImage(
+        sessionStoragePropertyData?.Images?.map((item) => {
+          return item.URL;
+        }) || []
+      );
+      setVideo(
+        sessionStoragePropertyData?.Videos?.map((item) => {
+          return item.URL;
+        }) || []
+      );
+      setDocuments(
+        sessionStoragePropertyData?.Documents?.map((item) => {
+          return item.URL;
+        }) || []
+      );
+    }
+  }, []);
 
   const SubmitForm = async () => {
     if (image.length == 0) {
@@ -40,47 +65,40 @@ export default function PropertyImagesForm({
       toast.error("Document is required.");
       return false;
     }
-    try {
-      // Convert files to Base64
-      const imageBase64 = await Promise.all(image.map(fileToBase64));
-      const videoBase64 = await Promise.all(video.map(fileToBase64));
-      const documentBase64 = await Promise.all(documents.map(fileToBase64));
 
-      // Store Base64 data in local storage
-      // const localStorageData =
-      //   JSON.parse(localStorage.getItem("projectData")) || {};
-      const newProjectData = {
-        // ...localStorageData,
-        image: imageBase64,
-        video: videoBase64,
-        documents: documentBase64,
-      };
-      sessionStorage.setItem("projectData", JSON.stringify(newProjectData));
+    const mediaData = {
+      Images: image.map((item) => {
+        return { URL: item };
+      }),
+      Documents: documents.map((item) => {
+        return { URL: item };
+      }),
+      Videos: video.map((item) => {
+        return { URL: item };
+      }),
+    };
+    console.log("mediaData before set localstorge", mediaData);
 
-      // Navigate to the next page
+    if (mediaData) {
+      const sessionStorageData = JSON.parse(
+        sessionStorage.getItem("EditPropertyData")
+      );
+      const newProjectData = { ...sessionStorageData, ...mediaData };
+      console.log("newProjectData before set localStorage", newProjectData);
+      sessionStorage.setItem(
+        "EditPropertyData",
+        JSON.stringify(newProjectData)
+      );
+      console.log("valueForBack", mainBackPageValue);
       valueForBack(mainBackPageValue + 1);
-    } catch (error) {
-      console.error("Error converting files to Base64:", error);
-      toast.error("An error occurred while processing the files.");
+      setBtnShowonInputChange(true);
     }
   };
 
-  const fileToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-
-   
-  };
-  console.log("image List", image);
-  const handleImageInputChange = (event) => {
+  const handleImageInputChange = async (event) => {
     const acceptedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
 
     const files = Array.from(event.target.files);
-    console.log("image Files", files);
 
     // Check file types
     const invalidFiles = files.filter(
@@ -95,15 +113,73 @@ export default function PropertyImagesForm({
         imageInputRef.current.value = "";
       }
     } else {
-      const uniqueFiles = files.filter(
-        (file) => !image.find((existingFile) => existingFile.name === file.name)
+      const imageString = [];
+
+      // Map each file to its corresponding image string asynchronously
+      await Promise.all(
+        files.map(async (item) => {
+          console.log("image File inside map", item);
+          const formData = new FormData();
+          formData.append("profilePic", item);
+
+          try {
+            const res = await ImageString(formData);
+            if (res.successMessage) {
+              console.log("Image Response", res.successMessage.imageUrl);
+              imageString.push(res.successMessage.imageUrl);
+            } else {
+              toast.error(res.errMessage);
+              return false;
+            }
+          } catch (error) {
+            console.error("Error occurred while converting image:", error);
+            toast.error("Error occurred while converting image.");
+            return false;
+          }
+        })
       );
 
+      console.log("image files data after convert string", imageString);
+
+      // Filter unique files based on filename
+      const uniqueFiles = imageString.filter((url) => {
+        const filename = url.substring(
+          url.lastIndexOf("-") + 1,
+          url.lastIndexOf(".")
+        );
+        console.log("imageString filename", filename);
+        if (image.length > 0) {
+          return !image.some((existingFile) => {
+            console.log("imageString existingFile", existingFile);
+            const existingFilename = existingFile.substring(
+              url.lastIndexOf("-") + 1,
+              existingFile.lastIndexOf(".")
+            );
+            console.log("image existingFilename", existingFilename);
+
+            return filename === existingFilename;
+          });
+        } else {
+          return filename;
+        }
+      });
       setImage([...image, ...uniqueFiles]);
+      console.log("uniqueFiles data after convert string", uniqueFiles);
+
+      
+      if (imageInputRef.current) {
+        imageInputRef.current.value = "";
+      }
+      if (btnShowonInputChange == true) {
+        setBtnShowonInputChange(false);
+      }
+      if (mainBackPageValue == 1) {
+        valueForBack(mainBackPageValue - 1);
+      }
     }
   };
 
-  const handleVideoInputChange = (event) => {
+  const handleVideoInputChange = async (event) => {
     const acceptedFileTypes = [
       "video/mp4",
       "video/webm",
@@ -127,22 +203,82 @@ export default function PropertyImagesForm({
         VideoInputRef.current.value = "";
       }
     } else {
-      const uniqueFiles = files.filter(
-        (file) => !video.find((existingFile) => existingFile.name === file.name)
+      const videoString = [];
+
+      // Map each file to its corresponding image string asynchronously
+      await Promise.all(
+        files.map(async (item) => {
+          console.log("image File inside map", item);
+          const formData = new FormData();
+          formData.append("profilePic", item);
+
+          try {
+            const res = await ImageString(formData);
+            if (res.successMessage) {
+              console.log("Image Response", res.successMessage.imageUrl);
+              videoString.push(res.successMessage.imageUrl);
+            } else {
+              toast.error(res.errMessage);
+              return false;
+            }
+          } catch (error) {
+            console.error("Error occurred while converting image:", error);
+            toast.error("Error occurred while converting image.");
+            return false;
+          }
+        })
       );
+
+      console.log("videoString files data after convert string", videoString);
+
+      // Filter unique files based on filename
+      const uniqueFiles = videoString.filter((url) => {
+        const filename = url.substring(
+          url.lastIndexOf("-") + 1,
+          url.lastIndexOf(".")
+        );
+        console.log("video filename", filename);
+        if (video.length > 0) {
+          return !video.some((existingFile) => {
+            const existingFilename = existingFile.substring(
+              existingFile.lastIndexOf("-") + 1,
+              existingFile.lastIndexOf(".")
+            );
+            console.log("video existingFilename", existingFilename);
+            return existingFilename === filename;
+          });
+        } else {
+          return filename;
+        }
+      });
+
+      console.log("uniqueFiles data after convert string", uniqueFiles);
+
+      // Update the video state
+
       setVideo([...video, ...uniqueFiles]);
+      if (VideoInputRef.current) {
+        VideoInputRef.current.value = "";
+      }
+      if (btnShowonInputChange == true) {
+        setBtnShowonInputChange(false);
+      }
+      if (mainBackPageValue == 1) {
+        valueForBack(mainBackPageValue - 1);
+      }
     }
   };
 
-  const handleDocumentInputChange = (event) => {
+  const handleDocumentInputChange = async (event) => {
     const acceptedFileTypes = [
       "application/pdf",
       "application/doc",
-      "application/docx",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ];
 
     const files = Array.from(event.target.files);
     console.log("Document Files", files);
+    console.log("files.type", files.type);
 
     // Check file types
     const invalidFiles = files.filter(
@@ -155,18 +291,103 @@ export default function PropertyImagesForm({
         documentInputRef.current.value = "";
       }
     } else {
-      const uniqueFiles = files.filter(
-        (file) =>
-          !documents.find((existingFile) => existingFile.name === file.name)
+      const documentString = [];
+
+      // Map each file to its corresponding image string asynchronously
+      await Promise.all(
+        files.map(async (item) => {
+          console.log("image File inside map", item);
+          const formData = new FormData();
+          formData.append("profilePic", item);
+
+          try {
+            const res = await ImageString(formData);
+            if (res.successMessage) {
+              console.log("Image Response", res.successMessage.imageUrl);
+              documentString.push(res.successMessage.imageUrl);
+            } else {
+              toast.error(res.errMessage);
+              return false;
+            }
+          } catch (error) {
+            console.error("Error occurred while converting image:", error);
+            toast.error("Error occurred while converting image.");
+            return false;
+          }
+        })
       );
+
+      console.log(
+        "documentString files data after convert string",
+        documentString
+      );
+
+      // Filter unique files based on filename
+      const uniqueFiles = documentString.filter((url) => {
+        const filename = url.substring(
+          url.lastIndexOf("-") + 1,
+          url.lastIndexOf(".")
+        );
+        console.log("documentString filename", filename);
+        if (documents.length > 0) {
+          return !documents.some((existingFile) => {
+            const existingFilename = existingFile.substring(
+              existingFile.lastIndexOf("-") + 1,
+              existingFile.lastIndexOf(".")
+            );
+            console.log("documents existingFilename", existingFilename);
+            return existingFilename === filename;
+          });
+        } else {
+          return filename;
+        }
+      });
+
+      console.log("uniqueFiles data after convert string", uniqueFiles);
+
+      // Update the document state
       setDocuments([...documents, ...uniqueFiles]);
+      if (documentInputRef.current) {
+        documentInputRef.current.value = "";
+      }
+      if (btnShowonInputChange == true) {
+        setBtnShowonInputChange(false);
+      }
+      if (mainBackPageValue == 1) {
+        valueForBack(mainBackPageValue - 1);
+      }
     }
   };
 
   const removeVideo = (index) => {
     const newArray = [...video];
+    console.log("newArray", newArray);
     newArray.splice(index, 1);
+    // Step 1: Retrieve the object from local storage
+
+    const storedData = JSON.parse(sessionStorage.getItem("EditPropertyData"));
+    const videoArray = storedData?.Videos;
+    console.log("videoArray", videoArray);
+    if (video.length == videoArray.length) {
+      if (videoArray.length > 0) {
+        // // Step 2: Modify the array by removing the desired item
+        videoArray.splice(index, 1);
+        console.log("videoArray after splicce", videoArray);
+
+        // // Step 3: Update the object in local storage with the modified array
+        const updatedData = { ...storedData, Videos: videoArray };
+        console.log("updatedData", updatedData);
+         sessionStorage.setItem("EditPropertyData", JSON.stringify(updatedData));
+      }
+    }
     setVideo(newArray);
+    if (btnShowonInputChange == true) {
+      setBtnShowonInputChange(false);
+    }
+    if (mainBackPageValue == 1) {
+      valueForBack(mainBackPageValue - 1);
+    }
+
     if (newArray.length == 0) {
       clearVideoInput();
     }
@@ -179,8 +400,34 @@ export default function PropertyImagesForm({
   const removeImage = (index) => {
     const newArray = [...image];
     newArray.splice(index, 1);
-    setImage(newArray);
+    console.log("newArray", newArray);
 
+    // Step 1: Retrieve the object from local storage
+
+    const storedData = JSON.parse(sessionStorage.getItem("EditPropertyData"));
+    console.log("storedData", storedData);
+
+    const imageArray = storedData?.Images;
+    console.log("imageArray", imageArray);
+    if (image.length == imageArray.length) {
+      console.log("Image session if called");
+      if (imageArray.length > 0) {
+        // // Step 2: Modify the array by removing the desired item
+        imageArray.splice(index, 1);
+        console.log("imageArray after splicce", imageArray);
+        // // Step 3: Update the object in local storage with the modified array
+        const updatedData = { ...storedData, Images: imageArray };
+        console.log("updatedData", updatedData);
+        sessionStorage.setItem("EditPropertyData", JSON.stringify(updatedData));
+      }
+    }
+    setImage(newArray);
+    if (btnShowonInputChange == true) {
+      setBtnShowonInputChange(false);
+    }
+    if (mainBackPageValue == 1) {
+      valueForBack(mainBackPageValue - 1);
+    }
     if (newArray.length == 0) {
       clearImageInput();
     }
@@ -190,6 +437,45 @@ export default function PropertyImagesForm({
       imageInputRef.current.value = "";
     }
   };
+
+  const removeDocument = (index) => {
+    const newArray = [...documents];
+    newArray.splice(index, 1);
+    // Step 1: Retrieve the object from local storage
+
+    const storedData = JSON.parse(sessionStorage.getItem("EditPropertyData"));
+    const documentsArray = storedData?.Documents;
+    console.log("documentsArray", documentsArray);
+    if (documents.length == documentsArray.length) {
+      if (documentsArray.length > 0) {
+        // // Step 2: Modify the array by removing the desired item
+        documentsArray.splice(index, 1);
+        console.log("documentsArray after splicce", documentsArray);
+
+        // // Step 3: Update the object in local storage with the modified array
+        const updatedData = { ...storedData, Documents: documentsArray };
+        console.log("updatedData", updatedData);
+        sessionStorage.setItem("EditPropertyData", JSON.stringify(updatedData));
+      }
+    }
+
+    setDocuments(newArray);
+    if (newArray.length == 0) {
+      cleardocumentInput();
+    }
+    if (btnShowonInputChange == true) {
+      setBtnShowonInputChange(false);
+    }
+    if (mainBackPageValue == 1) {
+      valueForBack(mainBackPageValue - 1);
+    }
+  };
+  const cleardocumentInput = () => {
+    if (documentInputRef.current) {
+      documentInputRef.current.value = "";
+    }
+  };
+  console.log("image", image);
   return (
     <>
       <div>
@@ -197,7 +483,7 @@ export default function PropertyImagesForm({
           <div className="grid gap-4 mb-4 sm:grid-cols-1">
             <div className="border border-gray-300 p-3 rounded-lg">
               <h3 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white">
-                Project Images
+                Property Images
               </h3>
               <label
                 htmlFor="imageInput"
@@ -216,33 +502,39 @@ export default function PropertyImagesForm({
                 onChange={handleImageInputChange}
                 required
               />
+
               {image.length > 0 ? (
-                <div className="flex flex-wrap relative mt-3">
-                  {image.map((imageUrl, index) => (
-                    <div key={index} className="mr-4 mb-4 relative ">
-                      <img
-                        src={URL.createObjectURL(imageUrl)}
-                        alt=""
-                        className="h-20 w-20 object-cover m-2 mt-5 border border-black rounded-lg "
-                      />
-                      <button
-                        className="absolute top-0 right-0 p-1  "
-                        onClick={() => removeImage(index)}
-                      >
-                        <i
-                          className="bi bi-x-circle-fill"
-                          style={{ color: "red" }}
-                        ></i>
-                      </button>
-                    </div>
-                  ))}
+                <div>
+                  <div className="ml-2 mt-3 underline font-bold">
+                    <h3>Selected Image</h3>
+                  </div>
+                  <div className="flex flex-wrap relative mt-3">
+                    {image.map((imageUrl, index) => (
+                      <div key={index} className="mr-4 mb-4 relative ">
+                        <img
+                          src={imageUrl}
+                          alt=""
+                          className="h-20 w-20 object-cover m-2 mt-5 border border-black rounded-lg "
+                        />
+                        <button
+                          className="absolute top-0 right-0 p-1  "
+                          onClick={() => removeImage(index)}
+                        >
+                          <i
+                            className="bi bi-x-circle-fill"
+                            style={{ color: "red" }}
+                          ></i>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ) : null}
             </div>
 
             <div className="border border-gray-300 p-3 rounded-lg">
               <h3 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white">
-                Project Videos
+                Property Videos
               </h3>
               <label
                 htmlFor="videoInput"
@@ -262,36 +554,38 @@ export default function PropertyImagesForm({
                 required
               />
               {video.length > 0 ? (
-                <div className="flex flex-wrap relative mt-3">
-                  {video.map((video, index) => (
-                    <div key={index} className="mr-4 mb-4 relative">
-                      <video
-                        controls
-                        className="h-48 w-64 border border-black rounded-lg"
-                      >
-                        <source
-                          src={URL.createObjectURL(video)}
-                          type="video/mp4"
-                        />
-                      </video>
-                      <button
-                        className="absolute top-0 right-0 p-1"
-                        onClick={() => removeVideo(index)}
-                      >
-                        <i
-                          className="bi bi-x-circle-fill"
-                          style={{ color: "red" }}
-                        ></i>
-                      </button>
-                    </div>
-                  ))}
+                <div>
+                  <div className="ml-2 mt-3 underline font-bold">
+                    <h3>Selected Video</h3>
+                  </div>
+                  <div className="flex flex-wrap relative mt-3">
+                    {video.map((videoUrl, index) => (
+                      <div key={index} className="mr-4 mb-4 relative">
+                        <video
+                          controls
+                          className="h-48 w-64 border border-black rounded-lg"
+                        >
+                          <source src={videoUrl} type="video/mp4" />
+                        </video>
+                        <button
+                          className="absolute top-0 right-0 p-1"
+                          onClick={() => removeVideo(index)}
+                        >
+                          <i
+                            className="bi bi-x-circle-fill"
+                            style={{ color: "red" }}
+                          ></i>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ) : null}
             </div>
 
             <div className="border border-gray-300 p-3 rounded-lg">
               <h3 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white">
-                Project Documents
+                Property Documents
               </h3>
               <label
                 htmlFor="documentInput"
@@ -310,10 +604,37 @@ export default function PropertyImagesForm({
                 onChange={handleDocumentInputChange}
                 required
               />
+              {documents.length > 0 ? (
+                <div>
+                  <div className="ml-2 mt-3 underline font-bold">
+                    <h3>Selected Document</h3>
+                  </div>
+                  <div className="flex flex-wrap relative mt-3">
+                    {documents.map((itemUrl, index) => (
+                      <div key={index} className="mr-4 mb-4 relative">
+                        <iframe
+                          title={`Document ${index}`}
+                          src={itemUrl}
+                          className="h-48 w-64 border border-black rounded-lg"
+                        />
+                        <button
+                          className="absolute top-0 right-0 p-1"
+                          onClick={() => removeDocument(index)}
+                        >
+                          <i
+                            className="bi bi-x-circle-fill"
+                            style={{ color: "red" }}
+                          ></i>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
         </form>
-        {mainBackPageValue == 0 ? (
+        {mainBackPageValue == 0 || btnShowonInputChange == false ? (
           <div>
             <button
               onClick={SubmitForm}

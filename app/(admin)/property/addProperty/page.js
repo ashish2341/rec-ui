@@ -50,7 +50,9 @@ export default function AddProject() {
     console.log("propertyData.Aminities", propertyData.Aminities);
     if (propertyData){
       const loanDetails= {
-        ByBank:propertyData?.LoanDetails?.ByBank?.value,
+        ByBank:propertyData?.LoanDetails?.ByBank.map((item)=>{
+          return item._id
+        }),
         LoanSince:propertyData?.LoanDetails?.LoanSince ,
         LoanTill:propertyData?.LoanDetails?. LoanTill
       }
@@ -61,7 +63,7 @@ export default function AddProject() {
         Facing: [propertyData.Facing.value],
         IsEnabled: propertyData.IsEnabled,
         IsExclusive: propertyData.IsExclusive,
-        isFeatured: propertyData.isFeatured,
+        IsFeatured: propertyData.IsFeatured,
         IsNew: propertyData.IsNew,
         ProeprtyFor: propertyData.ProeprtyFor.value,
         PropertyType: propertyData.PropertyTypeWithSubtype.value,
@@ -78,7 +80,7 @@ export default function AddProject() {
         PerUnitPrice: propertyData.PerUnitPrice,
         IsDisplayPrice: propertyData.IsDisplayPrice,
         IsNegotiable: propertyData.IsNegotiable,
-        PosessionStatus: propertyData.PosessionStatus,
+        PosessionStatus: propertyData.PosessionStatus.value,
         PosessionDate: propertyData.PosessionDate,
         FloorNumber: propertyData.FloorNumber,
         TotalFloors: propertyData.TotalFloors,
@@ -94,7 +96,9 @@ export default function AddProject() {
         OwnershipType: propertyData.OwnershipType.value,
         PropertyStatus: propertyData.PropertyStatus.value,
         IsSold: propertyData.IsSold,
-        Preferences: [propertyData.Preferences.value],
+        Preferences: propertyData.Preferences.map((item)=>{
+          return item._id
+        }),
         DiscountPercentage: propertyData.DiscountPercentage,
         DiscountForYears: propertyData.DiscountForYears,
         Surveillance: propertyData.Surveillance.map((item) => item.value),
@@ -106,6 +110,8 @@ export default function AddProject() {
         Country: propertyData.Country,
         Address: propertyData.Address,
         Area: propertyData.Area.value,
+        PinCode:propertyData.PinCode,
+        Landmark:propertyData.Landmark,
         Location: propertyData.Location,
         Images: propertyData.Images.map((URL) => ({ URL })),
         Videos: propertyData.Videos.map((URL) => ({ URL })),
@@ -131,7 +137,7 @@ export default function AddProject() {
         toast.error(res.errMessage);
         return false;
       }
-    }
+      }
    
    
   };

@@ -7,7 +7,7 @@ const token = Cookies.get("token");
 export const GetPropertyApi = async (page,searchData,setLoading=()=>{}) => {
   setLoading(true);
   try {
-    const res = await fetch(`${API_BASE_URL}/properties/allProperties?page=${page}&pageSize=${PAGE_LIMIT}&search=${searchData}`, {
+    const res = await fetch(`${API_BASE_URL}/properties/allProperties?page=${page ?page:1}&pageSize=${PAGE_LIMIT}&search=${searchData ?searchData:""}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -24,7 +24,7 @@ export const GetPropertyApi = async (page,searchData,setLoading=()=>{}) => {
     } else {
       //toast.error(resData.message);
       setLoading(false);
-      return {errMessage:resData.message};
+      return {errMessage:resData.error};
     }
   } catch (error) {
     setLoading(false);

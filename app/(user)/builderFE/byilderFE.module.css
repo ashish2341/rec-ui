@@ -1,0 +1,87 @@
+.divideDetailPage{
+    margin-left: 14rem;
+    margin-right: 14rem;
+    margin-top: 7rem;
+}
+
+.builderTop{
+    padding-left: 1rem;
+}
+
+.propertiesByAreaMainHead{
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+.builderDetailPage{
+    display: flex;
+    margin-left: 15.2rem;
+    margin-right: 15.2rem;
+}
+
+.builderDetailPageLeft{
+    width: 35%;
+    padding-right: 1rem;
+}
+
+.builderDetailPageRight{
+    width: 72%;
+}
+
+.builderBox{
+    border:1px solid #D1D5DB;
+    border-radius: 0.35rem;
+ }
+
+.builderline{
+    border-bottom:1px solid #D1D5DB;
+}
+
+
+.builderInputField{
+    padding: 1rem; 
+    
+}
+
+.crousalItemSearchInput{
+    border-radius: 5rem;
+}
+
+.builderDetailBuilderRight{
+    border:1px solid #D1D5DB;
+    border-radius: 0.35rem 0.35rem 0 0;
+    padding:2rem;
+    display:flex;
+}
+
+.builderImgBuilder{
+    border-radius:50%;
+    height:7rem;
+    width:7rem;
+}
+
+.builderDetailPageDown{
+    border:1px solid #D1D5DB;
+    border-radius:0 0 0.35rem 0.35rem;
+    border-top:none;
+    padding: 1rem;
+}
+
+.builderSocialLine{
+    display:flex;
+}
+
+.builderSocialLine{
+    justify-content: space-between;
+}
+
+.builderDetailDropDown{
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.builderTopRight{
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: gray;
+}

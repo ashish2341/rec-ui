@@ -225,7 +225,7 @@ background: linear-gradient(90deg, rgba(56,92,203,1) 0%, rgba(77,117,207,1) 48%,
 }
 .campassMainRight{
   margin-top: 3rem;
-    margin-left: 9rem;
+  margin-left: 9rem;
 }
 .campassMainRightHead{
   font-weight: 600;
@@ -245,10 +245,11 @@ background: linear-gradient(90deg, rgba(56,92,203,1) 0%, rgba(77,117,207,1) 48%,
 
 }
 .campassRightBoxImg{
-  height: 10rem;
-  width: 100%;
+  aspect-ratio: 3/2;
+  object-fit: fill;
 }
 .campassRightBoxHead{
+  text-transform: uppercase;
   font-weight: 600;
   margin-top: 1rem;
 }
@@ -327,16 +328,13 @@ background: linear-gradient(90deg, rgba(56,92,203,1) 0%, rgba(77,117,207,1) 48%,
 }
 .apartmentTypeBox{
   border: 1px solid;
-    padding: 1rem;
-    width: 13rem;
+  padding: 1rem;
+  margin-right: 1rem;
     /* margin-top: 2rem; */
-    margin-right: 1rem;
-   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .apartmentTypeBoxImg{
   border-radius: 5px;
-  height: 10rem;
-  width: 100%;
+  aspect-ratio: 3/2;
 }
 .apartmentTypeBoxHead{
   font-weight: 600;
@@ -406,6 +404,23 @@ margin-top: 6rem;
 }
 
 /* populerPropreties */
+.cardImgTop{
+  height: 12rem;
+  width: 100%;
+  border-radius: 0.5rem 0.5rem 0rem 0rem;
+}
+
+.cardImgBottom{
+  background-color: white;
+  padding: 1rem;
+  border-radius: 0rem 0rem 0.5rem 0.5rem ;
+
+}
+.cardImg{
+  padding: 0;
+  margin: 0;
+}
+
 .populerPropertiesMain{
   margin-top: 6rem;
   margin-left: 14rem;
@@ -432,6 +447,7 @@ margin-top: 6rem;
 .populerPropertiesBoxText{
   font-size: 0.75rem;
   font-weight: 500;
+  text-wrap: nowrap;
 }
 .populerPropertiesBoxImg{
   height: 12rem;
@@ -558,10 +574,19 @@ font-size: 0.8rem;
   display: flex !important;
 }
 .testimonialLeft{
+  display: flex !important;
   padding: 1rem;
   color: white;
+  width: 100%;
+  align-items: center;
+  flex-direction: column;
+}
+.testimonialImg{
+  margin-left: 4.4rem;
+  height: 8rem;
   width: 50%;
 }
+
 .testimonialLeftHead{
   font-size: 1.5rem;
   font-weight: 500;
@@ -571,12 +596,12 @@ font-size: 0.8rem;
   
   margin-bottom: 1rem;
 }
-.testimonialRight{
-  width: 50%;
-}
 .testimoniaText{
   font-size: 0.75rem;
   margin-top: 0.5rem;
+}
+.testimonialImg{
+  border-radius: 50%;
 }
 
 /* blogs */
@@ -776,5 +801,10 @@ font-size: 0.8rem;
   }
   .dreamRight{
     display: none;
+  }
+  .campassMainRight{
+    margin-right: 1rem;
+      margin-left: 1rem;
+      display: flex;
   }
 }

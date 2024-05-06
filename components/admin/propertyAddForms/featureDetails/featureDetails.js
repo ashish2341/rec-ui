@@ -149,17 +149,19 @@ export default function FeaturesDetailsForm({
       }
     });
 
-    // Update errors state
-    setErrors({
-      floorAndCounter: floorAndCounterErrors,
-      fitting: fittingErrors,
-      wallAndCeiling: wallAndCeilingErrors
-    });
-
-    // If there are no errors, submit the form
-    if (Object.keys(floorAndCounterErrors).length === 0 &&
-        Object.keys(fittingErrors).length === 0 &&
-        Object.keys(wallAndCeilingErrors).length === 0) {
+    if (Object.keys(floorAndCounterErrors).length != 0) {
+      toast.error("Please fill all required fields of floor & Counter.");
+      return false;
+    }
+    if (Object.keys(fittingErrors).length != 0) {
+      toast.error("Please fill all required fields of fitting.");
+      return false;
+    }
+    if (Object.keys(wallAndCeilingErrors).length != 0) {
+      toast.error("Please fill all required fields of wall & Ceiling.");
+      return false;
+    }
+  
           const featureAmenityData = {
             Features: selectedFeatures,
             Aminities: selectedAmenities,
@@ -175,7 +177,7 @@ export default function FeaturesDetailsForm({
           valueForNext(valueForNextPage + 1);
     }
  
-  };
+ 
 
   const handleAmenityCheckboxChange = (event) => {
     const { value, checked } = event.target;

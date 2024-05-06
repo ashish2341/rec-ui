@@ -1,0 +1,78 @@
+.contactImg{
+    background-image: url("../../../public/img/contactus.jpg");
+    margin-bottom: 5rem;
+}
+
+.contactHeadTextMain{
+    font-size: 3rem;
+    font-weight: 500;
+}
+
+.contactHeadMain{
+    padding-top: 20rem;
+    text-align: center;
+}
+
+.aboutWelcome{
+    display: flex;
+    margin-left: 10rem;
+    margin-right: 10rem;
+}
+
+.aboutWelcomeText{
+    width: 50%;
+}
+
+.aboutWelcomeImg{
+    width: 50%;
+}
+
+.aboutPost{
+    display: flex;
+    margin-left: 10rem;
+    margin-right: 10rem;
+    margin-top: 2rem;
+}
+
+.aboutPostText{
+    width: 50%;
+    padding: 0rem;
+}
+
+.aboutPostImg{
+    width: 50%;
+    height: 10%;
+}
+
+.aboutHeading{
+    font-size: 2.5rem;
+    font-weight: 500;
+}
+
+.aboutusVision{
+    display: flex;
+    margin-left: 10rem;
+    margin-right: 10rem;
+    margin-top: 2rem;
+}
+
+.aboutusVisionLeft{
+    width: 50%;
+}
+
+.aboutusVisionRight{
+    width: 50%;
+}
+
+.aboutusTimeline{
+    background-color: beige;
+}
+
+.aboutusTimelineInner{
+    padding-left: 9rem;
+    padding-right: 9rem;
+}
+
+.agentRightMainContentHead{
+    font-weight: 400;
+}

@@ -128,6 +128,9 @@ export default function Property() {
                 Is Enabled
               </th>
               <th scope="col" className="px-6 py-3">
+                Is Featured
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Action
               </th>
             </tr>
@@ -141,13 +144,25 @@ export default function Property() {
               >
                 {item.Titile}
               </th>
-              <td className="px-6 py-4">{item.ProeprtyFor}</td>
-              <td className="px-6 py-4">{item.Facing[0].Facing}</td>
-              <td className="px-6 py-4">{item.TotalPrice}</td>
+              <td className="px-6 py-4">{item?.ProeprtyFor}</td>
+              <td className="px-6 py-4">{item?.Facing[0]?.Facing}</td>
+              <td className="px-6 py-4">{item?.TotalPrice?.DisplayValue}</td>
               <td className="px-6 py-4 text-blue-600 dark:text-blue-500">
                  <i
                     className={` ${
-                      item.IsEnabled
+                      item?.IsEnabled
+                        ? "bi bi-hand-thumbs-up-fill text-green-600	"
+                        : "bi bi-hand-thumbs-down-fill text-red-500"
+                    } `}
+                    style={{ fontSize: "24px" }}
+                  ></i> 
+
+                
+              </td>
+              <td className="px-6 py-4 text-blue-600 dark:text-blue-500">
+                 <i
+                    className={` ${
+                      item.IsFeatured
                         ? "bi bi-hand-thumbs-up-fill text-green-600	"
                         : "bi bi-hand-thumbs-down-fill text-red-500"
                     } `}

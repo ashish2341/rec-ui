@@ -23,7 +23,7 @@ const MultiCarousel = ({ UI }) => {
   };
 
   return (
-    <div style={{ width: "95%", margin: "auto" }}>
+    <div style={{ width: "95%" }}>
       <Carousel
         responsive={responsive}
         draggable

@@ -15,6 +15,7 @@ export default function PropertyImagesForm({
   const VideoInputRef = useRef(null);
   const documentInputRef = useRef(null);
   const [mediaShowValue, setMediaShowValue] = useState(false);
+  const [btnShowonInputChange, setBtnShowonInputChange] = useState(false);
 
   useEffect(() => {
     // Retrieve data from localStorage
@@ -57,6 +58,7 @@ export default function PropertyImagesForm({
       console.log("newProjectData before set localStorage", newProjectData);
       sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
       valueForBack(mainBackPageValue + 1);
+      setBtnShowonInputChange(true);
     }
   };
 
@@ -134,6 +136,12 @@ export default function PropertyImagesForm({
       setImage([...image, ...uniqueFiles]);
       if (imageInputRef.current) {
         imageInputRef.current.value = "";
+      }
+      if (btnShowonInputChange == true) {
+        setBtnShowonInputChange(false);
+      }
+      if (mainBackPageValue == 1) {
+        valueForBack(mainBackPageValue - 1);
       }
     }
   };
@@ -219,6 +227,12 @@ export default function PropertyImagesForm({
       if (VideoInputRef.current) {
         VideoInputRef.current.value = "";
       }
+      if (btnShowonInputChange == true) {
+        setBtnShowonInputChange(false);
+      }
+      if (mainBackPageValue == 1) {
+        valueForBack(mainBackPageValue - 1);
+      }
     }
   };
 
@@ -303,6 +317,12 @@ export default function PropertyImagesForm({
       if (documentInputRef.current) {
         documentInputRef.current.value = "";
       }
+      if (btnShowonInputChange == true) {
+        setBtnShowonInputChange(false);
+      }
+      if (mainBackPageValue == 1) {
+        valueForBack(mainBackPageValue - 1);
+      }
     }
   };
 
@@ -312,22 +332,30 @@ export default function PropertyImagesForm({
     // Step 1: Retrieve the object from local storage
 
     const storedData = JSON.parse(sessionStorage.getItem("propertyData"));
-    const videoArray = [storedData?.Videos];
+    const videoArray = storedData?.Videos;
     console.log("videoArray", videoArray);
-    if (videoArray.length > 0) {
-      // // Step 2: Modify the array by removing the desired item
-      videoArray.splice(index, 1);
-      console.log("videoArray after splicce", videoArray);
+    if (video.length == videoArray.length) {
+      if (videoArray.length > 0) {
+        // // Step 2: Modify the array by removing the desired item
+        videoArray.splice(index, 1);
+        console.log("videoArray after splicce", videoArray);
 
-      // // Step 3: Update the object in local storage with the modified array
-      const updatedData = { ...storedData, Videos: videoArray };
-      console.log("updatedData", updatedData);
-      sessionStorage.setItem("propertyData", JSON.stringify(updatedData));
+        // // Step 3: Update the object in local storage with the modified array
+        const updatedData = { ...storedData, Videos: videoArray };
+        console.log("updatedData", updatedData);
+         sessionStorage.setItem("EditPropertyData", JSON.stringify(updatedData));
+      }
     }
     setVideo(newArray);
 
     if (newArray.length == 0) {
       clearVideoInput();
+    }
+    if (btnShowonInputChange == true) {
+      setBtnShowonInputChange(false);
+    }
+    if (mainBackPageValue == 1) {
+      valueForBack(mainBackPageValue - 1);
     }
   };
   const clearVideoInput = () => {
@@ -343,22 +371,30 @@ export default function PropertyImagesForm({
     // Step 1: Retrieve the object from local storage
 
     const storedData = JSON.parse(sessionStorage.getItem("propertyData"));
-    const imageArray = [storedData?.Images];
+    const imageArray = storedData?.Images;
     console.log("imageArray", imageArray);
-    if (imageArray.length > 0) {
-      // // Step 2: Modify the array by removing the desired item
-      imageArray.splice(index, 1);
-      console.log("imageArray after splicce", imageArray);
-
-      // // Step 3: Update the object in local storage with the modified array
-      const updatedData = { ...storedData, Images: imageArray };
-      console.log("updatedData", updatedData);
-      sessionStorage.setItem("propertyData", JSON.stringify(updatedData));
+    if (image.length == imageArray.length) {
+      console.log("Image session if called");
+      if (imageArray.length > 0) {
+        // // Step 2: Modify the array by removing the desired item
+        imageArray.splice(index, 1);
+        console.log("imageArray after splicce", imageArray);
+        // // Step 3: Update the object in local storage with the modified array
+        const updatedData = { ...storedData, Images: imageArray };
+        console.log("updatedData", updatedData);
+        sessionStorage.setItem("EditPropertyData", JSON.stringify(updatedData));
+      }
     }
 
     setImage(newArray);
     if (newArray.length == 0) {
       clearImageInput();
+    }
+    if (btnShowonInputChange == true) {
+      setBtnShowonInputChange(false);
+    }
+    if (mainBackPageValue == 1) {
+      valueForBack(mainBackPageValue - 1);
     }
   };
   const clearImageInput = () => {
@@ -373,17 +409,19 @@ export default function PropertyImagesForm({
     // Step 1: Retrieve the object from local storage
 
     const storedData = JSON.parse(sessionStorage.getItem("propertyData"));
-    const documentsArray = [storedData?.Documents];
+    const documentsArray = storedData?.Documents;
     console.log("documentsArray", documentsArray);
-    if (documentsArray.length > 0) {
-      // // Step 2: Modify the array by removing the desired item
-      documentsArray.splice(index, 1);
-      console.log("documentsArray after splicce", documentsArray);
+    if (documents.length == documentsArray.length) {
+      if (documentsArray.length > 0) {
+        // // Step 2: Modify the array by removing the desired item
+        documentsArray.splice(index, 1);
+        console.log("documentsArray after splicce", documentsArray);
 
-      // // Step 3: Update the object in local storage with the modified array
-      const updatedData = { ...storedData, Documents: documentsArray };
-      console.log("updatedData", updatedData);
-      sessionStorage.setItem("propertyData", JSON.stringify(updatedData));
+        // // Step 3: Update the object in local storage with the modified array
+        const updatedData = { ...storedData, Documents: documentsArray };
+        console.log("updatedData", updatedData);
+        sessionStorage.setItem("EditPropertyData", JSON.stringify(updatedData));
+      }
     }
     setDocuments(newArray);
 
@@ -394,6 +432,12 @@ export default function PropertyImagesForm({
   const cleardocumentInput = () => {
     if (documentInputRef.current) {
       documentInputRef.current.value = "";
+    }
+    if (btnShowonInputChange == true) {
+      setBtnShowonInputChange(false);
+    }
+    if (mainBackPageValue == 1) {
+      valueForBack(mainBackPageValue - 1);
     }
   };
 
@@ -555,7 +599,7 @@ export default function PropertyImagesForm({
             </div>
           </div>
         </form>
-        {mainBackPageValue == 0 ? (
+        {mainBackPageValue == 0 || btnShowonInputChange == false ? (
           <div>
             <button
               onClick={SubmitForm}

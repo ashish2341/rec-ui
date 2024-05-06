@@ -61,7 +61,7 @@ export default function PropertyDetailsForm({
   const { data: furnishedesData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/furnishedes`
   );
-   console.log("furnishedesData", furnishedesData);
+  console.log("furnishedesData", furnishedesData);
 
   // fetching Data for builtAreaTypesData
   const { data: builtAreaTypesData } = useFetch(
@@ -77,11 +77,17 @@ export default function PropertyDetailsForm({
 
   // fetching Data for byBank
   const { data: byBankData } = useFetch(`${API_BASE_URL_FOR_MASTER}/banks`);
-   console.log("byBankData", byBankData);
+  console.log("byBankData", byBankData);
 
-   // fetching Data for bhkTypeData
+  // fetching Data for bhkTypeData
   const { data: bhkTypeData } = useFetch(`${API_BASE_URL_FOR_MASTER}/bhkType`);
- // console.log("bhkTypeData", bhkTypeData);
+  // console.log("bhkTypeData", bhkTypeData);
+
+  // fetching Data for posessionStatusData
+  const { data: posessionStatusData } = useFetch(
+    `${API_BASE_URL_FOR_MASTER}/possession`
+  );
+  console.log("posessionStatusData", posessionStatusData);
 
   const defaultOption = [{ value: "", label: "no data found" }];
   const propertyForData = [
@@ -117,7 +123,6 @@ export default function PropertyDetailsForm({
   const [landArea, setLandArea] = useState("");
   const [coveredArea, setCoveredArea] = useState("");
   const [carpetArea, setCarpetArea] = useState("");
-  const [totalPrice, setTotalPrice] = useState("");
   const [perUnitPrice, setPerUnitPrice] = useState("");
   const [isDisplayPrice, setIsDisplayPrice] = useState("");
   const [isNegotiable, setIsNegotiable] = useState("");
@@ -136,21 +141,18 @@ export default function PropertyDetailsForm({
   const [ownershipType, setOwnershipType] = useState("");
   const [propertyStatus, setPropertyStatus] = useState("");
   const [isSold, setIsSold] = useState("");
-  const [preferences, setPreferences] = useState("");
+  const [preferences, setPreferences] = useState([]);
   const [discountPercentage, setDiscountPercentage] = useState("");
   const [discountForYears, setDiscountForYears] = useState("");
   const [surveillance, setSurveillance] = useState([]);
   //Loan Details
   const [isLoanable, setIsLoanable] = useState("");
   const [isAlreadyLoaned, setIsAlreadyLoaned] = useState("");
-  // const [loanDetails, setLoanDetails] = useState({
-  //   ByBank: "",
-  //   LoanSince: "",
-  //   LoanTill: "",
-  // });
-  const [byBank,setByBank]=useState()
-  const [loanSince,setLoanSince]=useState()
-  const [loanTill,setLoanTill]=useState()
+ const[startPrice,setStartPrice]=useState("")
+ const[endPrice,setEndPrice]=useState("")
+  const [byBank, setByBank] = useState([]);
+  const [loanSince, setLoanSince] = useState("");
+  const [loanTill, setLoanTill] = useState("");
   const [areaUnits, setAreaUnits] = useState("");
   //Purchase Details
   // const [purchaseDetails, setPurchaseDetails] = useState({
@@ -225,7 +227,8 @@ export default function PropertyDetailsForm({
       setLandArea(sessionStoragePropertyData?.LandArea || "");
       setCoveredArea(sessionStoragePropertyData?.CoveredArea || "");
       setCarpetArea(sessionStoragePropertyData?.CarpetArea || "");
-      setTotalPrice(sessionStoragePropertyData?.TotalPrice || "");
+      setStartPrice(sessionStoragePropertyData?.TotalPrice?.MinValue || "");
+      setEndPrice(sessionStoragePropertyData?.TotalPrice?.MaxValue || "");
       setPerUnitPrice(sessionStoragePropertyData?.PerUnitPrice || "");
       setIsDisplayPrice(
         sessionStoragePropertyData?.IsDisplayPrice === true
@@ -277,9 +280,9 @@ export default function PropertyDetailsForm({
       );
       setPreferences(sessionStoragePropertyData?.Preferences || "");
       setDiscountPercentage(
-        sessionStoragePropertyData?.DiscountPercentage || 0
+        sessionStoragePropertyData?.DiscountPercentage || ""
       );
-      setDiscountForYears(sessionStoragePropertyData?.DiscountForYears || 0);
+      setDiscountForYears(sessionStoragePropertyData?.DiscountForYears || "");
       setSurveillance(sessionStoragePropertyData?.Surveillance || "");
       setAreaUnits(sessionStoragePropertyData?.AreaUnits || "");
       // Loan Details
@@ -297,34 +300,14 @@ export default function PropertyDetailsForm({
           ? null
           : false
       );
-      setBhkType(sessionStoragePropertyData?.BhkType || 0)
-      setByBank(sessionStoragePropertyData?.LoanDetails?.ByBank || 0)
-      setLoanSince(sessionStoragePropertyData?.LoanDetails?.LoanSince || 0)
-      setLoanTill(sessionStoragePropertyData?.LoanDetails?.LoanTill || 0)
-      // setLoanDetails({
-      //   ByBank: sessionStoragePropertyData?.LoanDetails?.ByBank || "",
-      //   LoanSince: sessionStoragePropertyData?.LoanDetails?.LoanSince || "",
-      //   LoanTill: sessionStoragePropertyData?.LoanDetails?.LoanTill || "",
-      // });
-      // setPurchaseDetails({
-      //   BuyerId: sessionStoragePropertyData.PurchaseRentBy.BuyerId || "",
-      //   SellerId: sessionStoragePropertyData.PurchaseRentBy.SellerId || "",
-      //   PurchaseDate:sessionStoragePropertyData.PurchaseRentBy.PurchaseDate || "",
-      //   PurchaseAmount: sessionStoragePropertyData.PurchaseRentBy.PurchaseAmount || "",
-      //   Document: sessionStoragePropertyData.PurchaseRentBy.Document || "",
-      // })
+      setBhkType(sessionStoragePropertyData?.BhkType || "");
+      setByBank(sessionStoragePropertyData?.LoanDetails?.ByBank || "");
+      setLoanSince(sessionStoragePropertyData?.LoanDetails?.LoanSince || "");
+      setLoanTill(sessionStoragePropertyData?.LoanDetails?.LoanTill || "");
+      
     }
   }, []);
 
-  // const handelPropertyTypes = (e) => {
-  //   console.log("Property Type:", e.target.value);
-  //   setPropertyType(e.target.value);
-  // };
-
-  // const handelFacingChange = (e) => {
-  //   console.log("inputFacing:", e);
-  //   setFacing(e);
-  // };
 
   const handelIsEnabled = (e) => {
     console.log("Is Enabled:", e.target.value === "true");
@@ -391,49 +374,29 @@ export default function PropertyDetailsForm({
   const handleIsSold = (e) => {
     setIsSold(e.target.value === "true");
   };
-
-  // const handleLoanChange = (e) => {
-   
-  //   //  const { label, value } = e;
-  //   // setLoanDetails({ ...loanDetails, bankName: {label, value} });
-  //   const { name, value } = e.target;
-  //   setLoanDetails({ ...loanDetails, [name]: value });
-  // };
-  // const handleBankChange=(e)=>{
-  //   console.log("handleLoanChange", e);
-  //   setLoanDetails(loanDetails.ByBank)
-  // }
-  // const handlePurchaseChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setPurchaseDetails({ ...purchaseDetails, [name]: value });
-  // };
-
-  // const handleFileChange = (e) => {
-  //   const files = e.target.files;
-  //   const acceptedTypes = [
-  //     "application/pdf",
-  //     "application/msword",
-  //     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  //     "text/plain",
-  //   ]; // Accepted document file types
-  //   const selectedFiles = Array.from(files).filter((file) =>
-  //     acceptedTypes.includes(file.type)
-  //   );
-
-  //   if (selectedFiles.length === 0) {
-  //     // Display an error message or alert to the user
-  //     toast.error(
-  //       "Unsupported file type. Please select a valid document file."
-  //     );
-  //     if (documentInputRef.current) {
-  //       documentInputRef.current.value = "";
-  //     }
-  //     return;
-  //   }
-
-  //   // Update the state with the selected files
-  //   setPurchaseDetails({ ...purchaseDetails, Document: selectedFiles });
-  // };
+  const handleBankNameChange = (e) => {
+    setByBank(e.map((item) => ({ _id: item.value, BankName: item.label })));
+  };
+  
+  const  formatNumber = (number) => {
+    console.log("number",number)
+    console.log("typeof number",typeof number)
+    if (typeof number !== 'number') {
+        toast.error('Input must be a number');
+    }
+    
+    if (number >= 10000000) {
+        return (number / 10000000).toFixed(2) + ' Cr';
+    } else if (number >= 100000) {
+        return (number / 100000).toFixed(2) + ' L';
+    } else if(number>=1000) {
+      return (number / 1000).toFixed(2) + ' K';
+       
+    } else {
+      return number.toString();
+    }
+}
+ 
   const checkRequiredFields = () => {
     const requiredFields = [
       facing,
@@ -453,7 +416,8 @@ export default function PropertyDetailsForm({
       landArea,
       coveredArea,
       carpetArea,
-      totalPrice,
+      startPrice,
+      endPrice,
       perUnitPrice,
       isDisplayPrice,
       isNegotiable,
@@ -478,10 +442,9 @@ export default function PropertyDetailsForm({
       isLoanable,
       isAlreadyLoaned,
       byBank,
-     loanSince,
-     loanTill,
-      bhkType
-
+      loanSince,
+      loanTill,
+      bhkType,
     ];
 
     // Check if any required field is empty
@@ -494,24 +457,26 @@ export default function PropertyDetailsForm({
 
   //SUbmit form
   const SubmitForm = () => {
+  
     const allFieldsFilled = checkRequiredFields();
-    const LoanDetails= {
-      ByBank:byBank,
-      LoanSince:loanSince ,
-      LoanTill: loanTill
-    }
+    let minPrice=formatNumber(parseInt(startPrice));
+    let maxPrice=formatNumber(parseInt(endPrice));
+    const LoanDetails = {
+      ByBank: byBank,
+      LoanSince: loanSince,
+      LoanTill: loanTill,
+    };
     if (allFieldsFilled) {
       console.log("facing", facing);
       if (surveillance.length == 0) {
         toast.error("Please fill in all required fields!");
         return false;
       }
-console.log("BY BANK DATA BY INPUT ",byBank)
-console.log("loan since DATA BY INPUT ",loanSince)
-console.log("loan till DATA BY INPUT ",loanTill)
+      console.log("BY BANK DATA BY INPUT ", byBank);
+      console.log("loan since DATA BY INPUT ", loanSince);
+      console.log("loan till DATA BY INPUT ", loanTill);
 
-
-console.log("LoanDetails",LoanDetails)
+      console.log("LoanDetails", LoanDetails);
       const propertyDetailsData = {
         // propertyType: propertyType.trim(),
         Facing: facing,
@@ -530,7 +495,7 @@ console.log("LoanDetails",LoanDetails)
         LandArea: landArea,
         CoveredArea: coveredArea,
         CarpetArea: carpetArea,
-        TotalPrice: totalPrice,
+         TotalPrice: {DisplayValue:`${minPrice} - ${maxPrice}`,MinValue:startPrice,MaxValue:endPrice},
         PerUnitPrice: perUnitPrice,
         IsDisplayPrice: isDisplayPrice,
         IsNegotiable: isNegotiable,
@@ -557,7 +522,7 @@ console.log("LoanDetails",LoanDetails)
         Surveillance: surveillance,
         LoanDetails: LoanDetails,
         AreaUnits: areaUnits,
-        BhkType:bhkType
+        BhkType: bhkType,
         // PurchaseRentBy: purchaseDetails,
       };
       console.log("propertyDetailsData before checking ", propertyDetailsData);
@@ -1137,22 +1102,40 @@ console.log("LoanDetails",LoanDetails)
                 />
               )}
             </div>
-            {/* TotalPrice */}
+            {/* Start Price */}
             <div>
               <label
-                htmlFor="totalPrice"
+                htmlFor="startPrice"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
               >
-                DIsplay Price Range
+               Start Price
               </label>
               <input
-                type="text"
-                name="totalPrice"
-                id="totalPrice"
+                type="number"
+                name="startPrice"
+                id="startPrice"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Total Price"
-                value={totalPrice}
-                onChange={(e) => setTotalPrice(e.target.value)}
+                placeholder="Start Price"
+                value={startPrice}
+                onChange={(e) => setStartPrice(e.target.value)}
+              />
+            </div>
+             {/* End Price */}
+             <div>
+              <label
+                htmlFor="endPrice"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+              >
+               End Price
+              </label>
+              <input
+                type="number"
+                name="endPrice"
+                id="endPrice"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="End Price"
+                value={endPrice} 
+                onChange={(e) => setEndPrice(e.target.value)}
               />
             </div>
 
@@ -1243,24 +1226,37 @@ console.log("LoanDetails",LoanDetails)
               </label>
             </div>
             {/* Posession Status*/}
-
             <div>
               <label
                 htmlFor="posessionStatus"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
               >
-                Posession Status
+                Possession Status
               </label>
-              <input
-                type="text"
-                name="posessionStatus"
-                id="posessionStatus"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Posession Status"
-                value={posessionStatus}
-                onChange={(e) => setPosessionStatus(e.target.value)}
-              />
+              {posessionStatusData ? (
+                <Select
+                  options={posessionStatusData.data.map((element) => ({
+                    value: element._id,
+                    label: element.Possession
+                    ,
+                  }))}
+                  placeholder="Select One"
+                  onChange={setPosessionStatus}
+                  required={true}
+                  value={posessionStatus}
+                />
+              ) : (
+                <Select
+                  options={defaultOption.map((element) => ({
+                    value: element.value,
+                    label: element.label,
+                  }))}
+                  placeholder="Select One"
+                  required={true}
+                />
+              )}
             </div>
+          
 
             {/* PosessionDate */}
             <div>
@@ -1606,9 +1602,24 @@ console.log("LoanDetails",LoanDetails)
                     label: element.Preference,
                   }))}
                   placeholder="Select One"
-                  onChange={setPreferences}
+                  onChange={(e) =>
+                    setPreferences(
+                      e.map((item) => ({
+                        _id: item.value,
+                        Preference: item.label,
+                      }))
+                    )
+                  }
                   required={true}
-                  value={preferences}
+                  value={
+                    preferences
+                      ? preferences.map((item) => ({
+                          value: item._id,
+                          label: item.Preference,
+                        }))
+                      : preferences
+                  }
+                  isMulti
                 />
               ) : (
                 <Select
@@ -1680,8 +1691,8 @@ console.log("LoanDetails",LoanDetails)
                 isMulti
               />
             </div>
-{/* BhkType */}
-<div>
+            {/* BhkType */}
+            <div>
               <label
                 htmlFor="bhkType"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
@@ -1711,7 +1722,7 @@ console.log("LoanDetails",LoanDetails)
               )}
             </div>
             {/* Loan details */}
-          
+                <div></div>
             <h3 className="mb-4 text-lg mt-5 font-medium leading-none text-gray-900 dark:text-white font-bold underline">
               Loan Details
             </h3>
@@ -1800,12 +1811,20 @@ console.log("LoanDetails",LoanDetails)
                     imageUrl: element.BankImage,
                   }))}
                   placeholder="Select One"
-                  onChange={setByBank}
-                  required={true}
-                  value={byBank}
                   components={{ Option: CustomOption }}
-                  // getOptionLabel={(option) => option.label}
-                  // getOptionValue={(option) => option.value}
+                  // onChange={(e)=>setByBank({ _id: e.value, BankName: e.label })}
+                  onChange={handleBankNameChange}
+                  required={true}
+                  // value={{ value: byBank._id, label: byBank.BankName }}
+                  value={
+                    byBank
+                      ? byBank.map((item) => ({
+                          value: item._id,
+                          label: item.BankName,
+                        }))
+                      : byBank
+                  }
+                  isMulti
                 />
               ) : (
                 <Select
@@ -1817,15 +1836,6 @@ console.log("LoanDetails",LoanDetails)
                   required={true}
                 />
               )}
-              {/* <input
-                type="text"
-                name="ByBank"
-                id="byBank"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Bank Name"
-                value={loanDetails.ByBank}
-                onChange={handleLoanChange}
-              /> */}
             </div>
             {/*    Loan Since */}
             <div>

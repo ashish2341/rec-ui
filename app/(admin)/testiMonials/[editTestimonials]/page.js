@@ -15,7 +15,7 @@ export default function EditTestiMonials(params) {
     loading,
     error,
   } = useFetch(
-    `${API_BASE_URL}/testimonial/${params?.params?.editTestimonials}`
+    `${API_BASE_URL}/testimonial/testimonial/${params?.params?.editTestimonials}`
   );
   const [memberName, setMemberName] = useState("");
   const [description, setDescription] = useState(" ");

@@ -1,0 +1,78 @@
+/* or .accordionStyle */
+
+.heroSectionBottomBox {
+    height: 2rem;
+    /* background-color: white;
+    margin-left: 14rem;
+    margin-right: 14rem; */
+    border-radius: 0.35rem;
+    /* margin-top: 3rem; */
+    display: flex;
+    /* padding: 1rem 3rem 1rem 3rem; */
+    justify-content: space-between;
+    width: inherit;
+    margin-right: 2rem;
+   
+  }
+  
+  .heroSectionBottomBoxHead {
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+  .heroSectionBottomBoxText {
+    font-size: 0.7rem;
+  }
+  /* .heroSectionVL {
+    border-left: 3px solid;
+    height: 100%;
+  } */
+  .accordionStyle{
+    background-color: rgb(243, 244, 246);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  .textCapitalized {
+    text-transform: capitalize;
+  }
+
+/* Media query for screens below 768px */
+@media screen and (max-width: 768px) {
+  /* .heroSectionBottomBox {
+    display: flex;
+    flex-direction: column; 
+    flex: wrap;
+    margin-right: 0; 
+      margin-left: 0; 
+      margin-right: 0; 
+      padding: 0.5rem; 
+      height: auto;
+    
+  } */
+  .heroSectionBottomBox {
+    display: flex;
+    flex-direction: row; /* Ensure items are displayed in a row */
+    flex-wrap: wrap; /* Allow items to wrap to the next line if necessary */
+    justify-content: space-between; /* Add space between items */
+    margin: 0; /* Reset margins */
+    padding: 0.5rem; /* Add padding for smaller screens */
+    height: auto;
+}
+
+.heroSectionBottomBox > .accordionItem {
+    flex-basis: 48%; /* Set the width of each item to occupy around 48% of the container */
+    margin-bottom: 1rem; /* Add space between items vertically */
+}
+  .heroSectionBottomBoxHead {
+      font-size: 0.7rem; /* Decrease font size for smaller screens */
+  }
+
+  .heroSectionBottomBoxText {
+      font-size: 0.6rem; /* Decrease font size for smaller screens */
+  }
+
+  .accordionStyle {
+      margin: 0.5rem; /* Add margin for smaller screens */
+  }
+  .accordionItem{
+    margin-bottom:0.5rem
+  }
+}

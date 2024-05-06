@@ -1,0 +1,123 @@
+.contactMain{
+    margin-top: 0rem ;
+}
+
+.contactImg{
+    background-image: url("../../../public/img/contactusImg1.jpg");
+    margin-bottom: 5rem;
+}
+
+.contactSectionForm{
+    display: flex;
+    margin: 0 4rem 3rem 4rem;
+}
+
+.contactLeftImg{
+    width: 70%;
+}
+
+.contactLeftForm{
+    width: 30%;
+    border: 2px solid #2a4ac8;
+    margin-right: 3rem;
+    padding: 2rem;
+}
+
+.contactSectionMap{
+    display: flex;
+    margin: 0 4rem 3rem 4rem;
+}
+
+.contactLeftAddress{
+    width: 30%;
+    border: 2px solid #2a4ac8;
+}
+
+.contactLeftMap{
+    width: 70%;
+}
+
+.contactBoxText{
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #2a4ac8;
+    text-align: center;
+}
+
+.contactBoxHead{
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.contactHeadMain{
+    padding-top: 20rem;
+    text-align: center;
+}
+
+.contactHeadTextpp{
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+.contactHeadTextMain{
+    font-size: 3rem;
+    font-weight: 500;
+}
+
+.contactHeadTextp{
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.contactMap{
+    height: 30rem;
+    width: 95%;
+}
+
+@media screen and (max-width: 850px) {
+    .contactHeadMain{
+        padding-top: 15rem;
+    }
+
+    .contactHeadTextMain{
+        font-size: 1.5rem;
+        font-weight: 500;
+    }
+
+    .contactLeftImg{
+        width: 100%;
+    }
+
+    .contactHeadTextp{
+        font-size: .75rem;
+        font-weight: 600;
+    }
+    .contactSectionForm{
+        display: block;
+        margin: 1rem 2rem;
+    }
+    .contactLeftForm{
+        width: 100%;
+        margin: 1rem 1rem 1rem 0;
+        padding: 1rem;
+    }
+    .contactLeftMap{
+        width: 100%;
+    }
+    .contactSectionMap{
+        display: block;
+        margin: 1rem 2rem;
+    }
+    .contactMap{
+        aspect-ratio: 4/3;
+        width: 100%;
+    }
+    .contactImg{
+        margin-bottom: 1rem;
+    }
+    .contactLeftAddress{
+        width: 100%;
+        margin: 1rem 1rem 1rem 0;
+    }
+}

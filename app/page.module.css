@@ -1,0 +1,780 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* align-items: center; */
+  padding-top: 4rem;
+  min-height: 100vh;
+}
+.banner{
+  height: 35rem;
+}
+.crousalItemContentMain{
+  display: flex;
+  height: 100%;
+}
+.crousalItemLeftMain{
+   width: 64%;
+   background-color: #2A4AC8;
+}
+.crousalItemLeftContent{
+  margin-left: 26%;
+  margin-top: 3rem;
+}
+.crousalItemLeftMainHeading{
+  color: white;
+    font-weight: 600;
+    font-size: 3.5rem;
+    line-height: 5rem;
+}
+.crousalItemLeftMainPara{
+  width: 100%;
+    color: white;
+    font-size: 0.80rem;
+    margin-top: 1rem;
+}
+.crousalItemRightMain{
+   width: 36%;
+}
+.crousalItemSearchMain{
+  position: absolute;
+  top: 27rem;
+  width: 66%;
+}
+.crousalItemSearchInput{
+  height: 3rem;
+}
+
+.crousalSearchBuyType{
+  inset-inline-end: 22rem;
+  height: 100%;
+}
+.crousalSearchBudgetType{
+  inset-inline-end: 16rem;
+  height: 100%;
+}
+.crousalSearchPropertyType{
+  inset-inline-end: 7rem;
+  height: 100%;
+}
+.crousalItemAdvMain{
+  margin-top: 3rem;
+}
+.crousalItemAdvContent{
+  margin-right: 2rem;
+}
+.crousalItemAdvNumber{
+  color: white;
+  font-weight: 500;
+  font-size: 1.50rem;
+}
+.crousalItemAdvText{
+  color: white;
+  font-size: 0.75rem;
+}
+.crousalItemSearchButton{
+  inset-inline-end: 1rem;
+  height: 2.5rem;
+  width: 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.25rem;
+}
+.crousalItemSearchIcon{
+  display: none;
+}
+.crousalItemLeftImage{
+  height: 100%;
+}
+.crousalItemLeftArrowBtn{
+  inset-inline-end: 4rem;
+}
+.crousalItemLeftArrowSpan{
+  color: white;
+    border-radius: 3px;
+    width: 3rem;
+    height: 2rem;
+    border: 1px solid #2A4AC8;
+    background-color: #2A4AC8;
+    margin-bottom: 1rem;
+}
+.crousalItemRightArrowSpan{
+  color: white;
+    border-radius: 3px;
+    width: 3rem;
+    height: 2rem;
+    border: 1px solid #2A4AC8;
+    background-color: transparent;
+    margin-bottom: 1rem;
+  }
+  .crousalItemArrowIcon{
+  align-self: center;
+}
+  .crousalItemArrowIconRight{
+  color: #2A4AC8;
+  align-self: center;
+}
+
+@media screen and (max-width: 1100px) {
+  .crousalItemLeftMain{
+    width: 100%;
+  }
+  .crousalItemRightMain{
+    display: none;
+ }
+}
+@media screen and (max-width: 850px) {
+ .crousalSearchBuyType{
+  display:none !important;
+}
+.crousalSearchBudgetType{
+ display:none !important;
+}
+.crousalSearchPropertyType{
+  display:none !important;
+}
+}
+@media screen and (max-width: 750px) {
+  .banner{
+    height: 26rem;
+  }
+  .crousalItemLeftMainHeading{
+      font-weight: 500;
+      font-size: 2rem;
+      line-height: 3rem;
+  }
+  .crousalItemLeftContent{
+    margin-left: 2rem;
+    margin-right: 2rem;
+    text-align: center;
+  }
+  .crousalItemAdvMain{
+    justify-content: center;
+  }
+  .crousalItemSearchMain{
+    position: relative;
+    top: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: 66%;
+  }
+  .crousalItemSearchButton{
+    display: none;
+  }
+  .crousalItemSearchIcon{
+    display: block;
+  }
+}
+
+/* campassDirection */
+
+.campassMain{
+  /* background-color: blue; */
+  background: rgb(56,92,203);
+background: linear-gradient(90deg, rgba(56,92,203,1) 0%, rgba(77,117,207,1) 48%, rgba(101,146,211,1) 100%);
+    height: 21rem;
+    margin-top: 6rem;
+    width: 25rem;
+    border-top-right-radius: 13rem;
+    border-bottom-right-radius: 13rem;
+    position: relative;
+}
+.outerCampass{
+  position: absolute;
+  height: 22rem;
+}
+.innerCampass{
+  position: absolute;
+  height: 22rem;
+}
+@-webkit-keyframes innerCampass /* Safari and Chrome */ {
+  from {
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes innerCampass {
+  from {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.innerCampass {
+  -webkit-animation: innerCampass 3s linear infinite;
+  -moz-animation: innerCampass 3s linear infinite;
+  -ms-animation: innerCampass 3s linear infinite;
+  -o-animation: innerCampass 3s linear infinite;
+  animation: innerCampass 3s linear infinite;
+}
+.campassMainRight{
+  margin-top: 3rem;
+    margin-left: 9rem;
+}
+.campassMainRightHead{
+  font-weight: 600;
+  font-size: 2rem;
+}
+.campassMainRightText{
+  font-size: 0.75rem;
+
+}
+.campassRightBox{
+  border: 1px solid;
+    padding: 1rem;
+    width: 13rem;
+    margin-top: 2rem;
+    margin-right: 1rem;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+}
+.campassRightBoxImg{
+  height: 10rem;
+  width: 100%;
+}
+.campassRightBoxHead{
+  font-weight: 600;
+  margin-top: 1rem;
+}
+.campassRightBoxText{
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* properties byArea */
+
+.propertiesByAreaMain{
+  margin-top: 3rem;
+  margin-left: 14rem;
+  margin-right: 14rem;
+}
+.propertiesByAreaMainHead{
+  font-weight: 600;
+  font-size: 2rem;
+}
+.propertiesByAreaMainTextMain{
+ display: flex;
+ justify-content: space-between;
+}
+.propertiesByAreaMainText{
+  font-size: 0.75rem;
+
+}
+.propertiesByAreaBox{
+  margin-top: 2rem;
+  margin-right: 1.5rem;
+  width: 15.33%;
+  border: none;
+}
+.propertiesByAreaBoxImg{
+  height: 8rem;
+  width: 100%;
+}
+.propertiesByAreaBoxHead{
+  font-weight: 800;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+.propertiesByAreaBoxText{
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.sliderr{
+  width: 100%;
+}
+
+.smallText{
+  font-size: 0.5rem;
+}
+
+
+/* apartmentType */
+
+.apartmentTypeMain{
+  margin-top: 6rem;
+    margin-left: 14rem;
+    margin-right: 14rem;
+}
+.apartmentTypeMainHead{
+  font-weight: 600;
+  font-size: 2rem;
+}
+.apartmentTypeMainTextMain{
+  display: flex;
+  justify-content: space-between;
+ }
+
+.apartmentTypeMainText{
+  font-size: 0.75rem;
+
+}
+.apartmentTypeBox{
+  border: 1px solid;
+    padding: 1rem;
+    width: 13rem;
+    /* margin-top: 2rem; */
+    margin-right: 1rem;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.apartmentTypeBoxImg{
+  border-radius: 5px;
+  height: 10rem;
+  width: 100%;
+}
+.apartmentTypeBoxHead{
+  font-weight: 600;
+  margin-top: 1rem;
+}
+.apartmentTypeBoxText{
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.apartmentTypeLeftArrowBtn{
+  inset-inline-end: 4rem;
+}
+.apartmentTypeLeftArrowSpan{
+  color: white;
+    border-radius: 3px;
+    width: 2.5rem;
+    height: 1.7rem;
+    border: 1px solid #2A4AC8;
+    background-color: #2A4AC8;
+    margin-bottom: 1rem;
+}
+.apartmentTypeRightArrowSpan{
+  color: white;
+    border-radius: 3px;
+    width: 2.5rem;
+    height: 1.7rem;
+    border: 1px solid #2A4AC8;
+    background-color: transparent;
+    margin-bottom: 1rem;
+  }
+  .apartmentTypeArrowIcon{
+  align-self: center;
+}
+  .apartmentTypeArrowIconRight{
+  color: #2A4AC8;
+  align-self: center;
+}
+
+
+/* buyingOpetionWithZodic */
+.buyingOptionWithZodic{
+margin-top: 6rem;
+    margin-left: 14rem;
+    margin-right: 14rem;
+}
+.buyingWithZodicMain{
+  display: flex;
+}
+.buyingZodicLeft{
+  width: 50%;
+}
+.buyingZodicHead{
+  font-size: 2.6rem;
+    font-weight: 600;
+    line-height: 3rem;
+}
+.buyingZodicText{
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+.buyingZodicInputMain{
+  margin-top: 2rem;
+
+}
+.buyingZodicRight{
+  width: 50%;
+}
+
+/* populerPropreties */
+.populerPropertiesMain{
+  margin-top: 6rem;
+  margin-left: 14rem;
+  margin-right: 14rem;
+}
+.populerPropertiesBox{
+  margin-top: 2rem;
+  margin-right: 1rem;
+  width: 31.33%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.populerPropertiesLocationMain{
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-top: 0.4rem;
+
+}
+.populerPropertiesBoxHead{
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 0.4rem;
+
+}
+.populerPropertiesBoxText{
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.populerPropertiesBoxImg{
+  height: 12rem;
+  width: 100%;
+}
+.populerPropertiesBoxDetail{
+  justify-content: space-between;
+  margin-top: 0.4rem;
+
+}
+.populerPropertiesBoxPriceMain{
+  display: flex;
+    justify-content: space-between;
+    margin-top: 0.4rem;
+}
+.populerPropertiesBoxPrice{
+  font-weight: 500;
+}
+
+/* agent */
+
+.agentMain{
+  margin-top: 6rem;
+  margin-left: 14rem;
+  margin-right: 14rem;
+  display: flex;
+}
+.agentLeftMain{
+  width: 50%;
+}
+.agentImage{
+  height: 28rem;
+  width: 80%;
+}
+.agentRightMain{
+  width: 50%;
+  padding-left: 4rem;
+}
+.agentRightMainHead{
+  font-size: 2rem;
+  font-weight: 600;
+}
+.agentRightMainText{
+  font-size: 0.8rem;
+}
+.agentRightMainContentMain{
+  margin-top: 1rem;
+}
+.agentRightMainContent{
+  margin-left: 1rem;
+}
+.agentRightMainContentHead{
+  font-weight: 600;
+}
+.agentRightMainContentText{
+  font-size: 0.9rem;
+}
+.agentRightMainContenBtn{
+  margin-top: 1rem;
+  width: 10rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* faq */
+
+.faq{
+  margin-top: 6rem;
+  margin-right: 14rem;
+  margin-left: 14rem;
+}
+.faqMain{
+  text-align: center;
+}
+.faqHead{
+font-size: 2rem;
+font-weight: 600;
+}
+.faqHeadText{
+font-size: 0.8rem;
+}
+.faqLeftRightMain{
+  display: flex;
+}
+.faqLeft{
+  width: 50%;
+  margin-top: 2rem;
+}
+.faqItemMain{
+  margin-top: 1rem;
+}
+.faqRight{
+  width: 50%;
+  margin-top: 2rem;
+  margin-left: 1rem;
+}
+.faqRightHead{
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  margin-top: 0.8rem;
+  font-weight: 500;
+}
+
+/* testimonial */
+.testimonial{
+  margin-top: 6rem;
+  margin-left: 14rem;
+  margin-right: 14rem;
+}
+.testimonialMain{
+  text-align: center;
+}
+.testimonialHead{
+  font-size: 2rem;
+  font-weight: 600;
+}
+.testimonialText{
+  font-size: 0.75rem;
+}
+.testimonialcontent{
+  margin-top: 2rem;
+  background-color: #6592D3;
+  display: flex !important;
+}
+.testimonialLeft{
+  padding: 1rem;
+  color: white;
+  width: 50%;
+}
+.testimonialLeftHead{
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+.testimonialLeftText{
+  
+  margin-bottom: 1rem;
+}
+.testimonialRight{
+  width: 50%;
+}
+.testimoniaText{
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* blogs */
+
+.blogContentText{
+  margin-top: 1rem;
+  font-size: 0.75rem;
+}
+
+/* dream */
+
+.dream{
+  margin-top: 9rem;
+  margin-left: 14rem;
+  margin-right: 14rem;
+  margin-bottom: 2rem;
+}
+.dreamMain{
+  background: #6592D3;
+  display: flex;
+  border-radius: 0.6rem;
+  color: white;
+}
+.blogContentMain{
+  padding: 3rem;
+  width: 80%;
+}
+.blogContentHead{
+  font-size: 2rem;
+  font-weight: 600;
+}
+.blogContentText{
+  font-size: 0.75rem;
+}
+.blogContentImg{
+  height: 120%;
+}
+.dreamRight{
+  width: 20%;
+}
+.blogMainContenBtn{
+  color: blue;
+  margin-top: 2rem;
+  background-color: white !important;
+  align-items: center;
+
+  display: flex;
+}
+
+@media screen and (max-width: 750px) {
+  .propertiesByAreaBox{
+    width: 100%;
+  }
+}
+@media screen and (max-width: 750px) {
+  .propertiesByAreaBox{
+    width: 40%;
+  }
+  .propertiesByAreaBoxImg{
+    height: 5rem;
+    width: 100%;
+  }
+  .apartmentTypeBox{
+    display: flex;
+    flex-flow: column;
+  }
+  .crousalItemLeftContent{
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  .crousalItemAdvMain{
+    margin-top: 1rem;
+  }
+  .crousalItemLeftMainHeading{
+    font-size: 1rem;
+    line-height: 1rem;
+  }
+  .crousalItemSearchInput{
+    height: 2rem;
+  }
+  .crousalItemSearchMain{
+    width: 90%;
+  }
+  .crousalItemArrowIconRight{
+    color: white;
+  }
+  .propertiesByAreaMain{
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  .campassMainRight{
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  .campassMainRightHead{
+    text-align: center;
+  }
+  .campassMainRightText{
+    text-align: center;
+  }
+  .campassRightBoxMain{
+    justify-content: center;
+  }
+  .campassRightBox{
+    width: 9rem;
+  }
+  .propertiesByAreaMain{
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  .propertiesByAreaMainHead{
+    font-size: 1.5rem;
+  }
+  .propertiesByAreaMainTextMain a{
+    white-space: nowrap
+  }
+  .propertiesByAreaBoxMain{
+    justify-content: center;
+  }
+  .apartmentTypeMain{
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  .apartmentTypeMainHead{
+    font-size: 1.5rem;
+  }
+  .buyingOptionWithZodic{
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  .buyingZodicLeft{
+    width: 100%;
+  }
+  .buyingZodicRight{
+    display: none;
+  }
+  .populerPropertiesMain{
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  .populerPropertiesBoxMain{
+    justify-content: center;
+  }
+  .populerPropertiesBox{
+    width: 100%;
+  }
+  .agentMain{
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  .agentRightMainHead{
+    font-size: 1.5rem;
+  }
+  .agentLeftMain{
+    display: none;
+  }
+  .agentRightMain{
+    width: 100%;
+    padding-left: 0;
+  }
+  .faq{
+    margin-right: 1rem;
+    margin-left: 1rem;
+  }
+  .faqHead{
+    font-size: 1.5rem;
+  }
+  .faqLeftRightMain{
+    display: block;
+  }
+  .faqLeft{
+    width: 100%;
+  }
+  .faqRight{
+    width: 100%;
+    margin-left: 0;
+  }
+   .testimonial{
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  .testimonialHead{
+    font-size: 1.5rem;
+  }
+  .testimonialLeft{
+    width: 100%;
+  }
+  .testimonialRight{
+    display: none;
+  }
+  .dream{
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  .blogContentMain{
+    width: 100%;
+  }
+  .dreamRight{
+    display: none;
+  }
+}

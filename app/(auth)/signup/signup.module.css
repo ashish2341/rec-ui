@@ -1,0 +1,23 @@
+.loginMain {
+    background-color: #6592D3 !important;
+    height: 100%;
+  }
+  .signInBtn{
+    background-color: #2b4ac7 !important;
+  
+  }
+  
+  .mt7{
+      margin-top: 4rem;
+  }
+  @media (min-width: 1200px) {
+    .loginBoxMain {
+      width: 32%;
+    }
+  }
+  @media (max-width: 1200px) {
+    .loginBoxMain {
+      width: 100%;
+    }
+  }
+  

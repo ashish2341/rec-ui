@@ -1,0 +1,1062 @@
+"use client";
+import Footer from "@/components/common/footer";
+import Navbar from "@/components/common/navbar";
+import React, { useEffect, useState, useRef } from "react";
+import styles from "./propertyDetail.module.css";
+import { initFlowbite } from "flowbite";
+import Slider from "react-slick";
+import Link from 'next/link';
+import useFetch from "@/customHooks/useFetch";
+import { useRouter } from "next/navigation";
+import { DayPicker } from 'react-day-picker';
+//import { getAminityById } from "@/api-functions/amenity/getAmenityByID";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-day-picker/dist/style.css';
+import { GetPropertyById } from "@/api-functions/property/getPropertyById";
+import { API_BASE_URL } from "@/utils/constants";
+import { addEnquiry } from "@/api-functions/enquiry/addEnquiry";
+import { Input } from "postcss";
+import { Accordion, AccordionContent, AccordionPanel, AccordionTitle } from "flowbite-react";
+ 
+
+const PropertyDetail = ({params}) => {
+  const [expanded, setExpanded] = useState(false);
+  const [Name, setName] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Message, setMessage] = useState("");
+  const [MolileNumber, setPhone] = useState("");
+  const [EnquiryData, setEnquiryData] = useState("");
+  const [EnquiryType, setEnquiryType] = useState("");
+  const [listData, setListData] = useState(false);
+  const [listPropertiesData, setListPropertiesData] = useState(false);
+  const [listImageData, setListImageData] = useState(false);
+  const [videoData, setVideoData] = useState(false);
+  const [loanDetails, setLoanDetailseData] = useState(false);
+  const [aminityData, setAminityData] = useState(false);
+  
+  const [page, setPage] = useState(1);
+  const [activeSection, setActiveSection] = useState("general");
+
+  const addEnquiryData = async () => {
+    if (Name === "") {
+      toast.error("Name  is required");
+      return false;
+    }
+    if (Email === "") {
+      toast.error("Email is required");
+      return false;
+    }
+    if (Message === "") {
+      toast.error("Message is required");
+      return false;
+    }
+    if (EnquiryData === ""){
+      toast.error("Date is required");
+      return false;
+    }
+    if (EnquiryType === ""){
+      toast.error("Type is required");
+      return false;
+    }
+    if (MolileNumber === ""){
+      toast.error("Number is required");
+      return false;
+    }
+    let payload = { Name, Email, Message, MolileNumber, EnquiryData, EnquiryType };
+    let res = await addEnquiry(payload)
+    console.log('payload',res)
+     if(res?.resData?.success == true){
+       toast.success(res?.resData?.message);
+       setName("");
+       setPhone("");
+       setMessage("");
+       setEnquiryData("");
+       setEnquiryType("");
+       setEmail("");
+      }else{
+        toast.error(res.errMessage);
+        return false;
+      }
+    console.log(payload);
+  }
+  const toggleExpansion = () => {
+    setExpanded(!expanded);
+  };
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+  const handlePhoneChange = (e) => {
+    setPhone(e.target.value);
+  };
+  const handleMessageChange = (e) => {
+    setMessage(e.target.value);
+  };
+  const handleEnquiryType = (e) => {
+    setEnquiryType(e.target.value);
+  };
+  const handleEnquiryData = (date) => {
+    setEnquiryData(date);
+  };
+
+  console.log("EnquiryData",EnquiryData)
+
+  useEffect(() => {
+    initFlowbite();
+  }, []);
+
+  useEffect(() => {
+    GetPropertyId();
+    //getAllAmenity();
+  });
+
+  const {
+    data: listDataConst,
+    loading:popularPropertiesLoading,
+    error:popularPropertiesError,
+  } = useFetch(`${API_BASE_URL}/properties/${params?.property}`);
+  console.log("listDataConst",listDataConst);
+  // const getAllAmenity = async () => {
+  //   let amenities = await getAminityById(params?.property);
+  //   if (amenities?.resData?.success == true) {
+  //     setListData(amenities?.resData);
+  //     toast.success(amenities?.resData?.message);
+  //     return false;
+  //   } else {
+  //     toast.error(amenities.errMessage);
+  //     return false;
+  //   }
+  // };
+
+  const GetPropertyId = async () => {
+    let properties = await GetPropertyById(params?.property);
+    if (properties?.resData?.success == true) {
+      setListPropertiesData(properties?.resData?.data);
+      setListImageData(properties?.resData?.data?.Images);
+      console.log("listPropertiesData",typeof listImageData);
+      setLoanDetailseData(properties?.resData?.data?.LoanDetails);
+      setVideoData(properties?.resData?.data?.Videos);
+      setAminityData(properties?.resData?.data?.Aminities);
+      console.log("listPropertiesData.data",listPropertiesData);
+      toast.success(properties?.resData?.message);
+      return false;
+    } else {
+      toast.error(properties.errMessage);
+      return false;
+    }
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const  formatNumber = (number) => {
+    if (typeof number !== 'number') {
+        throw new Error('Input must be a number');
+    }
+    
+    if (number >= 10000000) {
+        return (number / 10000000).toFixed(2) + 'Cr';
+    } else if (number >= 100000) {
+        return (number / 100000).toFixed(2) + 'L';
+    } else {
+        return number.toString();
+    }
+}
+
+
+  var settings = {
+    dots: false,
+    infinite: true,
+    arrows: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true
+        }
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
+  };
+
+  const mapSrc = `https://maps.google.com/maps?width=100%25&height=600&hl=en&q=${listPropertiesData?.Location?.Latitude},${listPropertiesData?.Location?.Longitude}&t=&z=14&ie=UTF8&iwloc=B&output=embed`;
+  useEffect(() => {
+    const handleScroll = () => {
+      const nav = document.getElementById("nav");
+      const pages = document.querySelectorAll(".page");
+      const scrollPosition = window.scrollY;
+
+      pages.forEach((page) => {
+        const pageTop = page.offsetTop - nav.offsetHeight;
+        const pageBottom = pageTop + page.offsetHeight;
+
+        if (scrollPosition >= pageTop && scrollPosition < pageBottom) {
+          const activeLink = document.querySelector(`a[href="#${page.id}"]`);
+          if (activeLink) {
+            activeLink.classList.add("activeNavbar");
+          }
+        } else {
+          const activeLink = document.querySelector(`a[href="#${page.id}"]`);
+          if (activeLink) {
+            activeLink.classList.remove("activeNavbar");
+          }
+        }
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+  return (
+    <>
+      <Navbar />
+      
+      <div className={`${styles.heroSection} heroSection`}>
+        <div className={`${styles.heroSectionMain}`}>
+          <div className={`${styles.heroSectionCrousalMain}`}>
+            <div
+              id="controls-carousel"
+              className="relative w-full"
+              data-carousel="static"
+            >
+              <div  className="relative h-56 overflow-hidden rounded-lg md:h-96">
+              {listPropertiesData?.Images?.map((item) => (
+                <div
+                  key={item._id}
+                  className="hidden duration-700 ease-linear"
+                  data-carousel-item
+                >
+                   <img className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" src={item.URL} alt="" />
+                </div>
+                ))}
+              </div>
+              <button
+                type="button"
+                className="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                data-carousel-prev
+              >
+                <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                  <svg
+                    className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 6 10"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 1 1 5l4 4"
+                    />
+                  </svg>
+                  <span className="sr-only">Previous</span>
+                </span>
+              </button>
+              <button
+                type="button"
+                className="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                data-carousel-next
+              >
+                <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                  <svg
+                    className="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 6 10"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m1 9 4-4-4-4"
+                    />
+                  </svg>
+                  <span className="sr-only">Next</span>
+                </span>
+              </button>
+            </div>
+          </div>
+          <div className={`${styles.heroSectionLeftImgMain}`}>
+            <img src={listPropertiesData?.Area?.AreaImage} alt="" />
+          </div>
+          {listPropertiesData?.Videos?.map((videoDatas) => (
+          <div key={videoDatas._id} className={`${styles.heroSectionLeftVideoMain}`}>
+            <video
+              controls
+              className="h-48 w-64 border border-black rounded-lg"
+            >
+              <source
+                src={videoDatas.URL}
+                type="video/mp4"
+              />
+            </video>
+          </div>
+          ))}
+        </div>
+        <div className={`${styles.heroSectionBottomMain}`}>
+          <div className={`${styles.heroSectionBottomBox}`}>
+            <div className="">
+              <h2 className={`${styles.heroSectionBottomBoxHead}`}>
+                {listPropertiesData.Titile}
+              </h2>
+              <p className={`${styles.heroSectionBottomBoxText}`}>
+                {" "}
+                <i className="bi bi-geo-alt-fill"></i>{listPropertiesData.Address}
+              </p>
+            </div>
+            <div className={`${styles.heroSectionVL}`}></div>
+            <div>
+              <h2 className={`${styles.heroSectionBottomBoxHead}`}>Price</h2>
+              <p className={`${styles.heroSectionBottomBoxText}`}>
+                {" "}
+                {listPropertiesData.TotalPrice} 
+              </p>
+            </div>
+            <div className={`${styles.heroSectionVL}`}></div>
+            <div>
+              <h2 className={`${styles.heroSectionBottomBoxHead}`}>
+                Area Range
+              </h2>
+              <p className={`${styles.heroSectionBottomBoxText}`}>
+                {" "}
+                {listPropertiesData?.AreaUnits?.InSquareMeter * 1.195}  sq-yrd
+              </p>
+            </div>
+            <div className={`${styles.heroSectionVL}`}></div>
+            <div>
+              <h2 className={`${styles.heroSectionBottomBoxHead}`}>
+                Project Type
+              </h2>
+              <p className={`${styles.heroSectionBottomBoxText}`}>{listPropertiesData?.PropertyType?.Type}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div className={`${styles.detailSectionBar} detailSectionBar`}>
+        <div className="text-sm font-medium text-center text-black-500 border-b border-black-900 dark:text-gray-400 dark:border-gray-700 content" id="nav">
+          <ul className="flex flex-nowrap overflow-x-auto -mb-px">
+            <li className="me-2">
+              <Link
+                href="#general"
+                className="nonActiveBar">
+                General
+              </Link>
+            </li>
+            <li className="me-2">
+              <Link
+                href="#configure"
+                className="nonActiveBar"        >
+                Configuration
+              </Link>
+            </li>
+            <li className="me-2">
+              <Link
+                href="#overview"
+                className="nonActiveBar"
+              >
+                Overview
+              </Link>
+            </li>
+            <li className="me-2">
+              <Link
+                href="#amenities"
+                className="nonActiveBar"
+              >
+                Amenities
+              </Link>
+            </li>
+            <li className="me-2">
+              <Link
+                href="#bank"
+                className="nonActiveBar"
+              >
+                Bank Offers
+              </Link>
+            </li>
+            <li className="me-2">
+              <Link
+                href="#location"
+                className="nonActiveBar"
+              >
+                Location
+              </Link>
+            </li>
+            <li className="me-2">
+              <Link
+                href="#similar"
+                className="nonActiveBar"
+              >
+                Similar Properties
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className={` ${styles.divideDetailPage} divideDetailPage`}>
+        <div className={` ${styles.divideDetailPageLeft}`}>
+          {/* GeneralDetail */}
+            <div id="general" className={`${styles.generalDetails} GeneralDetails page`}>
+              <div className="GeneralDetailsMain">
+                <h2 className={`${styles.GeneralDetailsMainHead}`}>
+                  GENERAL DETAILS
+                </h2>
+                <div className={`${styles.GeneralDetailsBox}`}>
+                  <div className="flex flex-wrap justify-between">
+                    <div>
+                      <p className={`${styles.GeneralDetailsBoxName}`}>Price:</p>
+                      <p className={`${styles.GeneralDetailsBoxValue}`}>
+                        {listPropertiesData.TotalPrice} 
+                      </p>
+                    </div>
+                    <div>
+                      <p className={`${styles.GeneralDetailsBoxName}`}> Area:</p>
+                      <p className={`${styles.GeneralDetailsBoxValue}`}>
+                        {listPropertiesData?.AreaUnits?.InSquareMeter * 10.763} sq.ft.
+                      </p>
+                    </div>
+                    <div>
+                      <p className={`${styles.GeneralDetailsBoxName}`}>Rooms:</p>
+                      <p className={`${styles.GeneralDetailsBoxValue}`}>{listPropertiesData.Bedrooms}</p>
+                    </div>
+                    <div>
+                      <p className={`${styles.GeneralDetailsBoxName}`}>Floor:</p>
+                      <p className={`${styles.GeneralDetailsBoxValue}`}>{listPropertiesData.TotalFloors}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <h2 className={`${styles.GeneralDetailsBoxBottomHead}`}>
+                      Modern building in the hear of tribeca!
+                    </h2>
+                    <p className={`${styles.GeneralDetailsBoxBottomText}`}>
+                      {listPropertiesData.Description}
+                    </p>
+                  </div>
+
+                  {expanded && (
+                    <div className={`${styles.GeneralDetailsBoxMoreContent}`}>
+                      <p>{listPropertiesData.Highlight}</p>
+                    </div>
+                  )}
+                  <div
+                    className={`${styles.GeneralDetailsBoxBottomSeeMore}`}
+                    onClick={toggleExpansion}
+                  >
+                    {expanded ? "- See less" : "+ See more"}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          {/* configure */}
+          <div id="configure" className={`${styles.configure} configure page`}>
+            <div className="configureMain">
+              <h2 className={`${styles.configureMainHead}`}>
+                CONFIGURATION AND PLAN FLOOR
+              </h2>
+              <div className={`${styles.configureBox}`}>
+                <div className="mb-4 border-b border-gray-200 dark:border-gray-700">
+                  <ul
+                    className="flex flex-wrap -mb-px text-sm font-medium text-center"
+                    id="default-tab"
+                    data-tabs-toggle="#default-tab-content"
+                    role="tablist"
+                  >
+                    <li className="me-2" role="presentation">
+                      <button
+                        className="inline-block p-4 border-b-2 rounded-t-lg"
+                        id="profile-tab"
+                        data-tabs-target="#profile"
+                        type="button"
+                        role="tab"
+                        aria-controls="profile"
+                        aria-selected="false"
+                      >
+                        {listPropertiesData?.BhkType?.Type}
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+                <div id="default-tab-content">
+                  <div
+                    className="hidden p-4 rounded-lg dark:bg-gray-800"
+                    id="profile"
+                    role="tabpanel"
+                    aria-labelledby="profile-tab"
+                  >
+                    <div className="flex">
+                      <ol className={`${styles.configureOl}`}>
+                        <li className={`${styles.configureLiHead}`}>Legend</li>
+                        <li>{listPropertiesData.CarpetArea} Carpet Area</li>
+                        <li>{listPropertiesData.Balconies} Balcony</li>
+                        <li>{listPropertiesData.Bathrooms} Bathroom</li>
+                        <li>Scalable area - {listPropertiesData?.AreaUnits?.InSquareMeter * 10.763} sq.ft.</li>
+                      </ol>
+                      <div className={`${styles.configureImg}`}>
+                        <img src="/img/Map.jpeg" alt="" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* overview */}
+          <div id="overview" className={`${styles.overview} overview page`}>
+            <div className="overviewMain">
+              <h2 className={`${styles.overviewMainHead}`}>OVERVIEW</h2>
+              <div className={`${styles.overviewBox}`}>
+                <div className={`${styles.overviewBoxMain}`}>
+                  <div className={`${styles.overviewBoxMainContent}`}>
+                    <h2 className={`${styles.overviewBoxMainContentHead}`}>
+                      Project Area
+                    </h2>
+                    <p className={`${styles.overviewBoxMainContentText}`}>
+                      {listPropertiesData.LandArea} Acres
+                    </p>
+                  </div>
+                  <div className={`${styles.overviewBoxMainContent}`}>
+                    <h2 className={`${styles.overviewBoxMainContentHead}`}>
+                      Size
+                    </h2>
+                    <p className={`${styles.overviewBoxMainContentText}`}>
+                      {listPropertiesData?.AreaUnits?.InSquareMeter * 10.763} sq.ft.
+                    </p>
+                  </div>
+                  <div className={`${styles.overviewBoxMainContent}`}>
+                    <h2 className={`${styles.overviewBoxMainContentHead}`}>
+                      Avg. Price
+                    </h2>
+                    <p className={`${styles.overviewBoxMainContentText}`}>
+                      {listPropertiesData.PricePerSquareFeet} k/sq.ft.
+                    </p>
+                  </div>
+                  <div className={`${styles.overviewBoxMainContent}`}>
+                    <h2 className={`${styles.overviewBoxMainContentHead}`}>
+                    Posession Date 
+                    </h2>
+                    <p className={`${styles.overviewBoxMainContentText}`}>
+                     {formatDate(listPropertiesData.PosessionDate)}
+                    </p>
+                  </div>
+                  <div className={`${styles.overviewBoxMainContent}`}>
+                    <h2 className={`${styles.overviewBoxMainContentHead}`}>
+                    Property For
+                    </h2>
+                    <p className={`${styles.overviewBoxMainContentText}`}>
+                      {listPropertiesData.ProeprtyFor}
+                    </p>
+                  </div>
+                  <div className={`${styles.overviewBoxMainContent}`}>
+                    <h2 className={`${styles.overviewBoxMainContentHead}`}>
+                    Flooring
+                    </h2>
+                    <p className={`${styles.overviewBoxMainContentText}`}>
+                    {listPropertiesData?.Flooring?.Flooring}
+                    </p>
+                  </div>
+                  <div className={`${styles.overviewBoxMainContent}`}>
+                    <h2 className={`${styles.overviewBoxMainContentHead}`}>
+                    Furnished
+                    </h2>
+                    <p className={`${styles.overviewBoxMainContentText}`}>
+                    {listPropertiesData?.Furnished?.Furnished}
+                    </p>
+                  </div>
+                  <div className={`${styles.overviewBoxMainContent}`}>
+                    <h2 className={`${styles.overviewBoxMainContentHead}`}>
+                    RERA Number
+                    </h2>
+                    <p className={`${styles.overviewBoxMainContentText}`}>
+                    {listPropertiesData?.ReraNumber}
+                    </p>
+                  </div>
+                </div>
+                <div className={`${styles.overviewBoxBottomMain}`}>
+                <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Ask For Detail</button>
+                <button type="button" className="text-grey border border-gray-600 bg-white-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Share</button>
+                <button type="button" className="text-grey border border-gray-600 bg-white-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
+                <button type="button" className="text-grey border border-gray-600 bg-white-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Download Brochure</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* amenities */}
+          <div id="amenities" className={`${styles.amenities} amenities page`}>
+            <div className="amenitiesMain">
+              <h2 className={`${styles.amenitiesMainHead}`}>AMENITIES & FEATURES</h2>
+              <div className={`${styles.amenitiesBox}`}>
+              <p className={`${styles.amenitiesBoxMainContentText}`}>Amenities</p>
+                
+                <div className={`${styles.amenitiesBoxMain}`}>
+                    {listPropertiesData?.Aminities?.map((item, index) => (
+                    <div key={index} className={`${styles.amenitiesBoxMainContent}`}>
+                      <p className={`${styles.amenitiesBoxMainContentTextList}`}>
+                        <i className={`${styles.amenitiesIconBox} ${item.Icon} || "" `}>{" "}</i>{item.Aminity}
+                      </p>
+                    </div>
+                  ))} 
+                  </div>
+                <div className={`${styles.amenitiesBoxMain} mt-4`}>
+                {listPropertiesData?.Features?.map((item, index) => (
+                    <div key={index} className={`${styles.amenitiesBoxMainContent} mr-4`}>
+                      <p className={`${styles.amenitiesBoxMainContentTextList}`}>
+                        <i className={`${styles.amenitiesIconBox} ${item.Icon} || "" `}>{" "}</i>{item.Feature}
+                      </p>
+                    </div>
+                  ))} 
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* bank */}
+          <div id="bank" className={`${styles.bank} bank page`}>
+            <div className="bankMain">
+              <h2 className={`${styles.bankMainHead}`}>BANK LOAN OFFERS</h2>
+              <div className={`${styles.bankBox}`}>
+            {/* <Slider  {...settings} className={`${styles.sliderr}`}> */}
+              <div  className={` ${styles.bankBoxMain} border-gray-300 rounded-md`}>
+                <div>
+                  <div>
+                    <img
+                      className={` ${styles.bankBoxImg}`}
+                      src={loanDetails?.ByBank?.BankImage}
+                      alt=""
+                    />
+                  </div>
+                </div>
+                <div>
+                  <h2 className={` ${styles.bankBoxHead}`}>{loanDetails?.ByBank?.BankName}</h2>
+                  <p className={` ${styles.bankBoxText}`}>
+                    Lorem ipsum dolor
+                  </p>
+                </div>
+              </div>
+          {/*  </Slider> */}
+                </div>
+                </div>
+                </div>
+          
+          {/* Specifications */}
+            <div className={` ${styles.faq} faq mt-16`}>
+              <div className={` ${styles.faqMain}`}>
+                <h2 className={`${styles.amenitiesMainHead}`}>SPECIFICATIONS</h2>
+              </div>
+              <div className={`${styles.amenitiesBox}`}>
+                <div className={` ${styles.faqLeft}`}>
+                <Accordion className="border-none">
+                <AccordionPanel>
+                <AccordionTitle>Floor & Counter</AccordionTitle>
+                <AccordionContent className={`${styles.AccordionContent}`}>
+                  <div className="mr-6 p-4">
+                    <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">Dining</span>
+                    <p className="font-semibold">{listPropertiesData?.FloorAndCounter?.Dining}</p>
+                  </div>
+                  <div className="mr-6 p-4">
+                    <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">Master Bedroom</span>
+                    <p className="font-semibold">{listPropertiesData?.FloorAndCounter?.MasterBedroom}</p>
+                  </div>
+                  <div className="mr-6 p-4">
+                  <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">Other Bedroom</span>
+                  <p className="font-semibold">{listPropertiesData?.FloorAndCounter?.OtherBedroom}</p>
+                  </div>
+                  <div className="mr-6 p-4">
+                  <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">Kitchen</span>
+                  <p className="font-semibold">{listPropertiesData?.FloorAndCounter?.Kitchen}</p>
+                  </div>
+                  <div className="mr-6 p-4">
+                  <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">Balcony</span>
+                  <p className="font-semibold">{listPropertiesData?.FloorAndCounter?.Balcony}</p>
+                  </div>
+                  <div className="mr-6 p-4">
+                  <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">Toilets</span>
+                  <p className="font-semibold">{listPropertiesData?.FloorAndCounter?.Toilets}</p>
+                  </div>
+                </AccordionContent>
+                </AccordionPanel>
+                <AccordionPanel>
+                  <AccordionTitle>Fitting</AccordionTitle>
+                  <AccordionContent className={`${styles.AccordionContent}`}>
+                  <div className="mr-6 p-4">
+                    <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">Electrical</span>                    
+                    <p className="font-semibold">{listPropertiesData?.Fitting?.Electrical}</p>
+                  </div>
+                  <div className="mr-6 p-4">
+                    <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">Toilets</span>                    
+                    <p className="font-semibold">{listPropertiesData?.Fitting?.Toilets}</p>
+                  </div>
+                  <div className="mr-6 p-4">
+                    <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">Kitchen</span>                    
+                    <p className="font-semibold">{listPropertiesData?.Fitting?.Kitchen}</p>
+                  </div>
+                  <div className="mr-6 p-4">
+                    <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">Doors</span>                    
+                    <p className="font-semibold">{listPropertiesData?.Fitting?.Doors}</p>
+                  </div>
+                  <div className="mr-6 p-4">
+                    <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">Windows</span>                    
+                    <p className="font-semibold">{listPropertiesData?.Fitting?.Windows}</p>
+                  </div>
+                  <div className="mr-6 p-4">
+                    <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">Others</span>                    
+                    <p className="font-semibold">{listPropertiesData?.Fitting?.Others}</p>
+                  </div>
+                  </AccordionContent>
+                </AccordionPanel>
+                <AccordionPanel>
+                  <AccordionTitle>Wall & Ceiling</AccordionTitle>
+                  <AccordionContent className={`${styles.AccordionContent}`}>
+                  <div className="mr-6 p-4">
+                    <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">Interior</span>                    
+                    <p className="font-semibold">{listPropertiesData?.WallAndCeiling?.Interior}</p>
+                  </div>
+                  <div className="mr-6 p-4">
+                    <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">Exterior</span>                    
+                    <p className="font-semibold">{listPropertiesData?.WallAndCeiling?.Exterior}</p>
+                  </div>
+                  <div className="mr-6 p-4">
+                    <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">Kitchen</span>                    
+                    <p className="font-semibold">{listPropertiesData?.WallAndCeiling?.Kitchen}</p>
+                  </div>
+                  <div className="mr-6 p-4">
+                    <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">Toilets</span>                    
+                    <p className="font-semibold">{listPropertiesData?.WallAndCeiling?.Toilets}</p>
+                  </div>
+                  </AccordionContent>
+                </AccordionPanel>
+                </Accordion>
+                </div>
+              </div>
+            </div>
+
+          {/* location */}
+          <div id="location" className={`${styles.location} location page`}>
+            <div className="locationMain">
+              <h2 className={`${styles.locationMainHead}`}>LOCATION</h2>
+              <div className={`${styles.locationBox}`}>
+              <div >
+              <iframe
+                  width="600"
+                  height="400"
+                  frameBorder="0"
+                  className={styles.locationMapSize}
+                  src={mapSrc}
+                  allowFullScreen
+                ></iframe>
+
+              </div>
+              </div>
+              </div>
+              </div>
+
+          {/* FAQ */}
+          <div className={`${styles.amenities} amenities`}>
+            <div className={` ${styles.faq} faq`}>
+              <div className={` ${styles.faqMain}`}>
+                <h2 className={`${styles.amenitiesMainHead}`}>Frequently Asked Question</h2>
+              </div>
+              <div className={`${styles.amenitiesBox}`}>
+                <div className={` ${styles.faqLeft}`}>
+                  <Accordion collapseAll className="border-none">
+                    {listPropertiesData?.Faq?.map((item, index) => (
+                      <Accordion.Panel key={index}>
+                        <Accordion.Title
+                          className={` ${styles.faqItemMain} rounded-t-md text-black bg-white-700 hover:bg-white-700
+                            focus:border-none focus:ring-grey-0 focus:ring-0`}
+                        >
+                          {item?.Question}
+                        </Accordion.Title>
+                        <Accordion.Content className="bg-white-700 text-black">
+                          <p className=" mb-2 text-black dark:text-white-400">
+                            {item?.Answer}
+                          </p>
+                        </Accordion.Content>
+                      </Accordion.Panel>
+                    ))}
+                  </Accordion>
+                </div>
+              </div>
+            </div>
+          </div>
+
+              {/* similar */}
+
+              <div id="similar" className={`${styles.similar} similar page`}>
+            <div className="similarMain">
+              <h2 className={`${styles.similarMainHead}`}>SIMILAR PROPERTIES</h2>
+              <div className={`${styles.similarBox}`}>
+              <div className={` ${styles.smilarBoxMain} flex flex-wrap `}>
+         
+         <div className={` ${styles.smilarBox} border border-gray-300 rounded-md`}>
+           <div>
+             <div>
+               <img
+                 className={` ${styles.smilarBoxImg} rounded-md`}
+                 src="/img/black-wallpaper-1.jpg"
+                 alt=""
+               />
+             </div>
+           </div>
+           <div className="p-4">
+             <div className={` ${styles.smilarLocationMain} flex`}>
+             <i className="bi bi-geo-alt-fill"></i>
+             <p className={`text-gray-700`}>138 Rue Jean -Tone Est,CA</p>
+             </div>
+             <h2 className={` ${styles.smilarBoxHead}`}>Remon Luxury Apartment</h2>
+             <div className={` ${styles.smilarBoxDetail} flex`}>
+               <div className="flex">
+               <i className="bi bi-geo-alt-fill"></i>
+             <p className={` ${styles.smilarBoxText}`}>3 Bed Room</p>
+               </div>
+               <div className="flex">
+
+                 <i className="bi bi-geo-alt-fill"></i>
+                 <p className={` ${styles.smilarBoxText}`}>3 Baths</p>
+               </div>
+               <div className="flex">
+                 <i className="bi bi-geo-alt-fill"></i>
+
+                 <p className={` ${styles.smilarBoxText}`}>1300 Bed Room</p>
+               </div>
+             </div>
+             <div className={`${styles.smilarBoxPriceMain}`}>
+               <p className={`${styles.smilarBoxPrice}`}>$1,10,346</p>
+               <button
+         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+         type="button"
+             >
+              More Details
+             </button>
+             </div>
+           </div>
+         </div>
+         <div className={` ${styles.smilarBox} border border-gray-300 rounded-md`}>
+           <div>
+             <div>
+               <img
+                 className={` ${styles.smilarBoxImg} rounded-md`}
+                 src="/img/black-wallpaper-1.jpg"
+                 alt=""
+               />
+             </div>
+           </div>
+           <div className="p-4">
+             <div className={` ${styles.smilarLocationMain} flex`}>
+             <i className="bi bi-geo-alt-fill"></i>
+             <p className={`text-gray-700`}>138 Rue Jean -Tone Est,CA</p>
+             </div>
+             <h2 className={` ${styles.smilarBoxHead}`}>Remon Luxury Apartment</h2>
+             <div className={` ${styles.smilarBoxDetail} flex`}>
+               <div className="flex">
+               <i className="bi bi-geo-alt-fill"></i>
+             <p className={` ${styles.smilarBoxText}`}>3 Bed Room</p>
+               </div>
+               <div className="flex">
+
+                 <i className="bi bi-geo-alt-fill"></i>
+                 <p className={` ${styles.smilarBoxText}`}>3 Baths</p>
+               </div>
+               <div className="flex">
+                 <i className="bi bi-geo-alt-fill"></i>
+
+                 <p className={` ${styles.smilarBoxText}`}>1300 Bed Room</p>
+               </div>
+             </div>
+             <div className={`${styles.smilarBoxPriceMain}`}>
+               <p className={`${styles.smilarBoxPrice}`}>$1,10,346</p>
+               <button
+         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+         type="button"
+             >
+              More Details
+             </button>
+             </div>
+           </div>
+         </div>
+         <div className={` ${styles.smilarBox} border border-gray-300 rounded-md`}>
+           <div>
+             <div>
+               <img
+                 className={` ${styles.smilarBoxImg} rounded-md`}
+                 src="/img/black-wallpaper-1.jpg"
+                 alt=""
+               />
+             </div>
+           </div>
+           <div className="p-4">
+             <div className={` ${styles.smilarLocationMain} flex`}>
+             <i className="bi bi-geo-alt-fill"></i>
+             <p className={`text-gray-700`}>138 Rue Jean -Tone Est,CA</p>
+             </div>
+             <h2 className={` ${styles.smilarBoxHead}`}>Remon Luxury Apartment</h2>
+             <div className={` ${styles.smilarBoxDetail} flex`}>
+               <div className="flex">
+               <i className="bi bi-geo-alt-fill"></i>
+             <p className={` ${styles.smilarBoxText}`}>3 Bed Room</p>
+               </div>
+               <div className="flex">
+
+                 <i className="bi bi-geo-alt-fill"></i>
+                 <p className={` ${styles.smilarBoxText}`}>3 Baths</p>
+               </div>
+               <div className="flex">
+                 <i className="bi bi-geo-alt-fill"></i>
+
+                 <p className={` ${styles.smilarBoxText}`}>1300 Bed Room</p>
+               </div>
+             </div>
+             <div className={`${styles.smilarBoxPriceMain}`}>
+               <p className={`${styles.smilarBoxPrice}`}>$1,10,346</p>
+               <button
+         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+         type="button"
+             >
+              More Details
+             </button>
+             </div>
+           </div>
+         </div>
+         
+        
+         </div>
+                </div>
+                </div>
+                </div>
+        </div>
+        <div className={` ${styles.divideDetailPageRight}`}>
+          <div id="general" className={`${styles.formDetails}`}>
+              <div className="GeneralDetailsMain">
+                <h2 className={`${styles.GeneralDetailsMainHead}`}>
+                  GET A GUIDED TOUR
+                </h2>
+                <div className={`${styles.GeneralDetailsBox}`}>
+                <div className="mb-6 mt-6">
+                    <input
+                      type="text"
+                      value={Name}
+                      onChange={handleNameChange}
+                      id="Name"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Name"
+                      required
+                    />
+                  </div>
+                  <div className="mb-6">
+                    <input
+                      type="email"
+                      value={Email}
+                      onChange={handleEmailChange}
+                      id="email"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Email"
+                      required
+                    />
+                  </div>
+                  <div className="mb-6">
+                    <input
+                      type="text"
+                      value={MolileNumber}
+                      onChange={handlePhoneChange}
+                      id="Phone"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Phone"
+                      required
+                    />
+                  </div>
+                  <div className="mb-6">
+                    <textarea
+                      type="text"
+                      value={Message}
+                      onChange={handleMessageChange}
+                      id="Message"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="message"
+                      required
+                    />
+                  </div>
+                  <div className={`mb-6`}>
+                    <DayPicker
+                      mode="single"
+                      selected={EnquiryData}
+                      onSelect={handleEnquiryData}
+                      className={`${styles.rdp}`}
+                      modifiersStyles={{
+                        selected: {
+                          backgroundColor: 'gray',
+                          color: 'white',
+                        },
+                        today: {
+                          color: 'white',
+                          backgroundColor: '#2a4ac8',
+                        },
+                      }}
+                    />
+                  </div>
+                  <div className="mb-6">
+                    <select
+                      id="enquiryType"
+                      name="enquiryType"
+                      value={EnquiryType}
+                      onChange={handleEnquiryType}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    >
+                      <option value="">Select Enquiry Type</option>
+                      <option value="Project">Project</option>
+                      <option value="Property">Property</option>
+                      <option value="Astrology">Astrology</option>
+                    </select>
+                  </div>
+                  <button
+                    className={` ${styles.agentRightMainContenBtn} text-white bg-blue-700 h-12 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                    type="button"
+                    onClick={addEnquiryData}
+                    > 
+                    Send
+                  </button>
+                </div>
+                </div>
+              </div>
+          </div>
+      </div>
+      
+      <Footer />
+    </>
+  );
+};
+
+export default PropertyDetail;

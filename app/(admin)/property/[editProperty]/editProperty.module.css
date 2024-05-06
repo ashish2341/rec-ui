@@ -1,0 +1,14 @@
+.actiivetab{
+    border: 3px solid rgb(63 131 248 / var(--tw-bg-opacity)) !important;
+    background-color: lightgrey !important;
+
+}
+.activeMain{
+    border-color: rgb(63 131 248 / var(--tw-bg-opacity)) !important;
+
+}
+.activeMain:after{
+    border-color: rgb(63 131 248 / var(--tw-bg-opacity)) !important;
+
+}
+

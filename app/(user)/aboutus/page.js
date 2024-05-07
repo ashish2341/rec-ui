@@ -7,7 +7,10 @@ import styles from "./aboutus.module.css";
 import { addEnquiry } from "@/api-functions/enquiry/addEnquiry";
 import { ToastContainer, toast } from "react-toastify";
 import Timeline from "@/components/common/timeline";
-
+// export const metadata = {
+//     title: "About"
+    
+//   };
 
 const AboutUs = () => {
     const milestones = [

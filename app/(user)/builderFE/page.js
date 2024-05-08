@@ -148,7 +148,6 @@ const BuilderPage = () => {
                                 <i class="bi bi-instagram ml-3"></i>
                                 <i class="bi bi-linkedin ml-3"></i>
                                 <i class="bi bi-twitter ml-3"></i>
-                                <i class="bi bi-pinterest ml-3"></i>
                             </div>
                             <div>
                                 <p>100 properties listed</p>

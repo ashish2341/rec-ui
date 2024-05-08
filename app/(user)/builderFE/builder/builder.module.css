@@ -29,7 +29,9 @@
 }
 
 .builderDetailPageRight{
-    width: 72%;
+    width: 74%;
+    display: inline-grid;
+    grid-template-columns: auto auto;
 }
 
 .builderBox{
@@ -90,4 +92,18 @@
     font-size: 0.75rem;
     font-weight: 600;
     color: gray;
+}
+
+.builderLogoImg{
+    aspect-ratio: 2/2;
+    border-radius: 50%;
+    margin-left: 3rem;
+}
+
+.builderMapDetails{
+    padding: 1rem;
+}
+
+.builderRightImg{
+    aspect-ratio: 3 / 2;
 }

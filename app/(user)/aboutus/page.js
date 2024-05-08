@@ -31,7 +31,7 @@ const AboutUs = () => {
                 </div>
                 <div className={`${styles.aboutWelcome}`}>
                     <div className={`${styles.aboutWelcomeText}`}>
-                        <h1 className={`${styles.aboutHeading} mb-6`}>Welcome to Housing</h1>
+                        <h1 className={`${styles.aboutHeading} mb-6`}>Welcome to REC</h1>
                         <p className="mb-2 font-medium text-gray-600 dark:text-gray-600 text-sm">
                             Founded in 2012 and acquired by REA India in 2017, REC.com 
                             is India’s most innovative real estate advertising platform for homeowners, 

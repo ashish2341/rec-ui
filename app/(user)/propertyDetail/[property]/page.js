@@ -114,7 +114,7 @@ const PropertyDetail = ({params}) => {
     return isLoading ? (
       <SkeletonLoader />
     ) : (
-      listPropertiesData?.data?.map((item,index) => (
+      listDataConst?.data?.map((item,index) => (
             
         <div key={index} className="mr-3"  >
           <img
@@ -154,7 +154,7 @@ const PropertyDetail = ({params}) => {
             </div>
             <div className={`${styles.populerPropertiesBoxPriceMain}`}>
               <p className={`${styles.populerPropertiesBoxPrice}`}>
-              {item.TotalPrice} 
+              {item.TotalPrice?.DisplayValue} 
               </p>
               <Link href={`/propertyDetail/${item._id}`} >
                 <button
@@ -308,7 +308,8 @@ const PropertyDetail = ({params}) => {
               data-carousel="static"
             >
               <div  className="relative h-56 overflow-hidden rounded-lg md:h-96">
-              {listPropertiesData?.Images?.map((item,index) => (
+              {listPropertiesData ?
+                listPropertiesData?.Images?.map((item,index) => (
                 <div
                   key={index}
                   className=" duration-700 ease-linear"
@@ -316,7 +317,7 @@ const PropertyDetail = ({params}) => {
                 >
                    <img className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" src={item.URL} alt="" />
                 </div>
-                ))}
+                )): <LoadingImg />}
               </div>
               <button
                 type="button"
@@ -369,9 +370,12 @@ const PropertyDetail = ({params}) => {
             </div>
           </div>
           <div className={`${styles.heroSectionLeftImgMain}`}>
-            <img src={listPropertiesData?.Area?.AreaImage} alt="" />
+            {
+              listPropertiesData ? <img src={listPropertiesData?.Area?.AreaImage} alt="" /> : <LoadingImg />
+            }
           </div>
-          {listPropertiesData?.Videos?.map((videoDatas) => (
+          {listPropertiesData ?
+          listPropertiesData?.Videos?.map((videoDatas) => (
           <div key={videoDatas._id} className={`${styles.heroSectionLeftVideoMain}`}>
             <video
               controls
@@ -383,7 +387,7 @@ const PropertyDetail = ({params}) => {
               />
             </video>
           </div>
-          ))}
+          )): <LoadingImg />}
         </div>
         <div className={`${styles.heroSectionBottomMain}`}>
           <div className={`${styles.heroSectionBottomBox}`}>

@@ -26,6 +26,7 @@ import { Button, Modal } from "flowbite-react";
 import Spinner from "@/components/common/loading";
 import SkeletonLoader from "@/components/common/loader";
 import SearchBar from "./search";
+import LoadingImg from "@/components/common/loadingImg";
 
 export default function Home() {
  
@@ -274,9 +275,13 @@ export default function Home() {
       return false
     }
     setOpenModal(true);
-    setZodaicName("");
-    setDob("");
   };
+
+  const onResetValue =() => {
+    setOpenModal(false);
+    setZodaicName("")
+    setDob("")
+  }
   var totalSlides = propertyByapartmentType?.data?.length;
   var slidesToShow = totalSlides < 5 ? totalSlides : 5;
   
@@ -376,15 +381,18 @@ export default function Home() {
                 </div>
               </div>
               <div className={`${styles.crousalItemRightMain}`}>
-                <img
+                {bannerData ?
+                  <img
                   src={bannerData?.data[0].Url}
                   className={`${styles.crousalItemLeftImage} block`}
                   alt="...a"
-                />
+                /> : <Spinner />
+                }
               </div>
             </div>
           </div>
           <div className="hidden duration-700 ease-in-out" data-carousel-item>
+          <SearchBar />
             <img
               src={bannerData?.data[1].Url}
               className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
@@ -502,7 +510,7 @@ export default function Home() {
             <p className={`${styles.propertiesByAreaMainText}`}>
               Find Your Perfect Property by Area
             </p>
-            <a
+            {/* <a
               href="#"
               className="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline"
             >
@@ -524,7 +532,7 @@ export default function Home() {
                   d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
                 />
               </svg>
-            </a>
+            </a> */}
           </div>
         </div>
         {propertyByAreaData ? (
@@ -566,7 +574,7 @@ export default function Home() {
             <p className={`${styles.apartmentTypeMainText}`}>
               Discover Your Ideal Apartment Style
             </p>
-            <div className="flex flex-wrap">
+            {/* <div className="flex flex-wrap">
               <button
                 type="button"
                 onClick={() => slider?.current?.slickPrev()}
@@ -596,7 +604,7 @@ export default function Home() {
                   <span className="sr-only">Next</span>
                 </span>
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className={`flex`} >
@@ -703,7 +711,7 @@ export default function Home() {
       <div className={`${styles.populerPropertiesMain} populerProperties`}>
         <div>
           <h2 className={`${styles.propertiesByAreaMainHead}`}>
-            Discover Populer <span className="blueText">Properties</span>
+            Discover Popular <span className="blueText">Properties</span>
           </h2>
           <div className={`${styles.propertiesByAreaMainTextMain}`}>
             <p className={`${styles.propertiesByAreaMainText}`}>
@@ -1134,19 +1142,25 @@ export default function Home() {
         </div>
       </div>
       <Footer />
-       <Modal dismissible className="bg-transparent/[.5]" show={openModal} onClose={() => setOpenModal(false)}>
+       <Modal dismissible className="bg-transparent/[.5]" show={openModal} onClose={onResetValue}>
         <Modal.Header>Properties by <span className="blueText">Zodiac</span></Modal.Header>
         <Modal.Body>
-          <div className="space-y-6">
-            <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><span>Direction : </span>{propertyByZodaicProperty?.data?.Facing?.Facing}</p>
-            <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><span>Zodiac Sign : </span>{propertyByZodaicProperty?.data?.rashi}</p>
+          <div className={`${styles.ModalContent}`}>
+            <div>
+              <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400 m-2"><span>Name : </span>{ZodiacName}</p>
+              <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400 m-2"><span>Date of birth : </span>{Dob}</p>
+            </div>
+            <div>
+              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400 m-2"><span>Direction : </span>{propertyByZodaicProperty?.data?.Facing?.Facing}</p>
+              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400 m-2"><span>Zodiac Sign : </span>{propertyByZodaicProperty?.data?.rashi}</p>
+            </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
           <Button
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-small rounded-lg text-sm w-full sm:w-auto px-2.5 py-0.75 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             type="button"
-            onClick={() => setOpenModal(false)}
+            onClick={onResetValue}
             href={`/propertyList/facingId=${propertyByZodaicProperty?.data?.Facing?._id}`}
           >
             Show Properties

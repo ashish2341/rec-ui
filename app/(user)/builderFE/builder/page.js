@@ -203,7 +203,7 @@ const BuilderHomePage = () => {
                             <div className={` ${styles.cardImgBottom}`}>
                                 <div className={` ${styles.populerPropertiesLocationMain} flex`}>
                                 <i className="bi bi-geo-alt-fill"></i>
-                                <p className={`text-gray-700`}>Address</p>
+                                <p className={`text-gray-700`}>Addres</p>
                                 </div>
                                 <h2 className={` ${styles.populerPropertiesBoxHead}`}>
                                 Title

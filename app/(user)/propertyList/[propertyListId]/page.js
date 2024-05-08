@@ -52,13 +52,11 @@ const PropertyListPage = (params) => {
     `${API_BASE_URL_FOR_MASTER}/possession`
   );
 
-
   // fetching Data for featureData
   const { data: featureData } = useFetch(
     `${API_BASE_URL}/feature/allFeature?page=1&pageSize=10&search=`
   );
 
- 
   const urlArray = params?.params?.propertyListId.split("%");
   const urlPartTwo = urlArray[0];
   const query = urlArray[1].substring(2);
@@ -109,7 +107,6 @@ const PropertyListPage = (params) => {
   ];
   useEffect(() => {
     if (payload) {
-
       getAllFilterProperties(payload);
     }
 
@@ -255,6 +252,7 @@ const PropertyListPage = (params) => {
                               value={item._id}
                               name="facing"
                               onChange={handleCheckBoxChange}
+                              checked={payload.facing.includes(item._id)}
                               className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
@@ -323,6 +321,7 @@ const PropertyListPage = (params) => {
                               name="propertyType"
                               value={item._id}
                               onChange={handleCheckBoxChange}
+                              checked={payload.propertyType.includes(item._id)}
                               className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
@@ -391,6 +390,7 @@ const PropertyListPage = (params) => {
                               name="areaType"
                               value={item._id}
                               onChange={handleCheckBoxChange}
+                              checked={payload.areaType.includes(item._id)}
                               className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
@@ -450,7 +450,7 @@ const PropertyListPage = (params) => {
                     aria-labelledby="dropdownRangeTypeButton"
                   >
                     {RangeTypeArray.map((item, index) => (
-                      <li>
+                      <li key={index}>
                         <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                           <input
                             id={`checkbox-item-${index}`}
@@ -469,61 +469,6 @@ const PropertyListPage = (params) => {
                         </div>
                       </li>
                     ))}
-
-                    {/* <li>
-                      <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                        <input
-                          id={`checkbox-item-2`}
-                          type="checkbox"
-                          name="budget"
-                          value={"[3000000 ,6000000]"}
-                          onChange={handleRangeCheckBoxChange}
-                          className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                        />
-                        <label
-                          htmlFor={`checkbox-item-2`}
-                          className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
-                        >
-                          30 L- 60 L
-                        </label>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                        <input
-                          id={`checkbox-item-3`}
-                          type="checkbox"
-                          name="budget"
-                          value={"[6000000 ,10000000]"}
-                          onChange={handleRangeCheckBoxChange}
-                          className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                        />
-                        <label
-                          htmlFor={`checkbox-item-3`}
-                          className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
-                        >
-                          60 L- 1 Cr
-                        </label>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                        <input
-                          id={`checkbox-item-4`}
-                          type="checkbox"
-                          name="budget"
-                          value={"[10000000 ,20000000]"}
-                          onChange={handleRangeCheckBoxChange}
-                          className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                        />
-                        <label
-                          htmlFor={`checkbox-item-4`}
-                          className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
-                        >
-                          1 Cr- 2 Cr
-                        </label>
-                      </div>
-                    </li> */}
                   </ul>
                 </div>
               </li>
@@ -743,7 +688,7 @@ const PropertyListPage = (params) => {
                 >
                   More Filter
                   <svg
-                    class="w-2.5 h-2.5 ms-3"
+                    className="w-2.5 h-2.5 ms-3"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -751,9 +696,9 @@ const PropertyListPage = (params) => {
                   >
                     <path
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="m1 1 4 4 4-4"
                     />
                   </svg>
@@ -764,7 +709,7 @@ const PropertyListPage = (params) => {
                   className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
                 >
                   <ul
-                    class="p-2 text-sm text-gray-700 dark:text-gray-200"
+                    className="p-2 text-sm text-gray-700 dark:text-gray-200"
                     aria-labelledby="multiLevelDropdownButton"
                   >
                     {/* Feature */}
@@ -778,7 +723,7 @@ const PropertyListPage = (params) => {
                       >
                         Feature
                         <svg
-                          class="w-2.5 h-2.5 ms-3 rtl:rotate-180"
+                          className="w-2.5 h-2.5 ms-3 rtl:rotate-180"
                           aria-hidden="true"
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -786,9 +731,9 @@ const PropertyListPage = (params) => {
                         >
                           <path
                             stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
                             d="m1 9 4-4-4-4"
                           />
                         </svg>
@@ -838,77 +783,6 @@ const PropertyListPage = (params) => {
                         </ul>
                       </div>
                     </li>
-                    {/* land Area */}
-                    {/* <li>
-                      <button
-                        id="landAreaDropdownButton"
-                        data-dropdown-toggle="landAreaDropdown"
-                        data-dropdown-placement="right-start"
-                        type="button"
-                        className="flex items-center justify-between w-full px-4 py-2 hover:bg-white dark:hover:bg-white dark:text-white"
-                      >
-                        LandArea
-                        <svg
-                          class="w-2.5 h-2.5 ms-3 rtl:rotate-180"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 6 10"
-                        >
-                          <path
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="m1 9 4-4-4-4"
-                          />
-                        </svg>
-                      </button>
-                      <div
-                        id="landAreaDropdown"
-                        className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-96 dark:bg-gray-700"
-                      >
-                        <ul
-                    
-                          className="grid gap-1  p-2 md:grid-cols-2"
-                          aria-labelledby="landAreaDropdownButton"
-                        >
-                          {landAreaArray ? (
-                            landAreaArray.map((item, index) => (
-                              <li key={index} className="w-1/3 mb-2">
-                                {" "}
-                          
-                                <div className="flex items-center p-1 rounded hover:bg-white dark:hover:bg-gray-600">
-                                  <input
-                                    id={`checkbox-item-${index}`}
-                                    type="checkbox"
-                                    value={item.value}
-                                    name="landArea"
-                                    onChange={handleCheckBoxChange}
-                                    className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                  />
-                                  <label
-                                    htmlFor={`checkbox-item-${index}`}
-                                    className="w-full  text-sm font-medium text-gray-900 rounded dark:text-gray-300"
-                                  >
-                                    {item.label}
-                                  </label>
-                                </div>
-                              </li>
-                            ))
-                          ) : (
-                            <li>
-                              <a
-                                href="#"
-                                className="block px-4 py-2 hover:bg-white dark:hover:bg-gray-200 dark:hover:text-white"
-                              >
-                                No data found
-                              </a>
-                            </li>
-                          )}
-                        </ul>
-                      </div>
-                    </li> */}
                     {/* Bathroom */}
                     <li>
                       <button
@@ -920,7 +794,7 @@ const PropertyListPage = (params) => {
                       >
                         Bathroom
                         <svg
-                          class="w-2.5 h-2.5 ms-3 rtl:rotate-180"
+                          className="w-2.5 h-2.5 ms-3 rtl:rotate-180"
                           aria-hidden="true"
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -928,9 +802,9 @@ const PropertyListPage = (params) => {
                         >
                           <path
                             stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
                             d="m1 9 4-4-4-4"
                           />
                         </svg>
@@ -1017,7 +891,7 @@ const PropertyListPage = (params) => {
                 </h1>
                 <div className="flex">
                   <div>
-                    <li className="me-2 mt-2">
+                    <li className="me-2 mt-2 list-none">
                       <button
                         id="dropdownSortByButton"
                         data-dropdown-toggle="dropdownSortBy"
@@ -1057,7 +931,7 @@ const PropertyListPage = (params) => {
                               href="#"
                               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                             >
-                            By High Price
+                              By High Price
                             </a>
                           </li>
                           <li>
@@ -1065,7 +939,7 @@ const PropertyListPage = (params) => {
                               href="#"
                               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                             >
-                            By Low Price
+                              By Low Price
                             </a>
                           </li>
                           <li>
@@ -1073,7 +947,7 @@ const PropertyListPage = (params) => {
                               href="#"
                               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                             >
-                             A - Z  
+                              A - Z
                             </a>
                           </li>
                           <li>
@@ -1081,7 +955,7 @@ const PropertyListPage = (params) => {
                               href="#"
                               className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                             >
-                             Z - A
+                              Z - A
                             </a>
                           </li>
                         </ul>
@@ -1113,14 +987,16 @@ const PropertyListPage = (params) => {
                       <div
                         className={`flex flex-col justify-between leading-normal ml-3 w-full mr-3 mt-3 mb-3 ${styles.cardContent}`}
                       >
-                        <div className="flex justify-between ">
-                          <h5
-                            className={`mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white ${styles.price}`}
-                          >
-                            {/* <span className="px-2">₹</span> */}₹{" "}
-                            <span>{item.TotalPrice.DisplayValue}</span>
-                          </h5>
-                          <div className="flex ">
+                        <Link href={`/propertyDetail/${item._id}`}>
+                          {" "}
+                          <div className="flex justify-between ">
+                            <h5
+                              className={`mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white ${styles.price}`}
+                            >
+                              {/* <span className="px-2">₹</span> */}₹{" "}
+                              <span>{item.TotalPrice.DisplayValue}</span>
+                            </h5>
+                            {/* <div className="flex ">
                             <div
                               className={` mr-3 ${styles.GeneralDetailsBoxIcon}`}
                             >
@@ -1133,14 +1009,13 @@ const PropertyListPage = (params) => {
                               {" "}
                               <i className="bi bi-heart"></i>
                             </div>
+                          </div> */}
                           </div>
-                        </div>
-
-                        <div className="flex flex-row  leading-normal ">
-                          <p className="mb-3 font-bold text-black-700 dark:text-black-800 ">
-                            {item.Titile}
-                          </p>
-                          {/* <button
+                          <div className="flex flex-row  leading-normal ">
+                            <p className="mb-3 font-bold text-black-700 dark:text-black-800 ">
+                              {item.Titile}
+                            </p>
+                            {/* <button
                             type="button"
                             className={`text-white-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 ml-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 ${styles.cardStarBtn}`}
                           >
@@ -1150,29 +1025,30 @@ const PropertyListPage = (params) => {
                             </span>
                           </button> */}
 
-                          <button
-                            type="button"
-                            className={`text-white-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 ml-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 ${styles.cardStarBtn}`}
-                          >
-                            {item?.Facing[0].Facing}
-                          </button>
-                        </div>
-                        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                          <i className="bi bi-geo-alt-fill"></i>
-                          <span className={`ml-1 ${styles.textCapitalized}`}>
-                            {item.Address}
-                          </span>{" "}
-                          <span className={`ml-1 ${styles.textCapitalized}`}>
-                            {item.Country}
-                          </span>
-                        </p>
-                        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                          <span className="mb-3 font-bold text-gray-700 dark:text-gray-400">
-                            {item.BhkType.Type}
-                          </span>{" "}
-                          for {item.ProeprtyFor} in {item.Area.Area},
-                          {item.State}
-                        </p>
+                            <button
+                              type="button"
+                              className={`text-white-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 ml-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 ${styles.cardStarBtn}`}
+                            >
+                              {item?.Facing[0].Facing}
+                            </button>
+                          </div>
+                          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                            <i className="bi bi-geo-alt-fill"></i>
+                            <span className={`ml-1 ${styles.textCapitalized}`}>
+                              {item.Address}
+                            </span>{" "}
+                            <span className={`ml-1 ${styles.textCapitalized}`}>
+                              {item.Country}
+                            </span>
+                          </p>
+                          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                            <span className="mb-3 font-bold text-gray-700 dark:text-gray-400">
+                              {item.BhkType.Type}
+                            </span>{" "}
+                            for {item.ProeprtyFor} in {item.Area.Area},
+                            {item.State}
+                          </p>
+                        </Link>
                         <div className="">
                           <Accordion listData={[item]} />
                         </div>
@@ -1227,7 +1103,9 @@ const PropertyListPage = (params) => {
               )}
             </div>
           </div>
-          {listData.length > 2 && listData.length != numToShow ? (
+          {listData.length > 2 &&
+          listData.length != numToShow &&
+          listData.length != listDataForShow.length ? (
             <div className="flex justify-center">
               <div>
                 <button
@@ -1239,7 +1117,7 @@ const PropertyListPage = (params) => {
                 </button>
               </div>
             </div>
-          ) : listDataForShow.length > 2 ? (
+          ) : listDataForShow.length > 2 || numToShow != listData.length ? (
             <div className="flex justify-center">
               <div>
                 <button

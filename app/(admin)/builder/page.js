@@ -1,6 +1,65 @@
+"use client"
 import Link from "next/link";
+import Pagination from "@/components/common/pagination";
+import Popup from "@/components/common/popup";
+import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
+import { DeleteBuilderApi } from "@/api-functions/builder/deleteBuilder";
 
 export default function Builder() {
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [listData, setListData] = useState(false);
+  const [deleteId, setDeleteId] = useState();
+  const [page, setPage] = useState(1);
+  const [searchData, setSearchData] = useState("");
+
+  useEffect(() => {
+    getAllBuilder();
+  }, [page, searchData]);
+  
+  const getAllBuilder = async () => {
+    let builder = await GetBuilderApi(page, searchData);
+    if (builder?.resData?.success == true) {
+      setListData(builder?.resData);
+      toast.success(builder?.resData?.message);
+      return false;
+    } else {
+      toast.error(faq.errMessage);
+      return false;
+    }
+  };
+  const searchInputChange = (e) => {
+    setSearchData(e.target.value);
+  };
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
+  const handleDelete = async () => {
+    // Perform delete operation
+    let res = await DeleteBuilderApi(deleteId);
+    if (res?.resData?.success == true) {
+      getAllBuilder();
+      setDeleteId("");
+      setIsPopupOpen(false);
+      toast.success(res?.resData?.message);
+      return false;
+    } else {
+      toast.error(res?.errMessage);
+      return false;
+    }
+  };
+
+  const handleCancel = () => {
+    setDeleteId("");
+    setIsPopupOpen(false);
+  };
+  const deleteBuilderModal = async (id) => {
+    setDeleteId(id);
+    setIsPopupOpen(true);
+
+  };
+
   return (
     <section>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -42,7 +101,8 @@ export default function Builder() {
               type="text"
               id="table-search"
               className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Search htmlFor users"
+              placeholder="Search builder"
+              onChange={searchInputChange}
             />
           </div>
         </div>
@@ -50,16 +110,16 @@ export default function Builder() {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Name
+               Name
               </th>
               <th scope="col" className="px-6 py-3">
-                Description
+                Email
               </th>
               <th scope="col" className="px-6 py-3">
-                Address
+              Establish Date
               </th>
               <th scope="col" className="px-6 py-3">
-                Image
+                Logo
               </th>
               <th scope="col" className="px-6 py-3">
                 Action
@@ -67,168 +127,63 @@ export default function Builder() {
             </tr>
           </thead>
           <tbody>
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                Apple MacBook Pro 17"
-              </td>
-              <td className="px-6 py-4">Description</td>
-              <td className="px-6 py-4">Address</td>
-              <td className="px-6 py-4">
-                {" "}
-                
-                <img
-                  className="imageCircle"
-                  src={"img/recLogo.png"}
-                  width={100}
-                  height={100}
-                />
-                
-              </td>
-              <td className="px-6 py-4">
-                <div className="flex items-center space-x-2">
-                  <Link
-                    href="/builder/editBuilder"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                    <i className="bi bi-pencil-square"></i>
-                  </Link>
-                  <Link
-                    href="#"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                    <i className="bi bi-eye-fill"></i>
-                  </Link>
-                  <Link
-                    href="#"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                    <i className="bi bi-trash-fill"></i>
-                  </Link>
-                </div>
-              </td>
-            </tr>
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-            <td
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                Apple MacBook Pro 17"
-              </td>
-              <td className="px-6 py-4">Description</td>
-              <td className="px-6 py-4">Address</td>
-              <td className="px-6 py-4">
-                {" "}
-                
-                <img
-                  className="imageCircle"
-                  src={"img/recLogo.png"}
-                  width={100}
-                  height={100}
-                />
-                
-              </td>
-              <td className="px-6 py-4">
-                <div className="flex items-center space-x-2">
-                  <Link
-                    href="/builder/editBuilder"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                    <i className="bi bi-pencil-square"></i>
-                  </Link>
-                  <Link
-                    href="#"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                    <i className="bi bi-eye-fill"></i>
-                  </Link>
-                  <Link
-                    href="#"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                    <i className="bi bi-trash-fill"></i>
-                  </Link>
-                </div>
-              </td>
-            </tr>
+          {listData?.data?.map((item, index) => (
+              <tr
+              key={index} 
+              className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <td
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                 {item.Name}
+                </td>
+                <td className="px-6 py-4">{item.EmailId}</td>
+                <td className="px-6 py-4">{item.EstablishDate.slice(0,10)}</td>
+                <td className="px-6 py-4 text-blue-600 dark:text-blue-500">
+                  <img
+                    // className="imageCircle"
+                    src={item.Logo}
+                    width={100}
+                    height={100}
+                  />
+                </td>
+                <td className="px-6 py-4">
+                  <div className="flex items-center space-x-2">
+                    <Link
+                      href={`/builder/${item._id}`}
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    >
+                      <i className="bi bi-pencil-square"></i>
+                    </Link>
+                    <Link
+                      href="#"
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    >
+                      <i className="bi bi-eye-fill"></i>
+                    </Link>
+                    <Link
+                      href="#"
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    >
+                      <i
+                       onClick={() => deleteBuilderModal(item._id)} 
+                      className="bi bi-trash-fill"></i>
+                    </Link>
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
-        <nav
-          className="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
-          aria-label="Table navigation"
-        >
-          <span className="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
-            Showing{" "}
-            <span className="font-semibold text-gray-900 dark:text-white">
-              1-10
-            </span>{" "}
-            of{" "}
-            <span className="font-semibold text-gray-900 dark:text-white">
-              1000
-            </span>
-          </span>
-          <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-            <li>
-              <a
-                href="#"
-                className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Previous
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                1
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                2
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                aria-current="page"
-                className="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-              >
-                3
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                4
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                5
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Next
-              </a>
-            </li>
-          </ul>
-        </nav>
+        <Pagination data={listData} pageNo={handlePageChange} pageVal={page} />
+      <Popup
+        isOpen={isPopupOpen}
+        title="Are you sure you want to delete this builder ?"
+        confirmLabel="Yes, I'm sure"
+        cancelLabel="No, cancel"
+        onConfirm={handleDelete}
+        onCancel={handleCancel}
+      />
       </div>
     </section>
   );

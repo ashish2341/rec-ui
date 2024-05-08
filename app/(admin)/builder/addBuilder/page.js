@@ -5,12 +5,16 @@ import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { addAmenity } from "@/api-functions/amenity/addAmenity";
 import { ImageString } from "@/api-functions/auth/authAction";
+import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import useFetch from "@/customHooks/useFetch";
+import Select from "react-select";
+import { AddBuilderApi } from "@/api-functions/builder/addBuilder";
 
 export default function AddBuilder() {
-  const initialFieldState = {
-    Name: "",
-    URL: "",
-  };
+  // fetching Data for Area
+  const { data: areaData } = useFetch(`${API_BASE_URL_FOR_MASTER}/areas`);
+  console.log("areaData", areaData);
+  const defaultOption = [{ value: "", label: "no data found" }];
   const initialBranchState = {
     Phone: "",
     Mobile: "",
@@ -32,63 +36,50 @@ export default function AddBuilder() {
     ],
   };
   const [builderName, setBuilderName] = useState("");
-  const [DetailNote, setDescription] = useState("");
+  const [detailNote, setDetailNote] = useState("");
   const [verifiedBy, setVerifiedBy] = useState("");
   const [verificationDate, setVerificationDate] = useState("");
-  const [socialMediaProfileLinks, setSocialMediaProfileLinks] = useState([
-    initialFieldState,
-  ]);
-  const [BranchesData, setBranchesData] = useState([initialFieldState]);
+  const [socialMediaProfileLinks, setSocialMediaProfileLinks] = useState({
+    Twitter: "",
+    Facebook: "",
+    LinkedIn: "",
+    Instagram: "",
+  });
   const [image, setImage] = useState("");
   const [documents, setDocuments] = useState([]);
   const imageInputRef = useRef(null);
   const documentInputRef = useRef(null);
-  const [formData, setFormData] = useState([initialBranchState]);
+  const [BranchesData, setBranchesData] = useState([initialBranchState]);
+  const [builderMobile, setBuilderMobile] = useState("");
+  const [builderEmail, setBuilderEmail] = useState("");
+  const [builderWhatsapp, setBuilderWhatsapp] = useState("");
+  const [builderArea, setBuilderArea] = useState("");
+  const [establishDate, setEstablishDate] = useState("");
+  const [description, setDescription] = useState("");
+  const [builderLogo, setBuilderLogo] = useState("");
+  const logoInputRef = useRef(null);
   const router = useRouter();
 
   const handleNameChange = (e) => {
     setBuilderName(e.target.value);
   };
-  const handledescriptionChange = (e) => {
-    setDescription(e.target.value);
-  };
 
   // FOr Social media
-  const handleSocialProfileChange = (index, fieldName, value) => {
-    const updatedFields = [...socialMediaProfileLinks];
-    updatedFields[index][fieldName] = value;
-    setSocialMediaProfileLinks(updatedFields);
-  };
-
-  const handleAddMore = () => {
-    let newErrors = [];
-    socialMediaProfileLinks.forEach((field, index) => {
-      if (!field.Name.trim() || !field.URL.trim()) {
-        newErrors.push({ index, message: "profile Name and URL required." });
-      }
-    });
-
-    if (newErrors.length > 0) {
-      toast.error("profile Name and URL required.");
-      return false;
-    }
-    setSocialMediaProfileLinks([...socialMediaProfileLinks, initialFieldState]);
-  };
-
-  const handleDelete = (index) => {
-    const updatedFields = [...socialMediaProfileLinks];
-    updatedFields.splice(index, 1);
-    setSocialMediaProfileLinks(updatedFields);
+  const handleSocialProfileChange = (fieldName, value) => {
+    setSocialMediaProfileLinks((prevState) => ({
+      ...prevState,
+      [fieldName]: value,
+    }));
   };
 
   //For branchOffice
 
   const addMore = () => {
-    setFormData([...formData, initialBranchState]);
+    setBranchesData([...BranchesData, initialBranchState]);
   };
 
   const addMoreContactPerson = (index) => {
-    const updatedFormData = [...formData];
+    const updatedFormData = [...BranchesData];
     updatedFormData[index].ContactPerson.push({
       Name: "",
       Mobile: "",
@@ -96,128 +87,42 @@ export default function AddBuilder() {
       Phone: "",
       Designation: "",
     });
-    setFormData(updatedFormData);
+    setBranchesData(updatedFormData);
   };
 
-  const handleChange = (e, index, field, subIndex) => {
+  const handleOfficeChange = (e, index, field, subIndex) => {
     const { name, value } = e.target;
-    const updatedFormData = [...formData];
+    const updatedFormData = [...BranchesData];
     if (typeof subIndex === "undefined") {
-      updatedFormData[index][name] = value;
+      updatedFormData[index][field] = value;
     } else {
-      updatedFormData[index].ContactPerson[subIndex][name] = value;
+      // Check if ContactPerson array exists at the given index
+      if (!updatedFormData[index].ContactPerson) {
+        updatedFormData[index].ContactPerson = [];
+      }
+      // Ensure subIndex is within range
+      if (
+        subIndex >= 0 &&
+        subIndex < updatedFormData[index].ContactPerson.length
+      ) {
+        updatedFormData[index].ContactPerson[subIndex][field] = value;
+      }
     }
-    setFormData(updatedFormData);
+    setBranchesData(updatedFormData);
   };
 
   const handleDeleteContactPerson = (index, subIndex) => {
-    const updatedFormData = [...formData];
+    const updatedFormData = [...BranchesData];
     updatedFormData[index].ContactPerson.splice(subIndex, 1);
-    setFormData(updatedFormData);
+    setBranchesData(updatedFormData);
   };
 
-  const handleDeleteBranch = (index, subIndex) => {
-    if (typeof subIndex === "undefined") {
-      const updatedFormData = [...formData];
-      updatedFormData.splice(index, 1);
-      setFormData(updatedFormData);
-    } else {
-      const updatedFormData = [...formData];
-      updatedFormData[index].ContactPerson.splice(subIndex, 1);
-      setFormData(updatedFormData);
-    }
+  const handleDeleteBranch = (index) => {
+    const updatedFormData = [...BranchesData];
+    updatedFormData.splice(index, 1);
+    setBranchesData(updatedFormData);
   };
 
-  const submitForm = async () => {
-    // if (!builderName || !DetailNote || !verifiedBy || !image ) {
-    //   toast.error('Please fill in all required fields.');
-    //   return false
-    // }
-    console.log("handlesocialLinkChange=>", socialMediaProfileLinks);
-    const builderDetails = {
-      Name: builderName,
-      DetailNote: DetailNote,
-      verifiedBy: verifiedBy,
-      Logo: image,
-    };
-    console.log("builderDetails", builderDetails);
-  };
-  const handleImageInputChange = async (event) => {
-    const acceptedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
-
-    const files = Array.from(event.target.files);
-
-    // Check file types
-    const invalidFiles = files.filter(
-      (file) => !acceptedFileTypes.includes(file.type)
-    );
-
-    if (invalidFiles.length > 0) {
-      toast.error(
-        "Invalid image type. Please upload only JPEG or PNG or JPG files."
-      );
-      if (imageInputRef.current) {
-        imageInputRef.current.value = "";
-      }
-    } else {
-      const imageString = [];
-
-      // Map each file to its corresponding image string asynchronously
-      await Promise.all(
-        files.map(async (item) => {
-          console.log("image File inside map", item);
-          const formData = new FormData();
-          formData.append("profilePic", item);
-
-          try {
-            const res = await ImageString(formData);
-            if (res.successMessage) {
-              console.log("Image Response", res.successMessage.imageUrl);
-              imageString.push(res.successMessage.imageUrl);
-            } else {
-              toast.error(res.errMessage);
-              return false;
-            }
-          } catch (error) {
-            console.error("Error occurred while converting image:", error);
-            toast.error("Error occurred while converting image.");
-            return false;
-          }
-        })
-      );
-
-      console.log("image files data after convert string", imageString);
-
-      // Filter unique files based on filename
-      const uniqueFiles = imageString.filter((url) => {
-        const filename = url.substring(
-          url.lastIndexOf("-") + 1,
-          url.lastIndexOf(".")
-        );
-        console.log("imageString filename", filename);
-        if (image.length > 0) {
-          return !image.some((existingFile) => {
-            console.log("imageString existingFile", existingFile);
-            const existingFilename = existingFile.substring(
-              url.lastIndexOf("-") + 1,
-              existingFile.lastIndexOf(".")
-            );
-            console.log("image existingFilename", existingFilename);
-
-            return filename === existingFilename;
-          });
-        } else {
-          return filename;
-        }
-      });
-      setImage([...image, ...uniqueFiles]);
-      console.log("uniqueFiles data after convert string", uniqueFiles);
-
-      if (imageInputRef.current) {
-        imageInputRef.current.value = "";
-      }
-    }
-  };
   const handleDocumentInputChange = async (event) => {
     const acceptedFileTypes = [
       "application/pdf",
@@ -301,6 +206,118 @@ export default function AddBuilder() {
       }
     }
   };
+
+  const handleImageInputChange = async (event) => {
+    const acceptedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
+
+    const files = Array.from(event.target.files);
+
+    // Check file types
+    const invalidFiles = files.filter(
+      (file) => !acceptedFileTypes.includes(file.type)
+    );
+
+    if (invalidFiles.length > 0) {
+      toast.error(
+        "Invalid image type. Please upload only JPEG or PNG or JPG files."
+      );
+      if (imageInputRef.current) {
+        imageInputRef.current.value = "";
+      }
+    } else {
+      const imageString = [];
+
+      // Map each file to its corresponding image string asynchronously
+      await Promise.all(
+        files.map(async (item) => {
+          console.log("image File inside map", item);
+          const formData = new FormData();
+          formData.append("profilePic", item);
+
+          try {
+            const res = await ImageString(formData);
+            if (res.successMessage) {
+              console.log("Image Response", res.successMessage.imageUrl);
+              imageString.push(res.successMessage.imageUrl);
+            } else {
+              toast.error(res.errMessage);
+              return false;
+            }
+          } catch (error) {
+            console.error("Error occurred while converting image:", error);
+            toast.error("Error occurred while converting image.");
+            return false;
+          }
+        })
+      );
+
+      console.log("image files data after convert string", imageString);
+
+      // Filter unique files based on filename
+      const uniqueFiles = imageString.filter((url) => {
+        const filename = url.substring(
+          url.lastIndexOf("-") + 1,
+          url.lastIndexOf(".")
+        );
+        console.log("imageString filename", filename);
+        if (image.length > 0) {
+          return !image.some((existingFile) => {
+            console.log("imageString existingFile", existingFile);
+            const existingFilename = existingFile.substring(
+              url.lastIndexOf("-") + 1,
+              existingFile.lastIndexOf(".")
+            );
+            console.log("image existingFilename", existingFilename);
+
+            return filename === existingFilename;
+          });
+        } else {
+          return filename;
+        }
+      });
+      setImage([...image, ...uniqueFiles]);
+      console.log("uniqueFiles data after convert string", uniqueFiles);
+
+      if (imageInputRef.current) {
+        imageInputRef.current.value = "";
+      }
+    }
+  };
+  const submitForm = async () => {
+    // if (!builderName || !DetailNote || !verifiedBy || !image || !DetailNote || !verificationDate  || !documents) {
+    //   toast.error('Please fill in all required fields.');
+    //   return false
+    // }
+    // if (!socialMediaProfileLinks.Facebook || !socialMediaProfileLinks.Twitter || !socialMediaProfileLinks.Instagram || !socialMediaProfileLinks.Linkdin ) {
+    //   toast.error('Please fill in all Social Profile fields.');
+    //   return false
+    // }
+    const builderDetails = {
+      Name: builderName,
+      SocialMediaProfileLinks: socialMediaProfileLinks,
+      DetailNote: detailNote,
+      Logo: builderLogo,
+      Area: builderArea.value,
+      Mobile: builderMobile,
+      EmailId: builderEmail,
+      WhatsApp: builderWhatsapp,
+      Description: description,
+      EstablishDate: establishDate,
+      Images: image,
+      Documents: documents.map((URL) => ({ URL })),
+      BranchOffices: BranchesData,
+    };
+    console.log("builderDetails", builderDetails);
+    let res = await AddBuilderApi(builderDetails);
+    if (res?.resData?.success == true) {
+      router.push("/builder");
+      toast.success(res?.resData?.message);
+    } else {
+      toast.error(res?.errMessage);
+      return false;
+    }
+  };
+
   const removeImage = (index) => {
     const newArray = [...image];
     newArray.splice(index, 1);
@@ -328,6 +345,35 @@ export default function AddBuilder() {
   const cleardocumentInput = () => {
     if (documentInputRef.current) {
       documentInputRef.current.value = "";
+    }
+  };
+
+  const handleLogoInputChange = async (event) => {
+    const acceptedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
+
+    const file = event.target.files[0]; // Get the first file only
+    const formData = new FormData();
+    formData.append("profilePic", file);
+    console.log("image File", file);
+
+    // Check file type
+    if (!acceptedFileTypes.includes(file.type)) {
+      toast.error(
+        "Invalid logo type. Please upload only JPEG or PNG or JPG files."
+      );
+      if (logoInputRef.current) {
+        logoInputRef.current.value = "";
+      }
+    } else {
+      let res = await ImageString(formData);
+      console.log("image resPonse Data=>", res);
+      if (res.successMessage) {
+        console.log("Image Response", res.successMessage.imageUrl);
+        setBuilderLogo(res.successMessage.imageUrl);
+      } else {
+        toast.error(res.errMessage);
+        return;
+      }
     }
   };
   return (
@@ -367,6 +413,103 @@ export default function AddBuilder() {
           </div>
           <div>
             <label
+              htmlFor="area"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+            >
+              Area
+            </label>
+            {areaData ? (
+              <Select
+                options={areaData.data.map((element) => ({
+                  value: element._id,
+                  label: element.Area,
+                }))}
+                placeholder="Select One"
+                onChange={setBuilderArea}
+                required={true}
+                value={builderArea}
+              />
+            ) : (
+              <Select
+                options={defaultOption.map((element) => ({
+                  value: element.value,
+                  label: element.label,
+                }))}
+                placeholder="Select One"
+                required={true}
+              />
+            )}
+          </div>
+          <div>
+            <label
+              htmlFor="builderEmail"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              value={builderEmail}
+              onChange={(e) => setBuilderEmail(e.target.value)}
+              id="builderEmail"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Builder Email"
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="builderMobile"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+            >
+              Mobile
+            </label>
+            <input
+              type="number"
+              value={builderMobile}
+              onChange={(e) => setBuilderMobile(e.target.value)}
+              id="builderMobile"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Builder Mobile"
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="builderWhatsapp"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+            >
+              Whatsapp
+            </label>
+            <input
+              type="text"
+              value={builderWhatsapp}
+              onChange={(e) => setBuilderWhatsapp(e.target.value)}
+              id="builderWhatsapp"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Builder Whatsapp"
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="establishDate"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+            >
+              Established Date
+            </label>
+            <input
+              type="date"
+              value={establishDate}
+              onChange={(e) => setEstablishDate(e.target.value)}
+              id="establishDate"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Establish Date"
+              required
+            />
+          </div>
+          <div>
+            <label
               htmlFor="DetailNote"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
             >
@@ -374,8 +517,8 @@ export default function AddBuilder() {
             </label>
             <textarea
               type="DetailNote"
-              value={DetailNote}
-              onChange={handledescriptionChange}
+              value={detailNote}
+              onChange={(e) => setDetailNote(e.target.value)}
               id="DetailNote"
               className=" mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder=""
@@ -385,37 +528,57 @@ export default function AddBuilder() {
           </div>
           <div>
             <label
-              htmlFor="verifiedBy"
+              htmlFor="description"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
             >
-              verified By
+              Description
             </label>
-            <input
+            <textarea
               type="text"
-              value={verifiedBy}
-              onChange={(e) => setVerifiedBy(e.target.value)}
-              id="verifiedBy"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              id="description"
               className=" mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder=""
               required
+              rows={4}
             />
           </div>
-          <div>
+
+          <div className="mb-6">
             <label
-              htmlFor="VerificationDate"
+              htmlFor="logo"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
             >
-              Verification Date
+              Upload Logo
             </label>
             <input
-              type="date"
-              value={verificationDate}
-              onChange={(e) => setVerificationDate(e.target.value)}
-              id="VerificationDate"
-              className=" mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder=""
+              type="file"
+              id="logo"
+              name="logo"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              ref={logoInputRef}
+              multiple
+              accept=".jpg, .jpeg, .png"
+              onChange={handleLogoInputChange}
               required
             />
+            {builderLogo ? (
+              <div className="flex flex-wrap ">
+                <div className="mr-4 mb-1  ">
+                  <div className="ml-2  underline">
+                    <h3>Selected Logo</h3>
+                  </div>
+                  <img
+                    src={builderLogo}
+                    alt=""
+                    className=" object-cover m-2 mt-5 border border-black rounded-lg "
+                    width={100}
+                    height={100}
+                  />
+                </div>
+              </div>
+            ) : null}
           </div>
           <div className="mb-6">
             <label
@@ -509,81 +672,94 @@ export default function AddBuilder() {
               </div>
             ) : null}
           </div>
-        </div>
-        <div>
+
+          <div></div>
           <h2 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white underline">
             Social Profiles
           </h2>
-          {socialMediaProfileLinks.length != 0
-            ? socialMediaProfileLinks.map((field, index) => (
-                <div className="grid gap-4 mb-2 sm:grid-cols-3">
-                  <div key={index}>
-                    <label
-                      htmlFor={`profileName-${index}`}
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                    >
-                      Profile Name
-                    </label>
-                    <input
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      type="text"
-                      id={`profileName-${index}`}
-                      value={field.Name}
-                      onChange={(e) =>
-                        handleSocialProfileChange(index, "Name", e.target.value)
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor={`Url-${index}`}
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                    >
-                      Profile Url
-                    </label>
-                    <input
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      type="text"
-                      id={`Url-${index}`}
-                      value={field.URL}
-                      onChange={(e) =>
-                        handleSocialProfileChange(index, "URL", e.target.value)
-                      }
-                    />
-                  </div>
-
-                  {index > 0 ? (
-                    <div className="mt-3 ">
-                      <button
-                        className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mt-5"
-                        type="button"
-                        onClick={() => handleDelete(index)}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  ) : null}
-                </div>
-              ))
-            : null}
-
-          <button
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
-            type="button"
-            onClick={handleAddMore}
-          >
-            Add More Profile
-          </button>
+          <div></div>
+          {/* Facebook Url */}
+          <div>
+            <label
+              htmlFor="facebook"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+            >
+              Facebook Url
+            </label>
+            <input
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              type="text"
+              id="facebook"
+              value={socialMediaProfileLinks.Facebook}
+              onChange={(e) =>
+                handleSocialProfileChange("Facebook", e.target.value)
+              }
+            />
+          </div>
+          {/* Twitter Url */}
+          <div>
+            <label
+              htmlFor="Twitter"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+            >
+              Twitter Url
+            </label>
+            <input
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              type="text"
+              id="Twitter"
+              value={socialMediaProfileLinks.Twitter}
+              onChange={(e) =>
+                handleSocialProfileChange("Twitter", e.target.value)
+              }
+            />
+          </div>
+          {/* Instagram Url */}
+          <div>
+            <label
+              htmlFor="Instagram"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+            >
+              Instagram Url
+            </label>
+            <input
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              type="text"
+              id="Instagram"
+              value={socialMediaProfileLinks.Instagram}
+              onChange={(e) =>
+                handleSocialProfileChange("Instagram", e.target.value)
+              }
+            />
+          </div>
+          {/* Linkdin Url */}
+          <div>
+            <label
+              htmlFor="Linkdin"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+            >
+              Linkdin Url
+            </label>
+            <input
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              type="text"
+              id="facebLinkdinook"
+              value={socialMediaProfileLinks.LinkedIn}
+              onChange={(e) =>
+                handleSocialProfileChange("LinkedIn", e.target.value)
+              }
+            />
+          </div>
         </div>
         <div>
-          <div>
-            {formData.map((data, index) => (
-              <div className="grid gap-4 mb-2 sm:grid-cols-2" key={index}>
-                {/* Main BranchOffices fields */}
-                <h2 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white underline mt-10">
-                  Office Details
-                </h2>
-                <div></div>
+          {BranchesData.map((data, index) => (
+            <div key={index}>
+              {/* Main BranchOffices fields */}
+              <h2 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white underline mt-10">
+                Office Branch Details{" "}
+                <span>{index > 0 ? <span>{index + 1}</span> : null}</span>
+              </h2>
+              <div className="grid gap-4 mb-2 sm:grid-cols-3">
                 <div>
                   <label
                     htmlFor={`Phone-${index}`}
@@ -593,10 +769,10 @@ export default function AddBuilder() {
                   </label>
                   <input
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="text"
+                    type="number"
                     id={`Phone-${index}`}
                     value={data.Phone}
-                    onChange={(e) => handleChange(e, index, "Phone")}
+                    onChange={(e) => handleOfficeChange(e, index, "Phone")}
                   />
                 </div>
 
@@ -609,10 +785,10 @@ export default function AddBuilder() {
                   </label>
                   <input
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="text"
+                    type="number"
                     id={`Mobile-${index}`}
                     value={data.Mobile}
-                    onChange={(e) => handleChange(e, index, "Mobile")}
+                    onChange={(e) => handleOfficeChange(e, index, "Mobile")}
                   />
                 </div>
                 <div>
@@ -624,10 +800,10 @@ export default function AddBuilder() {
                   </label>
                   <input
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="text"
+                    type="email"
                     id={`EmailId-${index}`}
                     value={data.EmailId}
-                    onChange={(e) => handleChange(e, index, "EmailId")}
+                    onChange={(e) => handleOfficeChange(e, index, "EmailId")}
                   />
                 </div>
                 <div>
@@ -639,10 +815,10 @@ export default function AddBuilder() {
                   </label>
                   <input
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="text"
+                    type="number"
                     id={`WhatsApp-${index}`}
                     value={data.WhatsApp}
-                    onChange={(e) => handleChange(e, index, "WhatsApp")}
+                    onChange={(e) => handleOfficeChange(e, index, "WhatsApp")}
                   />
                 </div>
                 <div>
@@ -657,7 +833,7 @@ export default function AddBuilder() {
                     type="text"
                     id={`Area-${index}`}
                     value={data.Area}
-                    onChange={(e) => handleChange(e, index, "Area")}
+                    onChange={(e) => handleOfficeChange(e, index, "Area")}
                   />
                 </div>
                 <div>
@@ -672,7 +848,7 @@ export default function AddBuilder() {
                     type="text"
                     id={`City-${index}`}
                     value={data.City}
-                    onChange={(e) => handleChange(e, index, "City")}
+                    onChange={(e) => handleOfficeChange(e, index, "City")}
                   />
                 </div>
                 <div>
@@ -687,7 +863,7 @@ export default function AddBuilder() {
                     type="text"
                     id={`State-${index}`}
                     value={data.State}
-                    onChange={(e) => handleChange(e, index, "State")}
+                    onChange={(e) => handleOfficeChange(e, index, "State")}
                   />
                 </div>
                 <div>
@@ -702,7 +878,7 @@ export default function AddBuilder() {
                     type="text"
                     id={`Country-${index}`}
                     value={data.Country}
-                    onChange={(e) => handleChange(e, index, "Country")}
+                    onChange={(e) => handleOfficeChange(e, index, "Country")}
                   />
                 </div>
                 <div>
@@ -714,151 +890,169 @@ export default function AddBuilder() {
                   </label>
                   <input
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="text"
+                    type="number"
                     id={`PinCode-${index}`}
                     value={data.PinCode}
-                    onChange={(e) => handleChange(e, index, "PinCode")}
+                    onChange={(e) => handleOfficeChange(e, index, "PinCode")}
                   />
                 </div>
                 <div></div>
-
-                {/* ContactPerson fields */}
+              </div>
+              <div className="grid gap-4 mb-2 sm:grid-cols-3">
                 {data.ContactPerson.map((person, subIndex) => (
-                  <div
-                    className="grid gap-4 mb-2 sm:grid-cols-2"
-                    key={`${index}-${subIndex}`}
-                  >
+                  <div key={subIndex}>
                     <div>
                       <h2 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white underline mt-10">
-                       Contact Person Details <span>{subIndex >0?(<span>{subIndex}</span>):null}</span>
+                        Contact Person Details{" "}
+                        <span>
+                          {subIndex > 0 ? <span>{subIndex + 1}</span> : null}
+                        </span>
                       </h2>
                     </div>
-                    <div></div>
-                    <div>
-                      <label
-                        htmlFor={`Name-${index}-${subIndex}`}
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                      >
-                        Name
-                      </label>
-                      <input
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        type="text"
-                        id={`Name-${index}-${subIndex}`}
-                        value={person.Name}
-                        onChange={(e) =>
-                          handleChange(e, index, "Name", subIndex)
-                        }
-                      />
-                    </div>
 
-                    <div>
-                      <label
-                        htmlFor={`Mobile-${index}-${subIndex}`}
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                      >
-                        Mobile
-                      </label>
-                      <input
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        type="text"
-                        id={`Mobile-${index}-${subIndex}`}
-                        value={person.Mobile}
-                        onChange={(e) =>
-                          handleChange(e, index, "Mobile", subIndex)
-                        }
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor={`EmailId-${index}-${subIndex}`}
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                      >
-                        Email ID
-                      </label>
-                      <input
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        type="text"
-                        id={`EmailId-${index}-${subIndex}`}
-                        value={person.EmailId}
-                        onChange={(e) =>
-                          handleChange(e, index, "EmailId", subIndex)
-                        }
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor={`Phone-${index}-${subIndex}`}
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                      >
-                        Phone
-                      </label>
-                      <input
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        type="text"
-                        id={`Phone-${index}-${subIndex}`}
-                        value={person.Phone}
-                        onChange={(e) =>
-                          handleChange(e, index, "Phone", subIndex)
-                        }
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor={`Designation-${index}-${subIndex}`}
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                      >
-                        Designation
-                      </label>
-                      <input
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        type="text"
-                        id={`Designation-${index}-${subIndex}`}
-                        value={person.Designation}
-                        onChange={(e) =>
-                          handleChange(e, index, "Designation", subIndex)
-                        }
-                      />
-                    </div>
-                    <div>
-                      <button
-                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
-                        onClick={() => addMoreContactPerson(index)}
-                      >
-                        Add More Contact Person
-                      </button>
-                      {subIndex > 0 ? (
-                        <button
-                          className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mt-5"
-                          onClick={() =>
-                            handleDeleteContactPerson(index, subIndex)
+                    <div
+                      className="grid gap-4 mb-2 sm:grid-cols-2"
+                      key={`${index}-${subIndex}`}
+                    >
+                      <div>
+                        <label
+                          htmlFor={`Name-${index}-${subIndex}`}
+                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                        >
+                          Person Name
+                        </label>
+                        <input
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          type="text"
+                          id={`Name-${index}-${subIndex}`}
+                          value={person.Name}
+                          onChange={(e) =>
+                            handleOfficeChange(e, index, "Name", subIndex)
                           }
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor={`Mobile-${index}-${subIndex}`}
+                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
                         >
-                          Delete Contact
-                        </button>
-                      ) : null}
-                    </div>
-                    <div>
-                      {index > 0 && (
-                        <button
-                          className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mt-5"
-                          onClick={() => handleDeleteBranch(index)}
+                          Mobile
+                        </label>
+                        <input
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          type="number"
+                          id={`Mobile-${index}-${subIndex}`}
+                          value={person.Mobile}
+                          onChange={(e) =>
+                            handleOfficeChange(e, index, "Mobile", subIndex)
+                          }
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor={`EmailId-${index}-${subIndex}`}
+                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
                         >
-                          Delete Branch
-                        </button>
-                      )}
+                          Email
+                        </label>
+                        <input
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          type="email"
+                          id={`EmailId-${index}-${subIndex}`}
+                          value={person.EmailId}
+                          onChange={(e) =>
+                            handleOfficeChange(e, index, "EmailId", subIndex)
+                          }
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor={`Phone-${index}-${subIndex}`}
+                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                        >
+                          Phone
+                        </label>
+                        <input
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          type="number"
+                          id={`Phone-${index}-${subIndex}`}
+                          value={person.Phone}
+                          onChange={(e) =>
+                            handleOfficeChange(e, index, "Phone", subIndex)
+                          }
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor={`Designation-${index}-${subIndex}`}
+                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                        >
+                          Designation
+                        </label>
+                        <input
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          type="text"
+                          id={`Designation-${index}-${subIndex}`}
+                          value={person.Designation}
+                          onChange={(e) =>
+                            handleOfficeChange(
+                              e,
+                              index,
+                              "Designation",
+                              subIndex
+                            )
+                          }
+                        />
+                      </div>
+
+                      <div>
+                        {subIndex == 0 ? (
+                          <button
+                            type="button"
+                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
+                            onClick={() => addMoreContactPerson(index)}
+                          >
+                            Add More Contact Person
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mt-5"
+                            onClick={() =>
+                              handleDeleteContactPerson(index, subIndex)
+                            }
+                          >
+                            Delete Contact
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
-            ))}
-            <button
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
-              onClick={addMore}
-            >
-              Add More Branch
-            </button>
-          </div>
+              {/* ContactPerson fields */}
+
+              <div>
+                {index > 0 && (
+                  <button
+                    type="button"
+                    className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mt-5"
+                    onClick={() => handleDeleteBranch(index)}
+                  >
+                    Delete Branch
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
+            onClick={addMore}
+          >
+            Add More Branch
+          </button>
         </div>
       </form>
 

@@ -42,7 +42,7 @@ export default function Popup({
             <span className="sr-only">Close modal</span>
           </button>
           <div className="p-4 md:p-5 text-center">
-            <h3 className="mb-5 text-lg font-normal text-gray-500">{title}</h3>
+            <h3 className="mb-5 mr-2 text-lg font-normal text-gray-500">{title}</h3>
             <button
               onClick={onConfirm}
               className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"

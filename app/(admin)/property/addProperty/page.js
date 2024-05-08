@@ -122,7 +122,8 @@ export default function AddProject() {
         FloorAndCounter:propertyData.FloorAndCounter,
         Fitting:propertyData.Fitting,
         WallAndCeiling:propertyData.WallAndCeiling,
-        Faq:propertyData.Faq
+        Faq:propertyData.Faq,
+        Brochure:propertyData?.Brochure
       };
       console.log("finalizePropertyData", finalizePropertyData);
       let res = await AddProperty(finalizePropertyData);

@@ -6,7 +6,6 @@ const token = Cookies.get("token");
 
 export const GetPropertyByQueryApi = async (payloadData,setLoading=()=>{}) => {
   setLoading(true);
-  console.log("payloadData inside apifunction",payloadData)
   try {
     const res = await fetch(`${API_BASE_URL}/properties/propertyByBudget`, {
       method: "POST",

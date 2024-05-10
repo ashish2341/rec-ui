@@ -25,7 +25,7 @@ export default function Builder() {
       toast.success(builder?.resData?.message);
       return false;
     } else {
-      toast.error(faq.errMessage);
+      toast.error(builder?.errMessage);
       return false;
     }
   };

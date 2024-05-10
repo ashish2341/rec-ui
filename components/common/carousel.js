@@ -26,6 +26,9 @@ const MultiCarousel = ({ UI }) => {
     <div style={{ width: "95%" }}>
       <Carousel
         responsive={responsive}
+        infinite={true}
+        autoPlay={true}
+        autoPlaySpeed={1000}
         draggable
         swipeable
         containerClass="carousel-container"

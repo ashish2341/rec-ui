@@ -54,14 +54,21 @@
 .crousalSearchBuyType{
   inset-inline-end: 22rem;
   height: 100%;
+  width: 11rem;
+  justify-content: center;
+  padding-right: 2rem;
 }
 .crousalSearchBudgetType{
   inset-inline-end: 16rem;
   height: 100%;
+  width: 9rem;
+  justify-content: center;
 }
 .crousalSearchPropertyType{
   inset-inline-end: 7rem;
   height: 100%;
+  width: 9.3rem;
+  justify-content: center;
 }
 .crousalItemAdvMain{
   margin-top: 3rem;

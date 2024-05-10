@@ -87,16 +87,6 @@ const BuilderHomePage = () => {
                     <div>
                     <h1 className={`${styles.propertiesByAreaMainHead}`}>Residential Projects by Signature Global Builders Pvt.Ltd.</h1>
                     </div>
-          
-                <div className={` ${styles.builderDetailDropDown} flex`}>
-                            <h2>Sort by :</h2>
-                            <Dropdown label="" dismissOnClick={false} renderTrigger={() => <span> My custom trigger</span>}>
-                                <Dropdown.Item>Dashboard</Dropdown.Item>
-                                <Dropdown.Item>Settings</Dropdown.Item>
-                                <Dropdown.Item>Earnings</Dropdown.Item>
-                                <Dropdown.Item>Sign out</Dropdown.Item>
-                            </Dropdown>
-                        </div>
                 </div>
                
             </div>
@@ -112,19 +102,21 @@ const BuilderHomePage = () => {
                                     src="../../../img/contactusImg1.jpg"
                                 />
                             </div>
-                            <div className="text-md font-semibold blueText text-nowrap mt-2">Signature Global Builder Pvt. Ltd.</div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">Joined in August 2014</div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mt-4">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec 
-                                justo nec felis consectetur commodo vitae eget elit. 
-                                Proin nec justo eget ipsum cursus aliquet. Vestibulum non fermentum 
-                                enim. Sed vel eros nec elit viverra fermentum. 
-                            </div>
-                            <div className={` ${styles.builderSocialIcon} text-gray-700 mt-2`}>
-                                <i class="bi bi-facebook"></i>
-                                <i class="bi bi-instagram ml-3"></i>
-                                <i class="bi bi-linkedin ml-3"></i>
-                                <i class="bi bi-twitter ml-3"></i>
+                            <div className={` ${styles.builderAfterImg}`}>
+                                <div className="text-md font-semibold blueText text-nowrap mt-2">Signature Global Builder Pvt. Ltd.</div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">Joined in August 2014</div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400 mt-4">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec 
+                                    justo nec felis consectetur commodo vitae eget elit. 
+                                    Proin nec justo eget ipsum cursus aliquet. Vestibulum non fermentum 
+                                    enim. Sed vel eros nec elit viverra fermentum. 
+                                </div>
+                                <div className={` ${styles.builderSocialIcon} text-gray-700 mt-2`}>
+                                    <i class="bi bi-facebook"></i>
+                                    <i class="bi bi-instagram ml-3"></i>
+                                    <i class="bi bi-linkedin ml-3"></i>
+                                    <i class="bi bi-twitter ml-3"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -194,158 +186,68 @@ const BuilderHomePage = () => {
                     </div>
                 </div>
                 <div className={` ${styles.builderDetailPageRight}`}>
-                    <div className="mr-3">
+                    <div>
+                        <div className={` ${styles.builderDetailDropDown} flex`}>
+                                <h2>Sort by :</h2>
+                                <Dropdown label="" dismissOnClick={false} renderTrigger={() => <span> My custom trigger</span>}>
+                                    <Dropdown.Item>Dashboard</Dropdown.Item>
+                                    <Dropdown.Item>Settings</Dropdown.Item>
+                                    <Dropdown.Item>Earnings</Dropdown.Item>
+                                    <Dropdown.Item>Sign out</Dropdown.Item>
+                                </Dropdown>
+                         </div>
+                    </div>
+                    <div className={` ${styles.builderRightMainBox} flex mb-6 p-4`}>
                         <img
                             src="../../../img/contactusImg1.jpg"
-                            className={` ${styles.builderRightImg}`}
+                            className={` ${styles.builderRightImg} mr-3`}
                         />
                         <div>
                             <div className={` ${styles.cardImgBottom}`}>
-                                <div className={` ${styles.populerPropertiesLocationMain} flex`}>
+                                <div className={` ${styles.populerPropertiesLocationMain} flex text-md pt-4`}>
                                 <i className="bi bi-geo-alt-fill"></i>
                                 <p className={`text-gray-700`}>Addres</p>
                                 </div>
-                                <h2 className={` ${styles.populerPropertiesBoxHead}`}>
+                                <h2 className={` ${styles.populerPropertiesBoxHead} text-2xl pt-2`}>
                                 Title
                                 </h2>
-                                <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
-                                <div className="flex">
-                                <i className="fa fa-bed"></i>
-                                    <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-                                    Bed Room
-                                    </p>
-                                </div>
-                                <div className="flex">
-                                    <i className="fa fa-bath"></i>
-                                    <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-                                    Baths
-                                    </p>
-                                </div>
-                                <div className="flex">
-                                    <i className="fa fa-area-chart"></i>
-                    
-                                    <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-                                     Land Area
-                                    </p>
-                                </div>
-                                </div>
-                                <div className={`${styles.populerPropertiesBoxPriceMain}`}>
-                                <p className={`${styles.populerPropertiesBoxPrice}`}>
-                                TotalPrice
-                                </p>
-                                <Link href={`/propertyDetail/`} >
-                                    <button
-                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                    type="button"
-                                    
-                                    >
-                                    More Details
-                                    </button>
-                                </Link>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="mr-3">
-                        <img
-                            src="../../../img/contactusImg1.jpg"
-                            className={` ${styles.builderRightImg}`}
-                        />
-                        <div>
-                            <div className={` ${styles.cardImgBottom}`}>
-                                <div className={` ${styles.populerPropertiesLocationMain} flex`}>
-                                <i className="bi bi-geo-alt-fill"></i>
-                                <p className={`text-gray-700`}>Address</p>
-                                </div>
-                                <h2 className={` ${styles.populerPropertiesBoxHead}`}>
-                                Title
+                                <h2 className={` ${styles.populerPropertiesBoxHead} text-sm pt-2`}>
+                                Desc
                                 </h2>
-                                <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
-                                <div className="flex">
-                                <i className="fa fa-bed"></i>
-                                    <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-                                    Bed Room
+                                <div className={` ${styles.populerPropertiesBoxDetail} flex justify-between pt-2`}>
+                                    <div className="flex">
+                                    <i className="fa fa-bed"></i>
+                                        <p className={` ${styles.populerPropertiesBoxText} ml-1 mr-3`}>
+                                        Bed Room
+                                        </p>
+                                    </div>
+                                    <div className="flex">
+                                        <i className="fa fa-bath"></i>
+                                        <p className={` ${styles.populerPropertiesBoxText} ml-1 mr-3`}>
+                                        Baths
+                                        </p>
+                                    </div>
+                                    <div className="flex">
+                                        <i className="fa fa-area-chart"></i>
+                        
+                                        <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
+                                        Land Area
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className={`${styles.populerPropertiesBoxPriceMain} flex mt-2 justify-between`}>
+                                    <p className={`${styles.populerPropertiesBoxPrice}`}>
+                                        TotalPrice
                                     </p>
-                                </div>
-                                <div className="flex">
-                                    <i className="fa fa-bath"></i>
-                                    <p className={` ${styles.populerPropertiesBoxText} ml-1 `}>
-                                    Baths
-                                    </p>
-                                </div>
-                                <div className="flex">
-                                    <i className="fa fa-area-chart"></i>
-                    
-                                    <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-                                     Land Area
-                                    </p>
-                                </div>
-                                </div>
-                                <div className={`${styles.populerPropertiesBoxPriceMain}`}>
-                                <p className={`${styles.populerPropertiesBoxPrice}`}>
-                                TotalPrice
-                                </p>
-                                <Link href={`/propertyDetail/`} >
-                                    <button
-                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                    type="button"
-                                    
-                                    >
-                                    More Details
-                                    </button>
-                                </Link>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <img
-                            src="../../../img/contactusImg1.jpg"
-                            className={` ${styles.builderRightImg}`}
-                        />
-                        <div>
-                            <div className={` ${styles.cardImgBottom}`}>
-                                <div className={` ${styles.populerPropertiesLocationMain} flex`}>
-                                <i className="bi bi-geo-alt-fill"></i>
-                                <p className={`text-gray-700`}>Address</p>
-                                </div>
-                                <h2 className={` ${styles.populerPropertiesBoxHead}`}>
-                                Title
-                                </h2>
-                                <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
-                                <div className="flex">
-                                <i className="fa fa-bed"></i>
-                                    <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-                                    Bed Room
-                                    </p>
-                                </div>
-                                <div className="flex">
-                                    <i className="fa fa-bath"></i>
-                                    <p className={` ${styles.populerPropertiesBoxText} ml-1 `}>
-                                    Baths
-                                    </p>
-                                </div>
-                                <div className="flex">
-                                    <i className="fa fa-area-chart"></i>
-                    
-                                    <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-                                     Land Area
-                                    </p>
-                                </div>
-                                </div>
-                                <div className={`${styles.populerPropertiesBoxPriceMain}`}>
-                                <p className={`${styles.populerPropertiesBoxPrice}`}>
-                                TotalPrice
-                                </p>
-                                <Link href={`/propertyDetail/`} >
-                                    <button
-                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                    type="button"
-                                    
-                                    >
-                                    More Details
-                                    </button>
-                                </Link>
+                                    <Link href={`/propertyDetail/`} >
+                                        <button
+                                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        type="button"
+                                        
+                                        >
+                                        More Details
+                                        </button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>

@@ -40,22 +40,35 @@
   position: absolute;
   top: 27rem;
   width: 66%;
+  right: 0;
+  left: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 .crousalItemSearchInput{
   height: 3rem;
+  z-index: 3;
+  position: relative;
 }
 
 .crousalSearchBuyType{
   inset-inline-end: 22rem;
   height: 100%;
+  width: 11rem;
+  justify-content: center;
+  padding-right: 2rem;
 }
 .crousalSearchBudgetType{
   inset-inline-end: 16rem;
   height: 100%;
+  width: 9rem;
+  justify-content: center;
 }
 .crousalSearchPropertyType{
   inset-inline-end: 7rem;
   height: 100%;
+  width: 9.3rem;
+  justify-content: center;
 }
 .crousalItemAdvMain{
   margin-top: 3rem;
@@ -80,6 +93,7 @@
   align-items: center;
   justify-content: center;
   margin-top: 0.25rem;
+  z-index: 5;
 }
 .crousalItemSearchIcon{
   display: none;
@@ -651,6 +665,11 @@ font-size: 0.8rem;
   display: flex;
 }
 
+.ModalContent{
+  display: flex;
+  justify-content: space-evenly;
+}
+
 @media screen and (max-width: 750px) {
   .propertiesByAreaBox{
     width: 100%;
@@ -806,5 +825,9 @@ font-size: 0.8rem;
     margin-right: 1rem;
       margin-left: 1rem;
       display: flex;
+      flex-direction: column;
+  }
+  .campassMain{
+    margin-right: 2rem;
   }
 }

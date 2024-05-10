@@ -85,3 +85,28 @@
     font-weight: 600;
     color: gray;
 }
+
+@media screen and (max-width: 900px) {
+    .builderDetailPage{
+        display: block;
+        margin-left: 3rem;
+        margin-right: 3rem;
+    }
+    .builderDetailPageRight{
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+    .builderDetailPageLeft{
+        width: 100%;
+    }
+
+    .divideDetailPage{
+        margin-left: 3rem;
+        margin-right: 3rem;
+        margin-top: 7rem;
+    }
+
+    .builderHunter{
+        justify-content: flex-start;
+    }
+}

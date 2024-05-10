@@ -7,7 +7,7 @@ const token = Cookies.get("token");
 export const GetBuilderApi = async (page,searchData,setLoading=()=>{}) => {
   setLoading(true);
   try {
-    const res = await fetch(`${API_BASE_URL}/developer/allDeveloper?page=${page}&pageSize=${PAGE_LIMIT}&search=${searchData}`, {
+    const res = await fetch(`${API_BASE_URL}/developer/allDeveloper?page=${page=="undefined" ? page:1}&pageSize=${PAGE_LIMIT}&search=${searchData=="undefined" ? searchData:""}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

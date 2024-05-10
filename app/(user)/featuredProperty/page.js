@@ -3,7 +3,7 @@ import Footer from "@/components/common/footer";
 import Navbar from "@/components/common/navbar";
 import Spinner from "@/components/common/loading";
 import React, { useEffect, useState } from "react";
-import styles from "./propertyList.module.css";
+import styles from "./propertyFeature.module.css";
 import { initFlowbite } from "flowbite";
 import Slider from "react-slick";
 import Link from "next/link";
@@ -18,10 +18,9 @@ import { GetPropertyByQueryApi } from "@/api-functions/property/getPropertyByQue
 import { ToastContainer, toast } from "react-toastify";
 import { GetPropertyApi } from "@/api-functions/property/getProperty";
 import SkeletonLoader from "@/components/common/loader";
-import { split } from "postcss/lib/list";
-import { AbbreviatedNumberParser } from "../../../../utils/commonHelperFn";
 import LoadingSideImg from "@/components/common/sideImgLoader";
-const PropertyListPage = (params) => {
+
+const FeaturedProperty = (params) => {
   // fetching Data for facing
   const {
     data: facingData,
@@ -61,8 +60,7 @@ const PropertyListPage = (params) => {
   );
   // console.log("featureData",featureData)
   //using params
-  // console.log("params", params);
-
+  
   const {
     searchData,
     facingId,
@@ -73,30 +71,22 @@ const PropertyListPage = (params) => {
     propertyTypeLabel,
     budgetData,
     budgetLabel,
+    isFeatured,
   } = params.searchParams;
-  //  console.log("budgetData",budgetData)
-  if (budgetData) {
-    var budgetStr = budgetData.split(",");
-    var parsedNumbers = AbbreviatedNumberParser(budgetStr);
-  }
-
   const [payload, setPayload] = useState({
-    facing: facingId ? [{ id: facingId, label: facingLabel }] : [],
-    areaType: areaId ? [{ id: areaId, label: areaLabel }] : [],
-    propertyType: propertyTypeID
-      ? [{ id: propertyTypeID, label: propertyTypeLabel }]
-      : [],
+    facing:  [],
+    areaType:  [],
+    propertyType:  [],
     bhkType: [],
     propertyStatus: [],
     posessionStatus: [],
-    budget: budgetData ? [{ id: parsedNumbers, label: budgetStr }] : [],
+    budget: [],
     feature: [],
     landArea: [],
     bathroom: [],
-    search: searchData ? searchData : "",
-    isFeatured: true,
+    isFeatured:isFeatured?true:false,
   });
-  console.log("Outeside payload", payload);
+  // console.log("Outeside payload", payload);
   const pathname = usePathname();
   const [expanded, setExpanded] = useState(false);
   const [activeSection, setActiveSection] = useState("general");
@@ -104,8 +94,6 @@ const PropertyListPage = (params) => {
   const [listData, setListData] = useState("");
   const [numToShow, setNumToShow] = useState(2);
   const [listDataForShow, setListDataForShow] = useState("");
-  const [resetBtnValue, setResetBtnValue] = useState(false);
-
   const bathroomArray = [
     { value: 1, label: "One" },
     { value: 2, label: "Two" },
@@ -128,31 +116,22 @@ const PropertyListPage = (params) => {
   ];
   useEffect(() => {
     if (payload) {
-        const payloadWithId = extractIDsAndUpdateData(payload);
-        // console.log("payloadWithId", payloadWithId);
-        payloadWithId.budget = payloadWithId.budget.flat();
-        getAllFilterProperties(payloadWithId);
-
-        // Check if any array in payload has data
-        let hasData = false;
-        for (const key in payloadWithId) {
-            if (Array.isArray(payloadWithId[key]) && payloadWithId[key].length > 0) {
-                hasData = true;
-                break;
-            }
-        }
-
-        // Set resetBtnValue based on whether any array has data
-        setResetBtnValue(hasData);
+      const payloadWithId = extractIDsAndUpdateData(payload);
+      // console.log("payloadWithId", payloadWithId);
+      payloadWithId.budget=payloadWithId.budget.flat()
+      getAllFilterProperties(payloadWithId);
     }
-}, [payload]);
 
+    // getAllProperties();
+  }, [payload]);
   function extractIDsAndUpdateData(data) {
     const newData = { ...data }; // Create a shallow copy of the original object
     for (const key in newData) {
       if (Array.isArray(newData[key])) {
         newData[key] = newData[key].map((item) =>
-          typeof item === "object" ? item.id : item
+          typeof item === "object"
+            ?  item.id
+            : item
         );
       }
     }
@@ -170,40 +149,7 @@ const PropertyListPage = (params) => {
   useEffect(() => {
     initFlowbite(); // Call initCarousels() when component mounts
   }, []);
-  var settings = {
-    dots: false,
-    infinite: true,
-    arrows: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
+
   const getAllFilterProperties = async (payloadData) => {
     let properties = await GetPropertyByQueryApi(payloadData);
     if (properties?.resData?.success == true) {
@@ -238,16 +184,9 @@ const PropertyListPage = (params) => {
         ? [...prevPayload[name], { id, label }]
         : prevPayload[name].filter((item) => item.id !== id),
     }));
-  
-    if (checked == true) {
-      setResetBtnValue(true);
-    } else {
-      setResetBtnValue(false);
-    }
   };
-
   const handleRangeCheckBoxChange = (event) => {
-    const { value, checked } = event.target;
+    const { value } = event.target;
 
     // Parse the value string into an array of numbers
     const [value1, value2] = JSON.parse(value);
@@ -278,62 +217,26 @@ const PropertyListPage = (params) => {
         budget: [...prevPayload.budget, rangeSelection],
       }));
     }
-    console.log(" checked", checked);
-    if (checked == true) {
-      setResetBtnValue(true);
-    } else {
-      setResetBtnValue(false);
-    }
   };
 
   const handleRemoveBadge = (id) => {
-    console.log("handleRemoveBadge id", id);
-    console.log("handleRemoveBadge before payload", payload);
-
     setPayload((prevFilters) => {
-      // Modify the state based on the previous state
       const updatedFilters = { ...prevFilters };
       for (const key in updatedFilters) {
         if (Array.isArray(updatedFilters[key])) {
-          updatedFilters[key] = updatedFilters[key].filter((item) => {
-            if (Array.isArray(item.id) && Array.isArray(id)) {
-              return JSON.stringify(item.id) !== JSON.stringify(id);
-            } else {
-              return item.id !== id;
-            }
-          });
+          updatedFilters[key] = updatedFilters[key].filter(
+            (item) => item.id !== id
+          );
         }
       }
-      console.log("updatedFilters", updatedFilters);
-      let keyWithSingleObject = null; // Variable to store the key with exactly one object in its array
-
-      for (let key in payload) {
-        if (
-          Array.isArray(payload[key]) &&
-          payload[key].length === 1
-        ) {
-          if (keyWithSingleObject === null) {
-            keyWithSingleObject = key; // Store the key if it meets the condition for the first time
-          } else {
-            keyWithSingleObject = null; // Reset the variable if another key with single object is found
-            break; // Exit the loop since there are multiple keys with single object
-          }
-        }
-      }
-
-      if (keyWithSingleObject !== null) {
-        resetSelectItem(); // Perform action if exactly one key with one object is found
-      }
-      // Return the modified state
       return updatedFilters;
     });
   };
-
   const resetSelectItem = () => {
     setPayload({
-      facing: [],
-      areaType: [],
-      propertyType: [],
+      facing:  [],
+      areaType:  [],
+      propertyType:  [],
       bhkType: [],
       propertyStatus: [],
       posessionStatus: [],
@@ -341,10 +244,8 @@ const PropertyListPage = (params) => {
       feature: [],
       landArea: [],
       bathroom: [],
-      search: "",
-      isFeatured: true,
+      isFeatured:isFeatured?true:false,
     });
-    setResetBtnValue(false);
   };
   return (
     <>
@@ -354,11 +255,10 @@ const PropertyListPage = (params) => {
           <div className="text-sm font-medium text-center text-black-500 border-black-900 dark:text-gray-400 dark:border-gray-700">
             <ul className="flex flex-wrap -mb-px ml-3">
               {/* Facing */}
-
               <li className="me-2 mt-3">
                 <button
-                  id="dropdownFacinggButton"
-                  data-dropdown-toggle="dropdownFacingg"
+                  id="dropdownFacingButton"
+                  data-dropdown-toggle="dropdownFacing"
                   className="text-black bg-white border border-black hover:bg-white-800 focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
                   type="button"
                 >
@@ -380,12 +280,12 @@ const PropertyListPage = (params) => {
                   </svg>
                 </button>
                 <div
-                  id="dropdownFacingg"
+                  id="dropdownFacing"
                   className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
                 >
                   <ul
                     className="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
-                    aria-labelledby="dropdownFacinggButton"
+                    aria-labelledby="dropdownFacingButton"
                   >
                     {facingData ? (
                       facingData?.data?.map((item, index) => (
@@ -535,7 +435,7 @@ const PropertyListPage = (params) => {
                     className="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
                     aria-labelledby="dropdownAreTypeButton"
                   >
-                    {areaData?.data?.length > 0 ? (
+                    {areaData ? (
                       areaData?.data?.map((item, index) => (
                         <li key={index}>
                           <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
@@ -615,15 +515,14 @@ const PropertyListPage = (params) => {
                           <input
                             id={`checkbox-item-${index}`}
                             type="checkbox"
+                            // value={JSON.stringify({
+                            //   id: `[${item.value1} ,${item.value2}]`,
+                            //   label:`[${item.value1} ,${item.value2}]`,
+                            // })}
                             value={`[${item.value1} ,${item.value2}]`}
                             onChange={handleRangeCheckBoxChange}
                             name="budget"
                             className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                            checked={payload.budget.some(
-                              (obj) =>
-                                obj.id[0] === item.value1 &&
-                                obj.id[1] === item.value2
-                            )}
                           />
                           <label
                             htmlFor={`checkbox-item-${index}`}
@@ -1066,95 +965,56 @@ const PropertyListPage = (params) => {
           >
             <div className="flex ml-3">
               {Object.values(payload).some((array) => array.length > 0) && (
+                // <BadgeList data={payload} onRemove={handleRemoveBadge} />
                 <div className="flex">
                   {Object.entries(payload).map(
                     ([key, value]) =>
-                      value.length > 0 &&
-                      Array.isArray(value) ? (
+                      value.length > 0 && (
                         <div key={key}>
-                          {value.map((item, index) =>
-                            Array.isArray(item.label) ? (
-                              item.label.map((labelItem, labelIndex) => (
-                                <div
-                                  key={item.id}
-                                  id={`badge-dismiss-${item.id}`}
-                                  className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-blue-900 dark:text-blue-300"
-                                >
-                                  <span>{labelItem}</span>
-                                  {/* Add margin between label item and cross button */}
-                                  <button
-                                    type="button"
-                                    className="inline-flex items-center p-1 ms-2 me-1 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
-                                    onClick={() => handleRemoveBadge(item.id)}
-                                    aria-label="Remove"
-                                  >
-                                    <svg
-                                      className="w-2 h-2"
-                                      aria-hidden="true"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      fill="none"
-                                      viewBox="0 0 14 14"
-                                    >
-                                      <path
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                                      />
-                                    </svg>
-                                  </button>
-                                </div>
-                              ))
-                            ) : (
-                              <div
-                                key={item.id}
-                                id={`badge-dismiss-${item.id}`}
-                                className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-blue-900 dark:text-blue-300"
+                          {value.map((item) => (
+                            <div
+                              key={item.id}
+                              id={`badge-dismiss-${item.id}`}
+                              className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-blue-900 dark:text-blue-300"
+                            >
+                              {item.label || key}
+                              <button
+                                type="button"
+                                className="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
+                                onClick={() => handleRemoveBadge(item.id)}
+                                aria-label="Remove"
                               >
-                                <span>{item.label || item}</span>
-                                {/* Add margin between label item and cross button */}
-                                <button
-                                  type="button"
-                                  className="inline-flex items-center p-1 ms-2 me-1 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
-                                  onClick={() => handleRemoveBadge(item.id)}
-                                  aria-label="Remove"
+                                <svg
+                                  className="w-2 h-2"
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 14 14"
                                 >
-                                  <svg
-                                    className="w-2 h-2"
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 14 14"
-                                  >
-                                    <path
-                                      stroke="currentColor"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth="2"
-                                      d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                                    />
-                                  </svg>
-                                </button>
-                              </div>
-                            )
-                          )}
+                                  <path
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                          ))}
                         </div>
-                      ):(null)
+                      )
                   )}
-                  {resetBtnValue && (
-                    <button
-                      onClick={resetSelectItem}
-                      type="button"
-                      className={`mx-auto text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-1 text-center  me-2 mb-2`}
-                    >
-                      Reset
-                    </button>
-                  )}
+                  <button
+                    onClick={resetSelectItem}
+                    type="button"
+                    className={`mx-auto text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-1 text-center  me-2 mb-2`}
+                  >
+                    Reset
+                  </button>
                 </div>
               )}
             </div>
-
             <div className="GeneralDetailsMain">
               {listData && listDataForShow ? (
                 <h2 className={`${styles.GeneralDetailsMainHead}`}>
@@ -1166,10 +1026,13 @@ const PropertyListPage = (params) => {
                   No Data Found
                 </h2>
               )}
-
+              <h1 className={` flex-grow  ${styles.GeneralDetailsfeaturedHead}`}>
+                All Featured Property
+              </h1>
               <div
                 className={` flex justify-between  ${styles.GeneralDetailsSecondSection}`}
               >
+                {" "}
                 <h1
                   className={` flex-grow  ${styles.GeneralDetailsSecondHead}`}
                 >
@@ -1418,7 +1281,6 @@ const PropertyListPage = (params) => {
             </div>
           ) : null}
         </div>
-
         <div className={` ${styles.divideDetailPageRight}`}></div>
       </div>
 
@@ -1427,4 +1289,4 @@ const PropertyListPage = (params) => {
   );
 };
 
-export default PropertyListPage;
+export default FeaturedProperty;

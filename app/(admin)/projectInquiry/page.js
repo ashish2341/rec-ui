@@ -146,11 +146,66 @@ const inquiryData=  [
       </h1>
         <div className="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
          
-            <div>
-              {listData?( <ExportToExcel apiData={listData} fileName={"AlertAttendanceData"} />):null}
-           
+            <div className="flex">
+              {listData?( <ExportToExcel apiData={listData.data} fileName={"AlertAttendanceData"} />):null}
+              <li className="me-2  list-none">
+                <button
+                  id="dropdownPossessionButton"
+                  data-dropdown-toggle="dropdownPossession"
+                  className="text-black bg-white rounded-lg border border-gray-200  hover:bg-gray-100 hover:text-blue-700 focus:ring-gray-100  focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
+                  type="button"
+                >
+                  Enquiry Type
+                  <svg
+                    className="w-2.5 h-2.5 ms-3"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m1 1 4 4 4-4"
+                    />
+                  </svg>
+                </button>
+
+                <div
+                  id="dropdownPossession"
+                  className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+                >
+                  <ul
+                    className="p-2 text-sm text-gray-700 dark:text-gray-200 list-none"
+                    aria-labelledby="dropdownPossessionButton"
+                  >
+                   
+                        <li>
+                          <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
+                            <input
+                              // id={`checkbox-item-${index}`}
+                              type="checkbox"
+                              // value={item._id}
+                              // name="posessionStatus"
+                              // onChange={handleCheckBoxChange}
+                              className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                            />
+                            <label
+                              // htmlFor={`checkbox-item-${index}`}
+                              className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
+                            >
+                              Property
+                            </label>
+                          </div>
+                        </li>
+                      
+                  </ul>
+                </div>
+              </li>
             </div>
-          
+            
           <label htmlFor="table-search" className="sr-only">
             Search
           </label>
@@ -182,6 +237,9 @@ const inquiryData=  [
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
+            <th scope="col" className="px-6 py-3">
+               Enquiry Type
+              </th>
               <th scope="col" className="px-6 py-3">
                Question
               </th>
@@ -202,31 +260,37 @@ const inquiryData=  [
           <tbody>
              {listData?.data?.map((item, index) => ( 
             <tr
-              // key={index}
+               key={index}
               className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
             >
               <td
                 scope="row"
                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
-               {item.Message}
+               {item?.EnquiryType}
               </td>
               <td
                 scope="row"
                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
-               {item.Name}
+               {item?.Message}
               </td>
               <td
                 scope="row"
                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
-               {item.Email}
+               {item?.Name}
+              </td>
+              <td
+                scope="row"
+                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              >
+               {item?.Email}
               </td>
               <td className="px-6 py-4 text-blue-600 dark:text-blue-500">
                   <i
                     className={` ${
-                      item.IsEnabled
+                      item?.IsEnabled
                       ? "bi bi-hand-thumbs-up-fill text-green-600	"
                       : "bi bi-hand-thumbs-down-fill text-red-500"
                     } `}
@@ -244,7 +308,7 @@ const inquiryData=  [
                   </Link>
                   {/* <i className="bi bi-eye-fill"></i> */}
                   <i
-                     onClick={() => deleteInquiryModel(item._id)}
+                     onClick={() => deleteInquiryModel(item?._id)}
                     className="bi bi-trash-fill"
                   ></i>
                 </div>

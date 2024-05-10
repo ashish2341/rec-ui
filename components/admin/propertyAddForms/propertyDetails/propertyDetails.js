@@ -4,6 +4,8 @@ import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
 import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
+import { ImageString } from "@/api-functions/auth/authAction";
+import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
 
 export default function PropertyDetailsForm({
   valueForNext,
@@ -154,6 +156,10 @@ export default function PropertyDetailsForm({
   const [loanSince, setLoanSince] = useState("");
   const [loanTill, setLoanTill] = useState("");
   const [areaUnits, setAreaUnits] = useState("");
+  const [brochure, setBrochure] = useState("");
+  const brochureInputRef = useRef(null);
+  const [builderData,setBuilderData]=useState("")
+  const [builderName,setBuilderName]=useState("")
   //Purchase Details
   // const [purchaseDetails, setPurchaseDetails] = useState({
   //   BuyerId: "",
@@ -164,7 +170,21 @@ export default function PropertyDetailsForm({
   //   Document: [],
   // });
   // const documentInputRef = useRef(null);
-
+  useEffect(() => {
+    getAllBuilder();
+  }, []);
+  
+  const getAllBuilder = async () => {
+    let builder = await GetBuilderApi();
+    if (builder?.resData?.success == true) {
+      setBuilderData(builder?.resData);
+      toast.success(builder?.resData?.message);
+      return false;
+    } else {
+      toast.error(builder?.errMessage);
+      return false;
+    }
+  };
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
@@ -180,6 +200,7 @@ export default function PropertyDetailsForm({
         "if function called sessionStoragePropertyData.PropertyFor ",
         sessionStoragePropertyData.ProeprtyFor
       );
+      console.log("sessionStoragePropertyData?.Brochure",sessionStoragePropertyData?.Brochure)
       // setPropertyType(sessionStoragePropertyData.PropertyType || "");
       setFacing(sessionStoragePropertyData?.Facing || "");
 
@@ -213,6 +234,7 @@ export default function PropertyDetailsForm({
       );
       // setAvailableUnits(sessionStoragePropertyData.AvailableUnits || "");
       setReraNumber(sessionStoragePropertyData?.ReraNumber || "");
+      setBrochure(sessionStoragePropertyData?.Brochure || "");
       // setProjectStatus(sessionStoragePropertyData.ProjectStatus || "");
       setPropertyFor(sessionStoragePropertyData?.ProeprtyFor || "");
       setPropertyTypeWithSubtype(
@@ -304,6 +326,7 @@ export default function PropertyDetailsForm({
       setByBank(sessionStoragePropertyData?.LoanDetails?.ByBank || "");
       setLoanSince(sessionStoragePropertyData?.LoanDetails?.LoanSince || "");
       setLoanTill(sessionStoragePropertyData?.LoanDetails?.LoanTill || "");
+      setBuilderName(sessionStoragePropertyData?.Builder || "")
       
     }
   }, []);
@@ -377,6 +400,38 @@ export default function PropertyDetailsForm({
   const handleBankNameChange = (e) => {
     setByBank(e.map((item) => ({ _id: item.value, BankName: item.label })));
   };
+  const  handleDocumentChange = async (event) => {
+    const acceptedFileTypes = ["application/pdf",
+    "application/doc","application/.docx","application/ .txt"];
+
+    const file = event.target.files[0]; // Get the first file only
+    const formData= new FormData()
+    formData.append("profilePic",file)
+    console.log("image File", file);
+
+    // Check file type
+    if (!acceptedFileTypes.includes(file.type)) {
+        toast.error("Invalid image type. Please upload only JPEG or PNG or JPG files.");
+        if (brochureInputRef.current) {
+          brochureInputRef.current.value = "";
+        }
+    } else{
+      let res = await ImageString(formData)
+      console.log("image resPonse Data=>",res)
+      if(res.successMessage){
+       // router.push("/dashboard");
+       console.log("Image Response",res.successMessage.imageUrl)
+        setBrochure(res.successMessage.imageUrl);
+      }else{
+        toast.error(res.errMessage);
+        return;
+      }
+     
+    }
+
+     
+    
+  };
   
   const  formatNumber = (number) => {
     console.log("number",number)
@@ -445,6 +500,8 @@ export default function PropertyDetailsForm({
       loanSince,
       loanTill,
       bhkType,
+      brochure,
+      builderName
     ];
 
     // Check if any required field is empty
@@ -457,7 +514,7 @@ export default function PropertyDetailsForm({
 
   //SUbmit form
   const SubmitForm = () => {
-  
+  console.log("")
     const allFieldsFilled = checkRequiredFields();
     let minPrice=formatNumber(parseInt(startPrice));
     let maxPrice=formatNumber(parseInt(endPrice));
@@ -523,6 +580,8 @@ export default function PropertyDetailsForm({
         LoanDetails: LoanDetails,
         AreaUnits: areaUnits,
         BhkType: bhkType,
+        Brochure:brochure,
+        Builder:builderName
         // PurchaseRentBy: purchaseDetails,
       };
       console.log("propertyDetailsData before checking ", propertyDetailsData);
@@ -1721,8 +1780,78 @@ export default function PropertyDetailsForm({
                 />
               )}
             </div>
+
+             {/* BuilderData */}
+             <div>
+              <label
+                htmlFor="builder"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+              >
+               Builder Name
+              </label>
+              {builderData ? (
+                <Select
+                  options={builderData.data.map((element) => ({
+                    value: element._id,
+                    label: element.Name,
+                  }))}
+                  placeholder="Select One"
+                  onChange={setBuilderName}
+                  required={true}
+                  value={builderName}
+                />
+              ) : (
+                <Select
+                  options={defaultOption.map((element) => ({
+                    value: element.value,
+                    label: element.label,
+                  }))}
+                  placeholder="Select One"
+                  required={true}
+                />
+              )}
+            </div>
+            {/* brochure */}
+            <div>
+              <label
+                htmlFor="document"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+              >
+                Brochure
+              </label>
+              <input
+                type="file"
+                name="Document"
+                id="document"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                multiple // Allow multiple file selection
+                accept=".pdf, .doc, .docx, .txt" // Specify accepted file types
+                onChange={handleDocumentChange}
+                ref={brochureInputRef}
+              />
+              
+            </div>
+            
+            <div>
+            {brochure ? (
+                <div>
+                  <div className="ml-2 mt-3 underline font-bold">
+                    <h3>Selected Brochure</h3>
+                  </div>
+                  <div className="flex flex-wrap relative mt-3">
+                      <div  className="mr-4 mb-4 relative">
+                        <iframe
+                          src={brochure}
+                          className="h-48 w-64 border border-black rounded-lg"
+                        />
+                      </div>
+                  
+                  </div>
+                </div>
+              ) : null}
+            </div>
             {/* Loan details */}
-                <div></div>
+                {/* <div></div> */}
             <h3 className="mb-4 text-lg mt-5 font-medium leading-none text-gray-900 dark:text-white font-bold underline">
               Loan Details
             </h3>
@@ -1965,24 +2094,7 @@ export default function PropertyDetailsForm({
                 onChange={handlePurchaseChange}
               />
             </div>
-            <div>
-              <label
-                htmlFor="document"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Documents
-              </label>
-              <input
-                type="file"
-                name="Document"
-                id="document"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                multiple // Allow multiple file selection
-                accept=".pdf, .doc, .docx, .txt" // Specify accepted file types
-                onChange={handleFileChange}
-                ref={documentInputRef}
-              />
-            </div> */}
+            */}
           </div>
         </form>
         <div>

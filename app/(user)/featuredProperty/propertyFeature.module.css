@@ -123,8 +123,16 @@
 .GeneralDetailsSecondHead {
   font-weight: 700;
   margin: 1rem;
-  color: black;
+
+  color: grey;
   font-size: 1.3rem;
+}
+
+.GeneralDetailsfeaturedHead {
+  font-weight: 700;
+  margin: 1rem;
+  font-size: 1.3rem;
+  color: black;
 }
 
 .GeneralDetailsSecondSection {

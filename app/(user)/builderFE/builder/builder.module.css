@@ -29,7 +29,7 @@
 }
 
 .builderDetailPageRight{
-    width: 72%;
+    width: 73%;
 }
 
 .builderBox{
@@ -90,4 +90,64 @@
     font-size: 0.75rem;
     font-weight: 600;
     color: gray;
+}
+
+.builderLogoImg{
+    aspect-ratio: 2/2;
+    border-radius: 50%;
+    margin-left: 3rem;
+}
+
+.builderMapDetails{
+    padding: 1rem;
+}
+
+.builderRightImg{
+    aspect-ratio: 3 / 2;
+    width: 50%;
+    border-radius: 0.35rem;
+}
+
+.builderRightMainBox{
+    border:1px solid #D1D5DB;
+    border-radius: 0.35rem;
+}
+
+.cardImgBottom{
+    justify-content: center;
+}
+
+@media screen and (max-width: 1000px) {
+    .builderDetailPage{
+        display: block;
+        margin-left: 3rem;
+        margin-right: 3rem;
+    }
+    .builderDetailPageRight{
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+    .builderDetailPageLeft{
+        width: 100%;
+    }
+
+    .divideDetailPage{
+        margin-left: 3rem;
+        margin-right: 3rem;
+        margin-top: 7rem;
+    }
+
+    .builderHunter{
+        justify-content: flex-start;
+    }
+
+    .builderInputField{
+        display: flex;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .builderInputField{
+        display: block;
+    }
 }

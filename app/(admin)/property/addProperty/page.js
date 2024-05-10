@@ -47,7 +47,7 @@ export default function AddProject() {
   const submitPropertyData = async () => {
     const propertyData = JSON.parse(sessionStorage.getItem("propertyData"));
     console.log("all Property Data", propertyData);
-    console.log("propertyData.Aminities", propertyData.Aminities);
+    console.log("propertyData.Aminities", propertyData?.Aminities);
     if (propertyData){
       const loanDetails= {
         ByBank:propertyData?.LoanDetails?.ByBank.map((item)=>{
@@ -57,72 +57,74 @@ export default function AddProject() {
         LoanTill:propertyData?.LoanDetails?. LoanTill
       }
       const finalizePropertyData = {
-        Titile: propertyData.Titile,
-        Description: propertyData.Description,
-        Highlight: propertyData.Highlight,
-        Facing: [propertyData.Facing.value],
-        IsEnabled: propertyData.IsEnabled,
-        IsExclusive: propertyData.IsExclusive,
-        IsFeatured: propertyData.IsFeatured,
-        IsNew: propertyData.IsNew,
-        ProeprtyFor: propertyData.ProeprtyFor.value,
-        PropertyType: propertyData.PropertyTypeWithSubtype.value,
-        Bedrooms: propertyData.Bedrooms,
-        Bathrooms: propertyData.Bathrooms,
-        Fencing: propertyData.Fencing.value,
-        Flooring: propertyData.Flooring.value,
-        Furnished: propertyData.Furnished.value,
-        BuiltAreaType: propertyData.BuiltAreaType.value,
-        LandArea: propertyData.LandArea,
-        CoveredArea: propertyData.CoveredArea,
-        CarpetArea: propertyData.CarpetArea,
-        TotalPrice: propertyData.TotalPrice,
-        PerUnitPrice: propertyData.PerUnitPrice,
-        IsDisplayPrice: propertyData.IsDisplayPrice,
-        IsNegotiable: propertyData.IsNegotiable,
-        PosessionStatus: propertyData.PosessionStatus.value,
-        PosessionDate: propertyData.PosessionDate,
-        FloorNumber: propertyData.FloorNumber,
-        TotalFloors: propertyData.TotalFloors,
-        IsSingleProperty: propertyData.IsSingleProperty,
-        PricePerSquareFeet: propertyData.PricePerSquareFeet,
-        FloorsAllowed: propertyData.FloorsAllowed,
-        IsInterstedInJoinedVenture: propertyData.IsInterstedInJoinedVenture,
-        Balconies: propertyData.Balconies,
-        Soil: propertyData.Soil.value,
-        IsLoanable: propertyData.IsLoanable,
-        IsAlreadyLoaned: propertyData.IsAlreadyLoaned,
+        Titile: propertyData?.Titile,
+        Description: propertyData?.Description,
+        Highlight: propertyData?.Highlight,
+        Facing: [propertyData?.Facing?.value],
+        IsEnabled: propertyData?.IsEnabled,
+        IsExclusive: propertyData?.IsExclusive,
+        IsFeatured: propertyData?.IsFeatured,
+        IsNew: propertyData?.IsNew,
+        ProeprtyFor: propertyData?.ProeprtyFor?.value,
+        PropertyType: propertyData?.PropertyTypeWithSubtype?.value,
+        Bedrooms: propertyData?.Bedrooms,
+        Bathrooms: propertyData?.Bathrooms,
+        Fencing: propertyData?.Fencing?.value,
+        Flooring: propertyData?.Flooring?.value,
+        Furnished: propertyData?.Furnished?.value,
+        BuiltAreaType: propertyData?.BuiltAreaType?.value,
+        LandArea: propertyData?.LandArea,
+        CoveredArea: propertyData?.CoveredArea,
+        CarpetArea: propertyData?.CarpetArea,
+        TotalPrice: propertyData?.TotalPrice,
+        PerUnitPrice: propertyData?.PerUnitPrice,
+        IsDisplayPrice: propertyData?.IsDisplayPrice,
+        IsNegotiable: propertyData?.IsNegotiable,
+        PosessionStatus: propertyData?.PosessionStatus?.value,
+        PosessionDate: propertyData?.PosessionDate,
+        FloorNumber: propertyData?.FloorNumber,
+        TotalFloors: propertyData?.TotalFloors,
+        IsSingleProperty: propertyData?.IsSingleProperty,
+        PricePerSquareFeet: propertyData?.PricePerSquareFeet,
+        FloorsAllowed: propertyData?.FloorsAllowed,
+        IsInterstedInJoinedVenture: propertyData?.IsInterstedInJoinedVenture,
+        Balconies: propertyData?.Balconies,
+        Soil: propertyData?.Soil?.value,
+        IsLoanable: propertyData?.IsLoanable,
+        IsAlreadyLoaned: propertyData?.IsAlreadyLoaned,
         LoanDetails: loanDetails,
-        OwnershipType: propertyData.OwnershipType.value,
-        PropertyStatus: propertyData.PropertyStatus.value,
-        IsSold: propertyData.IsSold,
-        Preferences: propertyData.Preferences.map((item)=>{
+        OwnershipType: propertyData?.OwnershipType?.value,
+        PropertyStatus: propertyData?.PropertyStatus?.value,
+        IsSold: propertyData?.IsSold,
+        Preferences: propertyData?.Preferences.map((item)=>{
           return item._id
         }),
-        DiscountPercentage: propertyData.DiscountPercentage,
-        DiscountForYears: propertyData.DiscountForYears,
-        Surveillance: propertyData.Surveillance.map((item) => item.value),
-        IsFeatured: propertyData.IsFeatured,
-        Features: propertyData.Features,
-        Aminities: propertyData.Aminities,
-        City: propertyData.City,
-        State: propertyData.State,
-        Country: propertyData.Country,
-        Address: propertyData.Address,
-        Area: propertyData.Area.value,
+        DiscountPercentage: propertyData?.DiscountPercentage,
+        DiscountForYears: propertyData?.DiscountForYears,
+        Surveillance: propertyData?.Surveillance.map((item) => item.value),
+        IsFeatured: propertyData?.IsFeatured,
+        Features: propertyData?.Features,
+        Aminities: propertyData?.Aminities,
+        City: propertyData?.City,
+        State: propertyData?.State,
+        Country: propertyData?.Country,
+        Address: propertyData?.Address,
+        Area: propertyData?.Area.value,
         PinCode:propertyData.PinCode,
         Landmark:propertyData.Landmark,
-        Location: propertyData.Location,
-        Images: propertyData.Images.map((URL) => ({ URL })),
-        Videos: propertyData.Videos.map((URL) => ({ URL })),
-        Documents: propertyData.Documents.map((URL) => ({ URL })),
-        AreaUnits:propertyData.AreaUnits.value,
-        ReraNumber:propertyData.ReraNumber,
-        BhkType:propertyData.BhkType.value,
-        FloorAndCounter:propertyData.FloorAndCounter,
-        Fitting:propertyData.Fitting,
-        WallAndCeiling:propertyData.WallAndCeiling,
-        Faq:propertyData.Faq
+        Location: propertyData?.Location,
+        Images: propertyData?.Images.map((URL) => ({ URL })),
+        Videos: propertyData?.Videos.map((URL) => ({ URL })),
+        Documents: propertyData?.Documents.map((URL) => ({ URL })),
+        AreaUnits:propertyData?.AreaUnits?.value,
+        ReraNumber:propertyData?.ReraNumber,
+        BhkType:propertyData?.BhkType?.value,
+        FloorAndCounter:propertyData?.FloorAndCounter,
+        Fitting:propertyData?.Fitting,
+        WallAndCeiling:propertyData?.WallAndCeiling,
+        Faq:propertyData?.Faq,
+        Brochure:propertyData?.Brochure,
+        Builder:propertyData?.Builder?.value
       };
       console.log("finalizePropertyData", finalizePropertyData);
       let res = await AddProperty(finalizePropertyData);
@@ -137,7 +139,7 @@ export default function AddProject() {
         toast.error(res.errMessage);
         return false;
       }
-      }
+       }
    
    
   };

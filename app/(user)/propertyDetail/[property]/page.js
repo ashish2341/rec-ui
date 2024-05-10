@@ -4,6 +4,7 @@ import Navbar from "@/components/common/navbar";
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./propertyDetail.module.css";
 import { initFlowbite } from "flowbite";
+import { Button, Popover } from "flowbite-react";
 import Slider from "react-slick";
 import Link from 'next/link';
 import useFetch from "@/customHooks/useFetch";
@@ -38,6 +39,7 @@ const PropertyDetail = ({params}) => {
   const [listImageData, setListImageData] = useState(false);
   const [videoData, setVideoData] = useState(false);
   const [loanDetails, setLoanDetailseData] = useState(false);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [aminityData, setAminityData] = useState(false);
   
   const [page, setPage] = useState(1);
@@ -200,6 +202,16 @@ const PropertyDetail = ({params}) => {
     return `${year}-${month}-${day}`;
   };
 
+  const handleRedirect = () => {
+    window.open('https://www.facebook.com/', '_blank');
+    setIsPopoverOpen(false);
+  };
+
+  const handleRedirectTwitter = () => {
+    window.open('https://twitter.com/', '_blank');
+    setIsPopoverOpen(false);
+  };
+
   const ShowBank = () => {
     return isLoading ? (
       <SkeletonLoader />
@@ -226,6 +238,7 @@ const PropertyDetail = ({params}) => {
     navigator.clipboard.writeText(window.location.href);
     setCopied(true);
     toast.success("URL Copied");
+    setIsPopoverOpen(false);
     setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
   };
 
@@ -638,10 +651,11 @@ const PropertyDetail = ({params}) => {
 
           {/* overview */}
           <div id="overview" className={`${styles.overview} overview page`}>
-            {listPropertiesData ? (
+            
               <div className="overviewMain">
               <h2 className={`${styles.overviewMainHead}`}>OVERVIEW</h2>
               <div className={`${styles.overviewBox}`}>
+              {listPropertiesData ? (
                 <div className={`${styles.overviewBoxMain}`}>
                   <div className={`${styles.overviewBoxMainContent}`}>
                     <h2 className={`${styles.overviewBoxMainContentHead}`}>
@@ -708,6 +722,8 @@ const PropertyDetail = ({params}) => {
                     </p>
                   </div>
                 </div>
+                ) : <LoadingText/>
+              }
                 <div className={`${styles.overviewBoxBottomMain}`}>
                 <Link href="/contactus">
                   <button 
@@ -717,14 +733,53 @@ const PropertyDetail = ({params}) => {
                     Ask For Detail
                   </button>
                 </Link>
-                <button type="button" onClick={copyURL} className="text-grey border border-gray-600 bg-white-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Share</button>
+                {/* <button type="button" onClick={copyURL} className="text-grey border border-gray-600 bg-white-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Share</button> */}
+                <Popover
+                  aria-labelledby="default-popover"
+                  content={
+                    <div className="w-64 text-sm text-gray-500 dark:text-gray-400">
+                      <div className="px-3 py-2">
+                        <button 
+                          onClick={copyURL}
+                          className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        >
+                         <i class="bi bi-link-45deg mr-2"></i> Copy Url
+                        </button>
+                        <button 
+                          onClick={handleRedirect}
+                          className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        >
+                          <i class="bi bi-facebook mr-2"></i>Facebook
+                        </button>
+                        <button 
+                          onClick={handleRedirectTwitter}
+                          className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        >
+                          <i class="bi bi-twitter mr-2"></i>Twitter
+                        </button>
+                      </div>
+                    </div>
+                  }
+                  isOpen={isPopoverOpen} 
+                  onClose={() => setIsPopoverOpen(false)}
+                >
+                  <button
+                    type="button" 
+                    className="text-grey border border-gray-600 bg-white-700 
+                    hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 
+                    font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600 
+                    dark:hover:bg-blue-700 dark:focus:ring-blue-800" 
+                    onClick={() => setIsPopoverOpen(true)}
+                  >
+                    Share
+                  </button>
+                </Popover>
+                
                 <button type="button" className="text-grey border border-gray-600 bg-white-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
                 <button type="button" className="text-grey border border-gray-600 bg-white-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Download Brochure</button>
                 </div>
               </div>
             </div>
-            ) : <LoadingText/>
-            }
           </div>
 
           {/* amenities */}
@@ -732,25 +787,46 @@ const PropertyDetail = ({params}) => {
             <div className="amenitiesMain">
               <h2 className={`${styles.amenitiesMainHead}`}>AMENITIES & FEATURES</h2>
               <div className={`${styles.amenitiesBox}`}>
+              {listPropertiesData ?
                 <div className={`${styles.amenitiesBoxMain}`}>
                     {listPropertiesData?.Aminities?.map((item, index) => (
                     <div key={index} className={`${styles.amenitiesBoxMainContent}`}>
-                      <p className={`${styles.amenitiesBoxMainContentTextList}`}>
-                        <i className={`${styles.amenitiesIconBox} ${item.Icon} || "" `}>{" "}</i>{item.Aminity}
-                      </p>
+                      <div className={`${styles.amenitiesBoxMainContentTextList}`}>
+                        {/* <i className={`${styles.amenitiesIconBox} ${item.Icon} || "" `}>{" "}</i>{item.Aminity} */}
+                        <img
+                          className={`${styles.amenitiesIconBox}`}
+                          src={item.Icon}
+                          width="22"
+                          height="22"
+                         />
+                         <p className="wrap text-center">
+                         {item.Aminity}
+                         </p>
+                      </div>
                     </div>
                   ))} 
                   </div>
+                  : <LoadingText />}
                 <div className={`${styles.amenitiesBoxMain} mt-4`}>
                 {listPropertiesData?.Features?.map((item, index) => (
-                    <div key={index} className={`${styles.amenitiesBoxMainContent} mr-4`}>
-                      <p className={`${styles.amenitiesBoxMainContentTextList}`}>
-                        <i className={`${styles.amenitiesIconBox} ${item.Icon} || "" `}>{" "}</i>{item.Feature}
-                      </p>
+                    <div key={index} className={`${styles.amenitiesBoxMainContent}`}>
+                      <div className={`${styles.amenitiesBoxMainContentTextList}`}>
+                        {/* <i className={`${styles.amenitiesIconBox} ${item.Icon} || "" `}>{" "}</i>{item.Feature} */}
+                        <img
+                          className={`${styles.amenitiesIconBox}`}
+                          src={item.Icon}
+                          width="20"
+                          height="20"
+                         />
+                         <p className="wrap text-center">
+                         {item.Feature}
+                         </p>
+                      </div>
                     </div>
                   ))} 
                 </div>
               </div>
+               
             </div>
           </div>
 

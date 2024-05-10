@@ -4,38 +4,29 @@ import styles from "./page.module.css";
 import Navbar from "@/components/common/navbar";
 import Footer from "@/components/common/footer";
 import { useEffect, useRef, useState } from "react";
-// import Home from "./(user)/home/page";
 import { initFlowbite } from "flowbite";
 import React from "react";
 import Slider from "react-slick";
-// import { Accordion } from "flowbite-react";
-//import { CustomFlowbiteTheme } from "flowbite-react";
 import { Accordion } from "flowbite-react";
-import { Avatar, Blockquote } from "flowbite-react";
-import { Card } from "flowbite-react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import useFetch from "@/customHooks/useFetch";
 import { API_BASE_URL, API_BASE_URL_FOR_MASTER } from "@/utils/constants";
 import { addEnquiry } from "@/api-functions/enquiry/addEnquiry";
 import { toast } from "react-toastify";
-import MultipleItems from "@/components/common/ImageSlider";
 import Link from "next/link";
 import MultiCarousel from "@/components/common/carousel";
 import { Button, Modal } from "flowbite-react";
 import Spinner from "@/components/common/loading";
 import SkeletonLoader from "@/components/common/loader";
 import SearchBar from "./search";
-import LoadingImg from "@/components/common/loadingImg";
 
 export default function Home() {
  
   
    
- 
-  const slider = useRef(null);
+
   const sliderTestimonial = useRef(null);
-  const populerPropertiesslider = useRef(null);
   const [Name, setName] = useState("");
   const [ZodiacName, setZodaicName] = useState("");
   const [Dob, setDob] = useState("");
@@ -50,10 +41,10 @@ export default function Home() {
 
 
   const facingImage = [
-    "/img/EastImage.jpeg",
-    "/img/WestImage.jpeg",
-    "/img/NorthImage.jpeg",
-    "/img/SouthImage.jpeg",
+    "https://jaipurthrumylens.files.wordpress.com/2016/05/picture-of-hawa-mahal-jaipur-jaipurthrumylens.jpg",
+    "https://touringwithpk.com/wp-content/uploads/2024/01/IMG_8447a-700x432.jpg",
+    "https://www.india.com/wp-content/uploads/2022/09/Jal-mahal-1.jpg",
+    "https://assets.cntraveller.in/photos/60ba1bc8f27d46df614fc4a7/16:9/w_1920,h_1080,c_limit/City-Palace-Jaipur-2.jpg",
   ];
 
   const facingSubHeading =[
@@ -124,7 +115,7 @@ export default function Home() {
   const ShowApartmentProperties = () => {
      
     return propertyByapartmentType?.data?.map((item,index) => (
-      <Link key={index}  href={`/propertyList/propertyTypeId=${item._id}`} >
+      <Link key={index}  href={`/propertyList/property?propertyTypeID=${item._id}&propertyTypeLabel=${item?.areaInfo?.Type}`}  >
         <div 
           className="p-1"
         >
@@ -341,7 +332,7 @@ export default function Home() {
         className={`${styles.banner} relative w-full`}
         data-carousel="static"
       >
-        <div className="relative h-full overflow-hidden rounded-lg">
+        <div className="relative h-full rounded-lg">
           <div
             className="crousalItem hidden duration-700 ease-in-out"
             data-carousel-item="active"
@@ -377,7 +368,7 @@ export default function Home() {
                       </p>
                     </div>
                   </div>
-                  <SearchBar />
+                  <SearchBar/>
                 </div>
               </div>
               <div className={`${styles.crousalItemRightMain}`}>
@@ -386,27 +377,31 @@ export default function Home() {
                   src={bannerData?.data[0].Url}
                   className={`${styles.crousalItemLeftImage} block`}
                   alt="...a"
-                /> : <Spinner />
+                /> : (
+                  <div className="mt-70">
+                    <Spinner />
+                  </div>
+                )
                 }
               </div>
             </div>
           </div>
-          <div className="hidden duration-700 ease-in-out" data-carousel-item>
-          <SearchBar />
+          <div className="overflow-hidden duration-700 ease-in-out" data-carousel-item>
+          {/* <SearchBar id="2" /> */}
             <img
               src={bannerData?.data[1].Url}
               className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
               alt="...a"
             />
           </div>
-          <div className="hidden duration-700 ease-in-out" data-carousel-item>
+          <div className="overflow-hidden duration-700 ease-in-out" data-carousel-item>
             <img
               src={bannerData?.data[2].Url}
               className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
               alt="...a"
             />
           </div>
-          <div className="hidden duration-700 ease-in-out" data-carousel-item>
+          <div className="overflow-hidden duration-700 ease-in-out" data-carousel-item>
             <img
               src={bannerData?.data[3].Url}
               className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
@@ -471,7 +466,7 @@ export default function Home() {
              {facingData
               ? facingData.data.slice(0, 4).map((item,index) => (
                 
-                <Link key={index} href={`/propertyList/facingId=${item._id}`}>
+                <Link key={index}  href={`/propertyList/property?facingId=${item?._id}&facingLabel=${item?.Facing}`}>
                   <div
                     className={` ${styles.campassRightBox} border-gray-300 rounded-md`}
                   >
@@ -542,7 +537,7 @@ export default function Home() {
           <div key={index}
             className={` ${styles.propertiesByAreaBox} border border-gray-300 rounded-md`}
           >
-            <Link href={`/propertyList/areaTypeId=${item._id}`}>
+            <Link href={`/propertyList/property?areaId=${item?._id}&areaLabel=${item?.areaInfo?.Area}`}>
             <div>
               <div>
                 <img
@@ -717,8 +712,8 @@ export default function Home() {
             <p className={`${styles.propertiesByAreaMainText}`}>
               Exclusive showcase of top projects
             </p>
-            <a
-              href="#"
+            <Link
+              href={`/featuredProperty?isFeatured=yes`}
               className="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline"
             >
               See all properties
@@ -739,7 +734,7 @@ export default function Home() {
                   d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
                 />
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
         <div className={` ${styles.populerPropertiesBoxMain} flex flex-wrap mt-4 `}>
@@ -805,29 +800,31 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <button
-            className={` ${styles.agentRightMainContenBtn} text-white bg-blue-700 h-12 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-            type="button"
-          >
-            See more
-            <svg
-              className="w-4 h-4 ms-2"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
+          <Link href={`/astrologer`}>
+            <button
+              className={` ${styles.agentRightMainContenBtn} text-white bg-blue-700 h-12 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+              type="button"
             >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
-              />
-            </svg>
-          </button>
+              See more
+              <svg
+                className="w-4 h-4 ms-2"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                />
+              </svg>
+            </button>
+          </Link>
         </div>
       </div>
 

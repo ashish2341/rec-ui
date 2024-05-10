@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import { BreadCrumbs } from "@/components/common/breadcrumb";
 import Footer from "@/components/common/footer";
 import Navbar from "@/components/common/navbar";
@@ -9,18 +9,39 @@ import { API_BASE_URL, API_BASE_URL_FOR_MASTER } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { Avatar } from "flowbite-react";
 import { Card } from "flowbite-react";
+import { ToastContainer, toast } from "react-toastify";
 import { Accordion, AccordionContent, AccordionPanel, AccordionTitle } from "flowbite-react";
-
+import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
+import Link from "next/link";
+import LoadingSideImg from "@/components/common/sideImgLoader";
 
 const BuilderPage = () => {
     const { data: areaData } = useFetch(`${API_BASE_URL_FOR_MASTER}/areas`);
-    const {
-        data: developData,
-        loading: developLoading,
-        error: developError,
-      } = useFetch(`${API_BASE_URL}/develop/allDeveloper?page=1&pageSize=5`);
+    // const {
+    //     data: developData,
+    //     loading: developLoading,
+    //     error: developError,
+    //   } = useFetch(`${API_BASE_URL}/developer/allDeveloper?page=1&pageSize=5&search=""`);
 
-      console.log("developData",developData);
+    const [builderData,setBuilderData]=useState("")
+    useEffect(() => {
+        getAllBuilder();
+      }, []);
+      
+      const getAllBuilder = async () => {
+        let builder = await GetBuilderApi();
+        if (builder?.resData?.success == true) {
+          setBuilderData(builder?.resData);
+          toast.success(builder?.resData?.message);
+          return false;
+        } else {
+          toast.error(builder?.errMessage);
+          return false;
+        }
+      };
+
+      console.log("developData",builderData);
+      console.log("developData",builderData.Name);
     return(
         <>
         <Navbar />
@@ -46,19 +67,6 @@ const BuilderPage = () => {
                         </div>
                         <div className={` ${styles.builderline}`}></div>
                         <Accordion collapseAll className="border-none">
-                            <AccordionPanel>
-                                <AccordionTitle>All Categories</AccordionTitle>
-                                <AccordionContent className={`${styles.AccordionContent}`}>
-                                    <div className="mr-6 p-4">
-                                        <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">Dining</span>
-                                        <p className="">testimonialcontent</p>
-                                    </div>
-                                    <div className="mr-6 p-4">
-                                        <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">Master Bedroom</span>
-                                        <p className="">test</p>
-                                    </div>
-                                </AccordionContent>
-                            </AccordionPanel>
                             <AccordionPanel>
                                 <AccordionTitle>Location</AccordionTitle>
                                 <AccordionContent className={`${styles.AccordionContent}`}>
@@ -114,46 +122,51 @@ const BuilderPage = () => {
                 <div className={` ${styles.builderDetailPageRight}`}>
                     <div className={` ${styles.builderTopRight} mb-4 flex justify-between mt-2`}>
                         <div>
-                            <h1>Showing 1-3 of 130</h1>
+                            <h1>Showing {builderData.count} of {builderData.totalCount}</h1>
                         </div>
                         <div className={` ${styles.builderDetailDropDown} flex`}>
                             <h2>Sort by :</h2>
                             <Dropdown label="" dismissOnClick={false} renderTrigger={() => <span> My custom trigger</span>}>
                                 <Dropdown.Item>Dashboard</Dropdown.Item>
                                 <Dropdown.Item>Settings</Dropdown.Item>
-                                <Dropdown.Item>Earnings</Dropdown.Item>
-                                <Dropdown.Item>Sign out</Dropdown.Item>
+                                <Dropdown.Item>A-Z</Dropdown.Item>
+                                <Dropdown.Item>Z-A</Dropdown.Item>
                             </Dropdown>
                         </div>
                     </div>
-                    <div className={` ${styles.builderDetailBuilderRight}`}>
-                        <img 
-                            src="../../../img/contactusImg1.jpg"
-                            className={` ${styles.builderImgBuilder} mr-4`}
-                        />
-                        <div>
-                            <h5 className="text-lg font-bold  text-gray-900 dark:text-white blueText">
-                                Noteworthy technology acquisitions 2021
-                            </h5>
-                            <p className="text-sm text-gray-500 dark:text-white mb-4">Year estd. 2019</p>
-                            <p className="text-sm text-gray-700 dark:text-black-400">
-                                Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
-                            </p>
+                    { builderData ?
+                    builderData?.data?.map((item,index) => (
+                        <div key={index} className={` ${styles.builderDetailBuilderRight}`}>
+                            <img 
+                                src={item.Logo}
+                                className={` ${styles.builderImgBuilder} mr-4`}
+                            />
+                            <div>
+                                <h5 className="text-lg font-bold  text-gray-900 dark:text-white blueText">
+                                    {item.Name}
+                                </h5>
+                                <p className="text-sm text-gray-500 dark:text-white mb-4">Year estd. {(item.EstablishDate).substring(0, 4)}</p>
+                                <p className="text-sm text-gray-700 dark:text-black-400">
+                                    {item.Description}
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                    <div className={` ${styles.builderDetailPageDown}`}>
+                    )) : <LoadingSideImg />}
+                    {builderData?.data?.map((item,index) => (
+                    <div key={index} className={` ${styles.builderDetailPageDown}`}>
                         <div className={` ${styles.builderSocialLine}`} >
                             <div className={` ${styles.builderSocialIcon} text-gray-700`}>
-                                <i class="bi bi-facebook"></i>
-                                <i class="bi bi-instagram ml-3"></i>
-                                <i class="bi bi-linkedin ml-3"></i>
-                                <i class="bi bi-twitter ml-3"></i>
+                                <Link href={item.SocialMediaProfileLinks.Facebook} target="_blank" rel="noopener noreferrer"><i className="bi bi-facebook"></i></Link>
+                                <Link href={item.SocialMediaProfileLinks.Instagram} target="_blank" rel="noopener noreferrer"><i className="bi bi-instagram ml-3"></i></Link>
+                                <Link href={item.SocialMediaProfileLinks.Facebook} target="_blank" rel="noopener noreferrer"><i className="bi bi-linkedin ml-3"></i></Link>
+                                <Link href={item.SocialMediaProfileLinks.Twitter} target="_blank" rel="noopener noreferrer"><i className="bi bi-twitter ml-3"></i></Link>
                             </div>
                             <div>
-                                <p>100 properties listed</p>
+                                <p>{item.PropertiesLength} properties listed</p>
                             </div>
                         </div>
                     </div>
+                    ))}
                 </div>
             </div>
         <Footer />

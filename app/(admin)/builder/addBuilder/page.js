@@ -60,6 +60,176 @@ export default function AddBuilder() {
   const logoInputRef = useRef(null);
   const router = useRouter();
 
+  // const validateFields = () => {
+
+
+  //   let isValid = true;
+  //   let isEmptyField = false;
+  //   const newBranchesData = [...BranchesData];
+
+  //   newBranchesData.forEach((branch) => {
+  //     // Check if any field is empty
+  //     Object.keys(branch).forEach((key) => {
+  //       if (typeof branch[key] === "string" && branch[key].trim() === "") {
+  //         isEmptyField = true;
+  //       }
+  //     });
+  //   });
+
+  //   // If at least one field is empty, show the error message and return
+  //   if (isEmptyField) {
+  //     toast.error("Branch details  are required.");
+  //     return false;
+  //   }
+
+  //   newBranchesData.forEach((branch) => {
+  //     // Check mobile, whatsapp, phone number format and length
+  //     const mobilePattern = /^[789]\d{9}$/;
+  //     if (!mobilePattern.test(branch.Mobile)) {
+  //       isValid = false;
+  //       toast.error(
+  //         "Mobile number should be 10 digits and start with 9, 8, or 7."
+  //       );
+  //     }
+  //     if (!mobilePattern.test(branch.WhatsApp)) {
+  //       isValid = false;
+  //       toast.error(
+  //         "WhatsApp number should be 10 digits and start with 9, 8, or 7."
+  //       );
+  //     }
+  //     if (!mobilePattern.test(branch.Phone)) {
+  //       isValid = false;
+  //       toast.error(
+  //         "Phone number should be 10 digits and start with 9, 8, or 7."
+  //       );
+  //     }
+
+  //     // Check pincode format and length
+  //     const pincodePattern = /^\d{6}$/;
+  //     if (!pincodePattern.test(branch.PinCode)) {
+  //       isValid = false;
+  //       toast.error("Pincode should be 6 digits.");
+  //     }
+
+  //     // Check email format
+  //     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //     if (
+  //       !emailPattern.test(branch.EmailId) ||
+  //       !branch.EmailId.endsWith("gmail.com")
+  //     ) {
+  //       isValid = false;
+  //       toast.error("Email should be a valid Gmail address.");
+  //     }
+  //   });
+
+  //   return isValid;
+  // };
+
+  // const validateContact = () => {
+  //   let isValid = true;
+  //   let isEmptyField = false;
+  //   const newBranchesData = [...BranchesData];
+  //   newBranchesData.forEach((branch) => {
+  //     // Check mobile, whatsapp, phone number format and length
+  //     const mobilePattern = /^[789]\d{9}$/;
+  //     if (!mobilePattern.test(branch.Mobile)) {
+  //       isValid = false;
+  //       toast.error(
+  //         "Mobile number should be 10 digits and start with 9, 8, or 7."
+  //       );
+  //     }
+  //     if (!mobilePattern.test(branch.WhatsApp)) {
+  //       isValid = false;
+  //       toast.error(
+  //         "WhatsApp number should be 10 digits and start with 9, 8, or 7."
+  //       );
+  //     }
+  //     if (!mobilePattern.test(branch.Phone)) {
+  //       isValid = false;
+  //       toast.error(
+  //         "Phone number should be 10 digits and start with 9, 8, or 7."
+  //       );
+  //     }
+
+  //     // Check pincode format and length
+  //     const pincodePattern = /^\d{6}$/;
+  //     if (!pincodePattern.test(branch.PinCode)) {
+  //       isValid = false;
+  //       toast.error("Pincode should be 6 digits.");
+  //     }
+
+  //     // Check email format
+  //     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //     if (
+  //       !emailPattern.test(branch.EmailId) ||
+  //       !branch.EmailId.endsWith("gmail.com")
+  //     ) {
+  //       isValid = false;
+  //       toast.error("Email should be a valid Gmail address.");
+  //     }
+  //   });
+
+  //   return isValid;
+  // };
+
+  // const validateBasicData = () => {
+  //   let validValue = true;
+  //   if (!builderName || !builderArea) {
+  //     toast.error("Please fill in all required fields.");
+  //     validValue = false;
+  //   }
+
+  //   // email check
+
+  //   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   if (
+  //     !emailPattern.test(builderEmail) ||
+  //     !builderEmail.endsWith("gmail.com")
+  //   ) {
+  //     toast.error("Email should be a valid Gmail address.");
+  //     validValue = false;
+  //   }
+
+  //   // mobile patteren check
+
+  //   const mobilePattern = /^[789]\d{9}$/;
+  //   if (!mobilePattern.test(builderMobile)) {
+  //     toast.error(
+  //       "Mobile number should be 10 digits and start with 9, 8, or 7."
+  //     );
+  //     validValue = false;
+  //   }
+  //   if (!mobilePattern.test(builderWhatsapp)) {
+  //     toast.error(
+  //       "WhatsApp number should be 10 digits and start with 9, 8, or 7."
+  //     );
+  //     validValue = false;
+  //   }
+
+  //   if (
+  //     !description ||
+  //     !image ||
+  //     !detailNote ||
+  //     !establishDate ||
+  //     !documents ||
+  //     !builderLogo
+  //   ) {
+  //     toast.error("Please fill in all required fields.");
+  //     validValue = false;
+  //   }
+
+  //   if (
+  //     !socialMediaProfileLinks.Facebook ||
+  //     !socialMediaProfileLinks.Twitter ||
+  //     !socialMediaProfileLinks.Instagram ||
+  //     !socialMediaProfileLinks.LinkedIn
+  //   ) {
+  //     toast.error("Please fill in all Social Profile fields.");
+  //     validValue = false;
+  //   }
+  // };
+  
+  
   const handleNameChange = (e) => {
     setBuilderName(e.target.value);
   };
@@ -75,19 +245,25 @@ export default function AddBuilder() {
   //For branchOffice
 
   const addMore = () => {
-    setBranchesData([...BranchesData, initialBranchState]);
-  };
+    
+   
+        setBranchesData([...BranchesData, initialBranchState]);
+ 
+   };
 
   const addMoreContactPerson = (index) => {
-    const updatedFormData = [...BranchesData];
-    updatedFormData[index].ContactPerson.push({
-      Name: "",
-      Mobile: "",
-      EmailId: "",
-      Phone: "",
-      Designation: "",
-    });
-    setBranchesData(updatedFormData);
+    // const branchValidateforAdd = validateFields();
+    // if (branchValidateforAdd) {
+      const updatedFormData = [...BranchesData];
+      updatedFormData[index].ContactPerson.push({
+        Name: "",
+        Mobile: "",
+        EmailId: "",
+        Phone: "",
+        Designation: "",
+      });
+      setBranchesData(updatedFormData);
+    // }
   };
 
   const handleOfficeChange = (e, index, field, subIndex) => {
@@ -283,39 +459,35 @@ export default function AddBuilder() {
       }
     }
   };
+
   const submitForm = async () => {
-    // if (!builderName || !DetailNote || !verifiedBy || !image || !DetailNote || !verificationDate  || !documents) {
-    //   toast.error('Please fill in all required fields.');
-    //   return false
+    // const branchValidate = validateFields();
+    // if (branchValidate) {
+      const builderDetails = {
+        Name: builderName,
+        SocialMediaProfileLinks: socialMediaProfileLinks,
+        DetailNote: detailNote,
+        Logo: builderLogo,
+        Area: builderArea?.value,
+        Mobile: builderMobile,
+        EmailId: builderEmail,
+        WhatsApp: builderWhatsapp,
+        Description: description,
+        EstablishDate: establishDate,
+        Images: image,
+        Documents: documents.map((URL) => ({ URL })),
+        BranchOffices: BranchesData,
+      };
+      console.log("builderDetails", builderDetails);
+      let res = await AddBuilderApi(builderDetails);
+      if (res?.resData?.success == true) {
+        router.push("/builder");
+        toast.success(res?.resData?.message);
+      } else {
+        toast.error(res?.errMessage);
+        return false;
+      }
     // }
-    // if (!socialMediaProfileLinks.Facebook || !socialMediaProfileLinks.Twitter || !socialMediaProfileLinks.Instagram || !socialMediaProfileLinks.Linkdin ) {
-    //   toast.error('Please fill in all Social Profile fields.');
-    //   return false
-    // }
-    const builderDetails = {
-      Name: builderName,
-      SocialMediaProfileLinks: socialMediaProfileLinks,
-      DetailNote: detailNote,
-      Logo: builderLogo,
-      Area: builderArea.value,
-      Mobile: builderMobile,
-      EmailId: builderEmail,
-      WhatsApp: builderWhatsapp,
-      Description: description,
-      EstablishDate: establishDate,
-      Images: image,
-      Documents: documents.map((URL) => ({ URL })),
-      BranchOffices: BranchesData,
-    };
-    console.log("builderDetails", builderDetails);
-    let res = await AddBuilderApi(builderDetails);
-    if (res?.resData?.success == true) {
-      router.push("/builder");
-      toast.success(res?.resData?.message);
-    } else {
-      toast.error(res?.errMessage);
-      return false;
-    }
   };
 
   const removeImage = (index) => {

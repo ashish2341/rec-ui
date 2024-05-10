@@ -5,6 +5,7 @@ import Select from "react-select";
 import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
+import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
 
 export default function PropertyDetailsForm({
   valueForNext,
@@ -157,6 +158,8 @@ export default function PropertyDetailsForm({
   const [areaUnits, setAreaUnits] = useState("");
   const [brochure, setBrochure] = useState("");
   const brochureInputRef = useRef(null);
+  const [builderData,setBuilderData]=useState("")
+  const [builderName,setBuilderName]=useState("")
   //Purchase Details
   // const [purchaseDetails, setPurchaseDetails] = useState({
   //   BuyerId: "",
@@ -167,7 +170,21 @@ export default function PropertyDetailsForm({
   //   Document: [],
   // });
   // const documentInputRef = useRef(null);
-
+  useEffect(() => {
+    getAllBuilder();
+  }, []);
+  
+  const getAllBuilder = async () => {
+    let builder = await GetBuilderApi();
+    if (builder?.resData?.success == true) {
+      setBuilderData(builder?.resData);
+      toast.success(builder?.resData?.message);
+      return false;
+    } else {
+      toast.error(builder?.errMessage);
+      return false;
+    }
+  };
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
@@ -309,6 +326,7 @@ export default function PropertyDetailsForm({
       setByBank(sessionStoragePropertyData?.LoanDetails?.ByBank || "");
       setLoanSince(sessionStoragePropertyData?.LoanDetails?.LoanSince || "");
       setLoanTill(sessionStoragePropertyData?.LoanDetails?.LoanTill || "");
+      setBuilderName(sessionStoragePropertyData?.Builder || "")
       
     }
   }, []);
@@ -482,7 +500,8 @@ export default function PropertyDetailsForm({
       loanSince,
       loanTill,
       bhkType,
-      brochure
+      brochure,
+      builderName
     ];
 
     // Check if any required field is empty
@@ -495,7 +514,7 @@ export default function PropertyDetailsForm({
 
   //SUbmit form
   const SubmitForm = () => {
-  
+  console.log("")
     const allFieldsFilled = checkRequiredFields();
     let minPrice=formatNumber(parseInt(startPrice));
     let maxPrice=formatNumber(parseInt(endPrice));
@@ -561,7 +580,8 @@ export default function PropertyDetailsForm({
         LoanDetails: LoanDetails,
         AreaUnits: areaUnits,
         BhkType: bhkType,
-        Brochure:brochure
+        Brochure:brochure,
+        Builder:builderName
         // PurchaseRentBy: purchaseDetails,
       };
       console.log("propertyDetailsData before checking ", propertyDetailsData);
@@ -1760,6 +1780,38 @@ export default function PropertyDetailsForm({
                 />
               )}
             </div>
+
+             {/* BuilderData */}
+             <div>
+              <label
+                htmlFor="builder"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+              >
+               Builder Name
+              </label>
+              {builderData ? (
+                <Select
+                  options={builderData.data.map((element) => ({
+                    value: element._id,
+                    label: element.Name,
+                  }))}
+                  placeholder="Select One"
+                  onChange={setBuilderName}
+                  required={true}
+                  value={builderName}
+                />
+              ) : (
+                <Select
+                  options={defaultOption.map((element) => ({
+                    value: element.value,
+                    label: element.label,
+                  }))}
+                  placeholder="Select One"
+                  required={true}
+                />
+              )}
+            </div>
+            {/* brochure */}
             <div>
               <label
                 htmlFor="document"
@@ -1777,7 +1829,11 @@ export default function PropertyDetailsForm({
                 onChange={handleDocumentChange}
                 ref={brochureInputRef}
               />
-               {brochure ? (
+              
+            </div>
+            
+            <div>
+            {brochure ? (
                 <div>
                   <div className="ml-2 mt-3 underline font-bold">
                     <h3>Selected Brochure</h3>

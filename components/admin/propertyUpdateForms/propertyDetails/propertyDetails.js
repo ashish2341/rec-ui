@@ -5,6 +5,8 @@ import Select from "react-select";
 import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
+import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
+
 export default function PropertyDetailsForm({
   valueForNext,
   valueForNextPage,
@@ -161,8 +163,24 @@ console.log("posessionStatusData", posessionStatusData);
   const[endPrice,setEndPrice]=useState("")
   const [brochure, setBrochure] = useState("");
   const brochureInputRef = useRef(null);
+  const [builderData,setBuilderData]=useState("")
+  const [builderName,setBuilderName]=useState("")
  
-
+  useEffect(() => {
+    getAllBuilder();
+  }, []);
+  
+  const getAllBuilder = async () => {
+    let builder = await GetBuilderApi();
+    if (builder?.resData?.success == true) {
+      setBuilderData(builder?.resData);
+      toast.success(builder?.resData?.message);
+      return false;
+    } else {
+      toast.error(builder?.errMessage);
+      return false;
+    }
+  };
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
@@ -314,13 +332,7 @@ console.log("posessionStatusData", posessionStatusData);
       setLoanTill(
         sessionStoragePropertyData?.LoanDetails?.LoanTill?.slice(0, 10) || 0
       );
-      // setPurchaseDetails({
-      //   BuyerId: sessionStoragePropertyData.PurchaseRentBy.BuyerId || "",
-      //   SellerId: sessionStoragePropertyData.PurchaseRentBy.SellerId || "",
-      //   PurchaseDate:sessionStoragePropertyData.PurchaseRentBy.PurchaseDate || "",
-      //   PurchaseAmount: sessionStoragePropertyData.PurchaseRentBy.PurchaseAmount || "",
-      //   Document: sessionStoragePropertyData.PurchaseRentBy.Document || "",
-      // })
+      setBuilderName(sessionStoragePropertyData?.Builder || "")
     }
   }, []);
 
@@ -520,7 +532,8 @@ const checkRequiredFields = () => {
     loanSince,
     loanTill,
     bhkType,
-    brochure
+    brochure,
+    builderName
   ];
 
   // Check if any required field is empty
@@ -600,7 +613,8 @@ const checkRequiredFields = () => {
         Surveillance: oldSurveillanceData,
         AreaUnits: areaUnits,
         BhkType:bhkType,
-        Brochure:brochure
+        Brochure:brochure,
+        Builder:builderName
         // PurchaseRentBy: purchaseDetails,
       };
       console.log("propertyDetailsData before checking ", propertyDetailsData);
@@ -1830,6 +1844,37 @@ const checkRequiredFields = () => {
                 />
               )}
             </div>
+              {/* BuilderData */}
+              <div>
+              <label
+                htmlFor="builder"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+              >
+               Builder Name
+              </label>
+              {builderData ? (
+                <Select
+                  options={builderData.data.map((element) => ({
+                    value: element._id,
+                    label: element.Name,
+                  }))}
+                  placeholder="Select One"
+                  onChange={(e)=>setBuilderName({ _id: e.value, Type: e.label })}
+                  required={true}
+                  value={{ value: builderName._id, label: builderName.Name }}
+                />
+              ) : (
+                <Select
+                  options={defaultOption.map((element) => ({
+                    value: element.value,
+                    label: element.label,
+                  }))}
+                  placeholder="Select One"
+                  required={true}
+                />
+              )}
+            </div>
+            {/* Brochure */}
             <div>
               <label
                 htmlFor="document"
@@ -1847,7 +1892,11 @@ const checkRequiredFields = () => {
                 onChange={handleDocumentChange}
                 ref={brochureInputRef}
               />
-               {brochure ? (
+              
+            </div>
+            
+            <div>
+            {brochure ? (
                 <div>
                   <div className="ml-2 mt-3 underline font-bold">
                     <h3>Selected Brochure</h3>

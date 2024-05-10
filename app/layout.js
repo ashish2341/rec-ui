@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import 'flowbite';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import NotifyUserModal from "@/components/common/notifyUserModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -41,6 +42,7 @@ export default function RootLayout({ children }) {
 </head>
 
       <body className={inter.className} >{children}
+      <NotifyUserModal />
 
       <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
             <ToastContainer  autoClose={2000} />

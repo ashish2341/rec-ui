@@ -20,6 +20,7 @@ import { GetPropertyApi } from "@/api-functions/property/getProperty";
 import SkeletonLoader from "@/components/common/loader";
 import { split } from "postcss/lib/list";
 import { AbbreviatedNumberParser } from "../../../../utils/commonHelperFn";
+import LoadingSideImg from "@/components/common/sideImgLoader";
 const PropertyListPage = (params) => {
   // fetching Data for facing
   const {
@@ -1382,7 +1383,7 @@ const PropertyListPage = (params) => {
                   </div>
                 ))
               ) : (
-                <SkeletonLoader />
+                <LoadingSideImg />
               )}
             </div>
           </div>

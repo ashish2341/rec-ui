@@ -18,6 +18,7 @@ import { GetPropertyByQueryApi } from "@/api-functions/property/getPropertyByQue
 import { ToastContainer, toast } from "react-toastify";
 import { GetPropertyApi } from "@/api-functions/property/getProperty";
 import SkeletonLoader from "@/components/common/loader";
+import LoadingSideImg from "@/components/common/sideImgLoader";
 
 const FeaturedProperty = (params) => {
   // fetching Data for facing
@@ -1245,7 +1246,7 @@ const FeaturedProperty = (params) => {
                   </div>
                 ))
               ) : (
-                <SkeletonLoader />
+                <LoadingSideImg />
               )}
             </div>
           </div>

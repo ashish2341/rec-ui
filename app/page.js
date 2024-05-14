@@ -220,7 +220,6 @@ export default function Home() {
       toast.error("Number is required");
       return false;
     }
-    setEnquiryData(currentDate);
     let payload = { Name, Email, Message, MolileNumber, EnquiryData, EnquiryType };
     let res = await addEnquiry(payload)
     console.log('payload',res)
@@ -241,6 +240,7 @@ export default function Home() {
   };
   const handleNameChange = (e) => {
     setName(e.target.value);
+    setEnquiryData(currentDate);
   };
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -443,13 +443,13 @@ export default function Home() {
       <div className="campassDirection flex flex-wrap">
         <div className={styles.campassMain}>
           <img
-            src="/img/campassOutline.png"
-            className={` ${styles.outerCampass} block`}
+            src="/img/compasspin.png"
+            className={` ${styles.outerCampass} block ml-4 mt-2`}
             alt="..."
           />
           <img
-            src="/img/2807736_18111-removebg-preview-removebg-preview.png"
-            className={` ${styles.innerCampass} block`}
+            src="/img/compasswhiteoutline.png"
+            className={` ${styles.innerCampass} block ml-4 mt-12`}
             alt="..."
           />
         </div>
@@ -505,29 +505,6 @@ export default function Home() {
             <p className={`${styles.propertiesByAreaMainText}`}>
               Find Your Perfect Property by Area
             </p>
-            {/* <a
-              href="#"
-              className="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline"
-            >
-              View More
-              <svg
-                className="w-4 h-4 ms-2"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
-                />
-              </svg>
-            </a> */}
           </div>
         </div>
         {propertyByAreaData ? (
@@ -569,69 +546,12 @@ export default function Home() {
             <p className={`${styles.apartmentTypeMainText}`}>
               Discover Your Ideal Apartment Style
             </p>
-            {/* <div className="flex flex-wrap">
-              <button
-                type="button"
-                onClick={() => slider?.current?.slickPrev()}
-                className={` ${styles.apartmentTypeLeftArrowBtn}  z-30 flex justify-center px-4 cursor-pointer group focus:outline-none`}
-              >
-                <span
-                  className={` ${styles.apartmentTypeLeftArrowSpan} inline-flex justify-center dark:bg-gray-800/30  dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none `}
-                >
-                  <i
-                    className={` ${styles.apartmentTypeArrowIcon} bi bi-arrow-left `}
-                  ></i>
-                  <span className="sr-only">Previous</span>
-                </span>
-              </button>
-              <button
-                type="button"
-                onClick={() => slider?.current?.slickNext()}
-                className={`z-30 flex justify-center cursor-pointer group focus:outline-none`}
-                data-carousel-next
-              >
-                <span
-                  className={` ${styles.apartmentTypeRightArrowSpan} inline-flex justify-center dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none `}
-                >
-                  <i
-                    className={` ${styles.apartmentTypeArrowIconRight} bi bi-arrow-right `}
-                  ></i>
-                  <span className="sr-only">Next</span>
-                </span>
-              </button>
-            </div> */}
           </div>
         </div>
         <div className={`flex`} >
-        {/* { propertyByapartmentType?.data?.map((item,index) => (
-          <Link href="/" >
-            <div 
-              className="p-1"
-            >
-              <div key={index} className={` ${styles.apartmentTypeBox} border-gray-300 rounded-md`}>
-              <div>
-                <div>
-                  <img
-                    className={` ${styles.apartmentTypeBoxImg}`}
-                    src={item?.areaInfo?.PropImage}
-                    alt=""
-                  />
-                </div>
-              </div>
-              <div>
-                <h2 className={` ${styles.apartmentTypeBoxHead}`}>{item?.areaInfo?.Type}</h2>
-                <p className={` ${styles.apartmentTypeBoxText}`}>
-                  {item?.propertiesCount} Properties
-                </p>
-              </div>
-              </div>
-            </div>
-            </Link> 
-          ))} */}
           {
            propertyByapartmentType?.data?.length>0 ? <MultiCarousel UI={ShowApartmentProperties} /> : <SkeletonLoader />
           }
-          
         </div>
       </div>
 
@@ -748,7 +668,7 @@ export default function Home() {
         <div className={` ${styles.agentLeftMain}`}>
           <img
             className={` ${styles.agentImage}`}
-            src="/img/sadhguru.jpg"
+            src="/img/zodiac-signs.jpg"
             alt=""
           />
         </div>
@@ -1132,7 +1052,7 @@ export default function Home() {
           <div className={`${styles.dreamRight} relative`}>
             <img
               className={`${styles.blogContentImg} absolute bottom-0`}
-              src="/img/buiding.png"
+              src="/img/home3dimage1.png"
               alt="a"
             />
           </div>

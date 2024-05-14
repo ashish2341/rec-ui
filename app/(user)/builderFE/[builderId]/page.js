@@ -7,12 +7,13 @@ import styles from "./builder.module.css"
 import { Dropdown } from "flowbite-react";
 import { API_BASE_URL, API_BASE_URL_FOR_MASTER } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
-import { Avatar } from "flowbite-react";
-import { Card } from "flowbite-react";
-import { Accordion, AccordionContent, AccordionPanel, AccordionTitle } from "flowbite-react";
 import Link from "next/link";
+import ReadMore from "@/components/common/readMore";
+import LoadingSideImg from "@/components/common/sideImgLoader";
+import { addEnquiry } from "@/api-functions/enquiry/addEnquiry";
+import { toast } from "react-toastify";
 
-const BuilderHomePage = () => {
+const BuilderHomePage = (params) => {
     const [Name, setName] = useState("");
     const [Email, setEmail] = useState("");
     const [Message, setMessage] = useState("");
@@ -39,7 +40,7 @@ const BuilderHomePage = () => {
           toast.error("Number is required");
           return false;
         }
-        setEnquiryData(currentDate);
+        
         let payload = { Name, Email, Message, MolileNumber, EnquiryData, EnquiryType };
         let res = await addEnquiry(payload);
          if(res?.resData?.success == true){
@@ -57,6 +58,7 @@ const BuilderHomePage = () => {
 
       const handleNameChange = (e) => {
         setName(e.target.value);
+        setEnquiryData(currentDate);
       };
       const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -67,14 +69,14 @@ const BuilderHomePage = () => {
       const handleMessageChange = (e) => {
         setMessage(e.target.value);
       };
-    const { data: areaData } = useFetch(`${API_BASE_URL_FOR_MASTER}/areas`);
     const {
         data: developData,
         loading: developLoading,
         error: developError,
-      } = useFetch(`${API_BASE_URL}/develop/allDeveloper?page=1&pageSize=5`);
+      } = useFetch(`${API_BASE_URL}/developer/developer/${params?.params?.builderId}`);
 
-      console.log("developData",developData);
+      
+      console.log("developIdData",developData);
     return(
         <>
         <Navbar />
@@ -85,7 +87,7 @@ const BuilderHomePage = () => {
                 </div>
                 <div className={` ${styles.secondContent} mb-4 flex justify-between `}>
                     <div>
-                    <h1 className={`${styles.propertiesByAreaMainHead}`}>Residential Projects by Signature Global Builders Pvt.Ltd.</h1>
+                    <h1 className={`${styles.propertiesByAreaMainHead}`}>Residential Projects by {developData?.data?.Name}</h1>
                     </div>
                 </div>
                
@@ -94,29 +96,28 @@ const BuilderHomePage = () => {
                 <div className={` ${styles.builderDetailPageLeft}`}>
                     <div className={` ${styles.builderBox} mb-4`} >
                         <div className={` ${styles.builderInputField}`}>
-                            <div>
+                            <div >
                                 <img 
                                     width="180"
                                     height="180"
                                     className={` ${styles.builderLogoImg}`}
-                                    src="../../../img/contactusImg1.jpg"
+                                    src={developData?.data?.logo}
                                 />
                             </div>
                             <div className={` ${styles.builderAfterImg}`}>
-                                <div className="text-md font-semibold blueText text-nowrap mt-2">Signature Global Builder Pvt. Ltd.</div>
-                                <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">Joined in August 2014</div>
+                                <div className="text-md font-semibold blueText text-nowrap mt-2">{developData?.data?.Name}</div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">Joined in {(developData?.data?.EstablishDate)}</div>
                                 <div className="text-xs text-gray-500 dark:text-gray-400 mt-4">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec 
-                                    justo nec felis consectetur commodo vitae eget elit. 
-                                    Proin nec justo eget ipsum cursus aliquet. Vestibulum non fermentum 
-                                    enim. Sed vel eros nec elit viverra fermentum. 
+                                    {developData?.data?.Description}
                                 </div>
+                                {developData ?
                                 <div className={` ${styles.builderSocialIcon} text-gray-700 mt-2`}>
-                                    <i class="bi bi-facebook"></i>
-                                    <i class="bi bi-instagram ml-3"></i>
-                                    <i class="bi bi-linkedin ml-3"></i>
-                                    <i class="bi bi-twitter ml-3"></i>
+                                    <Link href={developData?.data?.SocialMediaProfileLinks.Facebook} target="_blank" rel="noopener noreferrer"><i className="bi bi-facebook"></i></Link>
+                                    <Link href={developData?.data?.SocialMediaProfileLinks.Instagram} target="_blank" rel="noopener noreferrer"><i className="bi bi-instagram ml-3"></i></Link>
+                                    <Link href={developData?.data?.SocialMediaProfileLinks.LinkedIn} target="_blank" rel="noopener noreferrer"><i className="bi bi-linkedin ml-3"></i></Link>
+                                    <Link href={developData?.data?.SocialMediaProfileLinks.Twitter} target="_blank" rel="noopener noreferrer"><i className="bi bi-twitter ml-3"></i></Link>
                                 </div>
+                                : null }
                             </div>
                         </div>
                     </div>
@@ -181,13 +182,12 @@ const BuilderHomePage = () => {
                         className={` ${styles.builderMapDetails}`}
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d227749.05321034128!2d75.62574624184872!3d26.885115144905566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396c4adf4c57e281%3A0xce1c63a0cf22e09!2sJaipur%2C%20Rajasthan!5e0!3m2!1sen!2sin!4v1715061916080!5m2!1sen!2sin" 
                         width="305" height="200"
-                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
                     ></iframe>
                     </div>
                 </div>
                 <div className={` ${styles.builderDetailPageRight}`}>
                     <div>
-                        <div className={` ${styles.builderDetailDropDown} flex`}>
+                        <div className={` ${styles.builderDetailDropDown} flex justify-end mb-2`}>
                                 <h2>Sort by :</h2>
                                 <Dropdown label="" dismissOnClick={false} renderTrigger={() => <span> My custom trigger</span>}>
                                     <Dropdown.Item>Dashboard</Dropdown.Item>
@@ -197,49 +197,52 @@ const BuilderHomePage = () => {
                                 </Dropdown>
                          </div>
                     </div>
-                    <div className={` ${styles.builderRightMainBox} flex mb-6 p-4`}>
+                    {developData ?
+                    developData?.data?.properties.map((item,index) => (
+                    <Link href={`/propertyDetail/${item._id}`}>
+                    <div key={index} className={` ${styles.builderRightMainBox} flex mb-6 p-4`}>
                         <img
-                            src="../../../img/contactusImg1.jpg"
+                            src={item.Images[0].URL}
                             className={` ${styles.builderRightImg} mr-3`}
                         />
                         <div>
                             <div className={` ${styles.cardImgBottom}`}>
                                 <div className={` ${styles.populerPropertiesLocationMain} flex text-md pt-4`}>
                                 <i className="bi bi-geo-alt-fill"></i>
-                                <p className={`text-gray-700`}>Addres</p>
+                                <p className={`text-gray-700`}>{item.Address}</p>
                                 </div>
                                 <h2 className={` ${styles.populerPropertiesBoxHead} text-2xl pt-2`}>
-                                Title
+                                {item.Titile}
                                 </h2>
                                 <h2 className={` ${styles.populerPropertiesBoxHead} text-sm pt-2`}>
-                                Desc
+                                    <ReadMore text={item.Description} maxLength={100}/>
                                 </h2>
                                 <div className={` ${styles.populerPropertiesBoxDetail} flex justify-between pt-2`}>
                                     <div className="flex">
                                     <i className="fa fa-bed"></i>
                                         <p className={` ${styles.populerPropertiesBoxText} ml-1 mr-3`}>
-                                        Bed Room
+                                        {item.Bedrooms} Bed Room
                                         </p>
                                     </div>
                                     <div className="flex">
                                         <i className="fa fa-bath"></i>
                                         <p className={` ${styles.populerPropertiesBoxText} ml-1 mr-3`}>
-                                        Baths
+                                        {item.Bathrooms} Baths
                                         </p>
                                     </div>
                                     <div className="flex">
                                         <i className="fa fa-area-chart"></i>
                         
                                         <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-                                        Land Area
+                                        {item.LandArea} Land Area
                                         </p>
                                     </div>
                                 </div>
                                 <div className={`${styles.populerPropertiesBoxPriceMain} flex mt-2 justify-between`}>
                                     <p className={`${styles.populerPropertiesBoxPrice}`}>
-                                        TotalPrice
+                                        {item.TotalPrice.DisplayValue}
                                     </p>
-                                    <Link href={`/propertyDetail/`} >
+                                    <Link href={`/propertyDetail/${item._id}`}>
                                         <button
                                         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                         type="button"
@@ -252,6 +255,8 @@ const BuilderHomePage = () => {
                             </div>
                         </div>
                     </div>
+                    </Link>
+                    )) : <LoadingSideImg/> } 
                 </div>
             </div>
         <Footer />

@@ -37,12 +37,19 @@
     border-bottom:1px solid #D1D5DB;
 }
 
+.builderDetailBuilderRightMain{
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 10px;
+}
 
 .builderInputField{
     padding: 1rem; 
     
 }
-
+.builderHunter{
+    justify-content: flex-start;
+}
 .crousalItemSearchInput{
     border-radius: 5rem;
 }

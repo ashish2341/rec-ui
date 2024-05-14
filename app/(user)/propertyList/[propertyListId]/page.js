@@ -16,8 +16,6 @@ import useFetch from "@/customHooks/useFetch";
 import DropdownComponent from "@/components/common/listDropdown";
 import { GetPropertyByQueryApi } from "@/api-functions/property/getPropertyByQuery";
 import { ToastContainer, toast } from "react-toastify";
-import { GetPropertyApi } from "@/api-functions/property/getProperty";
-import SkeletonLoader from "@/components/common/loader";
 import { split } from "postcss/lib/list";
 import { AbbreviatedNumberParser } from "../../../../utils/commonHelperFn";
 import LoadingSideImg from "@/components/common/sideImgLoader";
@@ -128,24 +126,27 @@ const PropertyListPage = (params) => {
   ];
   useEffect(() => {
     if (payload) {
-        const payloadWithId = extractIDsAndUpdateData(payload);
-        // console.log("payloadWithId", payloadWithId);
-        payloadWithId.budget = payloadWithId.budget.flat();
-        getAllFilterProperties(payloadWithId);
+      const payloadWithId = extractIDsAndUpdateData(payload);
+      // console.log("payloadWithId", payloadWithId);
+      payloadWithId.budget = payloadWithId.budget.flat();
+      getAllFilterProperties(payloadWithId);
 
-        // Check if any array in payload has data
-        let hasData = false;
-        for (const key in payloadWithId) {
-            if (Array.isArray(payloadWithId[key]) && payloadWithId[key].length > 0) {
-                hasData = true;
-                break;
-            }
+      // Check if any array in payload has data
+      let hasData = false;
+      for (const key in payloadWithId) {
+        if (
+          Array.isArray(payloadWithId[key]) &&
+          payloadWithId[key].length > 0
+        ) {
+          hasData = true;
+          break;
         }
+      }
 
-        // Set resetBtnValue based on whether any array has data
-        setResetBtnValue(hasData);
+      // Set resetBtnValue based on whether any array has data
+      setResetBtnValue(hasData);
     }
-}, [payload]);
+  }, [payload]);
 
   function extractIDsAndUpdateData(data) {
     const newData = { ...data }; // Create a shallow copy of the original object
@@ -238,7 +239,7 @@ const PropertyListPage = (params) => {
         ? [...prevPayload[name], { id, label }]
         : prevPayload[name].filter((item) => item.id !== id),
     }));
-  
+
     if (checked == true) {
       setResetBtnValue(true);
     } else {
@@ -308,10 +309,7 @@ const PropertyListPage = (params) => {
       let keyWithSingleObject = null; // Variable to store the key with exactly one object in its array
 
       for (let key in payload) {
-        if (
-          Array.isArray(payload[key]) &&
-          payload[key].length === 1
-        ) {
+        if (Array.isArray(payload[key]) && payload[key].length === 1) {
           if (keyWithSingleObject === null) {
             keyWithSingleObject = key; // Store the key if it meets the condition for the first time
           } else {
@@ -952,7 +950,7 @@ const PropertyListPage = (params) => {
                                   />
                                   <label
                                     htmlFor={`checkbox-item-${index}`}
-                                    className="w-full  text-sm font-medium text-gray-900 rounded dark:text-gray-300"
+                                    className="text-sm font-medium text-gray-900 rounded dark:text-gray-300 sm:w-full  ml-3"
                                   >
                                     {item.Feature}
                                   </label>
@@ -1000,7 +998,7 @@ const PropertyListPage = (params) => {
                       </button>
                       <div
                         id="bathroomDropdown"
-                        className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-96 dark:bg-gray-700"
+                        className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-40  dark:bg-gray-700"
                       >
                         <ul
                           // className="p-2 text-sm text-gray-700 dark:text-gray-200 flex flex-wrap"
@@ -1029,7 +1027,7 @@ const PropertyListPage = (params) => {
                                   />
                                   <label
                                     htmlFor={`checkbox-item-${index}`}
-                                    className="w-full  text-sm font-medium text-gray-900 rounded dark:text-gray-300"
+                                    className="text-sm font-medium text-gray-900 rounded dark:text-gray-300 sm:w-full  ml-3"
                                   >
                                     {item.label}
                                   </label>
@@ -1064,59 +1062,25 @@ const PropertyListPage = (params) => {
             id="general"
             className={`${styles.generalDetails} GeneralDetails`}
           >
-            <div className="flex ml-3">
+            <div className="flex flex-wrap   ml-3">
               {Object.values(payload).some((array) => array.length > 0) && (
-                <div className="flex">
-                  {Object.entries(payload).map(
-                    ([key, value]) =>
-                      value.length > 0 &&
-                      Array.isArray(value) ? (
-                        <div key={key}>
-                          {value.map((item, index) =>
-                            Array.isArray(item.label) ? (
-                              item.label.map((labelItem, labelIndex) => (
-                                <div
-                                  key={item.id}
-                                  id={`badge-dismiss-${item.id}`}
-                                  className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-blue-900 dark:text-blue-300"
-                                >
-                                  <span>{labelItem}</span>
-                                  {/* Add margin between label item and cross button */}
-                                  <button
-                                    type="button"
-                                    className="inline-flex items-center p-1 ms-2 me-1 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
-                                    onClick={() => handleRemoveBadge(item.id)}
-                                    aria-label="Remove"
-                                  >
-                                    <svg
-                                      className="w-2 h-2"
-                                      aria-hidden="true"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      fill="none"
-                                      viewBox="0 0 14 14"
-                                    >
-                                      <path
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                                      />
-                                    </svg>
-                                  </button>
-                                </div>
-                              ))
-                            ) : (
+                <div className="flex flex-col md:flex-row">
+                  {Object.entries(payload).map(([key, value]) =>
+                    value.length > 0 && Array.isArray(value) ? (
+                      <div key={key} className="mb-2 md:mb-0">
+                        {value.map((item, index) =>
+                          Array.isArray(item.label) ? (
+                            item.label.map((labelItem, labelIndex) => (
                               <div
                                 key={item.id}
                                 id={`badge-dismiss-${item.id}`}
-                                className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-blue-900 dark:text-blue-300"
+                                className="inline-flex items-center px-2 py-1 me-2 mb-2 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-blue-900 dark:text-blue-300"
                               >
-                                <span>{item.label || item}</span>
+                                <span>{labelItem}</span>
                                 {/* Add margin between label item and cross button */}
                                 <button
                                   type="button"
-                                  className="inline-flex items-center p-1 ms-2 me-1 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
+                                  className="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
                                   onClick={() => handleRemoveBadge(item.id)}
                                   aria-label="Remove"
                                 >
@@ -1137,17 +1101,49 @@ const PropertyListPage = (params) => {
                                   </svg>
                                 </button>
                               </div>
-                            )
-                          )}
-                        </div>
-                      ):(null)
+                            ))
+                          ) : (
+                            <div
+                              key={item.id}
+                              id={`badge-dismiss-${item.id}`}
+                              className="inline-flex items-center px-2 py-1 me-2 mb-2 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-blue-900 dark:text-blue-300"
+                            >
+                              <span>{item.label || item}</span>
+                              {/* Add margin between label item and cross button */}
+                              <button
+                                type="button"
+                                className="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
+                                onClick={() => handleRemoveBadge(item.id)}
+                                aria-label="Remove"
+                              >
+                                <svg
+                                  className="w-2 h-2"
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 14 14"
+                                >
+                                  <path
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                          )
+                        )}
+                      </div>
+                    ) : null
                   )}
                   {resetBtnValue && (
                     <button
                       onClick={resetSelectItem}
                       type="button"
                       className={`mx-auto text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-1 text-center  me-2 mb-2`}
-                    >
+                      >
                       Reset
                     </button>
                   )}
@@ -1253,8 +1249,7 @@ const PropertyListPage = (params) => {
               <div className=" mx-auto mb-2 ml-3">
                 <ReadMore text={longText} maxLength={100} />
               </div>
-              {listDataForShow ? (
-                listDataForShow.map((item, index) => (
+              {listDataForShow ? ( listDataForShow.length>0 ?( listDataForShow.map((item, index) => (
                   <div
                     key={index}
                     className={`mb-3 ml-3 ${styles.GeneralDetailsBox}`}
@@ -1282,20 +1277,20 @@ const PropertyListPage = (params) => {
                               {/* <span className="px-2">₹</span> */}₹{" "}
                               <span>{item.TotalPrice.DisplayValue}</span>
                             </h5>
-                            {/* <div className="flex ">
+                            <div className="flex ">
                             <div
                               className={` mr-3 ${styles.GeneralDetailsBoxIcon}`}
                             >
                               {" "}
                               <i className="bi bi-share"></i>
                             </div>
-                            <div
+                            {/* <div
                               className={`ml-3 ${styles.GeneralDetailsBoxIcon}`}
                             >
                               {" "}
                               <i className="bi bi-heart"></i>
-                            </div>
-                          </div> */}
+                            </div> */}
+                          </div>
                           </div>
                           <div className="flex flex-row  leading-normal ">
                             <p className="mb-3 font-bold text-black-700 dark:text-black-800 ">
@@ -1381,7 +1376,10 @@ const PropertyListPage = (params) => {
                       </div>
                     </div>
                   </div>
-                ))
+                ))):(<h1 className={`${styles.noDataHead}`}>
+                No Data Found
+              </h1>)
+               
               ) : (
                 <LoadingSideImg />
               )}

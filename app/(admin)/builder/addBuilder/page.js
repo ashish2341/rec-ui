@@ -13,7 +13,6 @@ import { AddBuilderApi } from "@/api-functions/builder/addBuilder";
 export default function AddBuilder() {
   // fetching Data for Area
   const { data: areaData } = useFetch(`${API_BASE_URL_FOR_MASTER}/areas`);
-  console.log("areaData", areaData);
   const defaultOption = [{ value: "", label: "no data found" }];
   const initialBranchState = {
     Phone: "",
@@ -57,6 +56,7 @@ export default function AddBuilder() {
   const [establishDate, setEstablishDate] = useState("");
   const [description, setDescription] = useState("");
   const [builderLogo, setBuilderLogo] = useState("");
+
   const logoInputRef = useRef(null);
   const router = useRouter();
 
@@ -477,6 +477,7 @@ export default function AddBuilder() {
         Images: image,
         Documents: documents.map((URL) => ({ URL })),
         BranchOffices: BranchesData,
+       
       };
       console.log("builderDetails", builderDetails);
       let res = await AddBuilderApi(builderDetails);
@@ -784,6 +785,7 @@ export default function AddBuilder() {
                         className="h-20 w-20 object-cover m-2 mt-5 border border-black rounded-lg "
                       />
                       <button
+                      type="button"
                         className="absolute top-0 right-0 p-1  "
                         onClick={() => removeImage(index)}
                       >
@@ -830,6 +832,7 @@ export default function AddBuilder() {
                         className="h-48 w-64 border border-black rounded-lg"
                       />
                       <button
+                      type="button"
                         className="absolute top-0 right-0 p-1"
                         onClick={() => removeDocument(index)}
                       >
@@ -845,7 +848,9 @@ export default function AddBuilder() {
             ) : null}
           </div>
 
-          <div></div>
+          <div>
+         
+          </div>
           <h2 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white underline">
             Social Profiles
           </h2>
@@ -941,7 +946,7 @@ export default function AddBuilder() {
                   </label>
                   <input
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="number"
+                    type="text"
                     id={`Phone-${index}`}
                     value={data.Phone}
                     onChange={(e) => handleOfficeChange(e, index, "Phone")}
@@ -957,7 +962,7 @@ export default function AddBuilder() {
                   </label>
                   <input
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="number"
+                    type="text"
                     id={`Mobile-${index}`}
                     value={data.Mobile}
                     onChange={(e) => handleOfficeChange(e, index, "Mobile")}
@@ -987,7 +992,7 @@ export default function AddBuilder() {
                   </label>
                   <input
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="number"
+                    type="text"
                     id={`WhatsApp-${index}`}
                     value={data.WhatsApp}
                     onChange={(e) => handleOfficeChange(e, index, "WhatsApp")}
@@ -1062,7 +1067,7 @@ export default function AddBuilder() {
                   </label>
                   <input
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="number"
+                    type="text"
                     id={`PinCode-${index}`}
                     value={data.PinCode}
                     onChange={(e) => handleOfficeChange(e, index, "PinCode")}
@@ -1113,7 +1118,7 @@ export default function AddBuilder() {
                         </label>
                         <input
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          type="number"
+                          type="text"
                           id={`Mobile-${index}-${subIndex}`}
                           value={person.Mobile}
                           onChange={(e) =>
@@ -1147,7 +1152,7 @@ export default function AddBuilder() {
                         </label>
                         <input
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          type="number"
+                          type="text"
                           id={`Phone-${index}-${subIndex}`}
                           value={person.Phone}
                           onChange={(e) =>

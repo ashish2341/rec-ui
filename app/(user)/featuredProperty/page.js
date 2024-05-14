@@ -822,7 +822,7 @@ const FeaturedProperty = (params) => {
                       </button>
                       <div
                         id="doubleDropdown"
-                        className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-96 dark:bg-gray-700"
+                        className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-96 sm:w-36 dark:bg-gray-700"
                       >
                         <ul
                           // className="p-2 text-sm text-gray-700 dark:text-gray-200 flex flex-wrap"
@@ -851,7 +851,7 @@ const FeaturedProperty = (params) => {
                                   />
                                   <label
                                     htmlFor={`checkbox-item-${index}`}
-                                    className="w-full  text-sm font-medium text-gray-900 rounded dark:text-gray-300"
+                                    className="text-sm font-medium text-gray-900 rounded dark:text-gray-300 sm:w-full  ml-3"
                                   >
                                     {item.Feature}
                                   </label>
@@ -899,7 +899,7 @@ const FeaturedProperty = (params) => {
                       </button>
                       <div
                         id="bathroomDropdown"
-                        className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-96 dark:bg-gray-700"
+                        className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-40  dark:bg-gray-700"
                       >
                         <ul
                           // className="p-2 text-sm text-gray-700 dark:text-gray-200 flex flex-wrap"
@@ -928,7 +928,8 @@ const FeaturedProperty = (params) => {
                                   />
                                   <label
                                     htmlFor={`checkbox-item-${index}`}
-                                    className="w-full  text-sm font-medium text-gray-900 rounded dark:text-gray-300"
+                                    className="text-sm font-medium text-gray-900 rounded dark:text-gray-300 sm:w-full  ml-3"
+
                                   >
                                     {item.label}
                                   </label>
@@ -963,20 +964,20 @@ const FeaturedProperty = (params) => {
             id="general"
             className={`${styles.generalDetails} GeneralDetails`}
           >
-            <div className="flex ml-3">
+            <div className="flex flex-wrap   ml-3">
               {Object.values(payload).some((array) => array.length > 0) && (
                 // <BadgeList data={payload} onRemove={handleRemoveBadge} />
-                <div className="flex">
+                <div className="flex flex-col md:flex-row">
                   {Object.entries(payload).map(
                     ([key, value]) =>
                       value.length > 0 && (
-                        <div key={key}>
+                        <div  className="mb-2 md:mb-0" key={key}>
                           {value.map((item) => (
                             <div
                               key={item.id}
                               id={`badge-dismiss-${item.id}`}
-                              className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-blue-900 dark:text-blue-300"
-                            >
+                              className="inline-flex items-center px-2 py-1 me-2 mb-2 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-blue-900 dark:text-blue-300"
+                              >
                               {item.label || key}
                               <button
                                 type="button"
@@ -1115,9 +1116,8 @@ const FeaturedProperty = (params) => {
               </div>
               <div className=" mx-auto mb-2 ml-3">
                 <ReadMore text={longText} maxLength={100} />
-              </div>
-              {listDataForShow ? (
-                listDataForShow.map((item, index) => (
+                </div>
+              {listDataForShow ? ( listDataForShow.length>0 ?( listDataForShow.map((item, index) => (
                   <div
                     key={index}
                     className={`mb-3 ml-3 ${styles.GeneralDetailsBox}`}
@@ -1145,20 +1145,20 @@ const FeaturedProperty = (params) => {
                               {/* <span className="px-2">₹</span> */}₹{" "}
                               <span>{item.TotalPrice.DisplayValue}</span>
                             </h5>
-                            {/* <div className="flex ">
+                            <div className="flex ">
                             <div
                               className={` mr-3 ${styles.GeneralDetailsBoxIcon}`}
                             >
                               {" "}
                               <i className="bi bi-share"></i>
                             </div>
-                            <div
+                            {/* <div
                               className={`ml-3 ${styles.GeneralDetailsBoxIcon}`}
                             >
                               {" "}
                               <i className="bi bi-heart"></i>
-                            </div>
-                          </div> */}
+                            </div> */}
+                          </div>
                           </div>
                           <div className="flex flex-row  leading-normal ">
                             <p className="mb-3 font-bold text-black-700 dark:text-black-800 ">
@@ -1244,7 +1244,10 @@ const FeaturedProperty = (params) => {
                       </div>
                     </div>
                   </div>
-                ))
+                ))):(<h1 className={`${styles.noDataHead}`}>
+                No Data Found
+              </h1>)
+               
               ) : (
                 <LoadingSideImg />
               )}

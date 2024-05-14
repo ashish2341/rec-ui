@@ -4,7 +4,7 @@ import { API_BASE_URL } from "@/utils/constants";
 
 const token = Cookies.get("token");
 
-export const UpdateBuilderApi = async (payload,id,setLoading=()=>{}) => {
+export const UpdateBuilderApi = async (builderDetails,id,setLoading=()=>{}) => {
   setLoading(true);
   console.log(id)
   try {
@@ -14,7 +14,7 @@ export const UpdateBuilderApi = async (payload,id,setLoading=()=>{}) => {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(builderDetails),
     });
     const resData = await res.json();
     console.log('resData',resData)

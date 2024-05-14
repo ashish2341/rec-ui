@@ -194,8 +194,8 @@ console.log("posessionStatusData", posessionStatusData);
     if (sessionStoragePropertyData) {
       console.log("sessionStoragePropertyData ", sessionStoragePropertyData);
       console.log(
-        "sessionStoragePropertyData?.AreaAreaUnits?._id  ",
-        sessionStoragePropertyData?.AreaUnits
+        "sessionStoragePropertyData?.Facing  ",
+        sessionStoragePropertyData?.Facing
       );
       console.log(
         "sessionStoragePropertyData?.AreaAreaUnits?.Unit  ",
@@ -638,6 +638,9 @@ const checkRequiredFields = () => {
       {data.label}
     </div>
   );
+  const handelFacing=(e)=>{
+console.log("handelFacing",e)
+  }
   return (
     <>
       <div>
@@ -701,7 +704,13 @@ const checkRequiredFields = () => {
                     label: element.Facing,
                   }))}
                   placeholder="Select One"
-                  onChange={setFacing}
+                  // onChange={setFacing}
+                   onChange={(e)=>setFacing([{ _id: e.value, Facing: e.label }])}
+                  // onChange={(e)=>setFacing(e.map((item)=>(
+                  //   {_id: item.value, Facing: item.label}
+                    
+                  // )))}
+                  // onchange={handelFacing}
                   required={true}
                   value={
                     facing
@@ -1859,7 +1868,7 @@ const checkRequiredFields = () => {
                     label: element.Name,
                   }))}
                   placeholder="Select One"
-                  onChange={(e)=>setBuilderName({ _id: e.value, Type: e.label })}
+                  onChange={(e)=>setBuilderName({ _id: e.value, Name: e.label })}
                   required={true}
                   value={{ value: builderName._id, label: builderName.Name }}
                 />

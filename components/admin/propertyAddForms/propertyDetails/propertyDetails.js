@@ -208,7 +208,7 @@ export default function PropertyDetailsForm({
         sessionStoragePropertyData?.IsEnabled === true
           ? true
           : sessionStoragePropertyData?.IsEnabled === undefined
-          ? null
+          ? true
           : false
       );
       setIsExclusive(

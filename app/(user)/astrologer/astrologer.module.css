@@ -1,9 +1,11 @@
 
 .astroLeftUpImg{
-  border-radius: 2rem;
+  border-radius: 1rem;    
+  height: 3%;
+  width: 100%;
 }
 
-.buyingOptionWithZodic{
+.backGroundyellow{
   background-color: beige;
 }
 
@@ -26,11 +28,16 @@
 
 .astroLeft{
     width: 67%;
+    margin-top: 1.5rem;
     margin-right: 2rem;
 }
 
+.astroList{
+  list-style: circle inside;
+}
+
 .buyingOptionWithZodic{
-    margin-top: 6rem;
+      padding-top: 6rem;
         margin-left: 14rem;
         margin-right: 14rem;
     }
@@ -64,7 +71,7 @@
       .formDetails{
         position: sticky;
         z-index: 1;
-        top: 9rem;
+        top: 6rem;
       }
 
       .GeneralDetailsMainHead{

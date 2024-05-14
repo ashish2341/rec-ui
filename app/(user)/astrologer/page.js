@@ -5,6 +5,8 @@ import React, { useState } from "react";
 import { DayPicker } from 'react-day-picker';
 import { Blockquote } from "flowbite-react";
 import Footer from "@/components/common/footer";
+import { addEnquiry } from "@/api-functions/enquiry/addEnquiry";
+import { toast } from "react-toastify";
 
 
 const AstrologerPage = () => {
@@ -55,16 +57,17 @@ const AstrologerPage = () => {
   const handlePhoneChange = (e) => {
     setPhone(e.target.value);
   };
-  const handleEnquiryData = (date) => {
-    setEnquiryData(date);
+  const handleEnquiryData = (e) => {
+    setEnquiryData(e.target.value);
   };
     return (
 
         <>
             <Navbar />
+            <div className={`${styles.backGroundyellow}`}>
             <div className={`${styles.buyingOptionWithZodic}`}>
                     <div className={`${styles.buyingWithZodicMain}`}>
-                    <div className={`${styles.buyingZodicLeft}`}>
+                    <div className={`${styles.buyingZodicLeft} mt-2`}>
                         <div>
                         <h2 className={`${styles.buyingZodicHead}`}>
                             Let's Find The Right Buying Option With{" "}
@@ -100,14 +103,16 @@ const AstrologerPage = () => {
                     </div>
                     </div>
             </div>
+            </div>
             <div className={` ${styles.astroDetails} mb-4`}>
                 <div className={` ${styles.astroLeft}`}>
                     <div>
-                        <img src="../../../img/black-wallpaper-1.jpg" className={` ${styles.astroLeftUpImg}`} />
-                        <h1 className="text-4xl font-semibold  mt-4 mb-2">Lorem ipsum dolor sit amet</h1>
+                        <img src="../../../img/download (2).jpeg" className={` ${styles.astroLeftUpImg}`} />
+                        <h1 className="text-4xl font-semibold  mt-6 mb-3">Lorem ipsum dolor sit amet</h1>
+                        <p className=" text-gray-500 mb-2">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        </p>
                         <p className=" text-gray-500 ">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                         </p>
@@ -115,15 +120,15 @@ const AstrologerPage = () => {
                             "Flowbite is just awesome. It contains tons of predesigned components and pages starting from login screen to
                             complex dashboard. Perfect choice for your next SaaS application."
                         </Blockquote>
-                        <div className="flex">
-                            <div className="">
-                                <img src="../../../img/EastImage.jpeg" />
+                        <div className="flex mb-4">
+                            <div className="pr-2">
+                                <img src="../../../img/OIP.jpeg" />
                             </div>
-                            <div>
+                            <div className="pl-4">
                                 <p className=" text-gray-500 ">
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
                                 </p>
-                                <ul >
+                                <ul className={` ${styles.astroList}`} >
                                     <li>Lorem ipsum dolor sit amet</li>
                                     <li>Lorem ipsum dolor sit amet</li>
                                     <li>Lorem ipsum dolor sit amet</li>
@@ -131,9 +136,11 @@ const AstrologerPage = () => {
                                 </ul>
                             </div>
                         </div>
+                        <div className=" text-gray-500 mb-4">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        </div>
                         <div className=" text-gray-500 ">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                         </div>
@@ -143,7 +150,7 @@ const AstrologerPage = () => {
                     <div id="general" className={`${styles.formDetails} mb-4`}>
                         <div className="GeneralDetailsMain">
                             <h2 className={`${styles.GeneralDetailsMainHead}`}>
-                            GET A GUIDED TOUR
+                            CONTACT OUR ASTROLOGER
                             </h2>
                             <div className={`${styles.GeneralDetailsBox}`}>
                             <div className="mb-5 mt-3">
@@ -180,7 +187,7 @@ const AstrologerPage = () => {
                                 />
                             </div>
                             <div className={`mb-5`}>
-                                <DayPicker
+                                {/* <DayPicker
                                 mode="single"
                                 selected={EnquiryData}
                                 onSelect={handleEnquiryData}
@@ -195,6 +202,15 @@ const AstrologerPage = () => {
                                     backgroundColor: '#2a4ac8',
                                     },
                                 }}
+                                /> */}
+                                <input 
+                                    type="date"
+                                    value={EnquiryData}
+                                    onChange={handleEnquiryData}
+                                    id="Phone"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Phone"
+                                    required
                                 />
                             </div>
                             <button

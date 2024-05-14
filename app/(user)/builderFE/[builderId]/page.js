@@ -77,6 +77,8 @@ const BuilderHomePage = (params) => {
 
       
       console.log("developIdData",developData);
+      const date = new Date(developData?.data?.EstablishDate);
+      const year = date.getFullYear();
     return(
         <>
         <Navbar />
@@ -101,12 +103,12 @@ const BuilderHomePage = (params) => {
                                     width="180"
                                     height="180"
                                     className={` ${styles.builderLogoImg}`}
-                                    src={developData?.data?.logo}
+                                    src={developData?.data?.Logo}
                                 />
                             </div>
                             <div className={` ${styles.builderAfterImg}`}>
                                 <div className="text-md font-semibold blueText text-nowrap mt-2">{developData?.data?.Name}</div>
-                                <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">Joined in {(developData?.data?.EstablishDate)}</div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">Joined in {year}</div>
                                 <div className="text-xs text-gray-500 dark:text-gray-400 mt-4">
                                     {developData?.data?.Description}
                                 </div>
@@ -199,8 +201,8 @@ const BuilderHomePage = (params) => {
                     </div>
                     {developData ?
                     developData?.data?.properties.map((item,index) => (
-                    <Link href={`/propertyDetail/${item._id}`}>
-                    <div key={index} className={` ${styles.builderRightMainBox} flex mb-6 p-4`}>
+                    <Link  key={index} href={`/propertyDetail/${item._id}`}>
+                    <div className={` ${styles.builderRightMainBox} flex mb-6 p-4`}>
                         <img
                             src={item.Images[0].URL}
                             className={` ${styles.builderRightImg} mr-3`}

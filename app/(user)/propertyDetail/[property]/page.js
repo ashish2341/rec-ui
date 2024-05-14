@@ -41,6 +41,7 @@ const PropertyDetail = ({params}) => {
   const [loanDetails, setLoanDetailseData] = useState(false);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [aminityData, setAminityData] = useState(false);
+  const [BrochureData, setBrochureData] = useState("")
   
   const [page, setPage] = useState(1);
   const [activeSection, setActiveSection] = useState("general");
@@ -180,19 +181,36 @@ const PropertyDetail = ({params}) => {
     if (properties?.resData?.success == true) {
       setListPropertiesData(properties?.resData?.data);
       setListImageData(properties?.resData?.data?.Images);
-      console.log("listPropertiesData",typeof listImageData);
       setLoanDetailseData(properties?.resData?.data?.LoanDetails);
       setVideoData(properties?.resData?.data?.Videos);
       setAminityData(properties?.resData?.data?.Aminities);
-      console.log("listPropertiesData.data",listPropertiesData);
+      setBrochureData(properties?.resData?.data?.Brochure);
+      console.log("BrochureData",BrochureData)
       setIsLoading(false);
       toast.success(properties?.resData?.message);
       return false;
     } else {
-      toast.error(properties.errMessage);
+      toast.error(properties?.errMessage);
       return false;
     }
   };
+
+    const handleDownload = () => {
+      // Construct the URL of the file
+      const fileUrl = BrochureData; // Adjust the file path as needed
+  
+      // Create an anchor element
+      const anchor = document.createElement('a');
+      anchor.href = fileUrl;
+      anchor.download = 'example.pdf';
+      anchor.rel = 'noopener noreferrer'; // Set the download attribute
+  
+      // Simulate a click event to trigger the download
+      anchor.click();
+  
+      // Clean up
+      anchor.remove();
+    };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -307,6 +325,8 @@ const PropertyDetail = ({params}) => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  console.log("listPropertiesData?.data?.Surveillance",listPropertiesData.Surveillance)
   
   return (
     <>
@@ -404,7 +424,7 @@ const PropertyDetail = ({params}) => {
         </div>
         <div className={`${styles.heroSectionBottomMain}`}>
           <div className={`${styles.heroSectionBottomBox}`}>
-            <div className="">
+            <div className={`${styles.BottomBoxcontenet}`}>
               <h2 className={`${styles.heroSectionBottomBoxHead}`}>
                 {listPropertiesData.Titile}
               </h2>
@@ -414,7 +434,7 @@ const PropertyDetail = ({params}) => {
               </p>
             </div>
             <div className={`${styles.heroSectionVL}`}></div>
-            <div>
+            <div className={`${styles.BottomBoxcontenet}`}>
               <h2 className={`${styles.heroSectionBottomBoxHead}`}>Price</h2>
               <p className={`${styles.heroSectionBottomBoxText}`}>
                 {" "}
@@ -422,7 +442,7 @@ const PropertyDetail = ({params}) => {
               </p>
             </div>
             <div className={`${styles.heroSectionVL}`}></div>
-            <div>
+            <div className={`${styles.BottomBoxcontenet}`}>
               <h2 className={`${styles.heroSectionBottomBoxHead}`}>
                 Facing
               </h2>
@@ -434,14 +454,14 @@ const PropertyDetail = ({params}) => {
               ))}
             </div>
             <div className={`${styles.heroSectionVL}`}></div>
-            <div>
+            <div className={`${styles.BottomBoxcontenet}`}>
               <h2 className={`${styles.heroSectionBottomBoxHead}`}>
                 Project Type
               </h2>
               <p className={`${styles.heroSectionBottomBoxText}`}>{listPropertiesData?.PropertyType?.Type}</p>
             </div>
             <div className={`${styles.heroSectionVL}`}></div>
-            <div>
+            <div className={`${styles.BottomBoxcontenet}`}>
               <h2 className={`${styles.heroSectionBottomBoxHead}`}>
                 Posession Status
               </h2>
@@ -576,7 +596,7 @@ const PropertyDetail = ({params}) => {
           <div id="configure" className={`${styles.configure} configure page`}>
             <div className="configureMain">
               <h2 className={`${styles.configureMainHead}`}>
-                CONFIGURATION AND PLAN FLOOR
+                CONFIGURATION AND FLOOR PLAN
               </h2>
               <div className={`${styles.configureBox}`}>
                 <div className="mb-4 border-b border-gray-200 dark:border-gray-700">
@@ -612,6 +632,19 @@ const PropertyDetail = ({params}) => {
                         Floor Plan
                       </button>
                     </li>
+                    <li className="me-2" role="presentation">
+                      <button
+                        className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                        id="generall-tab"
+                        data-tabs-target="#generall"
+                        type="button"
+                        role="tab"
+                        aria-controls="generall"
+                        aria-selected="false"
+                      >
+                        General
+                      </button>
+                    </li>
                   </ul>
                 </div>
                 <div id="default-tab-content">
@@ -642,6 +675,20 @@ const PropertyDetail = ({params}) => {
                   >
                     <div className={`${styles.configureFloorPlanImg}`}>
                       <img src="/img/Map.jpeg" alt="" />
+                    </div>
+                  </div>
+                  <div
+                    className="hidden p-4 rounded-lg dark:bg-gray-800"
+                    id="generall"
+                    role="tabpanel"
+                    aria-labelledby="generall-tab"
+                  > Surveillance
+                    <div className={`${styles.configureFloorPlanImg}`}>
+                    {/* {listPropertiesData.Surveillance.map((item,index) =>(
+                      <div key={index}>
+                        <p>{item}</p>
+                      </div>
+                    ))} */}
                     </div>
                   </div>
                 </div>
@@ -774,9 +821,7 @@ const PropertyDetail = ({params}) => {
                     Share
                   </button>
                 </Popover>
-                
-                <button type="button" className="text-grey border border-gray-600 bg-white-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
-                <button type="button" className="text-grey border border-gray-600 bg-white-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Download Brochure</button>
+                <button type="button" onClick={handleDownload} className="text-grey border border-gray-600 bg-white-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Download Brochure</button>
                 </div>
               </div>
             </div>
@@ -787,12 +832,13 @@ const PropertyDetail = ({params}) => {
             <div className="amenitiesMain">
               <h2 className={`${styles.amenitiesMainHead}`}>AMENITIES & FEATURES</h2>
               <div className={`${styles.amenitiesBox}`}>
-              {listPropertiesData ?
-                <div className={`${styles.amenitiesBoxMain}`}>
+              <Accordion className="border-none">
+                <AccordionPanel>
+                <AccordionTitle>Aminities</AccordionTitle>
+                {listPropertiesData ? (
+                  <AccordionContent className={`${styles.AccordionContent}`}>
                     {listPropertiesData?.Aminities?.map((item, index) => (
-                    <div key={index} className={`${styles.amenitiesBoxMainContent}`}>
-                      <div className={`${styles.amenitiesBoxMainContentTextList}`}>
-                        {/* <i className={`${styles.amenitiesIconBox} ${item.Icon} || "" `}>{" "}</i>{item.Aminity} */}
+                      <div key={index} className="p-4">
                         <img
                           className={`${styles.amenitiesIconBox}`}
                           src={item.Icon}
@@ -803,30 +849,30 @@ const PropertyDetail = ({params}) => {
                          {item.Aminity}
                          </p>
                       </div>
-                    </div>
-                  ))} 
-                  </div>
-                  : <LoadingText />}
-                <div className={`${styles.amenitiesBoxMain} mt-4`}>
-                {listPropertiesData?.Features?.map((item, index) => (
-                    <div key={index} className={`${styles.amenitiesBoxMainContent}`}>
-                      <div className={`${styles.amenitiesBoxMainContentTextList}`}>
-                        {/* <i className={`${styles.amenitiesIconBox} ${item.Icon} || "" `}>{" "}</i>{item.Feature} */}
+                    ))}
+                </AccordionContent>
+                ) : <LoadingText/>}
+                </AccordionPanel>
+                <AccordionPanel>
+                <AccordionTitle>Features</AccordionTitle>
+                <AccordionContent className={`${styles.AccordionContent}`}>
+                    {listPropertiesData?.Features?.map((item, index) => (
+                      <div key={index} className="p-4 justify-between">
                         <img
                           className={`${styles.amenitiesIconBox}`}
                           src={item.Icon}
-                          width="20"
-                          height="20"
+                          width="22"
+                          height="22"
                          />
                          <p className="wrap text-center">
                          {item.Feature}
                          </p>
                       </div>
-                    </div>
-                  ))} 
-                </div>
+                    ))}
+                </AccordionContent>
+                </AccordionPanel>
+              </Accordion>
               </div>
-               
             </div>
           </div>
 
@@ -966,7 +1012,7 @@ const PropertyDetail = ({params}) => {
               </div>
 
           {/* FAQ */}
-          <div className={`${styles.amenities} amenities`}>
+          <div className={`${styles.amenities} amenities mb-4`}>
             <div className={` ${styles.faq} faq`}>
               <div className={` ${styles.faqMain}`}>
                 <h2 className={`${styles.amenitiesMainHead}`}>Frequently Asked Question</h2>
@@ -997,7 +1043,7 @@ const PropertyDetail = ({params}) => {
         </div>
         
         <div className={` ${styles.divideDetailPageRight}`}>
-          <div id="general" className={`${styles.formDetails}`}>
+          <div id="general" className={`${styles.formDetails} mb-4`}>
               <div className="GeneralDetailsMain">
                 <h2 className={`${styles.GeneralDetailsMainHead}`}>
                   GET A GUIDED TOUR
@@ -1078,6 +1124,7 @@ const PropertyDetail = ({params}) => {
           </div>
       </div>
        {/* Similar */}
+       {listDataConst?.count > 0 ?
       <div className={`${styles.similarMainType}`}>
       <div id="similar" className={`${styles.similar} similar`}>
         <div className="similarMain">
@@ -1090,6 +1137,7 @@ const PropertyDetail = ({params}) => {
         </div>
       </div>
       </div>
+      : null }
       <Footer />
     </>
   );

@@ -196,11 +196,12 @@ background: linear-gradient(90deg, rgba(56,92,203,1) 0%, rgba(77,117,207,1) 48%,
 }
 .outerCampass{
   position: absolute;
-  height: 22rem;
+  height: 20rem;
 }
 .innerCampass{
   position: absolute;
-  height: 22rem;
+  height: 15rem;
+  margin-left: 3.3rem;
 }
 @-webkit-keyframes innerCampass /* Safari and Chrome */ {
   from {

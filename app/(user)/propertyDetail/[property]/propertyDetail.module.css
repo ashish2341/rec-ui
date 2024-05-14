@@ -1,8 +1,9 @@
 .heroSection {
   margin-top: 5rem;
-  padding-top: 5rem;
+  padding-top: 3rem;
   height: 42rem;
   background-color: #2a4ac8;
+  padding-bottom: 3rem;
 }
 
 .heroSectionMain {
@@ -227,7 +228,7 @@
   color: grey;
 }
 .amenitiesBox{
-   padding: 1.5rem 0.5rem 1.5rem 0.5rem;
+   /* padding: 1.5rem 0.5rem 1.5rem 0.5rem; */
    border-radius: 0.35rem;
    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
@@ -326,7 +327,7 @@
  /* similar */
 
 .similar{
-  margin-top: 3rem;
+  margin-top: 1rem;
 }
 .similarMainHead{
   font-weight: 600;
@@ -352,7 +353,6 @@
 .smilarBoxHead{
   font-size: 1.2rem;
   font-weight: 600;
-  margin-top: 0.4rem;
 
 }
 .smilarBoxText{
@@ -470,9 +470,17 @@
     padding: 1rem;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  .BottomBoxcontenet{
+    margin-bottom: 1rem;
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+
   }
   .heroSectionBottomBoxHead,
   .heroSectionBottomBoxText {
+    text-align: center;
     font-size: 0.75rem; /* Adjust font sizes */
   }
 

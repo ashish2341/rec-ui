@@ -1,0 +1,74 @@
+
+.astroLeftUpImg{
+  border-radius: 2rem;
+}
+
+.buyingOptionWithZodic{
+  background-color: beige;
+}
+
+.GeneralDetailsBox{
+    padding: 1rem 2rem 1rem 2rem;
+    border-radius: 0.35rem;
+    border: 1px solid gray;
+ }
+
+ .rdp {
+    --rdp-cell-size: 35px; 
+  }
+
+.astroDetails{
+    display: flex;
+    margin-top: 2rem;
+    margin-left: 14rem;
+    margin-right: 14rem;
+}
+
+.astroLeft{
+    width: 67%;
+    margin-right: 2rem;
+}
+
+.buyingOptionWithZodic{
+    margin-top: 6rem;
+        margin-left: 14rem;
+        margin-right: 14rem;
+    }
+    .buyingWithZodicMain{
+      display: flex;
+    }
+    .buyingZodicLeft{
+      width: 50%;
+    }
+    .buyingZodicHead{
+      font-size: 2.6rem;
+        font-weight: 600;
+        line-height: 3rem;
+    }
+    .buyingZodicText{
+      font-size: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .buyingZodicInputMain{
+      margin-top: 2rem;
+    
+    }
+    .buyingZodicRight{
+      width: 50%;
+    }
+
+    .divideDetailPageRight{
+        width: 33%;
+      }
+
+      .formDetails{
+        position: sticky;
+        z-index: 1;
+        top: 9rem;
+      }
+
+      .GeneralDetailsMainHead{
+        font-weight: 600;
+        margin: 1rem;
+        color: grey;
+      }

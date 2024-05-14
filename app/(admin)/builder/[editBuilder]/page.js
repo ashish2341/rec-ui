@@ -350,6 +350,8 @@ if(params){
       let updatebuilderData = await UpdateBuilderApi(builderDetails,params?.params?.editBuilder);
     if (updatebuilderData?.resData?.success == true) {
       console.log("builderData",updatebuilderData.resData?.data)
+      router.push("/builder")
+      toast.success(updatebuilderData?.resData?.message);
       return false;
     } else {
       toast.error(updatebuilderData?.errMessage);

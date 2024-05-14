@@ -41,7 +41,7 @@ const BuilderPage = () => {
       };
 
       console.log("developData",builderData);
-      console.log("developData",builderData.Name);
+      console.log("developData",developData);
     return(
         <>
         <Navbar />

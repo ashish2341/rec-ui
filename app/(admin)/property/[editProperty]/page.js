@@ -194,7 +194,7 @@ const router=useRouter()
             Answer:item.Answer}
         }),
         Brochure:propertyData?.Brochure,
-        Builder:propertyData?.Builder?.value
+        Builder:propertyData?.Builder?._id
         // Builder:"66322d1f893b152a776d2095"
       };
       const propertyId=params?.params?.editProperty;

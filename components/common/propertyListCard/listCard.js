@@ -14,15 +14,14 @@ const PropertyListCard = ({ cardData }) => {
             <div className={`flex w-full ${styles.cardContent}`}>
               <div className={`w-full ${styles.leftCardContent}`}>
                 <div className="grid h-56 grid-cols-1 gap-4 sm:h-64 xl:h-80 1xl:h-96">
-                  {item.Images.length != 1 ? (
+                  
                     <Carousel indicators={false} slide={false}>
                       {item?.Images?.map((itemurl, index) => (
                         <Link
-                          className="h-full"
                           href={`/propertyDetail/${item._id}`}
                         >
                           <img
-                            className="h-full"
+                          className=" h-56  sm:h-64 xl:h-80 1xl:h-96"
                             key={index}
                             src={itemurl?.URL}
                             alt="..."
@@ -30,16 +29,7 @@ const PropertyListCard = ({ cardData }) => {
                         </Link>
                       ))}
                     </Carousel>
-                  ) : (
-                    <Link href={`/propertyDetail/${item._id}`}>
-                      <img
-                        className="h-full"
-                        key={index}
-                        src={item?.Images[0]?.URL}
-                        alt="..."
-                      />
-                    </Link>
-                  )}
+                  
                 </div>
               </div>
               <div
@@ -47,8 +37,8 @@ const PropertyListCard = ({ cardData }) => {
               >
                 <Link href={`/propertyDetail/${item._id}`}>
                   {" "}
-                  <div className="flex justify-between ">
-                    <div className="flex flex-row  leading-normal ">
+                  <div className={`flex justify-between `}>
+                    <div className={`flex flex-row  leading-normal ${styles.firstcontent}`}>
                       <p
                         className={`mb-3  font-bold text-black-700 dark:text-black-800 ${styles.itemTitle}`}
                       >
@@ -105,7 +95,7 @@ const PropertyListCard = ({ cardData }) => {
                 </div>
                 <Link href={`/propertyDetail/${item._id}`}></Link>
                 <div className=" ">
-                  <ReadMore text={item.Description} maxLength={67} />
+                  <ReadMore text={item.Description} maxLength={65} />
                 </div>
                 <Link href={`/propertyDetail/${item._id}`}>
                   <div className="flex flex-col md:flex-row justify-between items-center leading-normal mt-3"></div>

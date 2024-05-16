@@ -137,8 +137,8 @@ export default function Builder() {
                 >
                  {item.Name}
                 </td>
-                <td className="px-6 py-4">{item.EmailId}</td>
-                <td className="px-6 py-4">{item.EstablishDate.slice(0,10)}</td>
+                <td className="px-6 py-4">{item?.EmailId}</td>
+                <td className="px-6 py-4">{item?.EstablishDate?.slice(0,10)}</td>
                 <td className="px-6 py-4 text-blue-600 dark:text-blue-500">
                   <img
                     // className="imageCircle"

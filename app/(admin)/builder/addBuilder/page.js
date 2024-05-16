@@ -56,12 +56,11 @@ export default function AddBuilder() {
   const [establishDate, setEstablishDate] = useState("");
   const [description, setDescription] = useState("");
   const [builderLogo, setBuilderLogo] = useState("");
-
+  const [password, setPassword] = useState("");
   const logoInputRef = useRef(null);
   const router = useRouter();
 
   // const validateFields = () => {
-
 
   //   let isValid = true;
   //   let isEmptyField = false;
@@ -228,8 +227,7 @@ export default function AddBuilder() {
   //     validValue = false;
   //   }
   // };
-  
-  
+
   const handleNameChange = (e) => {
     setBuilderName(e.target.value);
   };
@@ -245,24 +243,21 @@ export default function AddBuilder() {
   //For branchOffice
 
   const addMore = () => {
-    
-   
-        setBranchesData([...BranchesData, initialBranchState]);
- 
-   };
+    setBranchesData([...BranchesData, initialBranchState]);
+  };
 
   const addMoreContactPerson = (index) => {
     // const branchValidateforAdd = validateFields();
     // if (branchValidateforAdd) {
-      const updatedFormData = [...BranchesData];
-      updatedFormData[index].ContactPerson.push({
-        Name: "",
-        Mobile: "",
-        EmailId: "",
-        Phone: "",
-        Designation: "",
-      });
-      setBranchesData(updatedFormData);
+    const updatedFormData = [...BranchesData];
+    updatedFormData[index].ContactPerson.push({
+      Name: "",
+      Mobile: "",
+      EmailId: "",
+      Phone: "",
+      Designation: "",
+    });
+    setBranchesData(updatedFormData);
     // }
   };
 
@@ -463,31 +458,31 @@ export default function AddBuilder() {
   const submitForm = async () => {
     // const branchValidate = validateFields();
     // if (branchValidate) {
-      const builderDetails = {
-        Name: builderName,
-        SocialMediaProfileLinks: socialMediaProfileLinks,
-        DetailNote: detailNote,
-        Logo: builderLogo,
-        Area: builderArea?.value,
-        Mobile: builderMobile,
-        EmailId: builderEmail,
-        WhatsApp: builderWhatsapp,
-        Description: description,
-        EstablishDate: establishDate,
-        Images: image,
-        Documents: documents.map((URL) => ({ URL })),
-        BranchOffices: BranchesData,
-       
-      };
-      console.log("builderDetails", builderDetails);
-      let res = await AddBuilderApi(builderDetails);
-      if (res?.resData?.success == true) {
-        router.push("/builder");
-        toast.success(res?.resData?.message);
-      } else {
-        toast.error(res?.errMessage);
-        return false;
-      }
+    const builderDetails = {
+      Name: builderName,
+      SocialMediaProfileLinks: socialMediaProfileLinks,
+      DetailNote: detailNote,
+      Logo: builderLogo,
+      Area: builderArea?.value,
+      Mobile: builderMobile,
+      EmailId: builderEmail,
+      WhatsApp: builderWhatsapp,
+      Description: description,
+      EstablishDate: establishDate,
+      Images: image,
+      Documents: documents.map((URL) => ({ URL })),
+      BranchOffices: BranchesData,
+      Password:password
+    };
+    console.log("builderDetails", builderDetails);
+    let res = await AddBuilderApi(builderDetails);
+    if (res?.resData?.success == true) {
+      router.push("/builder");
+      toast.success(res?.resData?.message);
+    } else {
+      toast.error(res?.errMessage);
+      return false;
+    }
     // }
   };
 
@@ -785,7 +780,7 @@ export default function AddBuilder() {
                         className="h-20 w-20 object-cover m-2 mt-5 border border-black rounded-lg "
                       />
                       <button
-                      type="button"
+                        type="button"
                         className="absolute top-0 right-0 p-1  "
                         onClick={() => removeImage(index)}
                       >
@@ -832,7 +827,7 @@ export default function AddBuilder() {
                         className="h-48 w-64 border border-black rounded-lg"
                       />
                       <button
-                      type="button"
+                        type="button"
                         className="absolute top-0 right-0 p-1"
                         onClick={() => removeDocument(index)}
                       >
@@ -849,8 +844,21 @@ export default function AddBuilder() {
           </div>
 
           <div>
-         
+            <label
+              htmlFor="password"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+            >
+              Password
+            </label>
+            <input
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              type="text"
+              id="password"
+              value={password}
+              onChange={setPassword}
+            />
           </div>
+
           <h2 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white underline">
             Social Profiles
           </h2>

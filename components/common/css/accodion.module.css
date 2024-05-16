@@ -11,7 +11,7 @@
     /* padding: 1rem 3rem 1rem 3rem; */
     justify-content: space-between;
     width: inherit;
-    margin-right: 2rem;
+    margin-right: 1rem;
    
   }
   
@@ -70,7 +70,8 @@
   }
 
   .accordionStyle {
-      margin: 0.5rem; /* Add margin for smaller screens */
+    margin: 1.5rem;
+    margin-left: -0.5rem; /* Add margin for smaller screens */
   }
   .accordionItem{
     margin-bottom:0.5rem

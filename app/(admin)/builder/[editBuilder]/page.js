@@ -83,7 +83,7 @@ if(params){
         return item.URL;
       }) || []
     );
-      setBranchesData(builderData?.resData?.data?.BranchOffices || [initialBranchState]
+      setBranchesData(builderData?.resData?.data?.BranchOffices.length!=0 ? builderData?.resData?.data?.BranchOffices : [initialBranchState]
     );
       setSocialMediaProfileLinks(builderData?.resData?.data?.SocialMediaProfileLinks || []);
    
@@ -610,7 +610,7 @@ if(params){
               <div className="flex flex-wrap ">
                 <div className="mr-4 mb-1  ">
                 <div className="ml-2 mt-3 underline font-bold">
-                  <h3>Selected Image</h3>
+                  <h3>Selected Logo</h3>
                 </div>
                   <img
                     src={builderLogo}

@@ -108,17 +108,16 @@ const AstrologerPage = () => {
                 <div className={` ${styles.astroLeft}`}>
                     <div>
                         <img src="../../../img/download (2).jpeg" className={` ${styles.astroLeftUpImg}`} />
-                        <h1 className="text-4xl font-semibold  mt-6 mb-3">Lorem ipsum dolor sit amet</h1>
+                        <h1 className="text-4xl font-semibold  mt-6 mb-3">Title</h1>
                         <p className=" text-gray-500 mb-2">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        In the intricate dance of the cosmos, every moment is imbued with unique energies that shape our lives in profound ways. When it comes to the significant decision of buying property, consulting an experienced astrologer can provide invaluable insights into aligning your investment with celestial influences. Let's explore the role of an astrologer in the realm of property buying.
                         </p>
                         <p className=" text-gray-500 ">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                         </p>
                         <Blockquote className="my-4 text-md border-l-4 border-blue-500 bg-gray-50 p-4 dark:border-blue-500 dark:bg-gray-800">
-                            "Flowbite is just awesome. It contains tons of predesigned components and pages starting from login screen to
-                            complex dashboard. Perfect choice for your next SaaS application."
+                            "The Role of an Astrologer in Property Buying: Navigating Cosmic Energies for Real Estate Success"
                         </Blockquote>
                         <div className="flex mb-4">
                             <div className="pr-2">
@@ -126,23 +125,24 @@ const AstrologerPage = () => {
                             </div>
                             <div className="pl-4">
                                 <p className=" text-gray-500 ">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                                    Let's explore the role of an astrologer in the realm of property buying. 
                                 </p>
                                 <ul className={` ${styles.astroList}`} >
-                                    <li>Lorem ipsum dolor sit amet</li>
-                                    <li>Lorem ipsum dolor sit amet</li>
-                                    <li>Lorem ipsum dolor sit amet</li>
-                                    <li>Lorem ipsum dolor sit amet</li>
+                                    <li>Cosmic Guidance</li>
+                                    <li>Astrological Compatibility</li>
+                                    <li>Timing Considerations</li>
+                                    <li>Remedial Measures</li>
                                 </ul>
                             </div>
                         </div>
                         <div className=" text-gray-500 mb-4">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        In the cosmic tapestry of life, the wisdom of astrology 
+                        illuminates our path and empowers us to make informed decisions 
+                        that resonate with our soul's purpose. When embarking on the 
+                        journey of property buying, enlisting the expertise of an astrologer can make all the difference.
                         </div>
                         <div className=" text-gray-500 ">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        By navigating the celestial currents with wisdom and foresight, you can embark on a real estate journey that aligns with the stars and leads to lasting fulfillment.
                         </div>
                     </div>
                 </div>

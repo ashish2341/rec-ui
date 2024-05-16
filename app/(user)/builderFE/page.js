@@ -39,9 +39,7 @@ const BuilderPage = () => {
           return false;
         }
       };
-
-      console.log("developData",builderData);
-      console.log("developData",developData);
+      
     return(
         <>
         <Navbar />

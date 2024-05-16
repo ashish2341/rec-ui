@@ -71,7 +71,7 @@ const AboutUs = () => {
                             Buying, Selling, Renting, or moving into a house can be a trial 
                             by fire, especially in India where we often 
                             take the hassles involved in the process as an integral part of the 
-                            home purchase process. Our new idea for Housing.com questions that behaviour, and motivates 
+                            home purchase process. Our new idea for REC.com questions that behaviour, and motivates 
                             them to switch to a hassle-free experience.
                         </p>
                     </div>

@@ -5,7 +5,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { initFlowbite } from "flowbite";
 import styles from "./contactus.module.css";
 import { addEnquiry } from "@/api-functions/enquiry/addEnquiry";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 
 
 const ContactUs = () => {
@@ -35,7 +35,6 @@ const ContactUs = () => {
           toast.error("Number is required");
           return false;
         }
-        setEnquiryData(currentDate);
         let payload = { Name, Email, Message, MolileNumber, EnquiryData, EnquiryType };
         let res = await addEnquiry(payload);
          if(res?.resData?.success == true){
@@ -48,11 +47,11 @@ const ContactUs = () => {
             toast.error(res.errMessage);
             return false;
           }
-        console.log(payload);
       }
 
       const handleNameChange = (e) => {
         setName(e.target.value);
+        setEnquiryData(currentDate);
       };
       const handleEmailChange = (e) => {
         setEmail(e.target.value);

@@ -19,6 +19,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { split } from "postcss/lib/list";
 import { AbbreviatedNumberParser } from "../../../../utils/commonHelperFn";
 import LoadingSideImg from "@/components/common/sideImgLoader";
+import PriceRangeSlider from "@/components/common/priceRangeModal";
 const PropertyListPage = (params) => {
   // fetching Data for facing
   const {
@@ -347,6 +348,7 @@ const PropertyListPage = (params) => {
   return (
     <>
       <Navbar />
+      <PriceRangeSlider isShow='' setPayload={setPayload} />
       <div className={`${styles.forSticky}`}>
         <div className={`${styles.heroSection} heroSection `}>
           <div className="text-sm font-medium text-center text-black-500 border-black-900 dark:text-gray-400 dark:border-gray-700">

@@ -4,28 +4,37 @@ import { API_BASE_URL, PAGE_LIMIT } from "@/utils/constants";
 
 const token = Cookies.get("token");
 
-export const GetEnquiryApi = async (page,searchData,setLoading=()=>{}) => {
+export const GetEnquiryApi = async (
+  page,
+  searchData,
+  filterType,
+  setLoading = () => {}
+) => {
   setLoading(true);
+  console.log("GetEnquiryApi filterType", filterType);
   try {
-    const res = await fetch(`${API_BASE_URL}/enquiry/allProjectEnquiry?page=${page}&pageSize=${PAGE_LIMIT}&search=${searchData}`, 
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
-    });
+    const res = await fetch(
+      `${API_BASE_URL}/enquiry/allProjectEnquiry?page=${page}&pageSize=${PAGE_LIMIT}&search=${
+        searchData ? searchData : ""
+      }${filterType ? `&filter=${filterType}` : ""}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     const resData = await res.json();
-    console.log('resData',resData)
+    console.log("resData", resData);
 
-    if (resData?.statusCode==200) {
-      
+    if (resData?.statusCode == 200) {
       setLoading(false);
-      return {resData};
+      return { resData };
     } else {
       //toast.error(resData.message);
       setLoading(false);
-      return {errMessage:resData.message};
+      return { errMessage: resData.message };
     }
   } catch (error) {
     setLoading(false);

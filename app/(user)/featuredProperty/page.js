@@ -19,7 +19,8 @@ import { ToastContainer, toast } from "react-toastify";
 import { GetPropertyApi } from "@/api-functions/property/getProperty";
 import SkeletonLoader from "@/components/common/loader";
 import LoadingSideImg from "@/components/common/sideImgLoader";
-
+import PropertyListCard from "@/components/common/propertyListCard/listCard";
+import SortByButton from "@/components/common/sortbyButton/sortByButton";
 const FeaturedProperty = (params) => {
   // fetching Data for facing
   const {
@@ -60,7 +61,7 @@ const FeaturedProperty = (params) => {
   );
   // console.log("featureData",featureData)
   //using params
-  
+
   const {
     searchData,
     facingId,
@@ -74,9 +75,9 @@ const FeaturedProperty = (params) => {
     isFeatured,
   } = params.searchParams;
   const [payload, setPayload] = useState({
-    facing:  [],
-    areaType:  [],
-    propertyType:  [],
+    facing: [],
+    areaType: [],
+    propertyType: [],
     bhkType: [],
     propertyStatus: [],
     posessionStatus: [],
@@ -84,7 +85,11 @@ const FeaturedProperty = (params) => {
     feature: [],
     landArea: [],
     bathroom: [],
-    isFeatured:isFeatured?true:false,
+    isFeatured: isFeatured ? true : false,
+    sortBy:"",
+    sortOrder:"",
+    IsFeatured:"",
+    IsExclusive:"",
   });
   // console.log("Outeside payload", payload);
   const pathname = usePathname();
@@ -94,6 +99,7 @@ const FeaturedProperty = (params) => {
   const [listData, setListData] = useState("");
   const [numToShow, setNumToShow] = useState(2);
   const [listDataForShow, setListDataForShow] = useState("");
+  const [resetBtnValue, setResetBtnValue] = useState(false);
   const bathroomArray = [
     { value: 1, label: "One" },
     { value: 2, label: "Two" },
@@ -114,11 +120,18 @@ const FeaturedProperty = (params) => {
     { value1: 6000000, value2: 10000000, label: "60 L- 1 Cr" },
     { value1: 10000000, value2: 20000000, label: "1 Cr- 2 Cr" },
   ];
+  const sortItemArray = [
+    { itemName: "Low to High", urlItem1:"TotalPrice.MinValue" ,urlItem2:"1"},
+    { itemName: "High to Low", urlItem1:"TotalPrice.MaxValue" ,urlItem2:"-1" },
+    { itemName: "Latest", urlItem1:"CreatedDate" ,urlItem2:"-1" },
+    { itemName: "Featured", urlItem1:true ,urlItem2:"" },
+    { itemName: "Popular" , urlItem1:true ,urlItem2:""},
+  ];
   useEffect(() => {
     if (payload) {
       const payloadWithId = extractIDsAndUpdateData(payload);
       // console.log("payloadWithId", payloadWithId);
-      payloadWithId.budget=payloadWithId.budget.flat()
+      payloadWithId.budget = payloadWithId.budget.flat();
       getAllFilterProperties(payloadWithId);
     }
 
@@ -129,9 +142,7 @@ const FeaturedProperty = (params) => {
     for (const key in newData) {
       if (Array.isArray(newData[key])) {
         newData[key] = newData[key].map((item) =>
-          typeof item === "object"
-            ?  item.id
-            : item
+          typeof item === "object" ? item.id : item
         );
       }
     }
@@ -184,6 +195,11 @@ const FeaturedProperty = (params) => {
         ? [...prevPayload[name], { id, label }]
         : prevPayload[name].filter((item) => item.id !== id),
     }));
+    if (checked == true) {
+      setResetBtnValue(true);
+    } else {
+      setResetBtnValue(false);
+    }
   };
   const handleRangeCheckBoxChange = (event) => {
     const { value } = event.target;
@@ -217,6 +233,11 @@ const FeaturedProperty = (params) => {
         budget: [...prevPayload.budget, rangeSelection],
       }));
     }
+    if (checked == true) {
+      setResetBtnValue(true);
+    } else {
+      setResetBtnValue(false);
+    }
   };
 
   const handleRemoveBadge = (id) => {
@@ -234,9 +255,9 @@ const FeaturedProperty = (params) => {
   };
   const resetSelectItem = () => {
     setPayload({
-      facing:  [],
-      areaType:  [],
-      propertyType:  [],
+      facing: [],
+      areaType: [],
+      propertyType: [],
       bhkType: [],
       propertyStatus: [],
       posessionStatus: [],
@@ -244,8 +265,23 @@ const FeaturedProperty = (params) => {
       feature: [],
       landArea: [],
       bathroom: [],
-      isFeatured:isFeatured?true:false,
+      search: "",
+      isFeatured: true,
+      sortBy:"",
+      sortOrder:"",
+      IsFeatured:"",
+      IsExclusive:"",
     });
+    setResetBtnValue(false);
+  };
+
+  //here upload payload data which is comes from the child component sortbutton
+  const updatePayload = (newPayload) => {
+    console.log("newPayload",newPayload)
+    setPayload((prevPayload) => ({
+      ...prevPayload,
+      ...newPayload // Merge the new payload with the existing state
+    }));
   };
   return (
     <>
@@ -822,7 +858,7 @@ const FeaturedProperty = (params) => {
                       </button>
                       <div
                         id="doubleDropdown"
-                        className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-96 dark:bg-gray-700"
+                        className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-96 sm:w-36 dark:bg-gray-700"
                       >
                         <ul
                           // className="p-2 text-sm text-gray-700 dark:text-gray-200 flex flex-wrap"
@@ -851,7 +887,7 @@ const FeaturedProperty = (params) => {
                                   />
                                   <label
                                     htmlFor={`checkbox-item-${index}`}
-                                    className="w-full  text-sm font-medium text-gray-900 rounded dark:text-gray-300"
+                                    className="text-sm font-medium text-gray-900 rounded dark:text-gray-300 sm:w-full  ml-3"
                                   >
                                     {item.Feature}
                                   </label>
@@ -899,7 +935,7 @@ const FeaturedProperty = (params) => {
                       </button>
                       <div
                         id="bathroomDropdown"
-                        className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-96 dark:bg-gray-700"
+                        className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-40  dark:bg-gray-700"
                       >
                         <ul
                           // className="p-2 text-sm text-gray-700 dark:text-gray-200 flex flex-wrap"
@@ -928,7 +964,7 @@ const FeaturedProperty = (params) => {
                                   />
                                   <label
                                     htmlFor={`checkbox-item-${index}`}
-                                    className="w-full  text-sm font-medium text-gray-900 rounded dark:text-gray-300"
+                                    className="text-sm font-medium text-gray-900 rounded dark:text-gray-300 sm:w-full  ml-3"
                                   >
                                     {item.label}
                                   </label>
@@ -963,19 +999,19 @@ const FeaturedProperty = (params) => {
             id="general"
             className={`${styles.generalDetails} GeneralDetails`}
           >
-            <div className="flex ml-3">
+            <div className="flex flex-wrap   ml-3">
               {Object.values(payload).some((array) => array.length > 0) && (
                 // <BadgeList data={payload} onRemove={handleRemoveBadge} />
-                <div className="flex">
+                <div className="flex flex-col md:flex-row">
                   {Object.entries(payload).map(
                     ([key, value]) =>
-                      value.length > 0 && (
-                        <div key={key}>
+                      value.length > 0&& Array.isArray(value) && (
+                        <div className="mb-2 md:mb-0" key={key}>
                           {value.map((item) => (
                             <div
                               key={item.id}
                               id={`badge-dismiss-${item.id}`}
-                              className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-blue-900 dark:text-blue-300"
+                              className="inline-flex items-center px-2 py-1 me-2 mb-2 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-blue-900 dark:text-blue-300"
                             >
                               {item.label || key}
                               <button
@@ -1005,13 +1041,15 @@ const FeaturedProperty = (params) => {
                         </div>
                       )
                   )}
-                  <button
-                    onClick={resetSelectItem}
-                    type="button"
-                    className={`mx-auto text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-1 text-center  me-2 mb-2`}
-                  >
-                    Reset
-                  </button>
+                   {resetBtnValue && (
+                    <button
+                      onClick={resetSelectItem}
+                      type="button"
+                      className={`mx-auto text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-1 text-center  me-2 mb-2`}
+                    >
+                      Reset
+                    </button>
+                  )}
                 </div>
               )}
             </div>
@@ -1026,7 +1064,9 @@ const FeaturedProperty = (params) => {
                   No Data Found
                 </h2>
               )}
-              <h1 className={` flex-grow  ${styles.GeneralDetailsfeaturedHead}`}>
+              <h1
+                className={` flex-grow  ${styles.GeneralDetailsfeaturedHead}`}
+              >
                 All Featured Property
               </h1>
               <div
@@ -1039,212 +1079,20 @@ const FeaturedProperty = (params) => {
                   Ready to Move-In Projects in Rajasthan.
                 </h1>
                 <div className="flex">
-                  <div>
-                    <li className="me-2 mt-2 list-none">
-                      <button
-                        id="dropdownSortByButton"
-                        data-dropdown-toggle="dropdownSortBy"
-                        data-dropdown-delay="500"
-                        data-dropdown-trigger="hover"
-                        className={`text-black bg-lightgrey border border-black hover:bg-lightgrey-800 focus:ring-4 focus:outline-none focus:ring-lightgrey-300 font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center dark:bg-lightgrey-600 dark:hover:bg-lightgrey-700 dark:focus:ring-lightgrey-800 ${styles.GeneralDetailsSortDropdown}`}
-                        type="button"
-                      >
-                        Sort By
-                        <svg
-                          className="w-2.5 h-2.5 ms-3"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 10 6"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="m1 1 4 4 4-4"
-                          />
-                        </svg>
-                      </button>
-
-                      <div
-                        id="dropdownSortBy"
-                        className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-                      >
-                        <ul
-                          className="py-2 text-sm text-gray-700 dark:text-gray-200"
-                          aria-labelledby="dropdownSortByButton"
-                        >
-                          <li>
-                            <a
-                              href="#"
-                              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                            >
-                              By High Price
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              href="#"
-                              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                            >
-                              By Low Price
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              href="#"
-                              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                            >
-                              A - Z
-                            </a>
-                          </li>
-                          <li>
-                            <a
-                              href="#"
-                              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                            >
-                              Z - A
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </li>
-                  </div>
+                  {payload && (
+                    <SortByButton arrayItem={sortItemArray} updatePayload={updatePayload} />
+                  )}
                 </div>
               </div>
               <div className=" mx-auto mb-2 ml-3">
                 <ReadMore text={longText} maxLength={100} />
               </div>
               {listDataForShow ? (
-                listDataForShow.map((item, index) => (
-                  <div
-                    key={index}
-                    className={`mb-3 ml-3 ${styles.GeneralDetailsBox}`}
-                  >
-                    <div className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row  hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-                      <div className="flex-shrink-0 h-full">
-                        <Link href={`/propertyDetail/${item._id}`}>
-                          <img
-                            className={` object-cover w-full rounded-t-lg h-full h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg ml-3 ${styles.cardMainImg}`}
-                            src={item?.Images[0].URL}
-                            alt=""
-                          />
-                        </Link>
-                      </div>
-
-                      <div
-                        className={`flex flex-col justify-between leading-normal ml-3 w-full mr-3 mt-3 mb-3 ${styles.cardContent}`}
-                      >
-                        <Link href={`/propertyDetail/${item._id}`}>
-                          {" "}
-                          <div className="flex justify-between ">
-                            <h5
-                              className={`mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white ${styles.price}`}
-                            >
-                              {/* <span className="px-2">₹</span> */}₹{" "}
-                              <span>{item.TotalPrice.DisplayValue}</span>
-                            </h5>
-                            {/* <div className="flex ">
-                            <div
-                              className={` mr-3 ${styles.GeneralDetailsBoxIcon}`}
-                            >
-                              {" "}
-                              <i className="bi bi-share"></i>
-                            </div>
-                            <div
-                              className={`ml-3 ${styles.GeneralDetailsBoxIcon}`}
-                            >
-                              {" "}
-                              <i className="bi bi-heart"></i>
-                            </div>
-                          </div> */}
-                          </div>
-                          <div className="flex flex-row  leading-normal ">
-                            <p className="mb-3 font-bold text-black-700 dark:text-black-800 ">
-                              {item.Titile}
-                            </p>
-                            {/* <button
-                            type="button"
-                            className={`text-white-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 ml-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 ${styles.cardStarBtn}`}
-                          >
-                            <span>4</span>{" "}
-                            <span>
-                              <i className="bi bi-star-fill"></i>
-                            </span>
-                          </button> */}
-
-                            <button
-                              type="button"
-                              className={`text-white-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 ml-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 ${styles.cardStarBtn}`}
-                            >
-                              {item?.Facing[0].Facing}
-                            </button>
-                          </div>
-                          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                            <i className="bi bi-geo-alt-fill"></i>
-                            <span className={`ml-1 ${styles.textCapitalized}`}>
-                              {item.Address}
-                            </span>{" "}
-                            <span className={`ml-1 ${styles.textCapitalized}`}>
-                              {item.Country}
-                            </span>
-                          </p>
-                          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                            <span className="mb-3 font-bold text-gray-700 dark:text-gray-400">
-                              {item.BhkType.Type}
-                            </span>{" "}
-                            for {item.ProeprtyFor} in {item.Area.Area},
-                            {item.State}
-                          </p>
-                        </Link>
-                        <div className="">
-                          <Accordion listData={[item]} />
-                        </div>
-                        <div className="mt-2 ">
-                          <ReadMore text={item.Description} maxLength={100} />
-                        </div>
-                        <div className="flex flex-col md:flex-row justify-between items-center leading-normal mt-3">
-                          <div className="flex items-center mb-2 md:mb-0">
-                            <img
-                              className={`${styles.cardImage} w-10 h-10 md:w-auto md:h-auto`}
-                              src="/img/demo_building_logo.png"
-                              alt=""
-                            />
-                            <div className="flex flex-col ml-2">
-                              <h3 className="font-bold text-sm md:text-base">
-                                Demo Pvt.Ltd
-                              </h3>
-                              <p className="text-gray-900 text-xs md:text-sm">
-                                Seller
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex flex-col md:flex-row justify-between">
-                            <button
-                              type="button"
-                              className={`text-white-600 hover:bg-gray-200 hover:border-green-600 border-2 border-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-xs md:text-sm px-3 py-1.5 md:px-5 md:py-2.5 text-center mb-2 md:mb-0 me-2 ${styles.cardLastBtn}`}
-                            >
-                              <span className="mr-2">
-                                <i className="bi bi-download"></i>
-                              </span>{" "}
-                              Brochure
-                            </button>
-                            <button
-                              type="button"
-                              className={`text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs md:text-sm px-3 py-1.5 md:px-5 md:py-2.5 text-center mb-2 md:mb-0 ${styles.cardLastBtn}`}
-                            >
-                              <span className="mr-1">
-                                <i className="bi bi-telephone"></i>
-                              </span>
-                              Contact Sellers
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))
+                listDataForShow.length > 0 ? (
+                  <PropertyListCard cardData={listDataForShow}/>
+                ) : (
+                  <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
+                )
               ) : (
                 <LoadingSideImg />
               )}

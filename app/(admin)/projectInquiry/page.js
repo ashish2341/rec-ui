@@ -1,5 +1,4 @@
-
-"use client"
+"use client";
 import Spinner from "@/components/common/loading";
 import Pagination from "@/components/common/pagination";
 import Popup from "@/components/common/popup";
@@ -15,16 +14,20 @@ import { DeletProjectEnquiryApi } from "@/api-functions/enquiry/deleteEnquiry";
 export default function ProjectInquiry() {
   //  const { data: listData, loading, error } = useFetch(`${API_BASE_URL}/aminity/allAminity?page=1&pageSize=10`);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [listData, setListData] = useState(false);
+  const [listData, setListData] = useState(false);
   const [deleteId, setDeleteId] = useState();
   const [page, setPage] = useState(1);
-  const [searchData,setSearchData]=useState("")
-
+  const [searchData, setSearchData] = useState("");
+  const [filterData,setFilterData]=useState("")
+  useEffect(() => {
+    initFlowbite(); // Call initCarousels() when component mounts
+  }, []);
   useEffect(() => {
     getAllEnquiry();
-  }, [page,searchData]);
-  const getAllEnquiry = async () => {
-    let enquiries= await GetEnquiryApi(page,searchData);
+  }, [page, searchData]);
+  const getAllEnquiry = async (filterType) => {
+    console.log("filterType",filterType)
+    let enquiries = await GetEnquiryApi(page, searchData,filterType);
     if (enquiries?.resData?.success == true) {
       setListData(enquiries?.resData);
       toast.success(enquiries?.resData?.message);
@@ -34,9 +37,9 @@ export default function ProjectInquiry() {
       return false;
     }
   };
-  const searchInputChange=(e)=>{
-    setSearchData(e.target.value)
-  }
+  const searchInputChange = (e) => {
+    setSearchData(e.target.value);
+  };
   const handleDelete = async () => {
     // Perform delete operation
     let res = await DeletProjectEnquiryApi(deleteId);
@@ -66,146 +69,168 @@ export default function ProjectInquiry() {
     console.log(newPage);
     setPage(newPage);
   };
-const inquiryData=  [
-  {
-      "_id": "6617d013aef656b053655f39",
-      "Aminity": "amenity 25",
-      "Icon": "fa -fa-seat",
-      "IsEnabled": true,
-      "IsDeleted": false,
-      "CreatedBy": "66167a7dc58d18fe508ff039",
-      "UpdatedBy": "66167a7dc58d18fe508ff039",
-      "IsForProperty": true,
-      "IsForProject": true,
-      "CreatedDate": "2024-04-11T11:57:07.063Z",
-      "UpdatedDate": "2024-04-11T11:57:07.063Z",
-      "__v": 0
-  },
-  {
-      "_id": "6617d3afaef656b053655f4f",
-      "Aminity": "amenity 26",
-      "Icon": "fa fa-car",
-      "IsEnabled": true,
-      "IsDeleted": false,
-      "CreatedBy": "66167a7dc58d18fe508ff039",
-      "UpdatedBy": "66167a7dc58d18fe508ff039",
-      "IsForProperty": true,
-      "IsForProject": false,
-      "CreatedDate": "2024-04-11T12:12:31.249Z",
-      "UpdatedDate": "2024-04-11T12:12:31.249Z",
-      "__v": 0
-  },
-  {
-      "_id": "6618d510af1e5d1f1df80002",
-      "Aminity": "Tarrice new 27",
-      "Icon": "fa fa-ab",
-      "IsEnabled": false,
-      "IsDeleted": false,
-      "CreatedBy": "66167a7dc58d18fe508ff039",
-      "UpdatedBy": "66167a7dc58d18fe508ff039",
-      "IsForProperty": true,
-      "IsForProject": true,
-      "CreatedDate": "2024-04-12T06:30:40.686Z",
-      "UpdatedDate": "2024-04-12T06:30:40.686Z",
-      "__v": 0
-  },
-  {
-      "_id": "6618e308af1e5d1f1df80168",
-      "Aminity": "Tarrice new 1d",
-      "Icon": "fa fa-pencil",
-      "IsEnabled": true,
-      "IsDeleted": false,
-      "CreatedBy": "66167a7dc58d18fe508ff039",
-      "UpdatedBy": "66167a7dc58d18fe508ff039",
-      "IsForProperty": false,
-      "IsForProject": true,
-      "CreatedDate": "2024-04-12T07:30:16.616Z",
-      "UpdatedDate": "2024-04-12T07:30:16.616Z",
-      "__v": 0
-  },
-  {
-      "_id": "6618e312af1e5d1f1df80171",
-      "Aminity": "Tarrice new 3d",
-      "Icon": "fa fa-bike",
-      "IsEnabled": true,
-      "IsDeleted": false,
-      "CreatedBy": "66167a7dc58d18fe508ff039",
-      "UpdatedBy": "66167a7dc58d18fe508ff039",
-      "IsForProperty": false,
-      "IsForProject": true,
-      "CreatedDate": "2024-04-12T07:30:26.454Z",
-      "UpdatedDate": "2024-04-12T07:30:26.454Z",
-      "__v": 0
+  const inquiryData = [
+    {
+      _id: "6617d013aef656b053655f39",
+      Aminity: "amenity 25",
+      Icon: "fa -fa-seat",
+      IsEnabled: true,
+      IsDeleted: false,
+      CreatedBy: "66167a7dc58d18fe508ff039",
+      UpdatedBy: "66167a7dc58d18fe508ff039",
+      IsForProperty: true,
+      IsForProject: true,
+      CreatedDate: "2024-04-11T11:57:07.063Z",
+      UpdatedDate: "2024-04-11T11:57:07.063Z",
+      __v: 0,
+    },
+    {
+      _id: "6617d3afaef656b053655f4f",
+      Aminity: "amenity 26",
+      Icon: "fa fa-car",
+      IsEnabled: true,
+      IsDeleted: false,
+      CreatedBy: "66167a7dc58d18fe508ff039",
+      UpdatedBy: "66167a7dc58d18fe508ff039",
+      IsForProperty: true,
+      IsForProject: false,
+      CreatedDate: "2024-04-11T12:12:31.249Z",
+      UpdatedDate: "2024-04-11T12:12:31.249Z",
+      __v: 0,
+    },
+    {
+      _id: "6618d510af1e5d1f1df80002",
+      Aminity: "Tarrice new 27",
+      Icon: "fa fa-ab",
+      IsEnabled: false,
+      IsDeleted: false,
+      CreatedBy: "66167a7dc58d18fe508ff039",
+      UpdatedBy: "66167a7dc58d18fe508ff039",
+      IsForProperty: true,
+      IsForProject: true,
+      CreatedDate: "2024-04-12T06:30:40.686Z",
+      UpdatedDate: "2024-04-12T06:30:40.686Z",
+      __v: 0,
+    },
+    {
+      _id: "6618e308af1e5d1f1df80168",
+      Aminity: "Tarrice new 1d",
+      Icon: "fa fa-pencil",
+      IsEnabled: true,
+      IsDeleted: false,
+      CreatedBy: "66167a7dc58d18fe508ff039",
+      UpdatedBy: "66167a7dc58d18fe508ff039",
+      IsForProperty: false,
+      IsForProject: true,
+      CreatedDate: "2024-04-12T07:30:16.616Z",
+      UpdatedDate: "2024-04-12T07:30:16.616Z",
+      __v: 0,
+    },
+    {
+      _id: "6618e312af1e5d1f1df80171",
+      Aminity: "Tarrice new 3d",
+      Icon: "fa fa-bike",
+      IsEnabled: true,
+      IsDeleted: false,
+      CreatedBy: "66167a7dc58d18fe508ff039",
+      UpdatedBy: "66167a7dc58d18fe508ff039",
+      IsForProperty: false,
+      IsForProject: true,
+      CreatedDate: "2024-04-12T07:30:26.454Z",
+      UpdatedDate: "2024-04-12T07:30:26.454Z",
+      __v: 0,
+    },
+  ];
+
+  const enquiryType=(filterType)=>{
+    // setFilterData(type)
+    console.log("enquiryType filterType",filterType)
+    getAllEnquiry(filterType)
   }
-]
   return (
     <section>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3">
-      <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
-     Project Inquiry
-      </h1>
+        <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
+          Project Inquiry
+        </h1>
         <div className="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
-         
-            <div className="flex">
-              {listData?( <ExportToExcel apiData={listData.data} fileName={"AlertAttendanceData"} />):null}
-              <li className="me-2  list-none">
-                <button
-                  id="dropdownPossessionButton"
-                  data-dropdown-toggle="dropdownPossession"
-                  className="text-black bg-white rounded-lg border border-gray-200  hover:bg-gray-100 hover:text-blue-700 focus:ring-gray-100  focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
-                  type="button"
+          <div className="flex">
+            {listData ? (
+              <ExportToExcel
+                apiData={listData.data}
+                fileName={"AlertAttendanceData"}
+              />
+            ) : null}
+            <li className="me-2  list-none">
+              <button
+                id="dropdownPossessionButton"
+                data-dropdown-toggle="dropdownPossession"
+                className="text-black bg-white rounded-lg border border-gray-200  hover:bg-gray-100 hover:text-blue-700 focus:ring-gray-100  focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
+                type="button"
+              >
+                Enquiry Type
+                <svg
+                  className="w-2.5 h-2.5 ms-3"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 10 6"
                 >
-                  Enquiry Type
-                  <svg
-                    className="w-2.5 h-2.5 ms-3"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 10 6"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m1 1 4 4 4-4"
-                    />
-                  </svg>
-                </button>
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m1 1 4 4 4-4"
+                  />
+                </svg>
+              </button>
 
-                <div
-                  id="dropdownPossession"
-                  className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+              <div
+                id="dropdownPossession"
+                className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+              >
+                <ul
+                  className="p-2 text-sm text-gray-700 dark:text-gray-200 list-none"
+                  aria-labelledby="dropdownPossessionButton"
                 >
-                  <ul
-                    className="p-2 text-sm text-gray-700 dark:text-gray-200 list-none"
-                    aria-labelledby="dropdownPossessionButton"
-                  >
-                   
-                        <li>
-                          <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
-                            <input
-                              // id={`checkbox-item-${index}`}
-                              type="checkbox"
-                              // value={item._id}
-                              // name="posessionStatus"
-                              // onChange={handleCheckBoxChange}
-                              className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                            />
-                            <label
-                              // htmlFor={`checkbox-item-${index}`}
-                              className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
-                            >
-                              Property
-                            </label>
-                          </div>
-                        </li>
-                      
-                  </ul>
-                </div>
-              </li>
-            </div>
-            
+                  <li onClick={()=>enquiryType("Project")}>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Project
+                    </a>
+                  </li>
+                  <li onClick={()=>enquiryType("Property")}>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Property
+                    </a>
+                  </li>
+                  <li onClick={()=>enquiryType("Astrology")}>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Astrology
+                    </a>
+                  </li>
+                  <li onClick={()=>enquiryType("ContactUs")}>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Contact Us
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </div>
+
           <label htmlFor="table-search" className="sr-only">
             Search
           </label>
@@ -237,11 +262,11 @@ const inquiryData=  [
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-            <th scope="col" className="px-6 py-3">
-               Enquiry Type
+              <th scope="col" className="px-6 py-3">
+                Enquiry Type
               </th>
               <th scope="col" className="px-6 py-3">
-               Question
+                Question
               </th>
               <th scope="col" className="px-6 py-3">
                 Name
@@ -250,7 +275,7 @@ const inquiryData=  [
                 Email
               </th>
               <th scope="col" className="px-6 py-3">
-               Is Enabled
+                Is Enabled
               </th>
               <th scope="col" className="px-6 py-3">
                 Action
@@ -258,65 +283,63 @@ const inquiryData=  [
             </tr>
           </thead>
           <tbody>
-             {listData?.data?.map((item, index) => ( 
-            <tr
-               key={index}
-              className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-            >
-              <td
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            {listData?.data?.map((item, index) => (
+              <tr
+                key={index}
+                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
-               {item?.EnquiryType}
-              </td>
-              <td
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-               {item?.Message}
-              </td>
-              <td
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-               {item?.Name}
-              </td>
-              <td
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-               {item?.Email}
-              </td>
-              <td className="px-6 py-4 text-blue-600 dark:text-blue-500">
+                <td
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                  {item?.EnquiryType}
+                </td>
+                <td
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                  {item?.Message}
+                </td>
+                <td
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                  {item?.Name}
+                </td>
+                <td
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                  {item?.Email}
+                </td>
+                <td className="px-6 py-4 text-blue-600 dark:text-blue-500">
                   <i
                     className={` ${
                       item?.IsEnabled
-                      ? "bi bi-hand-thumbs-up-fill text-green-600	"
-                      : "bi bi-hand-thumbs-down-fill text-red-500"
+                        ? "bi bi-hand-thumbs-up-fill text-green-600	"
+                        : "bi bi-hand-thumbs-down-fill text-red-500"
                     } `}
                     style={{ fontSize: "24px" }}
                   ></i>
                 </td>
-              <td className="px-6 py-4">
-                <div className="flex items-center space-x-2">
-                  <Link
-                    //  href={`/amenity/${item._id}`}
-                    href={""}
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                    <i className="bi bi-eye-fill"></i>
-                  </Link>
-                  {/* <i className="bi bi-eye-fill"></i> */}
-                  <i
-                     onClick={() => deleteInquiryModel(item?._id)}
-                    className="bi bi-trash-fill"
-                  ></i>
-                </div>
-              </td>
-            </tr>
-             ))} 
-             
-           
+                <td className="px-6 py-4">
+                  <div className="flex items-center space-x-2">
+                    <Link
+                      //  href={`/amenity/${item._id}`}
+                      href={""}
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    >
+                      <i className="bi bi-eye-fill"></i>
+                    </Link>
+                    {/* <i className="bi bi-eye-fill"></i> */}
+                    <i
+                      onClick={() => deleteInquiryModel(item?._id)}
+                      className="bi bi-trash-fill"
+                    ></i>
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
         <Pagination data={listData} pageNo={handlePageChange} pageVal={page} />

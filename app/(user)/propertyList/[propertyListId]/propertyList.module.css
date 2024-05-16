@@ -114,12 +114,34 @@
 }
 
 /* generalDetails */
-
+.middleCardContent{
+  width: 70%;
+  /* margin-top: 2rem !important; */
+}
+.leftCardContent{
+width: 50% !important;
+}
+.rightCardContent{
+  width: 26%;
+  justify-content: space-evenly;
+  background-color: #dee6f1;
+  padding: 2rem;
+}
+.GeneralDetailsBox:hover{
+  background-color: #E4E5E0 !important;
+}
 .GeneralDetailsMainHead {
   font-weight: 600;
   margin: 1rem;
   color: grey;
 }
+.price{
+  font-size: 1.3rem !important;
+}
+.itemTitle{
+font-size: 1.4rem;
+}
+
 .noDataHead{
   font-weight: 600;
   margin: 1rem;
@@ -147,6 +169,7 @@
   background-color: #481c94 !important;
   color: White !important;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 4rem !important;
 }
 .cardSecondbtn{
   background-color: lightgrey !important;
@@ -160,6 +183,7 @@
 .cardImage{
   height: 3rem !important;
   width: 3rem !important;
+  background-Color: 'transparent'
 }
 .cardMainImg{
   height: 16rem !important;
@@ -170,7 +194,16 @@
   font-size: 1.1rem !important;
   font-weight:bold
 }
-
+.cardLastBrochureBtn{
+  height: 3rem;
+  width: 12rem;
+  font-size: 1.1rem !important;
+  font-weight:bold;
+  background-color: #fffcf2 !important;
+}
+.cardLastBrochureBtn:hover{
+  background-color: #e4e5e4 !important;
+}
 .GeneralDetailsBoxName {
   font-size: 0.75rem;
   font-weight: 500;
@@ -461,8 +494,9 @@
   .price{
     font-size: 1rem !important;
   }
-  .cardContent{
+  .middleCardContent{
     padding: 1rem;
+    /* margin-top: 0 !important; */
   }
   .GeneralDetailsBoxIcon{
     font-size:0.9rem !important
@@ -474,4 +508,15 @@
   .GeneralDetailsBox{
 padding: 1.5rem;
   }
+  .cardContent{
+    flex-direction: column;
+  }
+  .rightCardContent{
+    width: 100%;
+    
+  }
+  .leftCardContent{
+    width: 100% !important;
+    
+    }
 }

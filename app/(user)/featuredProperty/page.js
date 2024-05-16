@@ -21,6 +21,7 @@ import SkeletonLoader from "@/components/common/loader";
 import LoadingSideImg from "@/components/common/sideImgLoader";
 import PropertyListCard from "@/components/common/propertyListCard/listCard";
 import SortByButton from "@/components/common/sortbyButton/sortByButton";
+import TextComponent from "@/components/common/textComponent";
 const FeaturedProperty = (params) => {
   // fetching Data for facing
   const {
@@ -1085,7 +1086,7 @@ const FeaturedProperty = (params) => {
                 </div>
               </div>
               <div className=" mx-auto mb-2 ml-3">
-                <ReadMore text={longText} maxLength={100} />
+                <TextComponent text={longText} />
               </div>
               {listDataForShow ? (
                 listDataForShow.length > 0 ? (

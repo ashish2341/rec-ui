@@ -519,4 +519,13 @@ padding: 1.5rem;
     width: 100% !important;
     
     }
+    .firstcontent{
+      flex-direction: column !important;
+    }
+    .cardStarBtn{
+      width: 6rem;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: 0rem !important;
+    }
 }

@@ -87,10 +87,10 @@ const PropertyListPage = (params) => {
     bathroom: [],
     search: searchData ? searchData : "",
     isFeatured: true,
-    sortBy:"",
-    sortOrder:"",
-    IsFeatured:"",
-    IsExclusive:"",
+    sortBy: "",
+    sortOrder: "",
+    IsFeatured: "",
+    IsExclusive: "",
   });
   console.log("Outeside payload", payload);
   const pathname = usePathname();
@@ -124,11 +124,15 @@ const PropertyListPage = (params) => {
     { value1: 10000000, value2: 20000000, label: "1 Cr- 2 Cr" },
   ];
   const sortItemArray = [
-    { itemName: "Low to High", urlItem1:"TotalPrice.MinValue" ,urlItem2:"1"},
-    { itemName: "High to Low", urlItem1:"TotalPrice.MaxValue" ,urlItem2:"-1" },
-    { itemName: "Latest", urlItem1:"CreatedDate" ,urlItem2:"-1" },
-    { itemName: "Featured", urlItem1:true ,urlItem2:"" },
-    { itemName: "Popular" , urlItem1:true ,urlItem2:""},
+    { itemName: "Low to High", urlItem1: "TotalPrice.MinValue", urlItem2: "1" },
+    {
+      itemName: "High to Low",
+      urlItem1: "TotalPrice.MaxValue",
+      urlItem2: "-1",
+    },
+    { itemName: "Latest", urlItem1: "CreatedDate", urlItem2: "-1" },
+    { itemName: "Featured", urlItem1: true, urlItem2: "" },
+    { itemName: "Popular", urlItem1: true, urlItem2: "" },
   ];
   useEffect(() => {
     if (payload) {
@@ -154,7 +158,7 @@ const PropertyListPage = (params) => {
       // Set resetBtnValue based on whether any array has data
       setResetBtnValue(hasData);
     }
-  }, [payload,params.searchParams]);
+  }, [payload, params.searchParams]);
 
   function extractIDsAndUpdateData(data) {
     const newData = { ...data }; // Create a shallow copy of the original object
@@ -345,20 +349,20 @@ const PropertyListPage = (params) => {
       bathroom: [],
       search: "",
       isFeatured: true,
-      sortBy:"",
-      sortOrder:"",
-      IsFeatured:"",
-      IsExclusive:"",
+      sortBy: "",
+      sortOrder: "",
+      IsFeatured: "",
+      IsExclusive: "",
     });
     setResetBtnValue(false);
   };
 
   //here upload payload data which is comes from the child component sortbutton
   const updatePayload = (newPayload) => {
-    console.log("newPayload",newPayload)
+    console.log("newPayload", newPayload);
     setPayload((prevPayload) => ({
       ...prevPayload,
-      ...newPayload // Merge the new payload with the existing state
+      ...newPayload, // Merge the new payload with the existing state
     }));
   };
 
@@ -523,6 +527,7 @@ const PropertyListPage = (params) => {
                 <button
                   id="dropdownAreTypeButton"
                   data-dropdown-toggle="dropdownAreType"
+                  data-dropdown-placement="bottom"
                   className="text-black bg-white border border-black hover:bg-white-800 focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
                   type="button"
                 >
@@ -546,10 +551,10 @@ const PropertyListPage = (params) => {
 
                 <div
                   id="dropdownAreType"
-                  className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+                  className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 overflow-y-auto "
                 >
                   <ul
-                    className="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
+                    className="h-48 py-2 overflow-y-auto text-gray-700 dark:text-gray-200 "
                     aria-labelledby="dropdownAreTypeButton"
                   >
                     {areaData?.data?.length > 0 ? (
@@ -581,17 +586,63 @@ const PropertyListPage = (params) => {
                       ))
                     ) : (
                       <li>
-                        <a
-                          href="#"
+                        <p
                           className="block px-4 py-2 hover:bg-white dark:hover:bg-gray-200 dark:hover:text-white"
                         >
                           No data found
-                        </a>
+                        </p>
                       </li>
                     )}
                   </ul>
                 </div>
               </li>
+              <div
+                id="dropdownUsers"
+                className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700  "
+                >
+                <ul
+                  class="h-48 py-2 overflow-y-auto text-gray-700 dark:text-gray-200"
+                  aria-labelledby="dropdownUsersButton"
+                >
+                 {areaData?.data?.length > 0 ? (
+                      areaData?.data?.map((item, index) => (
+                        <li key={index}>
+                          <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
+                            <input
+                              id={`checkbox-item-${index}`}
+                              type="checkbox"
+                              name="areaType"
+                              value={JSON.stringify({
+                                id: item._id,
+                                label: item.Area,
+                              })}
+                              checked={payload.areaType.some(
+                                (obj) => obj.id === item._id
+                              )}
+                              onChange={handleCheckBoxChange}
+                              className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                            />
+                            <label
+                              htmlFor={`checkbox-item-${index}`}
+                              className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
+                            >
+                              {item.Area}
+                            </label>
+                          </div>
+                        </li>
+                      ))
+                    ) : (
+                      <li>
+                        <p
+                          className="block px-4 py-2 hover:bg-white dark:hover:bg-gray-200 dark:hover:text-white"
+                        >
+                          No data found
+                        </p>
+                      </li>
+                    )}
+                </ul>
+              </div>
+
               {/* Range type */}
               <li className="me-2 mt-3">
                 <button
@@ -1176,11 +1227,7 @@ const PropertyListPage = (params) => {
                   {listDataForShow.length - (listDataForShow.length - 1)} -{" "}
                   {listDataForShow.length} of {listData.length}
                 </h2>
-              ) : (
-                <h2 className={`${styles.GeneralDetailsMainHead}`}>
-                  No Data Found
-                </h2>
-              )}
+              ) : null}
 
               <div
                 className={` flex justify-between  ${styles.GeneralDetailsSecondSection}`}
@@ -1192,7 +1239,10 @@ const PropertyListPage = (params) => {
                 </h1>
                 <div className="flex">
                   {payload && (
-                    <SortByButton arrayItem={sortItemArray} updatePayload={updatePayload} />
+                    <SortByButton
+                      arrayItem={sortItemArray}
+                      updatePayload={updatePayload}
+                    />
                   )}
                 </div>
               </div>

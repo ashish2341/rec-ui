@@ -697,7 +697,7 @@ export default function Home() {
         <div className={` ${styles.agentLeftMain}`}>
           <img
             className={` ${styles.agentImage}`}
-            src="/img/agentImg-removebg-preview.png"
+            src="/img/zodiac-signs.jpg"
             alt=""
           />
         </div>

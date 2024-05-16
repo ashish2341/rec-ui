@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import styles from "./page.module.css";
 import Navbar from "@/components/common/navbar";
 import Footer from "@/components/common/footer";
@@ -20,6 +19,7 @@ import { Button, Modal } from "flowbite-react";
 import Spinner from "@/components/common/loading";
 import SkeletonLoader from "@/components/common/loader";
 import SearchBar from "./search";
+import AreaMultiCarousel from "../components/common/areapropertyCarousel";
 
 export default function Home() {
  
@@ -34,17 +34,17 @@ export default function Home() {
   const [Email, setEmail] = useState("");
   const [Message, setMessage] = useState("");
   const [MolileNumber, setPhone] = useState("");
+  const [ZodaicMolileNumber, setZodaicPhone] = useState("");
   const [EnquiryData, setEnquiryData] = useState("");
   const [EnquiryType, setEnquiryType] = useState("Project");
   const [openModal, setOpenModal] = useState(false);
-  const [isLoading,setIsLoading]=useState(true)
 
 
   const facingImage = [
-    "https://jaipurthrumylens.files.wordpress.com/2016/05/picture-of-hawa-mahal-jaipur-jaipurthrumylens.jpg",
-    "https://touringwithpk.com/wp-content/uploads/2024/01/IMG_8447a-700x432.jpg",
-    "https://www.india.com/wp-content/uploads/2022/09/Jal-mahal-1.jpg",
-    "https://assets.cntraveller.in/photos/60ba1bc8f27d46df614fc4a7/16:9/w_1920,h_1080,c_limit/City-Palace-Jaipur-2.jpg",
+    "../img/East.png",
+    "../img/West.jpg",
+    "../img/North.png",
+    "../img/South.jpg",
   ];
 
   const facingSubHeading =[
@@ -60,20 +60,19 @@ export default function Home() {
     loading: facingDataLoading,
     error: facingDataError,
   } = useFetch(`${API_BASE_URL_FOR_MASTER}/facing`);
-  console.log("facingData", facingData);
 
   const {
     data: propertyByAreaData,
     loading,
     error,
   } = useFetch(`${API_BASE_URL}/properties/propertyByArea`);
-  console.log("propertyByAreaData", propertyByAreaData);
+
   const {
     data: propertyByapartmentType,
     loading: apartmentTypeLoading,
     error: apartmentTypeError,
   } = useFetch(`${API_BASE_URL}/properties/propertyByType`);
-  console.log("propertyByType",propertyByapartmentType)
+
   const {
     data: propertyByPopularProperty,
     loading: popularPropertiesLoading,
@@ -111,7 +110,7 @@ export default function Home() {
     loading:bannerDataLoading,
     error:bannerDataError,
   } = useFetch(`${API_BASE_URL}/banner/allbanner?page=1&pageSize=5`);
-  console.log("bannerData",bannerData);
+
   const ShowApartmentProperties = () => {
      
     return propertyByapartmentType?.data?.map((item,index) => (
@@ -145,7 +144,7 @@ export default function Home() {
   const ShowPopularProperties = () => {
     return propertyByPopularProperty?.data?.map((item,index) => (
             
-      <div key={index} className="mr-3"  >
+      <div key={index} className={` ${styles.cardBoxPopularTop}`} >
         <img
               className={` ${styles.cardImgTop}`}
               src={item.Images[0].URL}
@@ -201,8 +200,33 @@ export default function Home() {
       ))
   }
 
+  const showAreaType = () => {
+    return  propertyByAreaData?.data?.map((item,index) => (
+        <div key={index}
+          className={` ${styles.propertiesByAreaBox} border border-gray-300 rounded-md`}
+        >
+          <Link href={`/propertyList/property?areaId=${item?._id}&areaLabel=${item?.areaInfo?.Area}`}>
+          <div>
+            <div>
+              <img
+                className={` ${styles.propertiesByAreaBoxImg} rounded-md`}
+                src={item?.areaInfo?.AreaImage}
+                alt=""
+              />
+            </div>
+          </div>
+          <div className="p-0">
+            <div className={` ${styles.populerPropertiesLocationMain} flex`}>
+              <h1 className={` ${styles.propertiesByAreaBoxHead}`}>{item?.areaInfo?.Area}</h1>
+            </div>
+            <p className={`${styles.smallText}text-gray-900`} href="/">{item?.propertiesCount} properties</p>
+          </div>
+          </Link>
+        </div>
+    ))
+  }
+
   const currentDate = new Date().toISOString().slice(0, 10);
-  console.log("currentDate",currentDate);
   const addEnquiryData = async () => {
     if (Name === "") {
       toast.error("Name  is required");
@@ -222,7 +246,6 @@ export default function Home() {
     }
     let payload = { Name, Email, Message, MolileNumber, EnquiryData, EnquiryType };
     let res = await addEnquiry(payload)
-    console.log('payload',res)
      if(res?.resData?.success == true){
        toast.success("Your Query Is being Generated");
        setName("");
@@ -233,7 +256,6 @@ export default function Home() {
         toast.error(res.errMessage);
         return false;
       }
-    console.log(payload);
   }
   const toggleExpansion = () => {
     setExpanded(!expanded);
@@ -260,18 +282,25 @@ export default function Home() {
   const handleZodiacName = (e) => {
     setZodaicName(e.target.value)
   }
+  const handleZodiacPhone = (e) => {
+    setZodaicPhone(e.target.value)
+  }
   const resetValue = () => {
-    if(Dob=="" || ZodiacName==""){
+    if(Dob=="" || ZodiacName=="" || ZodaicMolileNumber == ""){
       toast.error("Please fill Dob & Name Field.")
       return false
     }
     setOpenModal(true);
   };
 
+  let ZodiacData = { ZodiacName, ZodaicMolileNumber, Dob};
+
+
   const onResetValue =() => {
     setOpenModal(false);
     setZodaicName("")
     setDob("")
+    setZodaicPhone("")
   }
   var totalSlides = propertyByapartmentType?.data?.length;
   var slidesToShow = totalSlides < 5 ? totalSlides : 5;
@@ -371,7 +400,7 @@ export default function Home() {
                   <SearchBar/>
                 </div>
               </div>
-              <div className={`${styles.crousalItemRightMain}`}>
+              <div className={`${styles.crousalItemRightMain} overflow-hidden  `}>
                 {bannerData ?
                   <img
                   src={bannerData?.data[0].Url}
@@ -507,34 +536,12 @@ export default function Home() {
             </p>
           </div>
         </div>
-        {propertyByAreaData ? (
         <div className={` ${styles.propertiesByAreaBoxMain} flex flex-wrap `}>
-          {propertyByAreaData?.data?.map((item,index) => (
-            
-          <div key={index}
-            className={` ${styles.propertiesByAreaBox} border border-gray-300 rounded-md`}
-          >
-            <Link href={`/propertyList/property?areaId=${item?._id}&areaLabel=${item?.areaInfo?.Area}`}>
-            <div>
-              <div>
-                <img
-                  className={` ${styles.propertiesByAreaBoxImg} rounded-md`}
-                  src={item?.areaInfo?.AreaImage}
-                  alt=""
-                />
-              </div>
-            </div>
-            <div className="p-0">
-              <div className={` ${styles.populerPropertiesLocationMain} flex`}>
-                <h1 className={` ${styles.propertiesByAreaBoxHead}`}>{item?.areaInfo?.Area}</h1>
-              </div>
-              <p className={`${styles.smallText}text-gray-900`} href="/">{item?.propertiesCount} properties</p>
-            </div>
-            </Link>
-          </div>
-          ))}
-          </div>
-        ) : <SkeletonLoader />}
+        {
+          propertyByAreaData?.data?.length>0 ? <AreaMultiCarousel UI={showAreaType} /> : <SkeletonLoader />
+        }
+        </div>
+        
       </div>
 
       <div className={`${styles.apartmentTypeMain} apartmentType`}>
@@ -557,7 +564,7 @@ export default function Home() {
 
         
 
-      <div className={`${styles.buyingOptionWithZodic}`}>
+      <div id="zodiac-id" className={`${styles.buyingOptionWithZodic}`}>
         <div className={`${styles.buyingWithZodicMain}`}>
           <div className={`${styles.buyingZodicLeft}`}>
             <div>
@@ -569,6 +576,9 @@ export default function Home() {
               Unlock the door to your dream home with Zodiac.
               Let's embark on this journey together and discover your perfect home. 
               Welcome to Zodiac, where dreams come true.
+              </p>
+              <p className={`${styles.buyingZodicText} font-semibold`}>
+                ** Please note that this prediction is based on your D.O.B. rather than your name **
               </p>
             </div>
             <div className={`${styles.buyingZodicInputMain}`}>
@@ -592,6 +602,23 @@ export default function Home() {
                 </div>
                 <div>
                   <label
+                    htmlFor="first_name"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Mobile Number
+                  </label>
+                  <input
+                    type="text"
+                    value={ZodaicMolileNumber}
+                    onChange={handleZodiacPhone}
+                    id="mobile_number"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="1234567890"
+                    required
+                  />
+                </div>
+                <div>
+                  <label
                     htmlFor="last_name"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
@@ -607,14 +634,16 @@ export default function Home() {
                     required
                   />
                 </div>
+                <div>
+                  <button
+                    className="text-white bg-blue-700 ml-2 mt-6 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-md w-full md:w-auto px-10 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    type="button"
+                    onClick={resetValue}
+                  >
+                    Get Started
+                  </button>
+                </div>
               </div>
-              <button
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                type="button"
-                onClick={resetValue}
-              >
-                Get Started
-              </button>
             </div>
           </div>
           <div className={`${styles.buyingZodicRight}`}>
@@ -668,7 +697,7 @@ export default function Home() {
         <div className={` ${styles.agentLeftMain}`}>
           <img
             className={` ${styles.agentImage}`}
-            src="/img/zodiac-signs.jpg"
+            src="/img/agentImg-removebg-preview.png"
             alt=""
           />
         </div>
@@ -1069,7 +1098,7 @@ export default function Home() {
             </div>
             <div>
               <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400 m-2"><span>Direction : </span>{propertyByZodaicProperty?.data?.Facing?.Facing}</p>
-              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400 m-2"><span>Zodiac Sign : </span>{propertyByZodaicProperty?.data?.rashi}</p>
+              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400 m-2"><span>Zodiac Sign : </span>{propertyByZodaicProperty?.data?.sign}</p>
             </div>
           </div>
         </Modal.Body>

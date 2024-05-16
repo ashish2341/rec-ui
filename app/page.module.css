@@ -295,12 +295,12 @@ background: linear-gradient(90deg, rgba(56,92,203,1) 0%, rgba(77,117,207,1) 48%,
 .propertiesByAreaBox{
   margin-top: 2rem;
   margin-right: 1.5rem;
-  width: 15.33%;
+  width: 100%;
   border: none;
 }
 .propertiesByAreaBoxImg{
-  height: 8rem;
-  width: 100%;
+  aspect-ratio: 3/2;
+  width: 60%;
 }
 .propertiesByAreaBoxHead{
   font-weight: 800;
@@ -388,6 +388,19 @@ background: linear-gradient(90deg, rgba(56,92,203,1) 0%, rgba(77,117,207,1) 48%,
   align-self: center;
 }
 
+/* megamenu */
+
+.listBoard{
+  display: grid;
+  grid-template-columns: auto auto auto;
+  text-wrap: nowrap;
+  column-gap: 50px;
+}
+
+.listBoardBack{
+  width: 50%;
+  margin-left: 2rem;
+}
 
 /* buyingOpetionWithZodic */
 .buyingOptionWithZodic{
@@ -671,11 +684,31 @@ font-size: 0.8rem;
   justify-content: space-evenly;
 }
 
+.cardBoxPopularTop{
+  margin-right: 1rem;
+}
+
 @media screen and (max-width: 750px) {
   .propertiesByAreaBox{
     width: 100%;
   }
 }
+
+@media screen and (min-width: 1900px) {
+  .buyingZodicLeft{
+    margin-top: 7rem;
+  }
+  .cardImgTop{
+    aspect-ratio: 3/2;
+    width: 100%;
+  }
+  .cardBoxPopularTop{
+    width: 70%;
+    margin-right: 0rem;
+  }
+}
+
+
 @media screen and (max-width: 750px) {
   .propertiesByAreaBox{
     width: 40%;

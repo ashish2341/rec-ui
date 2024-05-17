@@ -23,6 +23,7 @@ import TextComponent from "@/components/common/textComponent";
 import { Carousel } from "flowbite-react";
 import PropertyListCard from "@/components/common/propertyListCard/listCard";
 import SortByButton from "@/components/common/sortbyButton/sortByButton";
+import PriceRangeSlider from "@/components/common/priceRangeModal/priceRangeModal";
 const PropertyListPage = (params) => {
   // fetching Data for facing
   const {
@@ -69,7 +70,9 @@ const PropertyListPage = (params) => {
   } = params.searchParams;
   if (budgetData) {
     var budgetStr = budgetData.split(",");
+    console.log("budgetStr", budgetStr);
     var parsedNumbers = AbbreviatedNumberParser(budgetStr);
+    console.log("parsedNumbers", parsedNumbers);
   }
 
   const [payload, setPayload] = useState({
@@ -101,7 +104,7 @@ const PropertyListPage = (params) => {
   const [numToShow, setNumToShow] = useState(2);
   const [listDataForShow, setListDataForShow] = useState("");
   const [resetBtnValue, setResetBtnValue] = useState(false);
-  // const [listPropertyBySort,setListPropertyBySort]=useState(allPropertiesBySort)
+  const [rangeModalvalue, setRangeModalValue] = useState(true);
 
   const bathroomArray = [
     { value: 1, label: "One" },
@@ -135,12 +138,22 @@ const PropertyListPage = (params) => {
     { itemName: "Popular", urlItem1: true, urlItem2: "" },
   ];
   useEffect(() => {
+    setPayload((prevPayload) => ({
+      ...prevPayload,
+      areaType: areaId
+        ? [{ id: areaId, label: areaLabel }]
+        : prevPayload.areaType,
+    }));
+    console.log("area useEffect working");
+    setResetBtnValue(true);
+  }, [areaId, areaLabel]);
+  useEffect(() => {
     if (payload) {
       const payloadWithId = extractIDsAndUpdateData(payload);
       // console.log("payloadWithId", payloadWithId);
       payloadWithId.budget = payloadWithId.budget.flat();
       payloadWithId.search = searchData;
-      payloadWithId.areaType = areaId;
+      // payloadWithId.areaType = areaId;
       getAllFilterProperties(payloadWithId);
 
       // Check if any array in payload has data
@@ -154,7 +167,6 @@ const PropertyListPage = (params) => {
           break;
         }
       }
-
       // Set resetBtnValue based on whether any array has data
       setResetBtnValue(hasData);
     }
@@ -215,9 +227,11 @@ const PropertyListPage = (params) => {
     ],
   };
   const getAllFilterProperties = async (payloadData) => {
+    console.log("payloadData", payloadData);
     let properties = await GetPropertyByQueryApi(payloadData);
     if (properties?.resData?.success == true) {
       setListData(properties?.resData.data);
+      console.log("properties?.resData?.data", properties?.resData?.data);
       setListDataForShow(properties?.resData?.data.slice(0, 2));
       return false;
     } else {
@@ -586,9 +600,7 @@ const PropertyListPage = (params) => {
                       ))
                     ) : (
                       <li>
-                        <p
-                          className="block px-4 py-2 hover:bg-white dark:hover:bg-gray-200 dark:hover:text-white"
-                        >
+                        <p className="block px-4 py-2 hover:bg-white dark:hover:bg-gray-200 dark:hover:text-white">
                           No data found
                         </p>
                       </li>
@@ -599,47 +611,45 @@ const PropertyListPage = (params) => {
               <div
                 id="dropdownUsers"
                 className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700  "
-                >
+              >
                 <ul
-                  class="h-48 py-2 overflow-y-auto text-gray-700 dark:text-gray-200"
+                  className="h-48 py-2 overflow-y-auto text-gray-700 dark:text-gray-200"
                   aria-labelledby="dropdownUsersButton"
                 >
-                 {areaData?.data?.length > 0 ? (
-                      areaData?.data?.map((item, index) => (
-                        <li key={index}>
-                          <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
-                            <input
-                              id={`checkbox-item-${index}`}
-                              type="checkbox"
-                              name="areaType"
-                              value={JSON.stringify({
-                                id: item._id,
-                                label: item.Area,
-                              })}
-                              checked={payload.areaType.some(
-                                (obj) => obj.id === item._id
-                              )}
-                              onChange={handleCheckBoxChange}
-                              className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                            />
-                            <label
-                              htmlFor={`checkbox-item-${index}`}
-                              className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
-                            >
-                              {item.Area}
-                            </label>
-                          </div>
-                        </li>
-                      ))
-                    ) : (
-                      <li>
-                        <p
-                          className="block px-4 py-2 hover:bg-white dark:hover:bg-gray-200 dark:hover:text-white"
-                        >
-                          No data found
-                        </p>
+                  {areaData?.data?.length > 0 ? (
+                    areaData?.data?.map((item, index) => (
+                      <li key={index}>
+                        <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
+                          <input
+                            id={`checkbox-item-${index}`}
+                            type="checkbox"
+                            name="areaType"
+                            value={JSON.stringify({
+                              id: item._id,
+                              label: item.Area,
+                            })}
+                            checked={payload.areaType.some(
+                              (obj) => obj.id === item._id
+                            )}
+                            onChange={handleCheckBoxChange}
+                            className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                          />
+                          <label
+                            htmlFor={`checkbox-item-${index}`}
+                            className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
+                          >
+                            {item.Area}
+                          </label>
+                        </div>
                       </li>
-                    )}
+                    ))
+                  ) : (
+                    <li>
+                      <p className="block px-4 py-2 hover:bg-white dark:hover:bg-gray-200 dark:hover:text-white">
+                        No data found
+                      </p>
+                    </li>
+                  )}
                 </ul>
               </div>
 
@@ -1251,7 +1261,23 @@ const PropertyListPage = (params) => {
               </div>
               {listDataForShow ? (
                 listDataForShow.length > 0 ? (
-                  <PropertyListCard cardData={listDataForShow} />
+                  listDataForShow.map((cardData,index) => (
+                    <div key={cardData._id}>
+                      <PropertyListCard item={cardData} />
+                      {index==1?(  <PriceRangeSlider
+                        isShow={rangeModalvalue}
+                        setRangeModalValue={setRangeModalValue}
+                        setPayload={setPayload}
+                      />):(null)}
+                    
+
+                      {/* <PriceRangeSlider
+                            isShow={rangeModalvalue}
+                            setRangeModalValue={setRangeModalValue}
+                            setPayload={setPayload}
+                          /> */}
+                    </div>
+                  ))
                 ) : (
                   <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
                 )

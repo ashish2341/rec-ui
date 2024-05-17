@@ -42,10 +42,10 @@ export default function Home() {
 
 
   const facingImage = [
-    "../img/East.png",
-    "../img/West.jpg",
-    "../img/North.png",
-    "../img/South.jpg",
+    "https://jaipurthrumylens.files.wordpress.com/2016/05/picture-of-hawa-mahal-jaipur-jaipurthrumylens.jpg",
+    "https://touringwithpk.com/wp-content/uploads/2024/01/IMG_8447a-700x432.jpg",
+    "https://www.india.com/wp-content/uploads/2022/09/Jal-mahal-1.jpg",
+    "https://assets.cntraveller.in/photos/60ba1bc8f27d46df614fc4a7/16:9/w_1920,h_1080,c_limit/City-Palace-Jaipur-2.jpg",
   ];
 
   const facingSubHeading =[
@@ -719,44 +719,40 @@ export default function Home() {
               Trusted By Best Exclusive <span className="blueText">Astrologer</span>
             </h2>
             <p className={`${styles.agentRightMainText}`}>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Odio ad
-              in eius debitis tenetur!
+            Unlocking Cosmic Wisdom: How Astrology Enhances Your Property Investment Journey
             </p>
           </div>
           <div className={`${styles.agentRightMainContentMain}`}>
             <div className="flex">
               <i className="bi bi-geo-alt-fill"></i>
               <div className={`${styles.agentRightMainContent}`}>
-                <h2 className={`${styles.agentRightMainContentHead}`}>
-                  John Doe
+                <h2 className={`${styles.agentRightMainContentHead} font-semibold`}>
+                Auspicious Timing :
                 </h2>
                 <p className={`${styles.agentRightMainContentText}`}>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit
-                  magnam nihil explicabo harum iure? Incidunt!
+                  Astrology can help determine the most auspicious time (Muhurat) for buying a house. 
                 </p>
               </div>
             </div>
             <div className="flex mt-4">
               <i className="bi bi-geo-alt-fill"></i>
               <div className={`${styles.agentRightMainContent}`}>
-                <h2 className={`${styles.agentRightMainContentHead}`}>
-                  John Doe
+                <h2 className={`${styles.agentRightMainContentHead} font-semibold`}>
+                Financial Stability :
                 </h2>
                 <p className={`${styles.agentRightMainContentText}`}>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit
-                  magnam nihil explicabo harum iure? Incidunt!
+                  Astrological analysis can provide insights into an individual's financial prospects and potential hurdles.
                 </p>
               </div>
             </div>
             <div className="flex mt-4">
               <i className="bi bi-geo-alt-fill"></i>
               <div className={`${styles.agentRightMainContent}`}>
-                <h2 className={`${styles.agentRightMainContentHead}`}>
-                  John Doe
+                <h2 className={`${styles.agentRightMainContentHead} font-semibold`}>
+                  Family Harmony :
                 </h2>
                 <p className={`${styles.agentRightMainContentText}`}>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit
-                  magnam nihil explicabo harum iure? Incidunt!
+                Astrology considers the influence of planetary positions on family dynamics and relationships.
                 </p>
               </div>
             </div>
@@ -994,7 +990,7 @@ export default function Home() {
           </h2>
           <div className={`${styles.propertiesByAreaMainTextMain}`}>
             <p className={`${styles.propertiesByAreaMainText}`}>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+              Discover More: Articles, Tips, and Stories
             </p>
             <a
               href="#"
@@ -1062,9 +1058,7 @@ export default function Home() {
           <div className={`${styles.blogContentMain}`}>
             <h2 className={`${styles.blogContentHead}`}>Get Your Dream Home</h2>
             <p className={`${styles.blogContentText}`}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita,
-              facilis quaerat aperiam odit id voluptates maxime veritatis
-              pariatur, qui tempora quasi est, ea ut dolor.
+            Your Dream Home Journey Begins Now: Dive Into Our Wealth of Options and Turn Your Dreams into Reality
             </p>
             <button
               className={` ${styles.blogMainContenBtn} text-blue bg-white-700 h-12 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}

@@ -32,15 +32,15 @@ const MegaDropdown = () => {
       </button>
       <div 
         id="dropdownNavbarLocation" 
-        className={`${styles.listBoardBack} z-10 ${isOpen ? 'block' : 'hidden'} font-normal bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600`}
+        className={`${styles.listBoardBack} z-10 ${isOpen ? 'block' : 'hidden'} ml-40 font-normal bg-gray-100 divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600`}
       >
-        <ul className={`${styles.listBoard} p-2  text-sm text-gray-700 dark:text-gray-400`} aria-labelledby="dropdownLargeButton">
+        <ul className={`${styles.listBoard} p-2 text-sm text-gray-700 dark:text-gray-400`} aria-labelledby="dropdownLargeButton">
           {areaData ?
             areaData?.data?.map((location, index) => (  
               <li key={index}>
                 <Link 
                   href={`/propertyList/property?areaId=${location._id}&areaLabel=${location.Area}`} 
-                  className="grid px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  className="grid px-4 py-2 hover:bg-white dark:hover:bg-gray-600 dark:hover:text-white"
                   passHref
                   onClick={handleLinkClick} // Add onClick handler to close dropdown
                 >

@@ -21,17 +21,16 @@ const PersonalLoanCalculator = () => {
     const totalPayment = monthlyPayment * numberOfPayments;
     const totalInterest = totalPayment - loanAmount;
     setRepaymentResult(
-      `Monthly Payment: $${monthlyPayment.toFixed(2)}\n` +
-      `Total Payment: $${totalPayment.toFixed(2)}\n` +
-      `Total Interest: $${totalInterest.toFixed(2)}`
+      `Monthly Payment: ₹ ${monthlyPayment.toFixed(2)}\n` +
+      `Total Payment: ₹ ${totalPayment.toFixed(2)}\n` +
+      `Total Interest: ₹${totalInterest.toFixed(2)}`
     );
     setErrorMessageVisible(false);
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg border-2 border-green-500">
-        <h1 className="text-3xl font-bold text-center mb-8">Personal Loan Calculator</h1>
+    <div className="flex justify-center items-center mt-4">
+      <div className="max-w-md w-full bg-grey p-8 rounded-lg shadow-xl border-2">
         <div className="mb-4">
           <label htmlFor="loanAmount" className="block text-gray-700">Loan Amount:</label>
           <input
@@ -56,7 +55,7 @@ const PersonalLoanCalculator = () => {
             onChange={(e) => setInterestRate(e.target.value)}
           />
         </div>
-        <div className="mb-4">
+        <div className="mb-6">
           <label htmlFor="loanTerm" className="block text-gray-700">Loan Term (years):</label>
           <input
             type="number"

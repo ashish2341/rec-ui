@@ -114,15 +114,6 @@ const BuilderPage = () => {
                         <div>
                             <h1>Showing {builderData.count} of {builderData.totalCount}</h1>
                         </div>
-                        <div className={` ${styles.builderDetailDropDown} flex`}>
-                            <h2>Sort by :</h2>
-                            <Dropdown label="" dismissOnClick={false} renderTrigger={() => <span> My custom trigger</span>}>
-                                <Dropdown.Item>Dashboard</Dropdown.Item>
-                                <Dropdown.Item>Settings</Dropdown.Item>
-                                <Dropdown.Item>A-Z</Dropdown.Item>
-                                <Dropdown.Item>Z-A</Dropdown.Item>
-                            </Dropdown>
-                        </div>
                     </div>
                     { builderData ?
                     builderData?.data?.map((item,index) => (

@@ -91,40 +91,47 @@ const AboutUs = () => {
                     </div>
                     <div className={`${styles.aboutusVisionRight}`}>
                         <div className={`${styles.agentRightMainContentMain}`}>
-                            <h1 className={`${styles.aboutHeading} blueText`}>Vision</h1>
-                            <div className="flex mt-4">
+                            <h1 className={`${styles.aboutHeading} blueText`}>Mission</h1>
+                            <div className="flex mt-2">
                             <i className="bi bi-arrow-right mr-1"></i>
                             <div className={`${styles.agentRightMainContent}`}>
-                                <h2 className={`${styles.agentRightMainContentHead}`}>
-                                John Doe
+                                <h2 className={`${styles.agentRightMainContentHead} font-semibold`}>
+                                Community Engagement : 
                                 </h2>
                                 <p className={`${styles.agentRightMainContentText}`}>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit
-                                magnam nihil explicabo harum iure? Incidunt!
+                                We are committed to contributing positively to the communities we serve, ensuring sustainable and inclusive growth.
                                 </p>
                             </div>
                             </div>
-                            <div className="flex mt-4">
+                            <div className="flex mt-2">
                             <i className="bi bi-arrow-right mr-1"></i>
                             <div className={`${styles.agentRightMainContent}`}>
-                                <h2 className={`${styles.agentRightMainContentHead}`}>
-                                John Doe
-                                </h2>
+                                <h2 className={`${styles.agentRightMainContentHead} font-semibold`}>
+                                Transparency :                                </h2>
                                 <p className={`${styles.agentRightMainContentText}`}>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit
-                                magnam nihil explicabo harum iure? Incidunt!
+                                We foster trust by maintaining the highest standards of honesty and openness in all our transactions and interactions.
                                 </p>
                             </div>
                             </div>
-                            <div className="flex mt-4">
+                            <div className="flex mt-2">
                             <i className="bi bi-arrow-right mr-1"></i>
                             <div className={`${styles.agentRightMainContent}`}>
-                                <h2 className={`${styles.agentRightMainContentHead}`}>
-                                John Doe
+                                <h2 className={`${styles.agentRightMainContentHead} font-semibold`}>
+                                Customer-Centric Approach :
                                 </h2>
                                 <p className={`${styles.agentRightMainContentText}`}>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit
-                                magnam nihil explicabo harum iure? Incidunt!
+                                We put our customers at the heart of everything we do, ensuring their needs and preferences guide our innovations and services.
+                                </p>
+                            </div>
+                            </div>
+                            <div className="flex mt-2">
+                            <i className="bi bi-arrow-right mr-1"></i>
+                            <div className={`${styles.agentRightMainContent}`}>
+                                <h2 className={`${styles.agentRightMainContentHead} font-semibold`}>
+                                Integrity : 
+                                </h2>
+                                <p className={`${styles.agentRightMainContentText}`}>
+                               We uphold the highest ethical standards, ensuring our actions always reflect our commitment to fairness and honesty.
                                 </p>
                             </div>
                             </div>
@@ -135,40 +142,37 @@ const AboutUs = () => {
                 <div className={`${styles.aboutusVision} mt-10 mb-10`}>
                 <div className={`${styles.aboutusVisionRight}`}>
                         <div className={`${styles.agentRightMainContentMain}`}>
-                            <h1 className={`${styles.aboutHeading} blueText`}>Mission</h1>
+                            <h1 className={`${styles.aboutHeading} blueText`}>Promise</h1>
                             <div className="flex mt-4">
                             <i className="bi bi-arrow-right mr-1"></i>
                             <div className={`${styles.agentRightMainContent}`}>
-                                <h2 className={`${styles.agentRightMainContentHead}`}>
-                                John Doe
+                                <h2 className={`${styles.agentRightMainContentHead} font-semibold`}>
+                                Expert Support :
                                 </h2>
                                 <p className={`${styles.agentRightMainContentText}`}>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit
-                                magnam nihil explicabo harum iure? Incidunt!
+                                Our team of real estate professionals is always ready to provide personalized guidance and support.
                                 </p>
                             </div>
                             </div>
                             <div className="flex mt-4">
                             <i className="bi bi-arrow-right mr-1"></i>
                             <div className={`${styles.agentRightMainContent}`}>
-                                <h2 className={`${styles.agentRightMainContentHead}`}>
-                                John Doe
+                                <h2 className={`${styles.agentRightMainContentHead} font-semibold`}>
+                                Comprehensive Listings :
                                 </h2>
                                 <p className={`${styles.agentRightMainContentText}`}>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit
-                                magnam nihil explicabo harum iure? Incidunt!
+                                 Access a wide range of verified listings that cater to diverse needs and budgets.
                                 </p>
                             </div>
                             </div>
                             <div className="flex mt-4">
                             <i className="bi bi-arrow-right mr-1"></i>
                             <div className={`${styles.agentRightMainContent}`}>
-                                <h2 className={`${styles.agentRightMainContentHead}`}>
-                                John Doe
+                                <h2 className={`${styles.agentRightMainContentHead} font-semibold`}>
+                                Simplified Processes : 
                                 </h2>
                                 <p className={`${styles.agentRightMainContentText}`}>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit
-                                magnam nihil explicabo harum iure? Incidunt!
+                                Whether you’re a first-time homebuyer or a seasoned investor, our platform is designed to provide a hassle-free experience.
                                 </p>
                             </div>
                             </div>
@@ -187,3 +191,7 @@ const AboutUs = () => {
 }
 
 export default AboutUs;
+
+
+
+

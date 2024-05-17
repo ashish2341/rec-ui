@@ -8,7 +8,7 @@ const TextComponent = ({ text }) => {
   };
 
   const renderText = () => {
-    const maxCharsPerLine = 150; // Adjust as needed
+    const maxCharsPerLine = 140; // Adjust as needed
     const lines = text.match(new RegExp(`.{1,${maxCharsPerLine}}`, "g"));  
     const visibleLines = showAll ? lines : lines?.slice(0, 4);
     return (

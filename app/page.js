@@ -20,6 +20,7 @@ import Spinner from "@/components/common/loading";
 import SkeletonLoader from "@/components/common/loader";
 import SearchBar from "./search";
 import AreaMultiCarousel from "../components/common/areapropertyCarousel";
+import { AddZodaic } from "@/api-functions/zodiac/addZodiac";
 
 export default function Home() {
  
@@ -285,16 +286,27 @@ export default function Home() {
   const handleZodiacPhone = (e) => {
     setZodaicPhone(e.target.value)
   }
-  const resetValue = () => {
+
+
+  const resetValue = async() => {
     if(Dob=="" || ZodiacName=="" || ZodaicMolileNumber == ""){
-      toast.error("Please fill Dob & Name Field.")
+      toast.warn("Please fill D.O.B. & Name Field.")
       return false
     }
     setOpenModal(true);
-  };
-
-  let ZodiacData = { ZodiacName, ZodaicMolileNumber, Dob};
-
+    let ZodiacData = { Name : ZodiacName, MobileNumber : ZodaicMolileNumber, DateOfBirth: Dob};
+    let res = await AddZodaic(ZodiacData);
+    if(res?.resData?.success == true){
+      console.log("res",res);
+      setName("");
+      setPhone("");
+      setMessage("");
+      setEmail("");
+     }else{
+       toast.error(res.errMessage);
+       return false;
+     }
+  }
 
   const onResetValue =() => {
     setOpenModal(false);
@@ -602,7 +614,7 @@ export default function Home() {
                 </div>
                 <div>
                   <label
-                    htmlFor="first_name"
+                    htmlFor="mobile_number"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Mobile Number
@@ -1107,7 +1119,7 @@ export default function Home() {
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-small rounded-lg text-sm w-full sm:w-auto px-2.5 py-0.75 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             type="button"
             onClick={onResetValue}
-            href={`/propertyList/facingId=${propertyByZodaicProperty?.data?.Facing?._id}`}
+            href={`/propertyList/property?facingId=${propertyByZodaicProperty?.data?.Facing?._id}&facingLabel=${propertyByZodaicProperty?.data?.Facing?.Facing}`}
           >
             Show Properties
           </Button>

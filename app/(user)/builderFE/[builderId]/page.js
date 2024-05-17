@@ -213,7 +213,7 @@ const BuilderHomePage = (params) => {
                                 <i className="bi bi-geo-alt-fill"></i>
                                 <p className={`text-gray-700`}>{item.Address}</p>
                                 </div>
-                                <h2 className={` ${styles.populerPropertiesBoxHead} text-2xl pt-2`}>
+                                <h2 className={` ${styles.populerPropertiesBoxHead} font-semibold text-2xl pt-2`}>
                                 {item.Titile}
                                 </h2>
                                 <h2 className={` ${styles.populerPropertiesBoxHead} text-sm pt-2`}>

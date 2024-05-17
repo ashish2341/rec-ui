@@ -39,7 +39,8 @@ const BuilderPage = () => {
           return false;
         }
       };
-      
+      const date = new Date(developData?.data?.EstablishDate);
+      const year = date.getFullYear();
     return(
         <>
         <Navbar />
@@ -99,7 +100,7 @@ const BuilderPage = () => {
                             <Avatar key={index} img={item.Logo} size="md" className="mr-2 ml-1 justify-start p-4" rounded>
                                 <div className="dark:text-white">
                                     <div className="text-xs font-semibold blueText text-nowrap">{item.Name}</div>
-                                    <div className="text-xs text-gray-500 dark:text-gray-400">Joined in {(item.EstablishDate).substring(0, 4)}</div>
+                                    <div className="text-xs text-gray-500 dark:text-gray-400">Joined in {(item.EstablishDate ? String(item.EstablishDate).substring(0, 4) : 'N/A')}</div>
                                 </div>
                             </Avatar>
                             </Link>
@@ -136,7 +137,7 @@ const BuilderPage = () => {
                                 <h5 className="text-lg font-bold  text-gray-900 dark:text-white blueText">
                                     {item.Name}
                                 </h5>
-                                <p className="text-sm text-gray-500 dark:text-white mb-4">Year estd. {(item.EstablishDate).substring(0, 4)}</p>
+                                <p className="text-sm text-gray-500 dark:text-white mb-4">Year estd. {(item.EstablishDate ? String(item.EstablishDate).substring(0, 4) : 'N/A')}</p>
                                 <p className="text-sm text-gray-700 dark:text-black-400">
                                     {item.Description}
                                 </p>

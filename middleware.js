@@ -3,8 +3,7 @@ import jwt from "@tsndr/cloudflare-worker-jwt";
 
 export const config = {
   matcher: [
-    // "/",
-    "/dashboard",
+       "/dashboard",
   ],
 };
 
@@ -13,15 +12,17 @@ export default async function middleware(req) {
   
   try {
     const token = req.cookies.get("token");
-    console.log('Token:', token);
+    const roleData = req.cookies.get("roles") ?? '';
+    // const roles = JSON.parse(roleData)
+    console.log('roleData', roleData.value);
 
     if (!token) {
       console.log('Token not found, redirecting to login page');
       return NextResponse.redirect(`http://localhost:3000/login`);
     }
     const cleanedToken = token.value.replace(/"/g, '');
-    const isValid = await jwt.verify(cleanedToken, process.env.JWT_SECRET_KEY);
-    console.log('Token validation result:', isValid);
+    const isValid = await jwt.verify(cleanedToken, process.env.JWT);
+    console.log('Token validation result:', process.env.JWT);
 
     if (!isValid ) {
       console.log('Invalid token, redirecting to login page');

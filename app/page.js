@@ -796,7 +796,7 @@ export default function Home() {
           <div className={` ${styles.faqLeft}`}>
             <Accordion collapseAll className="border-none">
               {faqData?.data?.map((item, index) => (
-                <Accordion.Panel key={index}>
+                <Accordion.Panel className= {`${styles.faqItemMainBox}`} key={index}>
                   <Accordion.Title
                     className={` ${styles.faqItemMain} rounded-t-md text-white bg-blue-700 hover:bg-blue-700
                       focus:border-none focus:ring-grey-0 focus:ring-0`}

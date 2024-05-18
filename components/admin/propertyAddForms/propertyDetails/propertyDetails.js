@@ -6,12 +6,16 @@ import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
+import Cookies from "js-cookie";
 import { FormatNumber } from "@/utils/commonHelperFn";
-
 export default function PropertyDetailsForm({
   valueForNext,
   valueForNextPage,
 }) {
+  const roleData = Cookies.get("roles") ?? "";
+  const name = Cookies.get("name");
+  const roles = roleData && JSON.parse(roleData);
+  const userId = Cookies.get("userId");
   // fetching Data for facing
   const {
     data: facingData,
@@ -151,16 +155,16 @@ export default function PropertyDetailsForm({
   //Loan Details
   const [isLoanable, setIsLoanable] = useState("");
   const [isAlreadyLoaned, setIsAlreadyLoaned] = useState("");
- const[startPrice,setStartPrice]=useState("")
- const[endPrice,setEndPrice]=useState("")
+  const [startPrice, setStartPrice] = useState("");
+  const [endPrice, setEndPrice] = useState("");
   const [byBank, setByBank] = useState([]);
   const [loanSince, setLoanSince] = useState("");
   const [loanTill, setLoanTill] = useState("");
   const [areaUnits, setAreaUnits] = useState("");
   const [brochure, setBrochure] = useState("");
   const brochureInputRef = useRef(null);
-  const [builderData,setBuilderData]=useState("")
-  const [builderName,setBuilderName]=useState("")
+  const [builderData, setBuilderData] = useState("");
+  const [builderName, setBuilderName] = useState("");
   //Purchase Details
   // const [purchaseDetails, setPurchaseDetails] = useState({
   //   BuyerId: "",
@@ -174,7 +178,7 @@ export default function PropertyDetailsForm({
   useEffect(() => {
     getAllBuilder();
   }, []);
-  
+
   const getAllBuilder = async () => {
     let builder = await GetBuilderApi();
     if (builder?.resData?.success == true) {
@@ -201,17 +205,13 @@ export default function PropertyDetailsForm({
         "if function called sessionStoragePropertyData.PropertyFor ",
         sessionStoragePropertyData.ProeprtyFor
       );
-      console.log("sessionStoragePropertyData?.Brochure",sessionStoragePropertyData?.Brochure)
+      console.log(
+        "sessionStoragePropertyData?.Brochure",
+        sessionStoragePropertyData?.Brochure
+      );
       // setPropertyType(sessionStoragePropertyData.PropertyType || "");
       setFacing(sessionStoragePropertyData?.Facing || "");
 
-      setIsEnabled(
-        sessionStoragePropertyData?.IsEnabled === true
-          ? true
-          : sessionStoragePropertyData?.IsEnabled === undefined
-          ? true
-          : false
-      );
       setIsExclusive(
         sessionStoragePropertyData?.IsExclusive === true
           ? true
@@ -219,13 +219,7 @@ export default function PropertyDetailsForm({
           ? null
           : false
       );
-      setIsFeatured(
-        sessionStoragePropertyData?.IsFeatured === true
-          ? true
-          : sessionStoragePropertyData?.IsFeatured === undefined
-          ? null
-          : false
-      );
+
       setIsNew(
         sessionStoragePropertyData?.IsNew === true
           ? true
@@ -327,11 +321,41 @@ export default function PropertyDetailsForm({
       setByBank(sessionStoragePropertyData?.LoanDetails?.ByBank || "");
       setLoanSince(sessionStoragePropertyData?.LoanDetails?.LoanSince || "");
       setLoanTill(sessionStoragePropertyData?.LoanDetails?.LoanTill || "");
-      setBuilderName(sessionStoragePropertyData?.Builder || "")
-      
+      if (roles.includes("Admin")) {
+        setIsEnabled(
+          sessionStoragePropertyData?.IsEnabled === true
+            ? true
+            : sessionStoragePropertyData?.IsEnabled === undefined
+            ? true
+            : false
+        );
+        setIsFeatured(
+          sessionStoragePropertyData?.IsFeatured === true
+            ? true
+            : sessionStoragePropertyData?.IsFeatured === undefined
+            ? null
+            : false
+        );
+        setBuilderName(sessionStoragePropertyData?.Builder || "");
+      } else {
+        setIsEnabled(
+          sessionStoragePropertyData?.IsEnabled === false
+            ? false
+            : sessionStoragePropertyData?.IsEnabled === undefined
+            ? false
+            : false
+        );
+        setIsFeatured(
+          sessionStoragePropertyData?.IsFeatured === false
+            ? false
+            : sessionStoragePropertyData?.IsFeatured === undefined
+            ? false
+            : false
+        );
+        // setBuilderName(sessionStoragePropertyData?.Builder || "");
+      }
     }
   }, []);
-
 
   const handelIsEnabled = (e) => {
     console.log("Is Enabled:", e.target.value === "true");
@@ -401,47 +425,49 @@ export default function PropertyDetailsForm({
   const handleBankNameChange = (e) => {
     setByBank(e.map((item) => ({ _id: item.value, BankName: item.label })));
   };
-  const  handleDocumentChange = async (event) => {
-    const acceptedFileTypes = ["application/pdf",
-    "application/doc","application/.docx","application/ .txt"];
+  const handleDocumentChange = async (event) => {
+    const acceptedFileTypes = [
+      "application/pdf",
+      "application/doc",
+      "application/.docx",
+      "application/ .txt",
+    ];
 
     const file = event.target.files[0]; // Get the first file only
-    const formData= new FormData()
-    formData.append("profilePic",file)
+    const formData = new FormData();
+    formData.append("profilePic", file);
     console.log("image File", file);
 
     // Check file type
     if (!acceptedFileTypes.includes(file.type)) {
-        toast.error("Invalid image type. Please upload only JPEG or PNG or JPG files.");
-        if (brochureInputRef.current) {
-          brochureInputRef.current.value = "";
-        }
-    } else{
-      let res = await ImageString(formData)
-      console.log("image resPonse Data=>",res)
-      if(res.successMessage){
-       // router.push("/dashboard");
-       console.log("Image Response",res.successMessage.imageUrl)
+      toast.error(
+        "Invalid image type. Please upload only JPEG or PNG or JPG files."
+      );
+      if (brochureInputRef.current) {
+        brochureInputRef.current.value = "";
+      }
+    } else {
+      let res = await ImageString(formData);
+      console.log("image resPonse Data=>", res);
+      if (res.successMessage) {
+        // router.push("/dashboard");
+        console.log("Image Response", res.successMessage.imageUrl);
         setBrochure(res.successMessage.imageUrl);
-      }else{
+      } else {
         toast.error(res.errMessage);
         return;
       }
-     
     }
-
-     
-    
   };
+
   
 
- 
   const checkRequiredFields = () => {
     const requiredFields = [
       facing,
-      isEnabled,
+      // isEnabled,
       isExclusive,
-      isFeatured,
+      // isFeatured,
       isNew,
       reraNumber,
       propertyFor,
@@ -485,7 +511,7 @@ export default function PropertyDetailsForm({
       loanTill,
       bhkType,
       brochure,
-      builderName
+      // builderName
     ];
 
     // Check if any required field is empty
@@ -498,10 +524,10 @@ export default function PropertyDetailsForm({
 
   //SUbmit form
   const SubmitForm = () => {
-  console.log("")
+    console.log("");
     const allFieldsFilled = checkRequiredFields();
-    let minPrice=FormatNumber(parseInt(startPrice));
-    let maxPrice=FormatNumber(parseInt(endPrice));
+    let minPrice = FormatNumber(parseInt(startPrice));
+    let maxPrice = FormatNumber(parseInt(endPrice));
     const LoanDetails = {
       ByBank: byBank,
       LoanSince: loanSince,
@@ -513,16 +539,10 @@ export default function PropertyDetailsForm({
         toast.error("Please fill in all required fields!");
         return false;
       }
-      console.log("BY BANK DATA BY INPUT ", byBank);
-      console.log("loan since DATA BY INPUT ", loanSince);
-      console.log("loan till DATA BY INPUT ", loanTill);
 
-      console.log("LoanDetails", LoanDetails);
       const propertyDetailsData = {
         // propertyType: propertyType.trim(),
         Facing: facing,
-        IsEnabled: isEnabled,
-        IsExclusive: isExclusive,
         IsFeatured: isFeatured,
         IsNew: isNew,
         ProeprtyFor: propertyFor,
@@ -536,7 +556,11 @@ export default function PropertyDetailsForm({
         LandArea: landArea,
         CoveredArea: coveredArea,
         CarpetArea: carpetArea,
-         TotalPrice: {DisplayValue:`${minPrice} - ${maxPrice}`,MinValue:startPrice,MaxValue:endPrice},
+        TotalPrice: {
+          DisplayValue: `${minPrice} - ${maxPrice}`,
+          MinValue: startPrice,
+          MaxValue: endPrice,
+        },
         PerUnitPrice: perUnitPrice,
         IsDisplayPrice: isDisplayPrice,
         IsNegotiable: isNegotiable,
@@ -564,10 +588,14 @@ export default function PropertyDetailsForm({
         LoanDetails: LoanDetails,
         AreaUnits: areaUnits,
         BhkType: bhkType,
-        Brochure:brochure,
-        Builder:builderName
+        Brochure: brochure,
+        IsEnabled: isEnabled,
+        IsExclusive: isExclusive,
         // PurchaseRentBy: purchaseDetails,
       };
+      if(roles.includes("Admin")){
+        propertyDetailsData.Builder=builderName
+      }
       console.log("propertyDetailsData before checking ", propertyDetailsData);
       const localStorageData = JSON.parse(
         sessionStorage.getItem("propertyData")
@@ -670,39 +698,42 @@ export default function PropertyDetailsForm({
             </div>
 
             {/* Is Enabled */}
-            <div>
-              <label
-                htmlFor="isEnabled"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Is Enabled
-              </label>
-              <input
-                type="radio"
-                name="isEnabled"
-                id="isEnabled"
-                value="true"
-                required=""
-                checked={isEnabled == true}
-                onChange={handelIsEnabled}
-              />
-              <label htmlFor="isEnabled" className="mr-3 ml-2">
-                Yes
-              </label>
-              <input
-                type="radio"
-                name="isEnabled"
-                id="isEnabled"
-                value="false"
-                required=""
-                checked={isEnabled == false}
-                onChange={handelIsEnabled}
-                className="form-radio h-5 w-5 text-red-600"
-              />
-              <label htmlFor="isEnabled" className="ml-2">
-                No
-              </label>
-            </div>
+            {roles.includes("Admin") && (
+              <div>
+                <label
+                  htmlFor="isEnabled"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                >
+                  Is Enabled
+                </label>
+                <input
+                  type="radio"
+                  name="isEnabled"
+                  id="isEnabled"
+                  value="true"
+                  required=""
+                  checked={isEnabled == true}
+                  onChange={handelIsEnabled}
+                />
+                <label htmlFor="isEnabled" className="mr-3 ml-2">
+                  Yes
+                </label>
+                <input
+                  type="radio"
+                  name="isEnabled"
+                  id="isEnabled"
+                  value="false"
+                  required=""
+                  checked={isEnabled == false}
+                  onChange={handelIsEnabled}
+                  className="form-radio h-5 w-5 text-red-600"
+                />
+                <label htmlFor="isEnabled" className="ml-2">
+                  No
+                </label>
+              </div>
+            )}
+
             {/*  Is Exclusive*/}
             <div>
               <label
@@ -738,39 +769,42 @@ export default function PropertyDetailsForm({
               </label>
             </div>
             {/*  Is Featured*/}
-            <div>
-              <label
-                htmlFor="isFeatured"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Is Featured
-              </label>
-              <input
-                type="radio"
-                name="isFeatured"
-                id="isFeatured"
-                value="true"
-                required=""
-                checked={isFeatured == true}
-                onChange={handelIsFeatured}
-              />
-              <label htmlFor="isFeatured" className="mr-3 ml-2">
-                Yes
-              </label>
-              <input
-                type="radio"
-                name="isFeatured"
-                id="isFeatured"
-                value="false"
-                required=""
-                checked={isFeatured == false}
-                onChange={handelIsFeatured}
-                className="form-radio h-5 w-5 text-red-600"
-              />
-              <label htmlFor="isFeatured" className="ml-2">
-                No
-              </label>
-            </div>
+            {roles.includes("Admin") && (
+              <div>
+                <label
+                  htmlFor="isFeatured"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                >
+                  Is Featured
+                </label>
+                <input
+                  type="radio"
+                  name="isFeatured"
+                  id="isFeatured"
+                  value="true"
+                  required=""
+                  checked={isFeatured == true}
+                  onChange={handelIsFeatured}
+                />
+                <label htmlFor="isFeatured" className="mr-3 ml-2">
+                  Yes
+                </label>
+                <input
+                  type="radio"
+                  name="isFeatured"
+                  id="isFeatured"
+                  value="false"
+                  required=""
+                  checked={isFeatured == false}
+                  onChange={handelIsFeatured}
+                  className="form-radio h-5 w-5 text-red-600"
+                />
+                <label htmlFor="isFeatured" className="ml-2">
+                  No
+                </label>
+              </div>
+            )}
+
             {/*  Is New*/}
             <div>
               <label
@@ -1151,7 +1185,7 @@ export default function PropertyDetailsForm({
                 htmlFor="startPrice"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
               >
-               Start Price
+                Start Price
               </label>
               <input
                 type="number"
@@ -1163,13 +1197,13 @@ export default function PropertyDetailsForm({
                 onChange={(e) => setStartPrice(e.target.value)}
               />
             </div>
-             {/* End Price */}
-             <div>
+            {/* End Price */}
+            <div>
               <label
                 htmlFor="endPrice"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
               >
-               End Price
+                End Price
               </label>
               <input
                 type="number"
@@ -1177,7 +1211,7 @@ export default function PropertyDetailsForm({
                 id="endPrice"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="End Price"
-                value={endPrice} 
+                value={endPrice}
                 onChange={(e) => setEndPrice(e.target.value)}
               />
             </div>
@@ -1280,8 +1314,7 @@ export default function PropertyDetailsForm({
                 <Select
                   options={posessionStatusData.data.map((element) => ({
                     value: element._id,
-                    label: element.Possession
-                    ,
+                    label: element.Possession,
                   }))}
                   placeholder="Select One"
                   onChange={setPosessionStatus}
@@ -1299,7 +1332,6 @@ export default function PropertyDetailsForm({
                 />
               )}
             </div>
-          
 
             {/* PosessionDate */}
             <div>
@@ -1765,13 +1797,13 @@ export default function PropertyDetailsForm({
               )}
             </div>
 
-             {/* BuilderData */}
-             <div>
+            {/* BuilderData */}
+            {roles.includes("Admin") &&  <div>
               <label
                 htmlFor="builder"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
               >
-               Builder Name
+                Builder Name
               </label>
               {builderData ? (
                 <Select
@@ -1794,7 +1826,8 @@ export default function PropertyDetailsForm({
                   required={true}
                 />
               )}
-            </div>
+            </div>}
+           
             {/* brochure */}
             <div>
               <label
@@ -1813,29 +1846,28 @@ export default function PropertyDetailsForm({
                 onChange={handleDocumentChange}
                 ref={brochureInputRef}
               />
-              
-            </div>
-            
-            <div>
-            {brochure ? (
+               <div>
+              {brochure ? (
                 <div>
                   <div className="ml-2 mt-3 underline font-bold">
                     <h3>Selected Brochure</h3>
                   </div>
                   <div className="flex flex-wrap relative mt-3">
-                      <div  className="mr-4 mb-4 relative">
-                        <iframe
-                          src={brochure}
-                          className="h-48 w-64 border border-black rounded-lg"
-                        />
-                      </div>
-                  
+                    <div className="mr-4 mb-4 relative">
+                      <iframe
+                        src={brochure}
+                        className="h-48 w-64 border border-black rounded-lg"
+                      />
+                    </div>
                   </div>
                 </div>
               ) : null}
             </div>
+            </div>
+
+           
             {/* Loan details */}
-                {/* <div></div> */}
+            {/* <div></div> */}
             <h3 className="mb-4 text-lg mt-5 font-medium leading-none text-gray-900 dark:text-white font-bold underline">
               Loan Details
             </h3>
@@ -1987,98 +2019,7 @@ export default function PropertyDetailsForm({
               />
             </div>
 
-            {/* Purchase details */}
-            {/* <div></div>
-            <h3 className="mb-4 text-lg mt-5 font-medium leading-none text-gray-900 dark:text-white font-bold underline">
-              Purchase Details
-            </h3>
-            <div></div>
-            <div>
-              <label
-                htmlFor="buyerId"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Buyer ID
-              </label>
-              <input
-                type="text"
-                name="BuyerId"
-                id="buyerId"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Buyer ID"
-                value={purchaseDetails.BuyerId}
-                onChange={handlePurchaseChange}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="sellerId"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Seller ID
-              </label>
-              <input
-                type="text"
-                name="SellerId"
-                id="sellerId"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Seller ID"
-                value={purchaseDetails.SellerId}
-                onChange={handlePurchaseChange}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="purchaseDate"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Purchase Date
-              </label>
-              <input
-                type="date"
-                name="PurchaseDate"
-                id="purchaseDate"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Purchase Date"
-                value={purchaseDetails.PurchaseDate}
-                onChange={handlePurchaseChange}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="purchaseAmount"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Purchase Amount
-              </label>
-              <input
-                type="number"
-                name="PurchaseAmount"
-                id="purchaseAmount"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Purchase Amount"
-                value={purchaseDetails.PurchaseAmount}
-                onChange={handlePurchaseChange}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="registryNumber"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Registry Number
-              </label>
-              <input
-                type="text"
-                name="RegistryNumber"
-                id="registryNumber"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Registry Number"
-                value={purchaseDetails.RegistryNumber}
-                onChange={handlePurchaseChange}
-              />
-            </div>
-            */}
+         
           </div>
         </form>
         <div>

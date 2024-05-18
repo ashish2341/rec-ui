@@ -7,6 +7,7 @@ import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
 import Cookies from "js-cookie";
+import { FormatNumber } from "@/utils/commonHelperFn";
 export default function PropertyDetailsForm({
   valueForNext,
   valueForNextPage,
@@ -496,24 +497,7 @@ console.log("posessionStatusData", posessionStatusData);
      
     
   };
-  const  formatNumber = (number) => {
-    console.log("number",number)
-    console.log("typeof number",typeof number)
-    if (typeof number !== 'number') {
-        toast.error('Input must be a number');
-    }
-    
-    if (number >= 10000000) {
-        return (number / 10000000).toFixed(2) + ' Cr';
-    } else if (number >= 100000) {
-        return (number / 100000).toFixed(2) + ' L';
-    } else if(number>=1000) {
-      return (number / 1000).toFixed(2) + ' K';
-       
-    } else {
-      return number.toString();
-    }
-}
+
 const checkRequiredFields = () => {
   const requiredFields = [
     facing,
@@ -582,8 +566,8 @@ const checkRequiredFields = () => {
       LoanTill: loanTill,
     };
      const allFieldsFilled = checkRequiredFields();
-     let minPrice=formatNumber(parseInt(startPrice));
-     let maxPrice=formatNumber(parseInt(endPrice));
+     let minPrice=FormatNumber(parseInt(startPrice));
+     let maxPrice=FormatNumber(parseInt(endPrice));
     if (allFieldsFilled) {
       console.log("facing", facing);
       console.log("fencing", fencing);

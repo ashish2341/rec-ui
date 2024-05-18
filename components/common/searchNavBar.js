@@ -14,7 +14,7 @@ const SearchBar = () => {
   useEffect(() => {}, [query]);
 
   return (
-    <form onSubmit={handleSubmit} className="relative">
+    <form onSubmit={handleSubmit} className="relative mr-5">
       <input
         type="text"
         placeholder="Search..."
@@ -24,7 +24,7 @@ const SearchBar = () => {
       />
       <button 
         type="submit"                           
-        className={`absolute top-0 end-0 text-white bg-blue-700 h-31 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-md text-sm px-1.5 py-1.5  mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800`}
+        className={`absolute top-0 end-0 text-white bg-blue-700 h-31 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-md text-sm px-1.5 py-2  mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800`}
       >
         <i className="bi bi-search"></i>
       </button>

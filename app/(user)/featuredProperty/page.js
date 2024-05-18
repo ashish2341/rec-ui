@@ -1113,7 +1113,9 @@ const FeaturedProperty = (params) => {
                   <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
                 )
               ) : (
-                <LoadingSideImg />
+                <div className={`mb-3 ml-3 ${styles.GeneralDetailsBox}`}>
+                  <LoadingSideImg />
+                </div>
               )}
             </div>
           </div>

@@ -201,7 +201,8 @@ background: linear-gradient(90deg, rgba(56,92,203,1) 0%, rgba(77,117,207,1) 48%,
 .innerCampass{
   position: absolute;
   height: 15rem;
-  margin-left: 3.3rem;
+  margin-left: 3.4rem;
+  margin-top: 3rem;
 }
 @-webkit-keyframes innerCampass /* Safari and Chrome */ {
   from {
@@ -548,8 +549,10 @@ margin-top: 6rem;
   margin-right: 14rem;
   margin-left: 14rem;
 }
+
 .faqMain{
   text-align: center;
+  
 }
 .faqHead{
 font-size: 2rem;
@@ -567,6 +570,7 @@ font-size: 0.8rem;
 }
 .faqItemMain{
   margin-top: 1rem;
+  border-radius: 20px !important;
 }
 .faqRight{
   width: 50%;
@@ -687,6 +691,8 @@ font-size: 0.8rem;
 .cardBoxPopularTop{
   margin-right: 1rem;
 }
+
+
 
 @media screen and (max-width: 750px) {
   .propertiesByAreaBox{

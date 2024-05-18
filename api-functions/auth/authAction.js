@@ -10,7 +10,6 @@ export const logoutUser = () => {
 
 export const loginUser = async (payload,setLoading=()=>{}) => {
   setLoading(true);
-console.log('API_BASE_URL',API_BASE_URL)
   try {
     const res = await fetch(`${API_BASE_URL}/auth/login`, {
       method: "POST",
@@ -25,7 +24,9 @@ console.log('API_BASE_URL',API_BASE_URL)
     if (resData?.success) {
       //toast.success("SuccessFully Login");
       Cookies.set("token", resData?.message);
-      
+      Cookies.set("userId", resData?.userId);
+      Cookies.set("name", resData?.firstName);
+      Cookies.set("roles", JSON.stringify(resData?.role));
 
       setLoading(false);
       return {token:resData?.message};

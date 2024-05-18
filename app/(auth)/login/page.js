@@ -42,7 +42,7 @@ export default function Login() {
       return false;
     }
     let res = await loginUser({Mobile,Password})
-    console.log("resDaat inside loginpage ",res)
+   
     if(res.token){
       router.push("/dashboard");
       toast.success("LogIn Successfully")

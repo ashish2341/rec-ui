@@ -67,7 +67,7 @@ const AstrologerPage = () => {
             <div className={`${styles.backGroundyellow}`}>
             <div className={`${styles.buyingOptionWithZodic}`}>
                     <div className={`${styles.buyingWithZodicMain}`}>
-                    <div className={`${styles.buyingZodicLeft} mt-2`}>
+                    <div className={`${styles.buyingZodicLeft} mt-10`}>
                         <div>
                         <h2 className={`${styles.buyingZodicHead}`}>
                             Let's Find The Right Buying Option With{" "}

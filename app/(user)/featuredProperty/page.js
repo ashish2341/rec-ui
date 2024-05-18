@@ -22,6 +22,7 @@ import LoadingSideImg from "@/components/common/sideImgLoader";
 import PropertyListCard from "@/components/common/propertyListCard/listCard";
 import SortByButton from "@/components/common/sortbyButton/sortByButton";
 import TextComponent from "@/components/common/textComponent";
+import PriceRangeSlider from "@/components/common/priceRangeModal/priceRangeModal";
 const FeaturedProperty = (params) => {
   // fetching Data for facing
   const {
@@ -92,7 +93,7 @@ const FeaturedProperty = (params) => {
     IsFeatured:"",
     IsExclusive:"",
   });
-  // console.log("Outeside payload", payload);
+ console.log("Outeside payload", payload);
   const pathname = usePathname();
   const [expanded, setExpanded] = useState(false);
   const [activeSection, setActiveSection] = useState("general");
@@ -101,6 +102,7 @@ const FeaturedProperty = (params) => {
   const [numToShow, setNumToShow] = useState(2);
   const [listDataForShow, setListDataForShow] = useState("");
   const [resetBtnValue, setResetBtnValue] = useState(false);
+  const [rangeModalvalue, setRangeModalValue] = useState(true);
   const bathroomArray = [
     { value: 1, label: "One" },
     { value: 2, label: "Two" },
@@ -203,7 +205,7 @@ const FeaturedProperty = (params) => {
     }
   };
   const handleRangeCheckBoxChange = (event) => {
-    const { value } = event.target;
+    const { value,checked } = event.target;
 
     // Parse the value string into an array of numbers
     const [value1, value2] = JSON.parse(value);
@@ -469,7 +471,7 @@ const FeaturedProperty = (params) => {
                   className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
                 >
                   <ul
-                    className="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
+                    className="h-48 py-2 overflow-y-auto text-gray-700 dark:text-gray-200 "
                     aria-labelledby="dropdownAreTypeButton"
                   >
                     {areaData ? (
@@ -1090,7 +1092,23 @@ const FeaturedProperty = (params) => {
               </div>
               {listDataForShow ? (
                 listDataForShow.length > 0 ? (
-                  <PropertyListCard cardData={listDataForShow}/>
+                  listDataForShow.map((cardData,index) => (
+                    <div key={cardData._id}>
+                      <PropertyListCard item={cardData} />
+                      {index==1?(  <PriceRangeSlider
+                        isShow={rangeModalvalue}
+                        setRangeModalValue={setRangeModalValue}
+                        setPayload={setPayload}
+                      />):(null)}
+                    
+
+                      {/* <PriceRangeSlider
+                            isShow={rangeModalvalue}
+                            setRangeModalValue={setRangeModalValue}
+                            setPayload={setPayload}
+                          /> */}
+                    </div>
+                  ))
                 ) : (
                   <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
                 )

@@ -188,17 +188,6 @@ const BuilderHomePage = (params) => {
                     </div>
                 </div>
                 <div className={` ${styles.builderDetailPageRight}`}>
-                    <div>
-                        <div className={` ${styles.builderDetailDropDown} flex justify-end mb-2`}>
-                                <h2>Sort by :</h2>
-                                <Dropdown label="" dismissOnClick={false} renderTrigger={() => <span> My custom trigger</span>}>
-                                    <Dropdown.Item>Dashboard</Dropdown.Item>
-                                    <Dropdown.Item>Settings</Dropdown.Item>
-                                    <Dropdown.Item>Earnings</Dropdown.Item>
-                                    <Dropdown.Item>Sign out</Dropdown.Item>
-                                </Dropdown>
-                         </div>
-                    </div>
                     {developData ?
                     developData?.data?.properties.map((item,index) => (
                     <Link  key={index} href={`/propertyDetail/${item._id}`}>

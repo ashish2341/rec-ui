@@ -399,7 +399,7 @@ background: linear-gradient(90deg, rgba(56,92,203,1) 0%, rgba(77,117,207,1) 48%,
 
 .listBoardBack{
   width: 50%;
-  margin-left: 2rem;
+  margin-left: 10rem !important;
 }
 
 /* buyingOpetionWithZodic */

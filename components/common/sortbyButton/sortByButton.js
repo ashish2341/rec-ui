@@ -67,8 +67,8 @@ const SortByButton = ({ arrayItem, updatePayload }) => {
             <ul
               className="py-2 text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownSortByButton"
-            >{arrayItem.length > 0 ?(arrayItem?.map((item) => (
-                <li>
+            >{arrayItem.length > 0 ?(arrayItem?.map((item,index) => (
+                <li key={index}>
                   <p
                     href=""
                     className="flex items-center p-2 ml-2 mr-2 rounded hover:bg-white dark:hover:bg-gray-600 cursor-pointer"

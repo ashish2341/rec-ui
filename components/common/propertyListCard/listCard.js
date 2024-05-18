@@ -5,11 +5,11 @@ import ReadMore from "@/components/common/readMore";
 import Accordion from "@/components/common/accodion";
 import { Carousel } from "flowbite-react";
 
-const PropertyListCard = ({ cardData }) => {
+const PropertyListCard = ({ item }) => {
   return (
     <>
-      {cardData.map((item, index) => (
-        <div key={index} className={`mb-3 ml-3 ${styles.GeneralDetailsBox}`}>
+      
+        <div  className={`mb-3 ml-3 ${styles.GeneralDetailsBox}`}>
           <div className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row  hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
             <div className={`flex w-full ${styles.cardContent}`}>
               <div className={`w-full ${styles.leftCardContent}`}>
@@ -18,10 +18,11 @@ const PropertyListCard = ({ cardData }) => {
                     <Carousel indicators={false} slide={false}>
                       {item?.Images?.map((itemurl, index) => (
                         <Link
+                        key={index}
                           href={`/propertyDetail/${item._id}`}
                         >
                           <img
-                          className=" h-56  sm:h-64 xl:h-80 1xl:h-96"
+                          className=" h-56  sm:h-64 xl:h-80 1xl:h-96 w-full"
                             key={index}
                             src={itemurl?.URL}
                             alt="..."
@@ -156,7 +157,7 @@ const PropertyListCard = ({ cardData }) => {
             </div>
           </div>
         </div>
-      ))}
+     
     </>
   );
 };

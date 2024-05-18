@@ -6,11 +6,19 @@ import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
-
+import Cookies from "js-cookie";
 export default function PropertyDetailsForm({
   valueForNext,
   valueForNextPage,
 }) {
+
+
+  const roleData = Cookies.get("roles") ?? "";
+  const name = Cookies.get("name");
+  const roles = roleData && JSON.parse(roleData);
+  const userId = Cookies.get("userId");
+
+
   // fetching Data for facing
   const {
     data: facingData,
@@ -205,13 +213,7 @@ console.log("posessionStatusData", posessionStatusData);
       // setPropertyType(sessionStoragePropertyData.PropertyType || "");
       setFacing(sessionStoragePropertyData?.Facing || "");
 
-      setIsEnabled(
-        sessionStoragePropertyData?.IsEnabled === true
-          ? true
-          : sessionStoragePropertyData?.IsEnabled === undefined
-          ? null
-          : false
-      );
+     
       setIsExclusive(
         sessionStoragePropertyData?.IsExclusive === true
           ? true
@@ -219,13 +221,7 @@ console.log("posessionStatusData", posessionStatusData);
           ? null
           : false
       );
-      setIsFeatured(
-        sessionStoragePropertyData?.IsFeatured === true
-          ? true
-          : sessionStoragePropertyData?.IsFeatured === undefined
-          ? null
-          : false
-      );
+      
       setIsNew(
         sessionStoragePropertyData?.IsNew === true
           ? true
@@ -332,7 +328,41 @@ console.log("posessionStatusData", posessionStatusData);
       setLoanTill(
         sessionStoragePropertyData?.LoanDetails?.LoanTill?.slice(0, 10) || 0
       );
-      setBuilderName(sessionStoragePropertyData?.Builder || "")
+      if (roles.includes("Admin")) {
+        setIsEnabled(
+          sessionStoragePropertyData?.IsEnabled === true
+            ? true
+            : sessionStoragePropertyData?.IsEnabled === undefined
+            ? true
+            : false
+        );
+        setIsFeatured(
+          sessionStoragePropertyData?.IsFeatured === true
+            ? true
+            : sessionStoragePropertyData?.IsFeatured === undefined
+            ? true
+            : false
+        );
+        setBuilderName(sessionStoragePropertyData?.Builder || "")
+      
+      } else {
+        setIsEnabled(
+          sessionStoragePropertyData?.IsEnabled === false
+            ? false
+            : sessionStoragePropertyData?.IsEnabled === undefined
+            ? false
+            : true
+        );
+        setIsFeatured(
+          sessionStoragePropertyData?.IsFeatured === false
+            ? false
+            : sessionStoragePropertyData?.IsFeatured === undefined
+            ? false
+            : true
+        );
+        // setBuilderName(sessionStoragePropertyData?.Builder || "");
+      }
+      
     }
   }, []);
 
@@ -487,8 +517,8 @@ console.log("posessionStatusData", posessionStatusData);
 const checkRequiredFields = () => {
   const requiredFields = [
     facing,
-    isEnabled,
-    isExclusive,
+    // isEnabled,
+    // isExclusive,
     isFeatured,
     isNew,
     reraNumber,
@@ -533,7 +563,7 @@ const checkRequiredFields = () => {
     loanTill,
     bhkType,
     brochure,
-    builderName
+    // builderName
   ];
 
   // Check if any required field is empty
@@ -614,9 +644,12 @@ const checkRequiredFields = () => {
         AreaUnits: areaUnits,
         BhkType:bhkType,
         Brochure:brochure,
-        Builder:builderName
+      
         // PurchaseRentBy: purchaseDetails,
       };
+      if(roles.includes("Admin")){
+        propertyDetailsData.Builder=builderName
+      }
       console.log("propertyDetailsData before checking ", propertyDetailsData);
       const sessionStorageData = JSON.parse(sessionStorage.getItem("EditPropertyData"));
       const newPropertyData = { ...sessionStorageData, ...propertyDetailsData };
@@ -734,39 +767,42 @@ console.log("handelFacing",e)
             </div>
 
             {/* Is Enabled */}
-            <div>
-              <label
-                htmlFor="isEnabled"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Is Enabled
-              </label>
-              <input
-                type="radio"
-                name="isEnabled"
-                id="isEnabled"
-                value="true"
-                required=""
-                checked={isEnabled == true}
-                onChange={handelIsEnabled}
-              />
-              <label htmlFor="isEnabled" className="mr-3 ml-2">
-                Yes
-              </label>
-              <input
-                type="radio"
-                name="isEnabled"
-                id="isEnabled"
-                value="false"
-                required=""
-                checked={isEnabled == false}
-                onChange={handelIsEnabled}
-                className="form-radio h-5 w-5 text-red-600"
-              />
-              <label htmlFor="isEnabled" className="ml-2">
-                No
-              </label>
-            </div>
+            {roles.includes("Admin") && (
+             <div>
+             <label
+               htmlFor="isEnabled"
+               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+             >
+               Is Enabled
+             </label>
+             <input
+               type="radio"
+               name="isEnabled"
+               id="isEnabled"
+               value="true"
+               required=""
+               checked={isEnabled == true}
+               onChange={handelIsEnabled}
+             />
+             <label htmlFor="isEnabled" className="mr-3 ml-2">
+               Yes
+             </label>
+             <input
+               type="radio"
+               name="isEnabled"
+               id="isEnabled"
+               value="false"
+               required=""
+               checked={isEnabled == false}
+               onChange={handelIsEnabled}
+               className="form-radio h-5 w-5 text-red-600"
+             />
+             <label htmlFor="isEnabled" className="ml-2">
+               No
+             </label>
+           </div>
+            )}
+           
             {/*  Is Exclusive*/}
             <div>
               <label
@@ -802,39 +838,42 @@ console.log("handelFacing",e)
               </label>
             </div>
             {/*  Is Featured*/}
-            <div>
-              <label
-                htmlFor="isFeatured"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Is Featured
-              </label>
-              <input
-                type="radio"
-                name="isFeatured"
-                id="isFeatured"
-                value="true"
-                required=""
-                checked={isFeatured == true}
-                onChange={handelIsFeatured}
-              />
-              <label htmlFor="isFeatured" className="mr-3 ml-2">
-                Yes
-              </label>
-              <input
-                type="radio"
-                name="isFeatured"
-                id="isFeatured"
-                value="false"
-                required=""
-                checked={isFeatured == false}
-                onChange={handelIsFeatured}
-                className="form-radio h-5 w-5 text-red-600"
-              />
-              <label htmlFor="isFeatured" className="ml-2">
-                No
-              </label>
-            </div>
+            {roles.includes("Admin") && (
+               <div>
+               <label
+                 htmlFor="isFeatured"
+                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+               >
+                 Is Featured
+               </label>
+               <input
+                 type="radio"
+                 name="isFeatured"
+                 id="isFeatured"
+                 value="true"
+                 required=""
+                 checked={isFeatured == true}
+                 onChange={handelIsFeatured}
+               />
+               <label htmlFor="isFeatured" className="mr-3 ml-2">
+                 Yes
+               </label>
+               <input
+                 type="radio"
+                 name="isFeatured"
+                 id="isFeatured"
+                 value="false"
+                 required=""
+                 checked={isFeatured == false}
+                 onChange={handelIsFeatured}
+                 className="form-radio h-5 w-5 text-red-600"
+               />
+               <label htmlFor="isFeatured" className="ml-2">
+                 No
+               </label>
+             </div>
+            )}
+          
             {/*  Is New*/}
             <div>
               <label
@@ -1854,35 +1893,38 @@ console.log("handelFacing",e)
               )}
             </div>
               {/* BuilderData */}
-              <div>
-              <label
-                htmlFor="builder"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-               Builder Name
-              </label>
-              {builderData ? (
-                <Select
-                  options={builderData.data.map((element) => ({
-                    value: element._id,
-                    label: element.Name,
-                  }))}
-                  placeholder="Select One"
-                  onChange={(e)=>setBuilderName({ _id: e.value, Name: e.label })}
-                  required={true}
-                  value={{ value: builderName._id, label: builderName.Name }}
-                />
-              ) : (
-                <Select
-                  options={defaultOption.map((element) => ({
-                    value: element.value,
-                    label: element.label,
-                  }))}
-                  placeholder="Select One"
-                  required={true}
-                />
-              )}
-            </div>
+              {roles.includes("Admin") && (
+                <div>
+                <label
+                  htmlFor="builder"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                >
+                 Builder Name
+                </label>
+                {builderData ? (
+                  <Select
+                    options={builderData.data.map((element) => ({
+                      value: element._id,
+                      label: element.Name,
+                    }))}
+                    placeholder="Select One"
+                    onChange={(e)=>setBuilderName({ _id: e.value, Name: e.label })}
+                    required={true}
+                    value={{ value: builderName._id, label: builderName.Name }}
+                  />
+                ) : (
+                  <Select
+                    options={defaultOption.map((element) => ({
+                      value: element.value,
+                      label: element.label,
+                    }))}
+                    placeholder="Select One"
+                    required={true}
+                  />
+                )}
+              </div>
+            )}
+            
             {/* Brochure */}
             <div>
               <label
@@ -1901,10 +1943,7 @@ console.log("handelFacing",e)
                 onChange={handleDocumentChange}
                 ref={brochureInputRef}
               />
-              
-            </div>
-            
-            <div>
+               <div>
             {brochure ? (
                 <div>
                   <div className="ml-2 mt-3 underline font-bold">
@@ -1922,6 +1961,9 @@ console.log("handelFacing",e)
                 </div>
               ) : null}
             </div>
+            </div>
+            
+           
             {/* Loan details */}
 
             <h3 className="mb-4 text-lg mt-5 font-medium leading-none text-gray-900 dark:text-white font-bold underline">

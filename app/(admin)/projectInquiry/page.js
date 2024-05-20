@@ -10,24 +10,47 @@ import { ToastContainer, toast } from "react-toastify";
 import { ExportToExcel } from "@/components/common/exportToCsv";
 import { GetEnquiryApi } from "@/api-functions/enquiry/getEnquiry";
 import { DeletProjectEnquiryApi } from "@/api-functions/enquiry/deleteEnquiry";
-
+import { GetEnquiryByBuilderApi } from "@/api-functions/enquiry/getEnquiryByBuilder";
+import Cookies from "js-cookie";
 export default function ProjectInquiry() {
+  const roleData = Cookies.get("roles") ?? "";
+  const name = Cookies.get("name");
+  const roles = roleData && JSON.parse(roleData);
+
   //  const { data: listData, loading, error } = useFetch(`${API_BASE_URL}/aminity/allAminity?page=1&pageSize=10`);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [listData, setListData] = useState(false);
   const [deleteId, setDeleteId] = useState();
   const [page, setPage] = useState(1);
   const [searchData, setSearchData] = useState("");
-  const [filterData,setFilterData]=useState("")
+  const [filterData, setFilterData] = useState("");
   useEffect(() => {
     initFlowbite(); // Call initCarousels() when component mounts
   }, []);
   useEffect(() => {
-    getAllEnquiry();
+    if (roles.includes("Admin")) {
+      console.log("admin function called");
+      getAllEnquiry(filterData);
+    } else {
+      console.log("buillder function called");
+      getAllEnquiryByBuilder(filterData);
+    }
   }, [page, searchData]);
   const getAllEnquiry = async (filterType) => {
-    console.log("filterType",filterType)
-    let enquiries = await GetEnquiryApi(page, searchData,filterType);
+    console.log("filterType", filterType);
+    let enquiries = await GetEnquiryApi(page, searchData, filterType);
+    if (enquiries?.resData?.success == true) {
+      setListData(enquiries?.resData);
+      toast.success(enquiries?.resData?.message);
+      return false;
+    } else {
+      toast.error(enquiries.errMessage);
+      return false;
+    }
+  };
+  const getAllEnquiryByBuilder = async (filterType) => {
+    console.log("filterType", filterType);
+    let enquiries = await GetEnquiryByBuilderApi(page, searchData , filterType);
     if (enquiries?.resData?.success == true) {
       setListData(enquiries?.resData);
       toast.success(enquiries?.resData?.message);
@@ -45,7 +68,13 @@ export default function ProjectInquiry() {
     let res = await DeletProjectEnquiryApi(deleteId);
     console.log("res", res);
     if (res?.resData?.success == true) {
-      getAllEnquiry();
+      if (roles.includes("Admin")) {
+        console.log("admin function called");
+        getAllEnquiry();
+      } else {
+        console.log("buillder function called");
+        getAllEnquiryByBuilder();
+      }
       setDeleteId("");
       setIsPopupOpen(false);
       toast.success(res?.resData?.message);
@@ -142,10 +171,24 @@ export default function ProjectInquiry() {
     },
   ];
 
-  const enquiryType=(filterType)=>{
+  const enquiryType = (filterType) => {
     // setFilterData(type)
-    console.log("enquiryType filterType",filterType)
-    getAllEnquiry(filterType)
+    console.log("enquiryType filterType", filterType);
+    getAllEnquiry(filterType);
+  };
+  function maskEmail(email) {
+    if (!email) return '';
+    const [localPart, domain] = email.split('@');
+    const visiblePart = localPart.slice(0, 2); // Get the first 2 characters
+    const maskedLocalPart = '*'.repeat(localPart.length - 2); // Mask the rest of the local part
+    const maskedDomain = '*'.repeat(domain.length); // Mask the entire domain part
+    return `${visiblePart}${maskedLocalPart}@${maskedDomain}`;
+  }
+  function maskNumber(number) {
+    if (!number) return '';
+    const visiblePart = number.slice(0, 2); // Get the first 2 characters
+    const maskedPart = '*'.repeat(number.length - 2); // Mask the rest
+    return `${visiblePart}${maskedPart}`;
   }
   return (
     <section>
@@ -161,74 +204,76 @@ export default function ProjectInquiry() {
                 fileName={"AlertAttendanceData"}
               />
             ) : null}
-            <li className="me-2  list-none">
-              <button
-                id="dropdownPossessionButton"
-                data-dropdown-toggle="dropdownPossession"
-                className="text-black bg-white rounded-lg border border-gray-200  hover:bg-gray-100 hover:text-blue-700 focus:ring-gray-100  focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
-                type="button"
-              >
-                Enquiry Type
-                <svg
-                  className="w-2.5 h-2.5 ms-3"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 10 6"
+            {roles.includes("Admin") && (
+              <li className="me-2  list-none">
+                <button
+                  id="dropdownPossessionButton"
+                  data-dropdown-toggle="dropdownPossession"
+                  className="text-black bg-white rounded-lg border border-gray-200  hover:bg-gray-100 hover:text-blue-700 focus:ring-gray-100  focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
+                  type="button"
                 >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 4 4 4-4"
-                  />
-                </svg>
-              </button>
+                  Enquiry Type
+                  <svg
+                    className="w-2.5 h-2.5 ms-3"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m1 1 4 4 4-4"
+                    />
+                  </svg>
+                </button>
 
-              <div
-                id="dropdownPossession"
-                className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-              >
-                <ul
-                  className="p-2 text-sm text-gray-700 dark:text-gray-200 list-none"
-                  aria-labelledby="dropdownPossessionButton"
+                <div
+                  id="dropdownPossession"
+                  className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
                 >
-                  <li onClick={()=>enquiryType("Project")}>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Project
-                    </a>
-                  </li>
-                  <li onClick={()=>enquiryType("Property")}>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Property
-                    </a>
-                  </li>
-                  <li onClick={()=>enquiryType("Astrology")}>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Astrology
-                    </a>
-                  </li>
-                  <li onClick={()=>enquiryType("ContactUs")}>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Contact Us
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </li>
+                  <ul
+                    className="p-2 text-sm text-gray-700 dark:text-gray-200 list-none"
+                    aria-labelledby="dropdownPossessionButton"
+                  >
+                    <li onClick={() => enquiryType("Project")}>
+                      <a
+                        href="#"
+                        className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
+                        Project
+                      </a>
+                    </li>
+                    <li onClick={() => enquiryType("Property")}>
+                      <a
+                        href="#"
+                        className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
+                        Property
+                      </a>
+                    </li>
+                    <li onClick={() => enquiryType("Astrology")}>
+                      <a
+                        href="#"
+                        className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
+                        Astrology
+                      </a>
+                    </li>
+                    <li onClick={() => enquiryType("ContactUs")}>
+                      <a
+                        href="#"
+                        className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
+                        Contact Us
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            )}
           </div>
 
           <label htmlFor="table-search" className="sr-only">
@@ -262,9 +307,12 @@ export default function ProjectInquiry() {
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th scope="col" className="px-6 py-3">
-                Enquiry Type
-              </th>
+              {roles.includes("Admin") && (
+                <th scope="col" className="px-6 py-3">
+                  Enquiry Type
+                </th>
+              )}
+
               <th scope="col" className="px-6 py-3">
                 Question
               </th>
@@ -274,9 +322,17 @@ export default function ProjectInquiry() {
               <th scope="col" className="px-6 py-3">
                 Email
               </th>
-              <th scope="col" className="px-6 py-3">
-                Is Enabled
-              </th>
+              {roles.includes("Developer") && (
+                <th scope="col" className="px-6 py-3">
+                  Mobile No.
+                </th>
+              )}
+              {roles.includes("Admin") && (
+                <th scope="col" className="px-6 py-3">
+                  Is Enabled
+                </th>
+              )}
+
               <th scope="col" className="px-6 py-3">
                 Action
               </th>
@@ -288,12 +344,15 @@ export default function ProjectInquiry() {
                 key={index}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
-                <td
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  {item?.EnquiryType}
-                </td>
+                {roles.includes("Admin") && (
+                  <td
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    {item?.EnquiryType}
+                  </td>
+                )}
+
                 <td
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -306,22 +365,39 @@ export default function ProjectInquiry() {
                 >
                   {item?.Name}
                 </td>
-                <td
+                {roles.includes("Admin") ?(<td
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
                   {item?.Email}
-                </td>
-                <td className="px-6 py-4 text-blue-600 dark:text-blue-500">
-                  <i
-                    className={` ${
-                      item?.IsEnabled
-                        ? "bi bi-hand-thumbs-up-fill text-green-600	"
-                        : "bi bi-hand-thumbs-down-fill text-red-500"
-                    } `}
-                    style={{ fontSize: "24px" }}
-                  ></i>
-                </td>
+                </td>):(<td
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                  {maskEmail(item?.Email)}
+                </td>)}
+                
+                {roles.includes("Developer") && (
+                 <td
+                 scope="row"
+                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+               >
+                 {maskNumber(item?.MolileNumber)}
+               </td>
+              )}
+                {roles.includes("Admin") && (
+                  <td className="px-6 py-4 text-blue-600 dark:text-blue-500">
+                    <i
+                      className={` ${
+                        item?.IsEnabled
+                          ? "bi bi-hand-thumbs-up-fill text-green-600	"
+                          : "bi bi-hand-thumbs-down-fill text-red-500"
+                      } `}
+                      style={{ fontSize: "24px" }}
+                    ></i>
+                  </td>
+                )}
+
                 <td className="px-6 py-4">
                   <div className="flex items-center space-x-2">
                     <Link
@@ -331,11 +407,18 @@ export default function ProjectInquiry() {
                     >
                       <i className="bi bi-eye-fill"></i>
                     </Link>
-                    {/* <i className="bi bi-eye-fill"></i> */}
-                    <i
+                    {roles.includes("Admin") && (
+                      <Link
+                        href="#"
+                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                      >
+                        <i
                       onClick={() => deleteInquiryModel(item?._id)}
                       className="bi bi-trash-fill"
                     ></i>
+                      </Link>
+                    )}
+                    
                   </div>
                 </td>
               </tr>

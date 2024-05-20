@@ -1,37 +1,42 @@
 import { NextResponse } from "next/server";
 import jwt from "@tsndr/cloudflare-worker-jwt";
-
+import { PROD_URL, UI_URL } from "./utils/constants";
+const adminRoute = ['/amenity']
 export const config = {
   matcher: [
-    // "/",
+
     "/dashboard",
+    ...adminRoute
+
   ],
 };
-
+const navUrl = process.env.NODE_ENV == 'development' ? UI_URL : PROD_URL
 export default async function middleware(req) {
-  console.log('Middleware function called');
-  
+
+
   try {
     const token = req.cookies.get("token");
-    console.log('Token:', token);
+    const roleData = req.cookies.get("roles") ?? '';
 
     if (!token) {
-      console.log('Token not found, redirecting to login page');
-      return NextResponse.redirect(`http://localhost:3000/login`);
+
+      return NextResponse.redirect(`${navUrl}/login`);
     }
     const cleanedToken = token.value.replace(/"/g, '');
-    const isValid = await jwt.verify(cleanedToken, process.env.JWT_SECRET_KEY);
-    console.log('Token validation result:', isValid);
+    const isValid = await jwt.verify(cleanedToken, process.env.JWT);
 
-    if (!isValid ) {
-      console.log('Invalid token, redirecting to login page');
-      return NextResponse.redirect(`http://localhost:3000/login`);
+
+    if (!isValid) {
+
+      return NextResponse.redirect(`${navUrl}/login`);
     }
+    if (roleData.value?.includes('Developer') && adminRoute.includes(req.nextUrl.pathname)) {
 
-    console.log('Token is valid, allowing access to the route');
+      return NextResponse.redirect(`${navUrl}/dashboard`);
+    }
     return NextResponse.next();
   } catch (error) {
     console.error('Error:', error);
-    return NextResponse.redirect(`http://localhost:3000/login`);
+    return NextResponse.redirect(`${navUrl}/login`);
   }
 }

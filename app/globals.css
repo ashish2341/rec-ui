@@ -154,16 +154,6 @@ body {
 .navbarMainUl{
   font-size: 0.85rem;
 }
-/* footer */
-
-.footerMain {
-  background-color: #191a1f;
-}
-.footerPart1Main {
-  justify-items: center;
-}
-
-
 
 .embla {
   overflow: hidden;

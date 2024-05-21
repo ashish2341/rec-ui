@@ -510,6 +510,7 @@ margin-top: 6rem;
 .agentImage{
   height: 28rem;
   width: 80%;
+  border-radius:10px;
 }
 .agentRightMain{
   width: 50%;

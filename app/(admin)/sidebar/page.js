@@ -118,7 +118,7 @@ export default function Sidebar({ children }) {
             </li>
             {roles.includes("Developer") && (
               <>
-                <li>
+               <li>
                   <Link
                     href="/property"
                     onClick={() => handleTabClick("property")}
@@ -126,11 +126,27 @@ export default function Sidebar({ children }) {
                       activeTab === "property"
                         ? Styles.activeTab
                         : Styles.inactiveTab
-                    } flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
+                    } flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group`}
                   >
-                    Property
+                    <svg
+                      className={`${
+                        activeTab === "property" ? "" : Styles.inactiveTab
+                      }  ${
+                        Styles.tabSvg
+                      }  flex-shrink-0 w-5 h-5 text-gray-900 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-black`}
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 18 21"
+                    >
+                      <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z" />
+                    </svg>
+                    <span className={` flex-1 ms-3 whitespace-nowrap`}>
+                       Property
+                    </span>
                   </Link>
                 </li>
+                
               </>
             )}
 
@@ -404,15 +420,28 @@ export default function Sidebar({ children }) {
                     <span className="flex-1 ms-3 whitespace-nowrap">FAQ</span>
                   </Link>
                 </li>
-                <li>
-                  <button
-                    type="button"
-                    className={`${Styles.tabText} flex items-center w-full p-2 text-base hover:text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
-                    aria-controls="InquiryDropdown"
-                    data-collapse-toggle="InquiryDropdown"
+               
+               
+             
+               
+              </>
+            )}
+            <li>
+                  <Link
+                    href="/projectInquiry"
+                    onClick={() => handleTabClick("projectInquiry")}
+                    className={` ${
+                      activeTab === "projectInquiry"
+                        ? Styles.activeTab
+                        : Styles.inactiveTab
+                    } flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group`}
                   >
                     <svg
-                      className={`${Styles.tabText} flex-shrink-0 w-5 h-5  transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white`}
+                      className={`${
+                        activeTab === "projectInquiry"
+                          ? Styles.activeTab
+                          : Styles.inactiveTab
+                      }${Styles.tabText} flex-shrink-0 w-5 h-5  transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white`}
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="currentColor"
@@ -436,73 +465,11 @@ export default function Sidebar({ children }) {
                         fill="none"
                       />
                     </svg>
-                    <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
+                    <span className={` flex-1 ms-3 whitespace-nowrap`}>
                       Inquiry
                     </span>
-                    <svg
-                      className="w-3 h-3"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 10 6"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="m1 1 4 4 4-4"
-                      />
-                    </svg>
-                  </button>
-                  <ul id="InquiryDropdown" className="hidden py-2 space-y-2">
-                    <li>
-                      <Link
-                        href="/projectInquiry"
-                        onClick={() => handleTabClick("projectInquiry")}
-                        className={` ${
-                          activeTab === "projectInquiry"
-                            ? Styles.activeTab
-                            : Styles.inactiveTab
-                        } flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
-                      >
-                        Project
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/astrologerInquiry"
-                        onClick={() => handleTabClick("astrologerInquiry")}
-                        className={` ${
-                          activeTab === "astrologerInquiry"
-                            ? Styles.activeTab
-                            : Styles.inactiveTab
-                        } flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
-                      >
-                        Astrologer
-                      </Link>{" "}
-                    </li>
-                  </ul>
-                </li>
-              </>
-            )}
-            {roles.includes("Developer") && (
-              <>
-                <li>
-                  <Link
-                    href="/projectInquiry"
-                    onClick={() => handleTabClick("projectInquiry")}
-                    className={` ${
-                      activeTab === "projectInquiry"
-                        ? Styles.activeTab
-                        : Styles.inactiveTab
-                    } flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
-                  >
-                    Enquiry
                   </Link>
                 </li>
-              </>
-            )}
           </ul>
         </div>
       </aside>

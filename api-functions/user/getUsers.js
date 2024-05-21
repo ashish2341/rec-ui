@@ -2,22 +2,15 @@ import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { API_BASE_URL, PAGE_LIMIT } from "@/utils/constants";
 
-
-
-export const GetEnquiryByBuilderApi = async (
-  page,
-  searchData,
-  filterType,
-  setLoading = () => {}
-) => {
+export const GetUserApi = async (page, searchData, setLoading = () => {}) => {
   const token = Cookies.get("token");
+  console.log("token", token);
   setLoading(true);
-  console.log("GetEnquiryApi filterType", filterType);
   try {
     const res = await fetch(
-      `${API_BASE_URL}/enquiry/enquiryGetByDeveloperId?page=${page}&pageSize=${PAGE_LIMIT}&search=${
-        searchData ? searchData : ""
-      }${filterType ? `&filter=${filterType}` : ""}`,
+      `${API_BASE_URL}/user/allUser?page=${
+        page ? page : 1
+      }&pageSize=${PAGE_LIMIT}&search=${searchData ? searchData : ""}`,
       {
         method: "GET",
         headers: {
@@ -35,7 +28,7 @@ export const GetEnquiryByBuilderApi = async (
     } else {
       //toast.error(resData.message);
       setLoading(false);
-      return { errMessage: resData.message };
+      return { errMessage: resData.error };
     }
   } catch (error) {
     setLoading(false);

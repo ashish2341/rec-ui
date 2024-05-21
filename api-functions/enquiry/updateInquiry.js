@@ -4,17 +4,18 @@ import { API_BASE_URL } from "@/utils/constants";
 
 
 
-export const DeletProjectEnquiryApi = async (id,setLoading=()=>{}) => {
+export const UpdateInquiryApi = async (addedUSerList,id,setLoading=()=>{}) => {
   const token = Cookies.get("token");
   setLoading(true);
   console.log(id)
   try {
-    const res = await fetch(`${API_BASE_URL}/enquiry/deleteProjectEnquiry/${id}`, {
-      method: "DELETE",
+    const res = await fetch(`${API_BASE_URL}/enquiry/updateProjectEnquiry/${id}`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
       },
+      body: JSON.stringify(addedUSerList),
     });
     const resData = await res.json();
     console.log('resData',resData)

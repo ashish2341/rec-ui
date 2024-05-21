@@ -4,12 +4,12 @@ import { API_BASE_URL } from "@/utils/constants";
 
 
 
-export const DeletProjectEnquiryApi = async (id,setLoading=()=>{}) => {
+export const DeleteUser = async (id,setLoading=()=>{}) => {
   const token = Cookies.get("token");
   setLoading(true);
   console.log(id)
   try {
-    const res = await fetch(`${API_BASE_URL}/enquiry/deleteProjectEnquiry/${id}`, {
+    const res = await fetch(`${API_BASE_URL}/user/deleteUser/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

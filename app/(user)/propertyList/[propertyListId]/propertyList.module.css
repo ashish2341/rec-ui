@@ -168,8 +168,9 @@ font-size: 1.4rem;
 .cardStarBtn{
   background-color: #481c94 !important;
   color: White !important;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
   border-radius: 4rem !important;
+  width: 4rem !important;
 }
 .cardSecondbtn{
   background-color: lightgrey !important;
@@ -192,7 +193,8 @@ font-size: 1.4rem;
   height: 3rem;
   width: 12rem;
   font-size: 1.1rem !important;
-  font-weight:bold
+  font-weight:bold;
+
 }
 .cardLastBrochureBtn{
   height: 3rem;
@@ -200,6 +202,7 @@ font-size: 1.4rem;
   font-size: 1.1rem !important;
   font-weight:bold;
   background-color: #fffcf2 !important;
+  border-color: #6592D3 !important;
 }
 .cardLastBrochureBtn:hover{
   background-color: #e4e5e4 !important;

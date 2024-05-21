@@ -28,7 +28,7 @@
   } */
   .accordionStyle{
     background-color: rgb(243, 244, 246);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.1), 0 8px 17px 0 rgba(0, 0, 0, 0.1);
   }
   .textCapitalized {
     text-transform: capitalize;

@@ -2,13 +2,14 @@ import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { API_BASE_URL, PAGE_LIMIT } from "@/utils/constants";
 
-const token = Cookies.get("token");
+
 
 export const GetPropertyByQueryApi = async (
   payloadData,
   setLoading = () => {}
 ) => {
-  console.log("GetPropertyByQueryApi payloadData ", payloadData);
+  const token = Cookies.get("token");
+  
   setLoading(true);
   try {
     const res = await fetch(

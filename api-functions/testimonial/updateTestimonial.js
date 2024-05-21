@@ -2,9 +2,10 @@ import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { API_BASE_URL } from "@/utils/constants";
 
-const token = Cookies.get("token");
+
 
 export const UpdateTestimonial = async (payload,id,setLoading=()=>{}) => {
+  const token = Cookies.get("token");
   setLoading(true);
   console.log(id)
   try {

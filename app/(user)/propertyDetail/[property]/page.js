@@ -74,7 +74,7 @@ const PropertyDetail = ({ params }) => {
       Email,
       Message,
       MolileNumber,
-      EnquiryData,
+      EnquiryDate:EnquiryData,
       EnquiryType,
       DeveloperId:listPropertiesData?.Builder?._id,
       PropertyId:listPropertiesData?._id

@@ -3,6 +3,7 @@ import Pagination from "@/components/common/pagination";
 import { GetUserApi } from "@/api-functions/user/getUsers";
 import { UpdateInquiryApi } from "@/api-functions/enquiry/updateInquiry";
 import { ToastContainer, toast } from "react-toastify";
+import styles from "./sendinquiry.module.css"
 export default function SendInquiryModal({
   isOpen,
   title,
@@ -76,7 +77,7 @@ const sendInquiry=async()=>{
       tabIndex="-1"
       className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full inset-0 h-full bg-black bg-opacity-50"
     >
-      <div className={`relative p-4 mx-auto max-w-3xl`}>
+      <div className={`relative p-4 mx-auto  ${styles.inquiryModal}`}>
         <div className="relative bg-white rounded-lg shadow-md">
           <button
             onClick={onCancel}

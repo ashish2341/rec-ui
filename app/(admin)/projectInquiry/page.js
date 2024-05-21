@@ -18,9 +18,6 @@ export default function ProjectInquiry() {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
   const roles = roleData && JSON.parse(roleData);
-
-    const { data: userEnquiryData, loading, error } = useFetch(`${API_BASE_URL}/user/userEnquiry`);
-    console.log("userEnquiryData",userEnquiryData)
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isPopupOpenforInquiry, setIsPopupOpenforInquiry] = useState(false);
   const [listData, setListData] = useState(false);
@@ -436,7 +433,7 @@ export default function ProjectInquiry() {
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    {!userEnquiryData.IsEnquiryVisiable ?(maskEmail(item?.Email)):(item?.Email)}
+                    {(item?.IsVisiable || !item?.DeveloperId)  ?(maskEmail(item?.Email)):(item?.Email)}
                     
                   </td>
                 )}
@@ -446,7 +443,7 @@ export default function ProjectInquiry() {
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    {!userEnquiryData.IsEnquiryVisiable ?(maskNumber(item?.MolileNumber)):(item?.MolileNumber)}
+                    {item?.IsVisiable ?(maskNumber(item?.MolileNumber)):(item?.MolileNumber)}
                     
                   </td>
                 )}

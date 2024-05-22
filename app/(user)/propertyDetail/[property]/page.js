@@ -34,11 +34,12 @@ const PropertyDetail = ({ params }) => {
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [Name, setName] = useState("");
+  // const [IsEnquiryVisiable, setIsEnquiryVisiable] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [Email, setEmail] = useState("");
   const [Message, setMessage] = useState("test");
   const [MolileNumber, setPhone] = useState("");
-  const [EnquiryData, setEnquiryData] = useState("");
+  const [EnquiryData, setEnquiryData] = useState(new Date());
   const [EnquiryType, setEnquiryType] = useState("Property");
   const [listData, setListData] = useState(false);
   const [listPropertiesData, setListPropertiesData] = useState(false);
@@ -76,6 +77,7 @@ const PropertyDetail = ({ params }) => {
       MolileNumber,
       EnquiryDate:EnquiryData,
       EnquiryType,
+      // IsEnquiryVisiable,
       DeveloperId:listPropertiesData?.Builder?._id,
       PropertyId:listPropertiesData?._id
     };
@@ -109,17 +111,16 @@ const PropertyDetail = ({ params }) => {
   };
   const handleEnquiryData = (date) => {
     setEnquiryData(date);
+    console.log("EnquiryData",EnquiryData);
+    console.log("date",date)
   };
-
-  console.log("EnquiryData", EnquiryData);
 
   useEffect(() => {
     initFlowbite();
-  }, []);
-
-  useEffect(() => {
     GetPropertyId();
-  });
+    console.log("Updated EnquiryData:", EnquiryData);
+}, [EnquiryData]);
+
 
   const {
     data: listDataConst,
@@ -398,7 +399,7 @@ const PropertyDetail = ({ params }) => {
             <LoadingImg />
           )}
         </div>
-        <div className={`${styles.heroSectionBottomMain}`}>
+        {/* <div className={`${styles.heroSectionBottomMain}`}>
           <div className={`${styles.heroSectionBottomBox}`}>
             <div className={`${styles.BottomBoxcontenet}`}>
               <h2 className={`${styles.heroSectionBottomBoxHead}`}>
@@ -447,7 +448,7 @@ const PropertyDetail = ({ params }) => {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className={`${styles.detailSectionBar} detailSectionBar`}>
@@ -497,6 +498,75 @@ const PropertyDetail = ({ params }) => {
 
       <div className={` ${styles.divideDetailPage} divideDetailPage`}>
         <div className={` ${styles.divideDetailPageLeft}`}>
+        <div
+          id="general"
+          className={`${styles.generalDetails} GeneralDetails page`}
+        >
+        <div className={`${styles.BottomBoxcontenet} flex justify-between`}>
+          <div>
+            <h2 className={`${styles.heroSectionBottomBoxHead} text-2xl`}>
+              {listPropertiesData.Titile}
+            </h2>
+            <p className={`${styles.heroSectionBottomBoxText}`}>
+              {" "}
+              <i className="bi bi-geo-alt-fill"></i>
+              {listPropertiesData.Address}
+            </p>
+          </div>
+          <div className="flex">
+            <div>
+              <img
+               className="mr-2"
+               height="50"
+               width="50"
+               src={listPropertiesData.Builder ? listPropertiesData.Builder.Logo : null}
+              />
+            </div>
+          <h2 className={`${styles.heroSectionBottomBoxHead} text-2xl mt-1`}>
+            {listPropertiesData.Builder ? listPropertiesData?.Builder.Name : null}
+          </h2>
+          </div>
+        </div>
+        <div className={`${styles.heroSectionBottomMain}`}>
+          <div className={`${styles.heroSectionBottomBox}`}>
+            <div className={`${styles.BottomBoxcontenet}`}>
+              <h2 className={`${styles.heroSectionBottomBoxHead}`}>Price</h2>
+              <p className={`${styles.heroSectionBottomBoxText}`}>
+                {" "}
+                {listPropertiesData.TotalPrice?.DisplayValue}
+              </p>
+            </div>
+            <div className={`${styles.heroSectionVL}`}></div>
+            <div className={`${styles.BottomBoxcontenet}`}>
+              <h2 className={`${styles.heroSectionBottomBoxHead}`}>Facing</h2>
+              {listPropertiesData?.Facing?.map((item, index) => (
+                <p key={index} className={`${styles.heroSectionBottomBoxText}`}>
+                  {" "}
+                  {item.Facing}
+                </p>
+              ))}
+            </div>
+            <div className={`${styles.heroSectionVL}`}></div>
+            <div className={`${styles.BottomBoxcontenet}`}>
+              <h2 className={`${styles.heroSectionBottomBoxHead}`}>
+                Project Type
+              </h2>
+              <p className={`${styles.heroSectionBottomBoxText}`}>
+                {listPropertiesData?.PropertyType?.Type}
+              </p>
+            </div>
+            <div className={`${styles.heroSectionVL}`}></div>
+            <div className={`${styles.BottomBoxcontenet}`}>
+              <h2 className={`${styles.heroSectionBottomBoxHead}`}>
+                Posession Status
+              </h2>
+              <p className={`${styles.heroSectionBottomBoxText}`}>
+                {listPropertiesData?.PosessionStatus?.Possession}
+              </p>
+            </div>
+          </div>
+        </div>
+        </div>
           {/* GeneralDetail */}
           <div
             id="general"
@@ -811,9 +881,9 @@ const PropertyDetail = ({ params }) => {
                   >
                     <button
                       type="button"
-                      className="text-grey border border-gray-600 bg-white-700 
-                    hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 
-                    font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600 
+                      className="text-grey border border-gray-600 bg-white-700
+                    hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300
+                    font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600
                     dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                       onClick={() => setIsPopoverOpen(true)}
                     >
@@ -1180,16 +1250,12 @@ const PropertyDetail = ({ params }) => {
                   <DayPicker
                     mode="single"
                     selected={EnquiryData}
-                    onSelect={handleEnquiryData}
+                    onDayClick={handleEnquiryData}
                     className={`${styles.rdp}`}
                     modifiersStyles={{
                       selected: {
                         backgroundColor: "gray",
                         color: "white",
-                      },
-                      today: {
-                        color: "white",
-                        backgroundColor: "#2a4ac8",
                       },
                     }}
                   />

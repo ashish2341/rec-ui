@@ -23,9 +23,9 @@ import AreaMultiCarousel from "../components/common/areapropertyCarousel";
 import { AddZodaic } from "@/api-functions/zodiac/addZodiac";
 
 export default function Home() {
- 
-  
-   
+
+
+
 
   const sliderTestimonial = useRef(null);
   const [Name, setName] = useState("");
@@ -113,10 +113,10 @@ export default function Home() {
   } = useFetch(`${API_BASE_URL}/banner/allbanner?page=1&pageSize=5`);
 
   const ShowApartmentProperties = () => {
-     
+
     return propertyByapartmentType?.data?.map((item,index) => (
       <Link key={index}  href={`/propertyList/property?propertyTypeID=${item._id}&propertyTypeLabel=${item?.areaInfo?.Type}`}  >
-        <div 
+        <div
           className="p-1"
         >
           <div className={` ${styles.apartmentTypeBox} border-gray-300 rounded-md`}>
@@ -137,14 +137,14 @@ export default function Home() {
           </div>
           </div>
         </div>
-        </Link> 
+        </Link>
       ))
-    
+
   }
 
   const ShowPopularProperties = () => {
     return propertyByPopularProperty?.data?.map((item,index) => (
-            
+
       <div key={index} className={` ${styles.cardBoxPopularTop}`} >
         <img
               className={` ${styles.cardImgTop}`}
@@ -183,13 +183,13 @@ export default function Home() {
           </div>
           <div className={`${styles.populerPropertiesBoxPriceMain}`}>
             <p className={`${styles.populerPropertiesBoxPrice}`}>
-            {item.TotalPrice?.DisplayValue} 
+            {item.TotalPrice?.DisplayValue}
             </p>
             <Link href={`/propertyDetail/${item._id}`} >
               <button
                 className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 type="button"
-                
+
               >
                 More Details
               </button>
@@ -316,7 +316,7 @@ export default function Home() {
   }
   var totalSlides = propertyByapartmentType?.data?.length;
   var slidesToShow = totalSlides < 5 ? totalSlides : 5;
-  
+
   var settings = {
     dots: false,
     infinite: true,
@@ -365,7 +365,7 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      
+
       <Navbar />
       {/* {isLoading && <Spinner />} */}
       <div
@@ -385,10 +385,10 @@ export default function Home() {
                     Looking for a home is always easier
                   </h2>
                   <p className={`${styles.crousalItemLeftMainPara}`}>
-                  Welcome to REC.com, your trusted partner in the journey of 
-                  finding the perfect home. At REC.com, 
-                  we understand that finding the right home is more than just a 
-                  transaction - it's about finding a place where memories are made, 
+                  Welcome to REC.com, your trusted partner in the journey of
+                  finding the perfect home. At REC.com,
+                  we understand that finding the right home is more than just a
+                  transaction - it's about finding a place where memories are made,
                   dreams are realized, and futures are built.
                   </p>
                   <div className={`${styles.crousalItemAdvMain} flex`}>
@@ -449,7 +449,7 @@ export default function Home() {
               alt="...a"
             />
           </div>
-           
+
         </div>
         <button
           type="button"
@@ -480,7 +480,7 @@ export default function Home() {
           </span>
         </button>
       </div>
-      
+
       <div className="campassDirection flex flex-wrap">
         <div className={styles.campassMain}>
           <img
@@ -505,8 +505,8 @@ export default function Home() {
           </div>
           <div className={`${styles.campassRightBoxMain} flex flex-wrap`}>
              {facingData
-              ? facingData.data.slice(0, 4).map((item,index) => (
-                
+              ? facingData?.data?.slice(0, 4).map((item,index) => (
+
                 <Link key={index}  href={`/propertyList/property?facingId=${item?._id}&facingLabel=${item?.Facing}`}>
                   <div
                     className={` ${styles.campassRightBox} border-gray-300 rounded-md`}
@@ -528,7 +528,7 @@ export default function Home() {
                           {facingSubHeading[index]}
                         </p>
                       </div>
-                    
+
                   </div>
                   </Link>
                 ))
@@ -553,7 +553,7 @@ export default function Home() {
           propertyByAreaData?.data?.length>0 ? <AreaMultiCarousel UI={showAreaType} /> : <SkeletonLoader />
         }
         </div>
-        
+
       </div>
 
       <div className={`${styles.apartmentTypeMain} apartmentType`}>
@@ -574,7 +574,7 @@ export default function Home() {
         </div>
       </div>
 
-        
+
 
       <div id="zodiac-id" className={`${styles.buyingOptionWithZodic}`}>
         <div className={`${styles.buyingWithZodicMain}`}>
@@ -586,7 +586,7 @@ export default function Home() {
               </h2>
               <p className={`${styles.buyingZodicText}`}>
               Unlock the door to your dream home with Zodiac.
-              Let's embark on this journey together and discover your perfect home. 
+              Let's embark on this journey together and discover your perfect home.
               Welcome to Zodiac, where dreams come true.
               </p>
               <p className={`${styles.buyingZodicText} font-semibold`}>
@@ -701,7 +701,7 @@ export default function Home() {
         <div className={` ${styles.populerPropertiesBoxMain} flex flex-wrap mt-4 `}>
           {
            propertyByPopularProperty?.data?.length>0 ? <MultiCarousel UI={ShowPopularProperties} /> : <SkeletonLoader />
-          }     
+          }
         </div>
       </div>
 
@@ -730,7 +730,7 @@ export default function Home() {
                 Auspicious Timing :
                 </h2>
                 <p className={`${styles.agentRightMainContentText}`}>
-                  Astrology can help determine the most auspicious time (Muhurat) for buying a house. 
+                  Astrology can help determine the most auspicious time (Muhurat) for buying a house.
                 </p>
               </div>
             </div>
@@ -866,7 +866,7 @@ export default function Home() {
                     className={` ${styles.agentRightMainContenBtn} text-white bg-blue-700 h-12 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
                     type="button"
                     onClick={addEnquiryData}
-                    > 
+                    >
                     Send
                   </button>
                 </div>
@@ -1017,8 +1017,8 @@ export default function Home() {
             </a>
           </div>
         </div>
-        
-        
+
+
         {blogData ? (
           <div className="flex flex-wrap">
           {blogData?.data?.map((item, index) => (
@@ -1042,7 +1042,7 @@ export default function Home() {
                 <h2 className={` ${styles.populerPropertiesBoxHead}`}>
                   {item.Title}
                 </h2>
-  
+
                 <p className={` ${styles.blogContentText}`}>
                  {item.Description}
                 </p>

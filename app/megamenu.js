@@ -47,7 +47,7 @@ const MegaDropdown = () => {
         id="dropdownNavbarLocation"
         className={`${styles.listBoardBack} z-10 ${
           isOpen ? "block" : "hidden"
-        } ml-40 font-normal bg-gray-100 divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600`}
+        } ml-20 font-normal bg-gray-100 divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600`}
       >
         <ul
           className={`${styles.listBoard} p-2 text-sm text-gray-700 dark:text-gray-400`}
@@ -69,10 +69,10 @@ const MegaDropdown = () => {
             : null}
         </ul>
       </div>
-      
+
     </div>
 
-    
+
   );
 };
 

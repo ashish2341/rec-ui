@@ -600,7 +600,7 @@ export default function Home() {
                     htmlFor="first_name"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    First Name
+                    Full Name
                   </label>
                   <input
                     type="text"
@@ -608,7 +608,7 @@ export default function Home() {
                     onChange={handleZodiacName}
                     id="first_name"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="John"
+                    placeholder="Satvik jain"
                     required
                   />
                 </div>
@@ -648,7 +648,7 @@ export default function Home() {
                 </div>
                 <div>
                   <button
-                    className="text-white bg-blue-700 ml-2 mt-6 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-md w-full md:w-auto px-10 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    className="text-white bg-blue-700 ml-2 mt-6 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-md w-full md:w-auto px-2.5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     type="button"
                     onClick={resetValue}
                   >
@@ -709,7 +709,7 @@ export default function Home() {
         <div className={` ${styles.agentLeftMain}`}>
           <img
             className={` ${styles.agentImage}`}
-            src="/img/zodiac-signs.jpg"
+            src="/img/astrology_img.jpg"
             alt=""
           />
         </div>

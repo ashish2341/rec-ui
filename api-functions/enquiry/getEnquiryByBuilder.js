@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { API_BASE_URL, PAGE_LIMIT } from "@/utils/constants";
 
-const token = Cookies.get("token");
+
 
 export const GetEnquiryByBuilderApi = async (
   page,
@@ -10,6 +10,7 @@ export const GetEnquiryByBuilderApi = async (
   filterType,
   setLoading = () => {}
 ) => {
+  const token = Cookies.get("token");
   setLoading(true);
   console.log("GetEnquiryApi filterType", filterType);
   try {

@@ -2,9 +2,9 @@ import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { API_BASE_URL, PAGE_LIMIT } from "@/utils/constants";
 
-const token = Cookies.get("token");
-console.log("token",token)
+
 export const GetReviewPropertyApi = async (setLoading=()=>{}) => {
+  const token = Cookies.get("token");
   setLoading(true);
   try {
     const res = await fetch(`${API_BASE_URL}/properties/reviewProperty`, {

@@ -36,7 +36,7 @@ const PropertyDetail = ({ params }) => {
   const [Name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [Email, setEmail] = useState("");
-  const [Message, setMessage] = useState("m");
+  const [Message, setMessage] = useState("test");
   const [MolileNumber, setPhone] = useState("");
   const [EnquiryData, setEnquiryData] = useState("");
   const [EnquiryType, setEnquiryType] = useState("Property");
@@ -74,8 +74,10 @@ const PropertyDetail = ({ params }) => {
       Email,
       Message,
       MolileNumber,
-      EnquiryData,
+      EnquiryDate:EnquiryData,
       EnquiryType,
+      DeveloperId:listPropertiesData?.Builder?._id,
+      PropertyId:listPropertiesData?._id
     };
     let res = await addEnquiry(payload);
     if (res?.resData?.success == true) {

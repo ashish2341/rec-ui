@@ -5,8 +5,8 @@ const adminRoute = ['/amenity']
 export const config = {
   matcher: [
 
-    "/dashboard",
-    ...adminRoute
+    // "/dashboard",
+    // ...adminRoute
 
   ],
 };

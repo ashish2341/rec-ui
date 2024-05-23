@@ -2,9 +2,10 @@ import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { API_BASE_URL } from "@/utils/constants";
 
-const token = Cookies.get("token");
+
 
 export const addFeatures = async (payload,setLoading=()=>{}) => {
+  const token = Cookies.get("token");
   setLoading(true);
   try {
     const res = await fetch(`${API_BASE_URL}/feature/addFeature`, {

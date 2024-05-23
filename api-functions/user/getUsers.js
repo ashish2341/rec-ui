@@ -2,39 +2,21 @@ import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { API_BASE_URL, PAGE_LIMIT } from "@/utils/constants";
 
-
-
-export const GetPropertyByQueryApi = async (
-  payloadData,
-  setLoading = () => {}
-) => {
+export const GetUserApi = async (page, searchData, setLoading = () => {}) => {
   const token = Cookies.get("token");
-  
+  console.log("token", token);
   setLoading(true);
   try {
     const res = await fetch(
-      `${API_BASE_URL}/properties/propertyByBudget?${
-        payloadData.sortBy != "" ? `sortBy=${payloadData.sortBy}` : ""
-      }${
-        payloadData.sortBy != ""
-          ? `&sortOrder=${payloadData.sortOrder}`
-          : ""
-      }${
-        payloadData.IsFeatured != ""
-          ? `IsFeatured=${payloadData.IsFeatured}`
-          : ""
-      }${
-        payloadData.IsExclusive != ""
-          ? `IsExclusive=${payloadData.IsExclusive}`
-          : ""
-      }`,
+      `${API_BASE_URL}/user/allUser?page=${
+        page ? page : 1
+      }&pageSize=${PAGE_LIMIT}&search=${searchData ? searchData : ""}`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(payloadData),
       }
     );
     const resData = await res.json();

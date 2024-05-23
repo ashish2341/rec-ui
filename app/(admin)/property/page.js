@@ -164,7 +164,7 @@ export default function Property() {
               )}
               {roles.includes("Developer") && (
                 <th scope="col" className="px-6 py-3">
-                  Under Review
+                  Review Status
                 </th>
               )}
 
@@ -211,7 +211,7 @@ export default function Property() {
                 )}
                 {roles.includes("Developer") && (
                   <td className="px-6 py-4 text-black-600 dark:text-black-500 ">
-                    { item?.IsEnabled ? (<span>NO</span> ) :<span>YES</span>}
+                    { item?.IsEnabled ? (<span>Completed</span> ) :<span>Pending</span>}
                  
                 </td>
                 )}

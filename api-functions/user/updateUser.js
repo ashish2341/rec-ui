@@ -1,19 +1,21 @@
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import { API_BASE_URL, PAGE_LIMIT } from "@/utils/constants";
+import { API_BASE_URL } from "@/utils/constants";
 
 
 
-export const GetBuilderById = async (id,setLoading=()=>{}) => {
+export const UpdateUserApi = async (payload,id,setLoading=()=>{}) => {
   const token = Cookies.get("token");
   setLoading(true);
+  console.log(id)
   try {
-    const res = await fetch(`${API_BASE_URL}/developer/developer/${id}`, {
-      method: "GET",
+    const res = await fetch(`${API_BASE_URL}/user/updateUser/${id}`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
       },
+      body: JSON.stringify(payload),
     });
     const resData = await res.json();
     console.log('resData',resData)

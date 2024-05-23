@@ -2,9 +2,10 @@ import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { API_BASE_URL, PAGE_LIMIT } from "@/utils/constants";
 
-const token = Cookies.get("token");
+
 
 export const GetBuilderApi = async (page,searchData,setLoading=()=>{}) => {
+  const token = Cookies.get("token");
   setLoading(true);
   try {
     const res = await fetch(`${API_BASE_URL}/developer/allDeveloper?page=${page=="undefined" ? page:1}&pageSize=${PAGE_LIMIT}&search=${searchData=="undefined" ? searchData:""}`, {

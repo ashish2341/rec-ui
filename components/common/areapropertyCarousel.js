@@ -3,7 +3,7 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
- 
+
 
 export default function AreaMultiCarousel({ UI }) {
   const responsive = {
@@ -14,7 +14,7 @@ export default function AreaMultiCarousel({ UI }) {
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
-      items: 1,
+      items: 2,
       partialVisibilityGutter: 30
     },
     tablet: {

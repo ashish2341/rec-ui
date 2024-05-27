@@ -41,6 +41,7 @@
 .aboutPostText{
     width: 50%;
     padding: 0rem;
+    margin-left: 2.5rem;
 }
 
 .aboutPostImg{
@@ -76,4 +77,64 @@
 
 .agentRightMainContentHead{
     font-weight: 400;
+}
+
+.aboutusMission{
+    display: flex;
+    margin-left: 10rem;
+    margin-right: 10rem;
+    margin-top: 2rem;
+}
+
+@media screen and (max-width: 900px) {
+
+        .aboutWelcome{
+            flex-direction: column-reverse;
+            margin-left: 2rem;
+            margin-right: 2rem;
+        }
+        .aboutWelcomeImg{
+            width: 100%;
+        }
+        .aboutWelcomeText{
+            width: 100%;
+        }
+        .aboutHeading{
+            font-size: 2rem;
+        }
+        .aboutPost{
+            flex-direction: column;
+            margin-left: 2rem;
+            margin-right: 2rem;
+        }
+        .aboutPostImg{
+            width: 100%;
+        }
+        .aboutPostText{
+            width: 100%;
+            margin-left: 0rem;
+        }
+        .aboutusTimelineInner{
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+        .aboutusVision{
+            flex-direction: column;
+            margin-left: 2rem;
+            margin-right: 2rem;
+            margin-top: 1rem;
+        }
+        .aboutusVisionLeft{
+            width: 100%;
+        }
+
+        .aboutusVisionRight{
+            width: 100%;
+        }
+        .aboutusMission{
+            flex-direction: column-reverse;
+            margin-left: 2rem;
+            margin-right: 2rem;
+            margin-top: 1rem;
+        }
 }

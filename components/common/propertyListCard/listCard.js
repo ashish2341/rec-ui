@@ -12,12 +12,12 @@ const PropertyListCard = ({ item }) => {
         <div className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row  hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
           <div className={`flex w-full ${styles.cardContent}`}>
             <div className={`w-full ${styles.leftCardContent}`}>
-              <div className="grid h-56 grid-cols-1 gap-4 sm:h-64 xl:h-80 1xl:h-96">
+              <div className={`${styles.listPropertyImgOuter} grid h-30 grid-cols-1 gap-4 sm:h-30 xl:h-30 1xl:h-96`}>
                 <Carousel indicators={false} slide={false}>
                   {item?.Images?.map((itemurl, index) => (
                     <Link key={index} href={`/propertyDetail/${item._id}`}>
                       <img
-                        className=" h-56  sm:h-64 xl:h-80 1xl:h-96 w-full"
+                        className={`${styles.listPropertyImg}`}
                         key={index}
                         src={itemurl?.URL}
                         alt="..."
@@ -28,7 +28,7 @@ const PropertyListCard = ({ item }) => {
               </div>
             </div>
             <div
-              className={`flex  flex-col justify-between leading-normal ml-2 w-full mr-2 mt-2 mb-2 ${styles.middleCardContent}`}
+              className={`flex  flex-col leading-normal ml-2 w-full mr-2 mt-4 mb-2 ${styles.middleCardContent}`}
             >
               <Link href={`/propertyDetail/${item._id}`}>
                 {" "}
@@ -80,14 +80,14 @@ const PropertyListCard = ({ item }) => {
                     {item.Country}
                   </span>
                 </p>
-                <p className="mb-2 font-normal text-gray-700 dark:text-gray-400">
+                <p className="mb-4 font-normal text-gray-700 dark:text-gray-400">
                   <span className=" font-bold text-gray-700 dark:text-gray-400">
                     {item.BhkType.Type}
                   </span>{" "}
                   for {item.ProeprtyFor} in {item.Area.Area},{item.State}
                 </p>
               </Link>
-              <div className="">
+              <div className="mb-4">
                 <Accordion listData={[item]} />
               </div>
               <Link href={`/propertyDetail/${item._id}`}></Link>

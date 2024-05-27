@@ -110,7 +110,7 @@ const SearchBar = (props) => {
               onClick={handleBudgetButtonClick}
               aria-haspopup="true"
               aria-expanded={isDropdownOpenB ? "true" : "false"}
-              className={`absolute top-0 ${styles.crousalSearchBuyType} 
+              className={`absolute top-0 ${styles.crousalSearchBuyType}
                           flex-shrink-0 z-10 inline-flex items-center mr-3 py-2.5 pr-8 pl-4 text-sm font-medium text-center text-gray-600 bg-gray-100 border border-gray-300`}
               type="button"
             >
@@ -217,7 +217,7 @@ const SearchBar = (props) => {
               onClick={handlePropertyButtonClick}
               aria-haspopup="true"
               aria-expanded={isDropdownOpenP ? "true" : "false"}
-              className={`absolute top-0 ${styles.crousalSearchPropertyType}  
+              className={`absolute top-0 ${styles.crousalSearchPropertyType}
                         flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-600 bg-gray-100 border border-gray-300`}
               type="button"
             >
@@ -270,7 +270,7 @@ const SearchBar = (props) => {
             >
               <button
                 type="button"
-                className={`${styles.crousalItemSearchButton} absolute top-0 end-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-md text-sm px-2.5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800`}
+                className={`${styles.crousalItemSearchButton} absolute top-0 end-0 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-md m-0 text-sm px-3.5 py-4.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800`}
               >
                 Search
               </button>

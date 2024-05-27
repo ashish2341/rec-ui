@@ -44,8 +44,8 @@
 }
 
 .builderInputField{
-    padding: 1rem; 
-    
+    padding: 1rem;
+
 }
 .builderHunter{
     justify-content: flex-start;
@@ -96,8 +96,8 @@
 @media screen and (max-width: 900px) {
     .builderDetailPage{
         display: block;
-        margin-left: 3rem;
-        margin-right: 3rem;
+        margin-left: 2rem;
+        margin-right: 2rem;
     }
     .builderDetailPageRight{
         width: 100%;
@@ -108,12 +108,20 @@
     }
 
     .divideDetailPage{
-        margin-left: 3rem;
-        margin-right: 3rem;
-        margin-top: 7rem;
+        margin-left: 0.5rem;
+        margin-right: 1.5rem;
+        margin-top: 6rem;
     }
 
     .builderHunter{
         justify-content: flex-start;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .builderDetailPage{
+        display: block;
+        margin-left: 1rem;
+        margin-right: 1rem;
     }
 }

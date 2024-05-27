@@ -1,15 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const PersonalLoanCalculator = () => {
-  const [loanAmount, setLoanAmount] = useState('');
-  const [interestRate, setInterestRate] = useState('');
-  const [loanTerm, setLoanTerm] = useState('');
-  const [repaymentResult, setRepaymentResult] = useState('');
-  const [errorMessageVisible, setErrorMessageVisible] = useState(false);
+  const [loanAmount, setLoanAmount] = useState(10000);
+  const [interestRate, setInterestRate] = useState(2);
+  const [loanTerm, setLoanTerm] = useState(1);
+  const [monthlyPayment, setMonthlyPayment] = useState(0);
+  const [emiPerMonth, setEmiPerMonth] = useState(0);
+  const [showBreakdown, setShowBreakdown] = useState(false);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [totalInterest, setTotalInterest] = useState(0);
+
+  useEffect(() => {
+    calculateRepayment();
+  }, [loanAmount, interestRate, loanTerm]);
+
+  useEffect(() => {
+    setEmiPerMonth(calculateInitialEmi());
+  }, []); // Call only once when the component is mounted
+
+  function calculateInitialEmi() {
+    const monthlyInterestRate = interestRate / 100 / 12;
+    const numberOfPayments = loanTerm * 12;
+    const initialMonthlyPayment =
+      loanAmount *
+      monthlyInterestRate /
+      (1 - Math.pow(1 + monthlyInterestRate, -numberOfPayments));
+    const initialEmiPerMonth = initialMonthlyPayment / numberOfPayments;
+    return initialEmiPerMonth.toFixed(2);
+  }
 
   const calculateRepayment = () => {
     if (!loanAmount || !interestRate || !loanTerm) {
-      setErrorMessageVisible(true);
       return;
     }
     const monthlyInterestRate = interestRate / 100 / 12;
@@ -18,73 +39,130 @@ const PersonalLoanCalculator = () => {
       loanAmount *
       monthlyInterestRate /
       (1 - Math.pow(1 + monthlyInterestRate, -numberOfPayments));
-    const totalPayment = monthlyPayment * numberOfPayments;
-    const totalInterest = totalPayment - loanAmount;
-    setRepaymentResult(
-      `Monthly Payment: ₹ ${monthlyPayment.toFixed(2)}\n` +
-      `Total Payment: ₹ ${totalPayment.toFixed(2)}\n` +
-      `Total Interest: ₹${totalInterest.toFixed(2)}`
-    );
-    setErrorMessageVisible(false);
+    setMonthlyPayment(monthlyPayment);
+    calculateEmiPerMonth(); // Update EMI per month after setting monthly payment
+    const totalAmount = monthlyPayment * numberOfPayments;
+    const totalInterest = totalAmount - loanAmount;
+    setTotalAmount(totalAmount);
+    setTotalInterest(totalInterest);
   };
+
+  const calculateEmiPerMonth = () => {
+    const numberOfPayments = loanTerm * 12;
+    const emiPerMonth = monthlyPayment / numberOfPayments;
+    setEmiPerMonth(emiPerMonth.toFixed(2));
+  };
+
+  const handleLoanAmountChange = (e) => {
+    setLoanAmount(parseInt(e.target.value));
+  };
+
+  const handleInterestRateChange = (e) => {
+    setInterestRate(parseFloat(e.target.value));
+  };
+
+  const handleLoanTermChange = (e) => {
+    setLoanTerm(parseInt(e.target.value));
+  };
+
+  const toggleBreakdown = () => {
+    setShowBreakdown(!showBreakdown);
+  };
+
+  // Utility function to convert number to words
+  const convertToWords = (num) => {
+  if (num < 1000) {
+    return num.toLocaleString(); // Display thousands separator
+  } else if (num < 100000) {
+    const thousand = Math.floor(num / 1000);
+    const remainder = num % 1000;
+    const formattedThousand = convertToWords(thousand); // Convert thousand part recursively
+    const formattedRemainder = remainder.toLocaleString(); // Display thousands separator for remainder part
+    if (remainder === 0) {
+      return `${formattedThousand} Thousand`;
+    } else {
+      return `${formattedThousand} Thousand ${formattedRemainder}`;
+    }
+  } else {
+    const lakh = Math.floor(num / 100000);
+    const remainder = num % 100000;
+    const formattedLakh = lakh.toLocaleString(); // Display thousands separator for lakh part
+    if (remainder === 0) {
+      return `${formattedLakh} Lakh`;
+    } else {
+      const formattedRemainder = convertToWords(remainder); // Convert remainder recursively
+      return `${formattedLakh} Lakh ${formattedRemainder}`;
+    }
+  }
+};
 
   return (
     <div className="flex justify-center items-center mt-4">
-      <div className="max-w-md w-full bg-grey p-8 rounded-lg shadow-xl border-2">
+      <div className="max-w-md w-full p-8 rounded-lg shadow-xl border-2">
         <div className="mb-4">
-          <label htmlFor="loanAmount" className="block text-gray-700">Loan Amount:</label>
+          <label htmlFor="loanAmount" className="block text-gray-700 flex justify-between items-center">
+            Loan Amount: <span>₹ {convertToWords(loanAmount)}</span>
+          </label>
           <input
-            type="number"
+            type="range"
             id="loanAmount"
             name="loanAmount"
-            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
-            placeholder="Enter loan amount"
+            className="w-full h-10 rounded-md overflow-hidden"
+            min="10000"
+            max="1000000"
+            step="1000"
             value={loanAmount}
-            onChange={(e) => setLoanAmount(e.target.value)}
+            onChange={handleLoanAmountChange}
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="interestRate" className="block text-gray-700">Interest Rate (%):</label>
+          <label htmlFor="interestRate" className="block text-gray-700 flex justify-between items-center">
+            Interest Rate (%): <span>{interestRate}%</span>
+          </label>
           <input
-            type="number"
+            type="range"
             id="interestRate"
             name="interestRate"
-            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
-            placeholder="Enter interest rate"
+            className="w-full h-10 rounded-md overflow-hidden"
+            min="2"
+            max="20"
+            step="0.1"
             value={interestRate}
-            onChange={(e) => setInterestRate(e.target.value)}
+            onChange={handleInterestRateChange}
           />
         </div>
         <div className="mb-6">
-          <label htmlFor="loanTerm" className="block text-gray-700">Loan Term (years):</label>
+          <label htmlFor="loanTerm" className="block text-gray-700 flex justify-between items-center">
+            Loan Term (years): <span>{loanTerm} years</span>
+          </label>
           <input
-            type="number"
+            type="range"
             id="loanTerm"
             name="loanTerm"
-            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
-            placeholder="Enter loan term in years"
+            className="w-full h-10 rounded-md overflow-hidden"
+            min="1"
+            max="30"
+            step="1"
             value={loanTerm}
-            onChange={(e) => setLoanTerm(e.target.value)}
+            onChange={handleLoanTermChange}
           />
         </div>
-        <div className="mb-8">
+        <div className="mb-6 flex justify-between p-3 border border-gray-300 rounded-lg mt-4">
+          <span className="text-center text-gray-600">Monthly EMI: ₹ {emiPerMonth}</span>
           <button
-            id="calculateButton"
-            className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none"
-            onClick={calculateRepayment}
+            className="block text-center text-blue-500 underline"
+            onClick={toggleBreakdown}
           >
-            Calculate Repayment
+            More
           </button>
         </div>
-        <div id="repaymentResult" className="text-lg font-semibold text-center">
-          {repaymentResult}
-        </div>
-        <div
-          id="errorMessage"
-          className={`text-red-500 text-sm mt-4 ${errorMessageVisible ? '' : 'hidden'}`}
-        >
-          Please fill in all fields.
-        </div>
+
+        {showBreakdown && (
+          <div className="p-4 border border-gray-300 rounded-lg mt-4">
+            <p>Total Amount: ₹ {totalAmount.toFixed(2)}</p>
+            <p>Total Interest: ₹ {totalInterest.toFixed(2)}</p>
+          </div>
+        )}
       </div>
     </div>
   );

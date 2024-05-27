@@ -34,11 +34,13 @@ const PropertyDetail = ({ params }) => {
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [Name, setName] = useState("");
+  // const [IsEnquiryVisiable, setIsEnquiryVisiable] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [Email, setEmail] = useState("");
   const [Message, setMessage] = useState("test");
   const [MolileNumber, setPhone] = useState("");
-  const [EnquiryData, setEnquiryData] = useState("");
+  const [EnquiryData, setEnquiryData] = useState(new Date());
+  const [EnquiryDataShow, setEnquiryDataShow] = useState(new Date());
   const [EnquiryType, setEnquiryType] = useState("Property");
   const [listData, setListData] = useState(false);
   const [listPropertiesData, setListPropertiesData] = useState(false);
@@ -74,8 +76,9 @@ const PropertyDetail = ({ params }) => {
       Email,
       Message,
       MolileNumber,
-      EnquiryDate:EnquiryData,
+      EnquiryDate:EnquiryData.selectedDay,
       EnquiryType,
+      // IsEnquiryVisiable,
       DeveloperId:listPropertiesData?.Builder?._id,
       PropertyId:listPropertiesData?._id
     };
@@ -85,6 +88,7 @@ const PropertyDetail = ({ params }) => {
       setName("");
       setPhone("");
       setEnquiryData("");
+      setEnquiryDataShow("");
       setEmail("");
     } else {
       toast.error(res.errMessage);
@@ -108,18 +112,17 @@ const PropertyDetail = ({ params }) => {
     setPhone(e.target.value);
   };
   const handleEnquiryData = (date) => {
-    setEnquiryData(date);
+    setEnquiryData({ selectedDay: date });
+    setEnquiryDataShow(EnquiryData);
+    console.log("date",EnquiryData)
   };
-
-  console.log("EnquiryData", EnquiryData);
 
   useEffect(() => {
     initFlowbite();
-  }, []);
-
-  useEffect(() => {
     GetPropertyId();
-  });
+    console.log("Updated EnquiryData:", EnquiryData);
+}, [EnquiryData]);
+
 
   const {
     data: listDataConst,
@@ -217,7 +220,7 @@ const PropertyDetail = ({ params }) => {
     // Create an anchor element
     const anchor = document.createElement("a");
     anchor.href = fileUrl;
-    anchor.download = "example.pdf";
+    anchor.download = "Brochure.pdf";
     anchor.rel = "noopener noreferrer"; // Set the download attribute
 
     // Simulate a click event to trigger the download
@@ -398,7 +401,7 @@ const PropertyDetail = ({ params }) => {
             <LoadingImg />
           )}
         </div>
-        <div className={`${styles.heroSectionBottomMain}`}>
+        {/* <div className={`${styles.heroSectionBottomMain}`}>
           <div className={`${styles.heroSectionBottomBox}`}>
             <div className={`${styles.BottomBoxcontenet}`}>
               <h2 className={`${styles.heroSectionBottomBoxHead}`}>
@@ -447,7 +450,7 @@ const PropertyDetail = ({ params }) => {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className={`${styles.detailSectionBar} detailSectionBar`}>
@@ -497,6 +500,75 @@ const PropertyDetail = ({ params }) => {
 
       <div className={` ${styles.divideDetailPage} divideDetailPage`}>
         <div className={` ${styles.divideDetailPageLeft}`}>
+        <div
+          id="general"
+          className={`${styles.generalDetails} GeneralDetails page`}
+        >
+        <div className={`${styles.BottomBoxcontenet} flex justify-between`}>
+          <div>
+            <h2 className={`${styles.heroSectionBottomBoxHead} text-2xl`}>
+              {listPropertiesData.Titile}
+            </h2>
+            <p className={`${styles.heroSectionBottomBoxText}`}>
+              {" "}
+              <i className="bi bi-geo-alt-fill"></i>
+              {listPropertiesData.Address}
+            </p>
+          </div>
+          <div className="flex">
+            <div>
+              <img
+               className="mr-2"
+               height="50"
+               width="50"
+               src={listPropertiesData.Builder ? listPropertiesData.Builder.Logo : null}
+              />
+            </div>
+          <h2 className={`${styles.heroSectionBottomBoxHead} text-2xl mt-1`}>
+            {listPropertiesData.Builder ? listPropertiesData?.Builder.Name : null}
+          </h2>
+          </div>
+        </div>
+        <div className={`${styles.heroSectionBottomMain}`}>
+          <div className={`${styles.heroSectionBottomBox}`}>
+            <div className={`${styles.BottomBoxcontenet}`}>
+              <h2 className={`${styles.heroSectionBottomBoxHead}`}>Price</h2>
+              <p className={`${styles.heroSectionBottomBoxText}`}>
+                {" "}
+                {listPropertiesData.TotalPrice?.DisplayValue}
+              </p>
+            </div>
+            <div className={`${styles.heroSectionVL}`}></div>
+            <div className={`${styles.BottomBoxcontenet}`}>
+              <h2 className={`${styles.heroSectionBottomBoxHead}`}>Facing</h2>
+              {listPropertiesData?.Facing?.map((item, index) => (
+                <p key={index} className={`${styles.heroSectionBottomBoxText}`}>
+                  {" "}
+                  {item.Facing}
+                </p>
+              ))}
+            </div>
+            <div className={`${styles.heroSectionVL}`}></div>
+            <div className={`${styles.BottomBoxcontenet}`}>
+              <h2 className={`${styles.heroSectionBottomBoxHead}`}>
+                Project Type
+              </h2>
+              <p className={`${styles.heroSectionBottomBoxText}`}>
+                {listPropertiesData?.PropertyType?.Type}
+              </p>
+            </div>
+            <div className={`${styles.heroSectionVL}`}></div>
+            <div className={`${styles.BottomBoxcontenet}`}>
+              <h2 className={`${styles.heroSectionBottomBoxHead}`}>
+                Posession Status
+              </h2>
+              <p className={`${styles.heroSectionBottomBoxText}`}>
+                {listPropertiesData?.PosessionStatus?.Possession}
+              </p>
+            </div>
+          </div>
+        </div>
+        </div>
           {/* GeneralDetail */}
           <div
             id="general"
@@ -517,10 +589,9 @@ const PropertyDetail = ({ params }) => {
                   <div>
                     <p className={`${styles.GeneralDetailsBoxName}`}> Area:</p>
                     <p className={`${styles.GeneralDetailsBoxValue}`}>
-                      {formatArea(
-                        listPropertiesData?.AreaUnits?.InSquareMeter * 10.763
-                      )}{" "}
-                      sq.ft.
+                      {
+                        listPropertiesData?.AreaUnits?.InSquareMeter
+                    }{" "}{listPropertiesData?.AreaUnits?.Unit}
                     </p>
                   </div>
                   <div>
@@ -635,11 +706,9 @@ const PropertyDetail = ({ params }) => {
                         <li>{listPropertiesData.Bathrooms} Bathroom</li>
                         <li>
                           Scalable area -{" "}
-                          {formatArea(
-                            listPropertiesData?.AreaUnits?.InSquareMeter *
-                              10.763
-                          )}{" "}
-                          sq.ft.
+                          {
+                            listPropertiesData?.AreaUnits?.InSquareMeter
+                        }{" "}{listPropertiesData?.AreaUnits?.Unit}
                         </li>
                       </ol>
                       <div className={`${styles.configureImg}`}>
@@ -712,10 +781,9 @@ const PropertyDetail = ({ params }) => {
                         Size
                       </h2>
                       <p className={`${styles.overviewBoxMainContentText}`}>
-                        {formatArea(
-                          listPropertiesData?.AreaUnits?.InSquareMeter * 10.763
-                        )}{" "}
-                        sq.ft.
+                      {
+                        listPropertiesData?.AreaUnits?.InSquareMeter
+                    }{" "}{listPropertiesData?.AreaUnits?.Unit}
                       </p>
                     </div>
                     <div className={`${styles.overviewBoxMainContent}`}>
@@ -811,9 +879,9 @@ const PropertyDetail = ({ params }) => {
                   >
                     <button
                       type="button"
-                      className="text-grey border border-gray-600 bg-white-700 
-                    hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 
-                    font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600 
+                      className="text-grey border border-gray-600 bg-white-700
+                    hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300
+                    font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600
                     dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                       onClick={() => setIsPopoverOpen(true)}
                     >
@@ -1133,7 +1201,7 @@ const PropertyDetail = ({ params }) => {
         <div className={` ${styles.divideDetailPageRight}`}>
           <div className="GeneralDetailsMain">
             <h2 className={`${styles.GeneralDetailsMainHead}`}>
-              PERSONAL LOAN CALCULATOR
+              EMI CALCULATOR
             </h2>
             <PersonalLoanCalculator/>
           </div>
@@ -1179,17 +1247,13 @@ const PropertyDetail = ({ params }) => {
                 <div className={`mb-5`}>
                   <DayPicker
                     mode="single"
-                    selected={EnquiryData}
-                    onSelect={handleEnquiryData}
+                    selected={EnquiryData.selectedDay}
+                    onDayClick={handleEnquiryData}
                     className={`${styles.rdp}`}
                     modifiersStyles={{
                       selected: {
                         backgroundColor: "gray",
                         color: "white",
-                      },
-                      today: {
-                        color: "white",
-                        backgroundColor: "#2a4ac8",
                       },
                     }}
                   />

@@ -22,11 +22,13 @@ export default function Navbar() {
               alt="Flowbite Logo"
             />
           </Link>
-          <MegaDropdown />
+          <MegaDropdown
+            className="items-center navbarMainUl justify-between hidden w-full md:flex md:w-auto md:order-1 "
+          />
         </div>
 
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          <SearchNavBar />
+         {/* SearchNavBar /> */}
           <Link href={"/login"}>
             <button
               type="button"
@@ -61,10 +63,10 @@ export default function Navbar() {
           </button>
         </div>
         <div
-          className="items-center navbarMainUl justify-between hidden w-full md:flex md:w-auto md:order-1"
+          className="items-center navbarMainUl justify-between hidden w-full md:flex md:w-auto md:order-1 "
           id="navbar-sticky"
         >
-          <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+          <ul className={` flex flex-col p-4 md:p-0 mt-4 align-items-baseline font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 ${styles.navbarStyleBaseLine}`}>
             <li>
               <Link
                 href="/"
@@ -106,7 +108,7 @@ export default function Navbar() {
               >
                 <ul
                   className="py-2 text-sm text-gray-700 dark:text-gray-400"
-                  aria-labelledby="dropdownLargeButton"
+                  aria-labelledby="dropdownBuyButton"
                 >
                   <li>
                     <Link
@@ -143,7 +145,6 @@ export default function Navbar() {
                 </div>
               </div>
             </li>
-
             <li>
               <Link
                 href="/aboutus"
@@ -171,6 +172,9 @@ export default function Navbar() {
               >
                 Builder
               </Link>
+            </li>
+            <li>
+                <SearchNavBar />
             </li>
           </ul>
         </div>

@@ -13,11 +13,11 @@ const NotifyUserModal = () => {
         timer = setTimeout(() => {
           sessionStorage.setItem('showBanner','yes')
             setOpenModal(true);
-        }, 10000); 
+        }, 10000);
     }
-     
 
-    return () => clearTimeout(timer); 
+
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -32,8 +32,7 @@ const NotifyUserModal = () => {
            <h1 className="mt-2 text-lg font-semibold">Unlock Your Dream Home: Tailored Properties for Every Zodiac Sign</h1>
            <p>Aligning Stars with Homes: Finding Your Perfect Property Match by Zodiac Signs</p>
            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+                Let your astrological guide unveil homes that resonate with your cosmic energy, blending the celestial with the terrestrial in perfect harmony.
            </p>
           </div>
         </Modal.Body>
@@ -43,7 +42,7 @@ const NotifyUserModal = () => {
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-small rounded-lg text-sm w-full sm:w-auto px-2.5 py-0.75 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             type="button"
             onClick={() => setOpenModal(false)}
-            
+
           >
             Click Here
           </Button>

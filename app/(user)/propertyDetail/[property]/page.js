@@ -40,6 +40,7 @@ const PropertyDetail = ({ params }) => {
   const [Message, setMessage] = useState("test");
   const [MolileNumber, setPhone] = useState("");
   const [EnquiryData, setEnquiryData] = useState(new Date());
+  const [EnquiryDataShow, setEnquiryDataShow] = useState(new Date());
   const [EnquiryType, setEnquiryType] = useState("Property");
   const [listData, setListData] = useState(false);
   const [listPropertiesData, setListPropertiesData] = useState(false);
@@ -75,7 +76,7 @@ const PropertyDetail = ({ params }) => {
       Email,
       Message,
       MolileNumber,
-      EnquiryDate:EnquiryData,
+      EnquiryDate:EnquiryData.selectedDay,
       EnquiryType,
       // IsEnquiryVisiable,
       DeveloperId:listPropertiesData?.Builder?._id,
@@ -87,6 +88,7 @@ const PropertyDetail = ({ params }) => {
       setName("");
       setPhone("");
       setEnquiryData("");
+      setEnquiryDataShow("");
       setEmail("");
     } else {
       toast.error(res.errMessage);
@@ -110,9 +112,9 @@ const PropertyDetail = ({ params }) => {
     setPhone(e.target.value);
   };
   const handleEnquiryData = (date) => {
-    setEnquiryData(date);
-    console.log("EnquiryData",EnquiryData);
-    console.log("date",date)
+    setEnquiryData({ selectedDay: date });
+    setEnquiryDataShow(EnquiryData);
+    console.log("date",EnquiryData)
   };
 
   useEffect(() => {
@@ -218,7 +220,7 @@ const PropertyDetail = ({ params }) => {
     // Create an anchor element
     const anchor = document.createElement("a");
     anchor.href = fileUrl;
-    anchor.download = "example.pdf";
+    anchor.download = "Brochure.pdf";
     anchor.rel = "noopener noreferrer"; // Set the download attribute
 
     // Simulate a click event to trigger the download
@@ -587,10 +589,9 @@ const PropertyDetail = ({ params }) => {
                   <div>
                     <p className={`${styles.GeneralDetailsBoxName}`}> Area:</p>
                     <p className={`${styles.GeneralDetailsBoxValue}`}>
-                      {formatArea(
-                        listPropertiesData?.AreaUnits?.InSquareMeter * 10.763
-                      )}{" "}
-                      sq.ft.
+                      {
+                        listPropertiesData?.AreaUnits?.InSquareMeter
+                    }{" "}{listPropertiesData?.AreaUnits?.Unit}
                     </p>
                   </div>
                   <div>
@@ -705,11 +706,9 @@ const PropertyDetail = ({ params }) => {
                         <li>{listPropertiesData.Bathrooms} Bathroom</li>
                         <li>
                           Scalable area -{" "}
-                          {formatArea(
-                            listPropertiesData?.AreaUnits?.InSquareMeter *
-                              10.763
-                          )}{" "}
-                          sq.ft.
+                          {
+                            listPropertiesData?.AreaUnits?.InSquareMeter
+                        }{" "}{listPropertiesData?.AreaUnits?.Unit}
                         </li>
                       </ol>
                       <div className={`${styles.configureImg}`}>
@@ -782,10 +781,9 @@ const PropertyDetail = ({ params }) => {
                         Size
                       </h2>
                       <p className={`${styles.overviewBoxMainContentText}`}>
-                        {formatArea(
-                          listPropertiesData?.AreaUnits?.InSquareMeter * 10.763
-                        )}{" "}
-                        sq.ft.
+                      {
+                        listPropertiesData?.AreaUnits?.InSquareMeter
+                    }{" "}{listPropertiesData?.AreaUnits?.Unit}
                       </p>
                     </div>
                     <div className={`${styles.overviewBoxMainContent}`}>
@@ -1203,7 +1201,7 @@ const PropertyDetail = ({ params }) => {
         <div className={` ${styles.divideDetailPageRight}`}>
           <div className="GeneralDetailsMain">
             <h2 className={`${styles.GeneralDetailsMainHead}`}>
-              PERSONAL LOAN CALCULATOR
+              EMI CALCULATOR
             </h2>
             <PersonalLoanCalculator/>
           </div>
@@ -1249,7 +1247,7 @@ const PropertyDetail = ({ params }) => {
                 <div className={`mb-5`}>
                   <DayPicker
                     mode="single"
-                    selected={EnquiryData}
+                    selected={EnquiryData.selectedDay}
                     onDayClick={handleEnquiryData}
                     className={`${styles.rdp}`}
                     modifiersStyles={{

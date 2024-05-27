@@ -9,7 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import Timeline from "@/components/common/timeline";
 // export const metadata = {
 //     title: "About"
-    
+
 //   };
 
 const AboutUs = () => {
@@ -33,18 +33,18 @@ const AboutUs = () => {
                     <div className={`${styles.aboutWelcomeText}`}>
                         <h1 className={`${styles.aboutHeading} mb-6`}>Welcome to REC</h1>
                         <p className="mb-2 font-medium text-gray-600 dark:text-gray-600 text-sm">
-                            Founded in 2012 and acquired by REA India in 2017, REC.com 
-                            is India’s most innovative real estate advertising platform for homeowners, 
-                            landlords, developers, and real estate brokers. The company offers listings for new 
-                            homes, resale homes, rentals, plots and co-living spaces in India. Backed by strong 
-                            research and analytics, the company’s experts provide comprehensive real estate services that 
-                            cover advertising and marketing, sales solutions for real estate developers, personalized search, 
-                            virtual viewing, AR&VR content, home loans, end-to-end transaction services, and 
+                            Founded in 2012 and acquired by REA India in 2017, REC.com
+                            is India’s most innovative real estate advertising platform for homeowners,
+                            landlords, developers, and real estate brokers. The company offers listings for new
+                            homes, resale homes, rentals, plots and co-living spaces in India. Backed by strong
+                            research and analytics, the company’s experts provide comprehensive real estate services that
+                            cover advertising and marketing, sales solutions for real estate developers, personalized search,
+                            virtual viewing, AR&VR content, home loans, end-to-end transaction services, and
                             post-transaction services to consumers for both buying and renting.
                         </p>
                     </div>
                     <div className={`${styles.aboutWelcomeImg} ml-10`}>
-                        <img 
+                        <img
                             src="../../../img/contactusImg1.jpg"
                         />
                     </div>
@@ -62,16 +62,16 @@ const AboutUs = () => {
                         />
                     </video>
                     </div>
-                    <div className={`${styles.aboutPostText} ml-10`}>
+                    <div className={`${styles.aboutPostText}`}>
                         <p className={`${styles.aboutSubHeading} mt-10`}>
                             Parr...se Perfect
                         </p>
                         <h1 className={`${styles.aboutHeading} mb-4`}>Post your property</h1>
                         <p className="mb-2 text-gray-600 dark:text-gray-600 text-sm">
-                            Buying, Selling, Renting, or moving into a house can be a trial 
-                            by fire, especially in India where we often 
-                            take the hassles involved in the process as an integral part of the 
-                            home purchase process. Our new idea for REC.com questions that behaviour, and motivates 
+                            Buying, Selling, Renting, or moving into a house can be a trial
+                            by fire, especially in India where we often
+                            take the hassles involved in the process as an integral part of the
+                            home purchase process. Our new idea for REC.com questions that behaviour, and motivates
                             them to switch to a hassle-free experience.
                         </p>
                     </div>
@@ -85,7 +85,7 @@ const AboutUs = () => {
 
                 <div className={`${styles.aboutusVision} mt-10`}>
                     <div className={`${styles.aboutWelcomeImg} mr-10`}>
-                        <img 
+                        <img
                             src="../../../img/contactusImg1.jpg"
                         />
                     </div>
@@ -96,7 +96,7 @@ const AboutUs = () => {
                             <i className="bi bi-arrow-right mr-1"></i>
                             <div className={`${styles.agentRightMainContent}`}>
                                 <h2 className={`${styles.agentRightMainContentHead} font-semibold`}>
-                                Community Engagement : 
+                                Community Engagement :
                                 </h2>
                                 <p className={`${styles.agentRightMainContentText}`}>
                                 We are committed to contributing positively to the communities we serve, ensuring sustainable and inclusive growth.
@@ -128,7 +128,7 @@ const AboutUs = () => {
                             <i className="bi bi-arrow-right mr-1"></i>
                             <div className={`${styles.agentRightMainContent}`}>
                                 <h2 className={`${styles.agentRightMainContentHead} font-semibold`}>
-                                Integrity : 
+                                Integrity :
                                 </h2>
                                 <p className={`${styles.agentRightMainContentText}`}>
                                We uphold the highest ethical standards, ensuring our actions always reflect our commitment to fairness and honesty.
@@ -139,7 +139,7 @@ const AboutUs = () => {
                     </div>
                 </div>
 
-                <div className={`${styles.aboutusVision} mt-10 mb-10`}>
+                <div className={`${styles.aboutusMission} mt-10 mb-10`}>
                 <div className={`${styles.aboutusVisionRight}`}>
                         <div className={`${styles.agentRightMainContentMain}`}>
                             <h1 className={`${styles.aboutHeading} blueText`}>Promise</h1>
@@ -169,7 +169,7 @@ const AboutUs = () => {
                             <i className="bi bi-arrow-right mr-1"></i>
                             <div className={`${styles.agentRightMainContent}`}>
                                 <h2 className={`${styles.agentRightMainContentHead} font-semibold`}>
-                                Simplified Processes : 
+                                Simplified Processes :
                                 </h2>
                                 <p className={`${styles.agentRightMainContentText}`}>
                                 Whether you’re a first-time homebuyer or a seasoned investor, our platform is designed to provide a hassle-free experience.
@@ -179,7 +179,7 @@ const AboutUs = () => {
                         </div>
                     </div>
                     <div className={`${styles.aboutWelcomeImg} ml-10`}>
-                        <img 
+                        <img
                             src="../../../img/contactusImg1.jpg"
                         />
                     </div>
@@ -191,7 +191,3 @@ const AboutUs = () => {
 }
 
 export default AboutUs;
-
-
-
-

@@ -87,8 +87,8 @@
 }
 .crousalItemSearchButton{
   inset-inline-end: 1rem;
-  height: 2.5rem;
-  width: 6rem;
+  height: 3rem;
+  width: 7.3rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -304,7 +304,7 @@ background: linear-gradient(90deg, rgba(56,92,203,1) 0%, rgba(77,117,207,1) 48%,
   width: 60%;
 }
 .propertiesByAreaBoxHead{
-  font-weight: 800;
+  font-weight: 700;
   font-size: 1rem;
   margin-top: 0.5rem;
 }
@@ -542,6 +542,11 @@ margin-top: 6rem;
   justify-content: center;
   align-items: center;
 }
+.agentRightMainFormContext{
+    display: flex;
+    flex-direction: column;
+}
+
 
 /* faq */
 
@@ -553,7 +558,7 @@ margin-top: 6rem;
 
 .faqMain{
   text-align: center;
-  
+
 }
 .faqHead{
 font-size: 2rem;
@@ -571,6 +576,9 @@ font-size: 0.8rem;
 }
 .faqItemMain{
   margin-top: 1rem;
+  border-radius: 20px !important;
+}
+.faqItemMainAnswer{
   border-radius: 20px !important;
 }
 .faqRight{
@@ -615,9 +623,10 @@ font-size: 0.8rem;
   flex-direction: column;
 }
 .testimonialImg{
-  margin-left: 4.4rem;
+  /* margin-left: 4.4rem; */
+  /* height: 8rem; */
+  width: 100%;
   height: 8rem;
-  width: 50%;
 }
 
 .testimonialLeftHead{
@@ -626,7 +635,6 @@ font-size: 0.8rem;
   margin-bottom: 1rem;
 }
 .testimonialLeftText{
-  
   margin-bottom: 1rem;
 }
 .testimoniaText{
@@ -713,16 +721,50 @@ font-size: 0.8rem;
     width: 70%;
     margin-right: 0rem;
   }
+  .campassDirection{
+   flex-wrap: nowrap;
+ }
 }
 
 
 @media screen and (max-width: 750px) {
+    .bannerHidden{
+        overflow-x: hidden;
+    }
   .propertiesByAreaBox{
-    width: 40%;
+    width: 80%;
   }
   .propertiesByAreaBoxImg{
-    height: 5rem;
+    aspect-ratio: 3/2;
     width: 100%;
+  }
+  .listBoardBack{
+      margin-left: 0.5rem !important;
+  }
+  .listBoard{
+      maxHeight: 400px;
+      overflowY: auto;
+      display: flex;
+      flex-direction: column;
+  }
+  .propertiesByAreaBoxHead{
+    font-weight: 600;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    text-wrap: nowrap;
+  }
+  .crousalItemLeftImage{
+      height: 100%;
+      object-fit: cover;
+  }
+  .crousalItemLeftImageS{
+      height: 100%;
+      object-fit: cover;
+  }
+  .smallText{
+      font-size: 0.75rem;
+      text-wrap: nowrap;
+      display : flex;
   }
   .apartmentTypeBox{
     display: flex;

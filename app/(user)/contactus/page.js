@@ -17,7 +17,7 @@ const ContactUs = () => {
     const [EnquiryType, setEnquiryType] = useState("ContactUs");
 
     const currentDate = new Date().toISOString().slice(0, 10);
-    
+
     const addEnquiryData = async () => {
         if (Name === "") {
           toast.error("Name  is required");
@@ -35,7 +35,7 @@ const ContactUs = () => {
           toast.error("Number is required");
           return false;
         }
-        let payload = { Name, Email, Message, MolileNumber, EnquiryData, EnquiryType };
+        let payload = { Name, Email, Message, MolileNumber,EnquiryDate:  EnquiryData, EnquiryType };
         let res = await addEnquiry(payload);
          if(res?.resData?.success == true){
            toast.success(res?.resData?.message);
@@ -132,24 +132,24 @@ const ContactUs = () => {
                             className={` ${styles.agentRightMainContenBtn} text-white bg-blue-700 h-12 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium  text-sm w-full sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
                             type="button"
                             onClick={addEnquiryData}
-                            > 
+                            >
                             Send
                         </button>
                     </div>
                 </div>
                 <div className={`${styles.contactLeftImg}`}>
-                    <img 
+                    <img
                         src="../../../img/contactusImg1.jpg"
                     />
                 </div>
             </div>
             <div className={`${styles.contactSectionMap}`} >
                 <div className={`${styles.contactLeftMap}`}>
-                <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d227749.05321034128!2d75.62574624184872!3d26.885115144905566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396c4adf4c57e281%3A0xce1c63a0cf22e09!2sJaipur%2C%20Rajasthan!5e0!3m2!1sen!2sin!4v1714546518432!5m2!1sen!2sin" 
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d227749.05321034128!2d75.62574624184872!3d26.885115144905566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396c4adf4c57e281%3A0xce1c63a0cf22e09!2sJaipur%2C%20Rajasthan!5e0!3m2!1sen!2sin!4v1714546518432!5m2!1sen!2sin"
                     className={`${styles.contactMap}`}
-                    allowfullscreen="" 
-                    loading="lazy" 
+                    allowfullscreen=""
+                    loading="lazy"
                     referrerpolicy="no-referrer-when-downgrade"
                 >
                 </iframe>

@@ -3,6 +3,7 @@
     background-color: lightgrey !important;
 
 }
+
 .activeMain{
     border-color: rgb(63 131 248 / var(--tw-bg-opacity)) !important;
 
@@ -11,23 +12,10 @@
     border-color: rgb(63 131 248 / var(--tw-bg-opacity)) !important;
 
 }
-
-.verticalLine{
-    left: 4% !important;
-    /* margin-top: -10rem !important; */
+.completeTab{
+    background: #2a4acb !important;
 }
-
-.propertyContainer {
-    display: flex;
-    gap: 1rem; /* Adjust the gap as needed */
-  }
-  
-  .column1 {
-    flex: 0 0 30%;
-    margin-top: 2rem;
-  }
-  
-  .column2 {
-    flex: 0 0 70%;
-  }
-  
+.rightMark{
+    color: white !important;
+    ;
+}

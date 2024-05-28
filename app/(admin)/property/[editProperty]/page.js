@@ -19,7 +19,7 @@ export default function EditProject(params) {
   console.log("params", params);
   const {
     data: listEditData,
- 
+
     error,
   } = useFetch(
     `${API_BASE_URL}/properties/${params?.params?.editProperty}`
@@ -70,7 +70,7 @@ const router=useRouter()
         }else{
           toast.error(data.error)
         }
-       
+
       } catch (error) {
         console.error("Error fetching data:", error);
         setLoading(false);
@@ -80,15 +80,6 @@ const router=useRouter()
     fetchData();
   }, [params]);
 
-  // useEffect(()=>{
-  //   console.log("property listEditData inside useEffect",listEditData?.data)
-  //   if(listEditData?.data.length>0){
-  //     sessionStorage.setItem("EditPropertyData",JSON.stringify(listEditData?.data))
-  //     console.log("useEffect working in side Uodate")
-  //     // setLocalStoragePropertyData(JSON.parse(sessionStorage.getItem('EditPropertyData')))
-  //   }
-
-  // },[listEditData])
   const handleAmenitiesChange = (amenities) => {
     console.log("amenities", amenities);
     setSelectedAmenities(amenities);
@@ -207,13 +198,9 @@ const router=useRouter()
         }),
         Brochure:propertyData?.Brochure,
         Builder:propertyData?.Builder?._id
-        // Builder:"66322d1f893b152a776d2095"
       };
       const propertyId=params?.params?.editProperty;
-      // console.log("propertyId",propertyId)
-       console.log("finalizePropertyData", finalizePropertyData);
       let res = await UpdatePropertyApi(finalizePropertyData,propertyId);
-      console.log(" Property res", res);
       if (res?.resData?.success == true) {
         if (typeof window !== "undefined") {
            sessionStorage.removeItem("EditPropertyData");
@@ -225,8 +212,8 @@ const router=useRouter()
         return false;
       }
       }
-   
-   
+
+
   };
 
   return (
@@ -264,12 +251,12 @@ const router=useRouter()
           </div>
 
           <div className={`${Styles.column2}`}>
-            {pageValue === 1 && (
-              <BasicDetailsForm
-                valueForNext={handelNextBtnValue}
-                valueForNextPage={pageValue}
-              />
-            )}
+          {pageValue === 1 && isRender ? (
+            <BasicDetailsForm
+              valueForNext={handelNextBtnValue}
+              valueForNextPage={pageValue}
+            />
+          ):null}
             {pageValue === 2 && (
               <PropertyDetailsForm
                 setPropertyBackvalue={setPropertyBackvalue}

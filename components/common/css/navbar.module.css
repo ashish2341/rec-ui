@@ -1,3 +1,18 @@
 .navbarStyle{
     justify-content: space-around;
 }
+
+.NavBarSearchButton{
+    height: 2rem;
+    margin-top: 0.1rem;
+    margin-right: 0.1rem;
+}
+
+.NavBarSearchIcon{
+    display: grid;
+    align-items: center;
+}
+
+.navbarStyleBaseLine{
+    align-items: baseline;
+}

@@ -155,12 +155,12 @@ export default function Builder() {
                     >
                       <i className="bi bi-pencil-square"></i>
                     </Link>
-                    <Link
+                    {/* <Link
                       href="#"
                       className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                     >
                       <i className="bi bi-eye-fill"></i>
-                    </Link>
+                    </Link> */}
                     <Link
                       href="#"
                       className="font-medium text-blue-600 dark:text-blue-500 hover:underline"

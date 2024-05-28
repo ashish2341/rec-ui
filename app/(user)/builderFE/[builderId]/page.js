@@ -22,7 +22,7 @@ const BuilderHomePage = (params) => {
     const [EnquiryType, setEnquiryType] = useState("ContactUs");
 
     const currentDate = new Date().toISOString().slice(0, 10);
-    
+
     const addEnquiryData = async () => {
         if (Name === "") {
           toast.error("Name  is required");
@@ -40,8 +40,8 @@ const BuilderHomePage = (params) => {
           toast.error("Number is required");
           return false;
         }
-        
-        let payload = { Name, Email, Message, MolileNumber, EnquiryData, EnquiryType };
+
+        let payload = { Name, Email, Message, MolileNumber, EnquiryDate :EnquiryData, EnquiryType };
         let res = await addEnquiry(payload);
          if(res?.resData?.success == true){
            toast.success(res?.resData?.message);
@@ -75,7 +75,7 @@ const BuilderHomePage = (params) => {
         error: developError,
       } = useFetch(`${API_BASE_URL}/developer/developer/${params?.params?.builderId}`);
 
-      
+
       console.log("developIdData",developData);
       const date = new Date(developData?.data?.EstablishDate);
       const year = date.getFullYear();
@@ -85,21 +85,21 @@ const BuilderHomePage = (params) => {
             <div className={` ${styles.divideDetailPage} divideDetailPage`}>
                 <div className={` ${styles.builderTop} mb-5`}>
                     <BreadCrumbs />
-                   
+
                 </div>
                 <div className={` ${styles.secondContent} mb-4 flex justify-between `}>
                     <div>
                     <h1 className={`${styles.propertiesByAreaMainHead}`}>Residential Projects by {developData?.data?.Name}</h1>
                     </div>
                 </div>
-               
+
             </div>
             <div className={` ${styles.builderDetailPage}`}>
                 <div className={` ${styles.builderDetailPageLeft}`}>
                     <div className={` ${styles.builderBox} mb-4`} >
                         <div className={` ${styles.builderInputField}`}>
                             <div >
-                                <img 
+                                <img
                                     width="180"
                                     height="180"
                                     className={` ${styles.builderLogoImg}`}
@@ -174,15 +174,15 @@ const BuilderHomePage = (params) => {
                                 className={` ${styles.agentRightMainContenBtn} text-white bg-blue-700 h-12 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium  text-sm w-full sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
                                 type="button"
                                 onClick={addEnquiryData}
-                                > 
+                                >
                                 Send
                             </button>
                         </div>
                     </div>
                     <div className={` ${styles.builderBox} mb-4`} >
-                    <iframe 
+                    <iframe
                         className={` ${styles.builderMapDetails}`}
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d227749.05321034128!2d75.62574624184872!3d26.885115144905566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396c4adf4c57e281%3A0xce1c63a0cf22e09!2sJaipur%2C%20Rajasthan!5e0!3m2!1sen!2sin!4v1715061916080!5m2!1sen!2sin" 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d227749.05321034128!2d75.62574624184872!3d26.885115144905566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396c4adf4c57e281%3A0xce1c63a0cf22e09!2sJaipur%2C%20Rajasthan!5e0!3m2!1sen!2sin!4v1715061916080!5m2!1sen!2sin"
                         width="305" height="200"
                     ></iframe>
                     </div>
@@ -223,7 +223,7 @@ const BuilderHomePage = (params) => {
                                     </div>
                                     <div className="flex">
                                         <i className="fa fa-area-chart"></i>
-                        
+
                                         <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
                                         {item.LandArea} Land Area
                                         </p>
@@ -237,7 +237,7 @@ const BuilderHomePage = (params) => {
                                         <button
                                         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                         type="button"
-                                        
+
                                         >
                                         More Details
                                         </button>
@@ -247,7 +247,7 @@ const BuilderHomePage = (params) => {
                         </div>
                     </div>
                     </Link>
-                    )) : <LoadingSideImg/> } 
+                    )) : <LoadingSideImg/> }
                 </div>
             </div>
         <Footer />

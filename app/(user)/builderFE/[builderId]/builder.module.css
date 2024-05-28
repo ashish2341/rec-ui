@@ -43,8 +43,8 @@
 
 
 .builderInputField{
-    padding: 1rem; 
-    
+    padding: 1rem;
+
 }
 
 .crousalItemSearchInput{
@@ -118,8 +118,8 @@
 @media screen and (max-width: 1000px) {
     .builderDetailPage{
         display: block;
-        margin-left: 3rem;
-        margin-right: 3rem;
+        margin-left: 2rem;
+        margin-right: 2rem;
     }
     .builderDetailPageRight{
         width: 100%;
@@ -130,9 +130,9 @@
     }
 
     .divideDetailPage{
-        margin-left: 3rem;
-        margin-right: 3rem;
-        margin-top: 7rem;
+        margin-left: 0.5rem;
+        margin-right: 1.5rem;
+        margin-top: 6rem;
     }
 
     .builderHunter{
@@ -147,5 +147,19 @@
 @media screen and (max-width: 600px) {
     .builderInputField{
         display: block;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .builderRightMainBox{
+        flex-direction: column;
+    }
+    .populerPropertiesBoxText{
+        display: flex;
+        text-wrap: nowrap;
+        font-size: 0.75rem;
+    }
+    .builderRightImg{
+        width: 100%;
     }
 }

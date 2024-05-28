@@ -16,31 +16,41 @@ import Link from "next/link";
 import LoadingSideImg from "@/components/common/sideImgLoader";
 
 const BuilderPage = () => {
+    const [search, setSearch] = useState("");
     const { data: areaData } = useFetch(`${API_BASE_URL_FOR_MASTER}/areas`);
     const {
         data: developData,
         loading: developLoading,
         error: developError,
-      } = useFetch(`${API_BASE_URL}/developer/allDeveloper?page=1&pageSize=5&search="K"`);
+    } = useFetch(`${API_BASE_URL}/developer/allDeveloper?page=1&pageSize=10&search=${search}`);
 
-    const [builderData,setBuilderData]=useState("")
+    const [builderData,setBuilderData]=useState("");
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         getAllBuilder();
-      }, []);
-      
-      const getAllBuilder = async () => {
-        let builder = await GetBuilderApi();
+    }, []);
+
+    useEffect(() => {
+        setLoading(developLoading);
+    }, [developLoading]);
+
+    const getAllBuilder = async () => {
+        let builder = await GetBuilderApi(search);
         if (builder?.resData?.success == true) {
-          setBuilderData(builder?.resData);
-          toast.success(builder?.resData?.message);
-          return false;
+            setBuilderData(builder?.resData);
+            toast.success(builder?.resData?.message);
+            setLoading(false);
         } else {
-          toast.error(builder?.errMessage);
-          return false;
+            toast.error(builder?.errMessage);
+            setLoading(false);
         }
-      };
-      const date = new Date(developData?.data?.EstablishDate);
-      const year = date.getFullYear();
+    };
+
+    const handleSearch = (e) => {
+        setSearch(e.target.value);
+    };
+
     return(
         <>
         <Navbar />
@@ -56,11 +66,11 @@ const BuilderPage = () => {
                         <div className={` ${styles.builderInputField}`}>
                             <input
                                 type="search"
-                                //value={search}
-                                ///onChange={handleSearch}
+                                value={search}
+                                onChange={handleSearch}
                                 id="search-dropdown"
                                 className={` ${styles.crousalItemSearchInput}`}
-                                placeholder="Search for property"
+                                placeholder="Search for Builder"
                                 required
                             />
                         </div>
@@ -96,7 +106,7 @@ const BuilderPage = () => {
                                 .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
                                 .slice(0, 4)
                                 .map((item, index) => (
-                            <Link href={`/builderFE/${item._id}`}>        
+                            <Link href={`/builderFE/${item._id}`}>
                             <Avatar key={index} img={item.Logo} size="md" className="mr-2 ml-1 justify-start p-4" rounded>
                                 <div className="dark:text-white">
                                     <div className="text-xs font-semibold blueText text-nowrap">{item.Name}</div>
@@ -112,15 +122,19 @@ const BuilderPage = () => {
                 <div className={` ${styles.builderDetailPageRight}`}>
                     <div className={` ${styles.builderTopRight} mb-4 flex justify-between mt-2`}>
                         <div>
-                            <h1>Showing {builderData.count} of {builderData.totalCount}</h1>
+                            {
+                                developData?.count > 0 ? <h1>Showing {developData?.count} of {builderData.totalCount}</h1> : null
+                            }
                         </div>
                     </div>
-                    { builderData ?
-                    builderData?.data?.map((item,index) => (
-                    <div className="mb-4">
+                    {developLoading ? (
+                        <LoadingSideImg />
+                    ) : developData?.count > 0 ?
+                    (developData?.data?.map((item,index) => (
+                    <div className={` ${styles.hoverEffect} mb-4 hover:bg-white`}>
                         <Link href={`/builderFE/${item._id}`}>
-                        <div key={index} className={` ${styles.builderDetailBuilderRight}`}>
-                            <img 
+                        <div key={index} className={` ${styles.builderDetailBuilderRight} `}>
+                            <img
                                 src={item.Logo}
                                 className={` ${styles.builderImgBuilder} mr-4`}
                             />
@@ -135,7 +149,7 @@ const BuilderPage = () => {
                             </div>
                         </div>
                         </Link>
-                    
+
                         <div className={` ${styles.builderDetailPageDown}`}>
                             <div className={` ${styles.builderSocialLine}`} >
                                 <div className={` ${styles.builderSocialIcon} text-gray-700`}>
@@ -150,7 +164,7 @@ const BuilderPage = () => {
                             </div>
                         </div>
                     </div>
-                    )) : <LoadingSideImg />}
+                ))) : <h1 className="text-2xl font-semibold text-gray-300 text-center">No data Found </h1>}
                 </div>
             </div>
         <Footer />

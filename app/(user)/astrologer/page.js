@@ -34,7 +34,7 @@ const AstrologerPage = () => {
       toast.error("Number is required");
       return false;
     }
-    let payload = { Name, Email, Message, MolileNumber, EnquiryData, EnquiryType };
+    let payload = { Name, Email, Message, MolileNumber, EnquiryDate:EnquiryData, EnquiryType };
     let res = await addEnquiry(payload)
      if(res?.resData?.success == true){
        toast.success(res?.resData?.message);
@@ -75,14 +75,14 @@ const AstrologerPage = () => {
                         </h2>
                         <p className={`${styles.buyingZodicText}`}>
                         Unlock the door to your dream home with Zodiac.
-                        Let's embark on this journey together and discover your perfect home. 
+                        Let's embark on this journey together and discover your perfect home.
                         Welcome to Zodiac, where dreams come true.
                         </p>
                         </div>
                         <div className={`${styles.buyingZodicInputMain}`}>
-                            <div className="grid gap-6 mb-6 md:grid-cols-2">
+                            <div className={`${styles.zodaicButtons} grid gap-6 mb-6 md:grid-cols-2`}>
                                 <div>
-                                    <button 
+                                    <button
                                         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium  text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                     >
                                         Chat with Astrologer
@@ -125,7 +125,7 @@ const AstrologerPage = () => {
                             </div>
                             <div className="pl-4">
                                 <p className=" text-gray-500 ">
-                                    Let's explore the role of an astrologer in the realm of property buying. 
+                                    Let's explore the role of an astrologer in the realm of property buying.
                                 </p>
                                 <ul className={` ${styles.astroList}`} >
                                     <li>Cosmic Guidance</li>
@@ -136,9 +136,9 @@ const AstrologerPage = () => {
                             </div>
                         </div>
                         <div className=" text-gray-500 mb-4">
-                        In the cosmic tapestry of life, the wisdom of astrology 
-                        illuminates our path and empowers us to make informed decisions 
-                        that resonate with our soul's purpose. When embarking on the 
+                        In the cosmic tapestry of life, the wisdom of astrology
+                        illuminates our path and empowers us to make informed decisions
+                        that resonate with our soul's purpose. When embarking on the
                         journey of property buying, enlisting the expertise of an astrologer can make all the difference.
                         </div>
                         <div className=" text-gray-500 ">
@@ -203,7 +203,7 @@ const AstrologerPage = () => {
                                     },
                                 }}
                                 /> */}
-                                <input 
+                                <input
                                     type="date"
                                     value={EnquiryData}
                                     onChange={handleEnquiryData}
@@ -217,7 +217,7 @@ const AstrologerPage = () => {
                                 className={` ${styles.agentRightMainContenBtn} text-white bg-blue-700 h-12 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
                                 type="button"
                                 onClick={addEnquiryData}
-                                > 
+                                >
                                 Send
                             </button>
                             </div>

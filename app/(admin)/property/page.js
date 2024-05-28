@@ -167,10 +167,11 @@ export default function Property() {
                   Review Status
                 </th>
               )}
-
-              <th scope="col" className="px-6 py-3">
-                Action
-              </th>
+              {roles.includes("Admin") && (
+                <th scope="col" className="px-6 py-3">
+                  Action
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -211,9 +212,12 @@ export default function Property() {
                 )}
                 {roles.includes("Developer") && (
                   <td className="px-6 py-4 text-black-600 dark:text-black-500 ">
-                    { item?.IsEnabled ? (<span>Completed</span> ) :<span>Pending</span>}
-                 
-                </td>
+                    {item?.IsEnabled ? (
+                      <span>Completed</span>
+                    ) : (
+                      <span>Pending</span>
+                    )}
+                  </td>
                 )}
                 <td className="px-6 py-4">
                   <div className="flex items-center space-x-2">
@@ -226,12 +230,12 @@ export default function Property() {
                       </Link>
                     )}
 
-                    <Link
+                    {/* <Link
                       href="#"
                       className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                     >
                       <i className="bi bi-eye-fill"></i>
-                    </Link>
+                    </Link> */}
                     {roles.includes("Admin") && (
                       <Link
                         href="#"

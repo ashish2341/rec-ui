@@ -4,6 +4,7 @@ import { GetUserApi } from "@/api-functions/user/getUsers";
 import { UpdateInquiryApi } from "@/api-functions/enquiry/updateInquiry";
 import { ToastContainer, toast } from "react-toastify";
 import styles from "./sendinquiry.module.css"
+import { add } from "date-fns";
 export default function SendInquiryModal({
   isOpen,
   title,
@@ -17,9 +18,10 @@ export default function SendInquiryModal({
   setIsPopupOpenforInquiry
 }) {
   if (!isOpen) return null;
+  console.log("AllowedUsers",AllowedUsers)
   const [page, setPage] = useState(1);
   const [userLlistData, setUserLlistData] = useState(false);
-  const [addedUSerList, setAddedUSerList] = useState(AllowedUsers);
+  const [addedUSerList, setAddedUSerList] = useState(AllowedUsers?.map((item)=>item.UserId));
   const [searchData, setSearchData] = useState("");
   useEffect(() => {
     getAllUser();
@@ -79,6 +81,7 @@ const selectAllHandle = (e) => {
     setAddedUSerList([])
   }
 }
+console.log("aduserList",addedUSerList)
   return (
     <div
       id="popup-modal"
@@ -144,6 +147,7 @@ const selectAllHandle = (e) => {
                       type="checkbox"
                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                        onChange={selectAllHandle}
+                      
                       
                     />
                     <label

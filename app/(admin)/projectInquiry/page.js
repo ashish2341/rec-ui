@@ -14,10 +14,19 @@ import { GetEnquiryByBuilderApi } from "@/api-functions/enquiry/getEnquiryByBuil
 import Cookies from "js-cookie";
 import "flowbite/dist/flowbite.min.css";
 import SendInquiryModal from "@/components/common/sendInquiryModal/sendInquiryModal";
+import DateRange from "@/components/common/dateRange/dateRange";
 export default function ProjectInquiry() {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
+  const loginUserId = Cookies.get("userId");
   const roles = roleData && JSON.parse(roleData);
+
+  const inquiryItem = [
+    "Project",
+    "Property",
+    "Astrology",
+    "ContactUs",
+  ];
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isPopupOpenforInquiry, setIsPopupOpenforInquiry] = useState(false);
   const [listData, setListData] = useState(false);
@@ -25,25 +34,26 @@ export default function ProjectInquiry() {
   const [page, setPage] = useState(1);
   const [searchData, setSearchData] = useState("");
   const [filterData, setFilterData] = useState("");
+  const [typeOnButton, setTypeOnButton] = useState("Property");
   const [AllowedUserList, setAllowedUserList] = useState([]);
-  const [isSubmitClicked,setIsSubmitClicked]=useState(0)
-  const [inquiryId,setInquiryId]=useState("")
+  const [isSubmitClicked, setIsSubmitClicked] = useState(0);
+  const [inquiryId, setInquiryId] = useState("");
+  const [isDeleted, setIsDeleted] = useState(false);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   useEffect(() => {
     initFlowbite(); // Call initCarousels() when component mounts
   }, []);
   useEffect(() => {
     if (roles.includes("Admin")) {
-      console.log("admin function called");
-      getAllEnquiry(filterData);
+      getAllEnquiry(typeOnButton);
     } else {
-      console.log("buillder function called");
       getAllEnquiryByBuilder(filterData);
     }
-  }, [page, searchData,isSubmitClicked]);
+  }, [page, searchData, isSubmitClicked, isDeleted ,toDate]);
 
   const getAllEnquiry = async (filterType) => {
-    console.log("filterType", filterType);
-    let enquiries = await GetEnquiryApi(page, searchData, filterType);
+    let enquiries = await GetEnquiryApi(page, searchData, filterType,fromDate,toDate);
     if (enquiries?.resData?.success == true) {
       setListData(enquiries?.resData);
       toast.success(enquiries?.resData?.message);
@@ -74,8 +84,7 @@ export default function ProjectInquiry() {
     console.log("res", res);
     if (res?.resData?.success == true) {
       if (roles.includes("Admin")) {
-        console.log("admin function called");
-        getAllEnquiry();
+        setIsDeleted(true);
       } else {
         console.log("buillder function called");
         getAllEnquiryByBuilder();
@@ -103,90 +112,28 @@ export default function ProjectInquiry() {
     console.log(newPage);
     setPage(newPage);
   };
-  const inquiryData = [
-    {
-      _id: "6617d013aef656b053655f39",
-      Aminity: "amenity 25",
-      Icon: "fa -fa-seat",
-      IsEnabled: true,
-      IsDeleted: false,
-      CreatedBy: "66167a7dc58d18fe508ff039",
-      UpdatedBy: "66167a7dc58d18fe508ff039",
-      IsForProperty: true,
-      IsForProject: true,
-      CreatedDate: "2024-04-11T11:57:07.063Z",
-      UpdatedDate: "2024-04-11T11:57:07.063Z",
-      __v: 0,
-    },
-    {
-      _id: "6617d3afaef656b053655f4f",
-      Aminity: "amenity 26",
-      Icon: "fa fa-car",
-      IsEnabled: true,
-      IsDeleted: false,
-      CreatedBy: "66167a7dc58d18fe508ff039",
-      UpdatedBy: "66167a7dc58d18fe508ff039",
-      IsForProperty: true,
-      IsForProject: false,
-      CreatedDate: "2024-04-11T12:12:31.249Z",
-      UpdatedDate: "2024-04-11T12:12:31.249Z",
-      __v: 0,
-    },
-    {
-      _id: "6618d510af1e5d1f1df80002",
-      Aminity: "Tarrice new 27",
-      Icon: "fa fa-ab",
-      IsEnabled: false,
-      IsDeleted: false,
-      CreatedBy: "66167a7dc58d18fe508ff039",
-      UpdatedBy: "66167a7dc58d18fe508ff039",
-      IsForProperty: true,
-      IsForProject: true,
-      CreatedDate: "2024-04-12T06:30:40.686Z",
-      UpdatedDate: "2024-04-12T06:30:40.686Z",
-      __v: 0,
-    },
-    {
-      _id: "6618e308af1e5d1f1df80168",
-      Aminity: "Tarrice new 1d",
-      Icon: "fa fa-pencil",
-      IsEnabled: true,
-      IsDeleted: false,
-      CreatedBy: "66167a7dc58d18fe508ff039",
-      UpdatedBy: "66167a7dc58d18fe508ff039",
-      IsForProperty: false,
-      IsForProject: true,
-      CreatedDate: "2024-04-12T07:30:16.616Z",
-      UpdatedDate: "2024-04-12T07:30:16.616Z",
-      __v: 0,
-    },
-    {
-      _id: "6618e312af1e5d1f1df80171",
-      Aminity: "Tarrice new 3d",
-      Icon: "fa fa-bike",
-      IsEnabled: true,
-      IsDeleted: false,
-      CreatedBy: "66167a7dc58d18fe508ff039",
-      UpdatedBy: "66167a7dc58d18fe508ff039",
-      IsForProperty: false,
-      IsForProject: true,
-      CreatedDate: "2024-04-12T07:30:26.454Z",
-      UpdatedDate: "2024-04-12T07:30:26.454Z",
-      __v: 0,
-    },
-  ];
 
   const enquiryType = (filterType) => {
-    // setFilterData(type)
+    setTypeOnButton(filterType);
     console.log("enquiryType filterType", filterType);
     getAllEnquiry(filterType);
   };
   function maskEmail(email) {
     if (!email) return "";
+    console.log("email", email);
     const [localPart, domain] = email.split("@");
-    const visiblePart = localPart.slice(0, 2); // Get the first 2 characters
-    const maskedLocalPart = "*".repeat(localPart.length - 2); // Mask the rest of the local part
+    console.log("localPart", localPart);
+    console.log("domain", domain);
+    const visiblePart =
+      localPart.length != 1 ? localPart.slice(0, 2) : localPart.slice(0, 1); // Get the first 2 characters
+    console.log("visiblePart", visiblePart);
+    const maskedLocalPart =
+      localPart.length != 1
+        ? "*".repeat(localPart.length - 2)
+        : "*".repeat(localPart.length - 1); // Mask the rest of the local part
+    console.log("maskedLocalPart", maskedLocalPart);
     const maskedDomain = "*".repeat(domain.length); // Mask the entire domain part
+    console.log("maskedDomain", maskedDomain);
     return `${visiblePart}${maskedLocalPart}@${maskedDomain}`;
   }
   function maskNumber(number) {
@@ -196,62 +143,31 @@ export default function ProjectInquiry() {
     return `${visiblePart}${maskedPart}`;
   }
 
-  const openInquiryModal = (AllowedUserListArray,id) => {
+  const openInquiryModal = (AllowedUserListArray, id) => {
     setIsPopupOpenforInquiry(true);
     setAllowedUserList(AllowedUserListArray);
-    setInquiryId(id)
+    setInquiryId(id);
   };
   const handleInquiryModalCancel = () => {
     setIsPopupOpenforInquiry(false);
   };
+const IsInquiryVisiable=((inquiry)=>{
+if(inquiry?.DeveloperId){
+  return inquiry?.IsVisiable
+}else{
+  return inquiry?.AllowedUser?.find((item)=>item?.UserId == loginUserId)?.Status
+}
+})
   return (
     <section>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3">
         <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
           Project Inquiry
         </h1>
-        {/* <div id="date-rangepicker" className="flex items-center mb-5">
-          <div className="relative">
-            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-              <svg
-                className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-              </svg>
-            </div>
-            <input
-              name="start"
-              type="date"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Select date start"
-            />
-          </div>
-          <span className="mx-4 text-gray-500">to</span>
-          <div className="relative">
-            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-              <svg
-                className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-              </svg>
-            </div>
-            <input
-              name="end"
-              type="date"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Select date end"
-            />
-          </div>
-        </div> */}
 
+        {roles.includes("Admin") && (
+          <DateRange setFromDate={setFromDate} setToDate={setToDate} startDate={fromDate} endDate={toDate}/>
+        )}
         <div className="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
           <div className="flex">
             {listData ? (
@@ -268,7 +184,8 @@ export default function ProjectInquiry() {
                   className="text-black bg-white rounded-lg border border-gray-200  hover:bg-gray-100 hover:text-blue-700 focus:ring-gray-100  focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
                   type="button"
                 >
-                  Inquiry Type
+                  {" "}
+                  {typeOnButton && typeOnButton}
                   <svg
                     className="w-2.5 h-2.5 ms-3"
                     aria-hidden="true"
@@ -294,38 +211,16 @@ export default function ProjectInquiry() {
                     className="p-2 text-sm text-gray-700 dark:text-gray-200 list-none"
                     aria-labelledby="dropdownPossessionButton"
                   >
-                    <li onClick={() => enquiryType("Project")}>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        Project
-                      </a>
-                    </li>
-                    <li onClick={() => enquiryType("Property")}>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        Property
-                      </a>
-                    </li>
-                    <li onClick={() => enquiryType("Astrology")}>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        Astrology
-                      </a>
-                    </li>
-                    <li onClick={() => enquiryType("ContactUs")}>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        Contact Us
-                      </a>
-                    </li>
+                    {inquiryItem.map((item) => (
+                      <li onClick={() => enquiryType(item)}>
+                        <Link
+                          href=""
+                          className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
+                        >
+                          {item}
+                        </Link>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </li>
@@ -363,35 +258,54 @@ export default function ProjectInquiry() {
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              {roles.includes("Admin") && (
+              {/* {roles.includes("Admin") && (
                 <th scope="col" className="px-6 py-3">
                   Enquiry Type
                 </th>
-              )}
-
-              <th scope="col" className="px-6 py-3">
-                Question
-              </th>
+              )} */}
               <th scope="col" className="px-6 py-3">
                 Name
               </th>
               <th scope="col" className="px-6 py-3">
                 Email
               </th>
-              {roles.includes("Developer") && (
+              <th scope="col" className="px-6 py-3">
+                Mobile No.
+              </th>
+              {typeOnButton != "Project" &&
+              typeOnButton != "ContactUs" &&
+              typeOnButton != "Astrology" ? (
                 <th scope="col" className="px-6 py-3">
-                  Mobile No.
+                  Property Name
+                </th>
+              ) : null}
+              {typeOnButton != "Project" &&
+              typeOnButton != "ContactUs" &&
+              typeOnButton != "Astrology" ? (
+                <th scope="col" className="px-6 py-3">
+                  Property URL
+                </th>
+              ) : null}
+              {typeOnButton == "Project" || typeOnButton == "ContactUs" ? (
+                <th scope="col" className="px-6 py-3">
+                  Message
+                </th>
+              ) : null}
+
+              <th scope="col" className="px-6 py-3">
+                enquiry Date
+              </th>
+
+              {roles.includes("Admin") && (
+                <th scope="col" className="px-6 py-3">
+                  Action Taken
                 </th>
               )}
               {roles.includes("Admin") && (
                 <th scope="col" className="px-6 py-3">
-                  Is Enabled
+                  Action
                 </th>
               )}
-
-              <th scope="col" className="px-6 py-3">
-                Action
-              </th>
             </tr>
           </thead>
           <tbody>
@@ -400,21 +314,14 @@ export default function ProjectInquiry() {
                 key={index}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
-                {roles.includes("Admin") && (
+                {/* {roles.includes("Admin") && (
                   <td
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
                     {item?.EnquiryType}
                   </td>
-                )}
-
-                <td
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  {item?.Message}
-                </td>
+                )} */}
                 <td
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -433,25 +340,91 @@ export default function ProjectInquiry() {
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    {(item?.IsVisiable || !item?.DeveloperId)  ?(maskEmail(item?.Email)):(item?.Email)}
-                    
+                    {IsInquiryVisiable(item)
+                      ? item?.Email
+                      : maskEmail(item?.Email)}
                   </td>
                 )}
 
-                {roles.includes("Developer") && (
+                {roles.includes("Developer") ? (
+                  <td
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  > 
+                    {IsInquiryVisiable(item)
+                      ? item?.MolileNumber
+                      : maskNumber(item?.MolileNumber) }
+                  </td>
+                ) : (
                   <td
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    {item?.IsVisiable ?(maskNumber(item?.MolileNumber)):(item?.MolileNumber)}
-                    
+                    {item?.MolileNumber}
                   </td>
                 )}
+                {typeOnButton != "Project" &&
+                typeOnButton != "ContactUs" &&
+                typeOnButton != "Astrology" ? (
+                  <td
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    {roles.includes("Developer") &&
+                    item?.EnquiryType != "Property" ? (
+                      <span>-</span>
+                    ) : (
+                      item?.PropertyId?.Titile
+                    )}
+                  </td>
+                ) : null}
+                {typeOnButton != "Project" &&
+                typeOnButton != "ContactUs" &&
+                typeOnButton != "Astrology" ? (
+                  roles.includes("Developer") &&
+                  item?.EnquiryType != "Property" ? (
+                    <td
+                      scope="row"
+                      className="px-6 py-4 font-medium text-black-500 whitespace-nowrap dark:text-white"
+                    >
+                      -
+                    </td>
+                  ) : (
+                    <Link
+                      href={`/propertyDetail/${item?.PropertyId?._id}`}
+                      legacyBehavior
+                    >
+                      <a target="_blank" rel="noopener noreferrer">
+                        <td
+                          scope="row"
+                          className="px-6 py-4 font-medium text-blue-500 whitespace-nowrap dark:text-white"
+                        >
+                          URL
+                        </td>
+                      </a>
+                    </Link>
+                  )
+                ) : null}
+                {typeOnButton == "Project" || typeOnButton == "ContactUs" ? (
+                  <td
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    {item?.Message}
+                  </td>
+                ) : null}
+
+                <td
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                  {item?.EnquiryDate.slice(0, 10)}
+                </td>
                 {roles.includes("Admin") && (
                   <td className="px-6 py-4 text-blue-600 dark:text-blue-500">
                     <i
                       className={` ${
-                        item?.IsEnabled
+                        item?.IsActionTaken
                           ? "bi bi-hand-thumbs-up-fill text-green-600	"
                           : "bi bi-hand-thumbs-down-fill text-red-500"
                       } `}
@@ -459,41 +432,44 @@ export default function ProjectInquiry() {
                     ></i>
                   </td>
                 )}
+                {roles.includes("Admin") && (
+                  <td className="px-6 py-4">
+                    <div className="flex items-center space-x-2">
+                      {/* <Link
+                        //  href={`/amenity/${item._id}`}
+                               href={""}
+                               className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                           >
+                                <i className="bi bi-eye-fill"></i>
+                                 </Link> */}
+                      {roles.includes("Admin") && (
+                        <Link
+                          href=""
+                          className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                        >
+                          <i
+                            onClick={() => deleteInquiryModel(item?._id)}
+                            className="bi bi-trash-fill"
+                          ></i>
+                        </Link>
+                      )}
 
-                <td className="px-6 py-4">
-                  <div className="flex items-center space-x-2">
-                    <Link
-                      //  href={`/amenity/${item._id}`}
-                      href={""}
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    >
-                      <i className="bi bi-eye-fill"></i>
-                    </Link>
-                    {roles.includes("Admin") && (
-                      <Link
-                        href=""
-                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                      >
-                        <i
-                          onClick={() => deleteInquiryModel(item?._id)}
-                          className="bi bi-trash-fill"
-                        ></i>
-                      </Link>
-                    )}
-
-                    {roles.includes("Admin") && !item?.DeveloperId ? (
-                      <Link
-                        href=""
-                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                      >
-                        <i
-                          onClick={() => openInquiryModal(item?.AllowedUser ,item?._id)}
-                          className="bi bi-send-fill"
-                        ></i>
-                      </Link>
-                    ) : null}
-                  </div>
-                </td>
+                      {roles.includes("Admin") && !item?.DeveloperId ? (
+                        <Link
+                          href=""
+                          className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                        >
+                          <i
+                            onClick={() =>
+                              openInquiryModal(item?.AllowedUser, item?._id)
+                            }
+                            className="bi bi-send-fill"
+                          ></i>
+                        </Link>
+                      ) : null}
+                    </div>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

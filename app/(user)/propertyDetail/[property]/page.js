@@ -1251,6 +1251,9 @@ const PropertyDetail = ({ params }) => {
                     selected={EnquiryData}
                     onDayClick={handleEnquiryData}
                     className={`${styles.rdp}`}
+                    modifiers={{
+                        disabled: { before: new Date() } // Disable dates before today
+                      }}
                     modifiersStyles={{
                       selected: {
                         backgroundColor: "gray",

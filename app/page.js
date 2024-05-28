@@ -212,8 +212,6 @@ console.log("testimonialData",testimonialData);
                 <div className={`${styles.testimonialLeft}`}>
                   <div className={`${styles.testimonialLeftBoxDetails} text-center`}>
                     <img
-                      height="20"
-                      width="20"
                       className={` ${styles.testimonialImg}  mb-3`}
                       src={item.Image}
                       alt="test"
@@ -1175,7 +1173,7 @@ console.log("testimonialData",testimonialData);
           <div className={`${styles.dreamRight} relative`}>
             <img
               className={`${styles.blogContentImg} absolute bottom-0`}
-              src="/img/home3dimage1.png"
+              src="/img/homeBottom1.png"
               alt="a"
             />
           </div>

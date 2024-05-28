@@ -10,7 +10,7 @@ import Cookies from "js-cookie";
 import { FormatNumber } from "@/utils/commonHelperFn";
 import Styles from "../propertypage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
-
+import styles from "../propertypage.module.css"
 export default function PartSix({
   valueForNextfromSix,
   valueForNextPagefromSix,
@@ -28,7 +28,7 @@ export default function PartSix({
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
-      sessionStorage.getItem("propertyData")
+      sessionStorage.getItem("EditPropertyData")
     );
     console.log(
       "localStorageData from localstorage",
@@ -62,8 +62,8 @@ export default function PartSix({
       );
 
       setByBank(sessionStoragePropertyData?.LoanDetails?.ByBank || []);
-      setLoanSince(sessionStoragePropertyData?.LoanDetails?.LoanSince || "");
-      setLoanTill(sessionStoragePropertyData?.LoanDetails?.LoanTill || "");
+      setLoanSince(sessionStoragePropertyData?.LoanDetails?.LoanSince?.slice(0, 10) || "");
+      setLoanTill(sessionStoragePropertyData?.LoanDetails?.LoanTill?.slice(0, 10) || "");
     }
   }, []);
 
@@ -107,10 +107,10 @@ export default function PartSix({
       };
       console.log("sixthPropertyData", sixthPropertyData);
       const localStorageData = JSON.parse(
-        sessionStorage.getItem("propertyData")
+        sessionStorage.getItem("EditPropertyData")
       );
       const newProjectData = { ...localStorageData, ...sixthPropertyData };
-      sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
+      sessionStorage.setItem("EditPropertyData", JSON.stringify(newProjectData));
       valueForNextfromSix(valueForNextPagefromSix + 1);
       setPropertyBackvalue(prev=>prev-1)
     } else {
@@ -295,7 +295,7 @@ export default function PartSix({
             </div>
           ) : (
             <div className="flex flex-wrap space-x-2">
-             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+             <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
             </div>
           )}
         </div>

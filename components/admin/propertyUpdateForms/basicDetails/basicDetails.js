@@ -3,50 +3,55 @@
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
-
-
 export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [highlight, setHighlight] = useState("");
-  
-  
- console.log("This is  Basis detils page ")
 
+  console.log("This is  Basis detils page ");
 
   useEffect(() => {
-    const sessionStoragePropertyData=JSON.parse(sessionStorage.getItem('EditPropertyData'));
-    console.log("sessionStoragePropertyData from localstorage",sessionStoragePropertyData)
-    if (sessionStoragePropertyData){
-      setTitle(sessionStoragePropertyData?.Titile || "")
-      setDescription(sessionStoragePropertyData?.Description || "")
-      setHighlight(sessionStoragePropertyData?.Highlight || "")
+    const sessionStoragePropertyData = JSON.parse(
+      sessionStorage.getItem("EditPropertyData")
+    );
+    console.log(
+      "sessionStoragePropertyData from localstorage",
+      sessionStoragePropertyData
+    );
+    if (sessionStoragePropertyData) {
+      setTitle(sessionStoragePropertyData?.Titile || "");
+      setDescription(sessionStoragePropertyData?.Description || "");
+      setHighlight(sessionStoragePropertyData?.Highlight || "");
     }
-  },[]);
+  }, []);
 
   const SubmitForm = () => {
-
     if (title === "") {
-        toast.error("Title  is required.");
-        return false;
-      }
-      if (description === "") {
-          toast.error("Description is required.");
-        return false;
-      }
-      if (highlight === "") {
-        toast.error("Highlight is required.");
-        return false;
-      }
-      const basicDetailsData={
-        Titile:title.trim(),
-        Description:description.trim(),
-        Highlight:highlight.trim(),
+      toast.error("Title  is required.");
+      return false;
+    }
+    if (description === "") {
+      toast.error("Description is required.");
+      return false;
+    }
+    if (highlight === "") {
+      toast.error("Highlight is required.");
+      return false;
+    }
+    const basicDetailsData = {
+      Titile: title.trim(),
+      Description: description.trim(),
+      Highlight: highlight.trim(),
+    };
+    const updatedProjectData = {
+      ...JSON.parse(sessionStorage.getItem("EditPropertyData")),
+      ...basicDetailsData,
+    };
+    sessionStorage.setItem(
+      "EditPropertyData",
+      JSON.stringify(updatedProjectData)
+    );
 
-      }
-      const updatedProjectData = { ...JSON.parse(sessionStorage.getItem('EditPropertyData')), ...basicDetailsData };
-      sessionStorage.setItem("EditPropertyData",JSON.stringify(updatedProjectData))
-  
     valueForNext(valueForNextPage + 1);
   };
 
@@ -63,7 +68,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
   return (
     <>
       <div>
-        <form action="#">
+        <form>
           <h3 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white">
             Basic Details{" "}
           </h3>
@@ -122,17 +127,16 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
             </div>
           </div>
         </form>
-       
-          <div>
-            <button
-              onClick={SubmitForm}
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
-            >
-              Next
-            </button>
-          </div>
-    
+
+        <div>
+          <button
+            onClick={SubmitForm}
+            type="button"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </>
   );

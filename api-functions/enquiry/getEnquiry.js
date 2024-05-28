@@ -2,12 +2,12 @@ import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { API_BASE_URL, PAGE_LIMIT } from "@/utils/constants";
 
-
-
 export const GetEnquiryApi = async (
   page,
   searchData,
   filterType,
+  fromDate,
+  toDate,
   setLoading = () => {}
 ) => {
   const token = Cookies.get("token");
@@ -17,7 +17,9 @@ export const GetEnquiryApi = async (
     const res = await fetch(
       `${API_BASE_URL}/enquiry/allProjectEnquiry?page=${page}&pageSize=${PAGE_LIMIT}&search=${
         searchData ? searchData : ""
-      }${filterType ? `&filter=${filterType}` : ""}`,
+      }${filterType ? `&filter=${filterType}` : ""}${
+        fromDate ? `&startDate=${fromDate}` : ""
+      }${toDate ? `&endDate=${toDate}` : ""}`,
       {
         method: "GET",
         headers: {

@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import { FormatNumber } from "@/utils/commonHelperFn";
 import Styles from "../propertypage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
+import styles from "../propertypage.module.css"
 export default function PartThree({ setPropertyPageValue }) {
   // fetching Data for fencingsData
   const { data: fencingsData } = useFetch(
@@ -54,7 +55,7 @@ export default function PartThree({ setPropertyPageValue }) {
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
-      sessionStorage.getItem("propertyData")
+      sessionStorage.getItem("EditPropertyData")
     );
     console.log(
       "localStorageData from localstorage",
@@ -115,10 +116,10 @@ export default function PartThree({ setPropertyPageValue }) {
       };
       console.log("thirdPropertyData", thirdPropertyData);
       const localStorageData = JSON.parse(
-        sessionStorage.getItem("propertyData")
+        sessionStorage.getItem("EditPropertyData")
       );
       const newProjectData = { ...localStorageData, ...thirdPropertyData };
-      sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
+      sessionStorage.setItem("EditPropertyData", JSON.stringify(newProjectData));
       setPropertyPageValue((prev) => prev + 1);
     } else {
       toast.error("Please fill in all required fields!");
@@ -175,7 +176,7 @@ export default function PartThree({ setPropertyPageValue }) {
             </div>
           ) : (
             <div className="flex flex-wrap space-x-2">
-             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+             <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
             </div>
           )}
         </div>
@@ -225,7 +226,7 @@ export default function PartThree({ setPropertyPageValue }) {
             </div>
           ) : (
             <div className="flex flex-wrap space-x-2">
-             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+             <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
             </div>
           )}
         </div>
@@ -275,7 +276,7 @@ export default function PartThree({ setPropertyPageValue }) {
             </div>
           ) : (
             <div className="flex flex-wrap space-x-2">
-             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+             <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
             </div>
           )}
         </div>
@@ -327,7 +328,7 @@ export default function PartThree({ setPropertyPageValue }) {
             </div>
           ) : (
             <div className="flex flex-wrap space-x-2">
-             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+             <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
             </div>
           )}
         </div>
@@ -432,7 +433,7 @@ export default function PartThree({ setPropertyPageValue }) {
             </div>
           ) : (
             <div className="flex flex-wrap space-x-2">
-             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+             <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
             </div>
           )}
         

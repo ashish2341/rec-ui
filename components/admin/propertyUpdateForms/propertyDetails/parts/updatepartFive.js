@@ -10,7 +10,7 @@ import Cookies from "js-cookie";
 import { FormatNumber } from "@/utils/commonHelperFn";
 import Styles from "../propertypage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
-
+import styles from "../propertypage.module.css"
 export default function PartFive({ setPropertyPageValue }) {
   // fetching Data for bhkTypeData
   const { data: bhkTypeData } = useFetch(`${API_BASE_URL_FOR_MASTER}/bhkType`);
@@ -69,7 +69,7 @@ export default function PartFive({ setPropertyPageValue }) {
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
-      sessionStorage.getItem("propertyData")
+      sessionStorage.getItem("EditPropertyData")
     );
     console.log(
       "localStorageData from localstorage",
@@ -87,7 +87,7 @@ export default function PartFive({ setPropertyPageValue }) {
       );
 
       setPosessionStatus(sessionStoragePropertyData?.PosessionStatus || "");
-      setPosessionDate(sessionStoragePropertyData?.PosessionDate || "");
+      setPosessionDate(sessionStoragePropertyData?.PosessionDate?.slice(0, 10) || "");
       setIsSingleProperty(
         sessionStoragePropertyData?.IsSingleProperty === true
           ? true
@@ -113,7 +113,9 @@ export default function PartFive({ setPropertyPageValue }) {
           : false
       );
       setPreferences(sessionStoragePropertyData?.Preferences || []);
-      setSurveillance(sessionStoragePropertyData?.Surveillance || []);
+      setSurveillance(sessionStoragePropertyData?.Surveillance.map((item)=>{
+        return {value:item}
+      }) || []);
 
       setBhkType(sessionStoragePropertyData?.BhkType || "");
       setBrochure(sessionStoragePropertyData?.Brochure || "");
@@ -240,10 +242,10 @@ export default function PartFive({ setPropertyPageValue }) {
       };
       console.log("fifthPropertyData", fifthPropertyData);
       const localStorageData = JSON.parse(
-        sessionStorage.getItem("propertyData")
+        sessionStorage.getItem("EditPropertyData")
       );
       const newProjectData = { ...localStorageData, ...fifthPropertyData };
-      sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
+      sessionStorage.setItem("EditPropertyData", JSON.stringify(newProjectData));
       setPropertyPageValue((prev) => prev + 1);
     } else {
       toast.error("Please fill in all required fields!");
@@ -353,7 +355,7 @@ export default function PartFive({ setPropertyPageValue }) {
             </div>
           ) : (
             <div className="flex flex-wrap space-x-2">
-             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+             <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
             </div>
           )}
         </div>
@@ -403,7 +405,7 @@ export default function PartFive({ setPropertyPageValue }) {
             </div>
           ) : (
             <div className="flex flex-wrap space-x-2">
-             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+             <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
             </div>
           )}
         </div>
@@ -455,7 +457,7 @@ export default function PartFive({ setPropertyPageValue }) {
             </div>
           ) : (
             <div className="flex flex-wrap space-x-2">
-             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+             <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
             </div>
           )}
         </div>
@@ -508,7 +510,7 @@ export default function PartFive({ setPropertyPageValue }) {
             </div>
           ) : (
             <div className="flex flex-wrap space-x-2">
-             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+             <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
             </div>
           )}
         </div>
@@ -595,7 +597,7 @@ export default function PartFive({ setPropertyPageValue }) {
             placeholder="Surveillance"
             required=""
             value={surveillance.map((item) => {
-              return item.name;
+              return item.value;
             })}
             disabled={true}
           />
@@ -625,7 +627,7 @@ export default function PartFive({ setPropertyPageValue }) {
             </div>
           ) : (
             <div className="flex flex-wrap space-x-2">
-             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+             <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
             </div>
           )}
         </div>
@@ -674,7 +676,7 @@ export default function PartFive({ setPropertyPageValue }) {
             </div>
           ) : (
             <div className="flex flex-wrap space-x-2">
-             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+             <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
             </div>
           )}
         </div>
@@ -723,7 +725,7 @@ export default function PartFive({ setPropertyPageValue }) {
             </div>
           ) : (
             <div className="flex flex-wrap space-x-2">
-             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+             <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
             </div>
           )}
         </div>

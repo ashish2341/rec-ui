@@ -215,39 +215,10 @@ export default function LocationDetailsForm({
                 </div>
               ) : (
                 <div className="flex flex-wrap space-x-2">
-                  {defaultOption.map((item, index) => (
-                    <button
-                      key={index}
-                      // onClick={() => handleFacingClick(item.value)}
-                      className={` rounded text-white w-full  ${Styles.optionButton} bg-[#6592d3] }`}
-                    >
-                      {item.label}
-                    </button>
-                  ))}
-                </div>
+             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+            </div>
               )}
-              {/*               
-              {areaData ? (
-                <Select
-                  options={areaData.data.map((element) => ({
-                    value: element._id,
-                    label: element.Area,
-                  }))}
-                  placeholder="Select One"
-                  onChange={setArea}
-                  required={true}
-                  value={area}
-                />
-              ) : (
-                <Select
-                  options={defaultOption.map((element) => ({
-                    value: element.value,
-                    label: element.label,
-                  }))}
-                  placeholder="Select One"
-                  required={true}
-                />
-              )} */}
+             
             </div>
             <div>
               <label

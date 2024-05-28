@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import { FormatNumber } from "@/utils/commonHelperFn";
 import Styles from "../propertypage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
+import styles from "../propertypage.module.css"
 export default function PartOne({
   setPropertyPageValue,
   setPropertyBackvalue,
@@ -67,7 +68,7 @@ export default function PartOne({
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
-      sessionStorage.getItem("propertyData")
+      sessionStorage.getItem("EditPropertyData")
     );
     console.log(
       "localStorageData from localstorage",
@@ -76,15 +77,17 @@ export default function PartOne({
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
       console.log(
-        "if function called sessionStoragePropertyData.PropertyFor ",
-        sessionStoragePropertyData.ProeprtyFor
+        "sessionStoragePropertyData?.Facing  ",
+        sessionStoragePropertyData?.Facing.map((item)=>{
+          return item
+        })
       );
       console.log(
         "sessionStoragePropertyData?.Brochure",
         sessionStoragePropertyData?.Brochure
       );
       // setPropertyType(sessionStoragePropertyData.PropertyType || "");
-      setFacing(sessionStoragePropertyData?.Facing || "");
+      setFacing(sessionStoragePropertyData?.Facing || []);
       setPropertyFor(sessionStoragePropertyData?.ProeprtyFor || "");
       setIsExclusive(
         sessionStoragePropertyData?.IsExclusive === true
@@ -138,7 +141,7 @@ export default function PartOne({
     }
     setReraNumber(sessionStoragePropertyData?.ReraNumber || "");
     setPropertyTypeWithSubtype(
-      sessionStoragePropertyData?.PropertyTypeWithSubtype || []
+      sessionStoragePropertyData?.PropertyType || ""
     );
   }, []);
   const handelIsEnabled = (e) => {
@@ -165,7 +168,7 @@ export default function PartOne({
     setPropertyFor(value);
   };
   const handleFacingClick = (value, label) => {
-    setFacing({ _id: value, Facing: label });
+    setFacing([{ _id: value, Facing: label }]);
   };
   const handelReraNumber = (e) => {
     console.log("Rera Number:", e.target.value);
@@ -199,7 +202,7 @@ export default function PartOne({
         IsFeatured: isFeatured,
         IsNew: isNew,
         ProeprtyFor: propertyFor,
-        PropertyTypeWithSubtype: propertyTypeWithSubtype,
+        PropertyType: propertyTypeWithSubtype,
         ReraNumber: reraNumber,
         
       };
@@ -208,10 +211,10 @@ export default function PartOne({
       }
       console.log("firstPropertyData", firstPropertyData);
       const localStorageData = JSON.parse(
-        sessionStorage.getItem("propertyData")
+        sessionStorage.getItem("EditPropertyData")
       );
       const newProjectData = { ...localStorageData, ...firstPropertyData };
-      sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
+      sessionStorage.setItem("EditPropertyData", JSON.stringify(newProjectData));
       setPropertyPageValue((prev) => prev + 1);
       setPropertyBackvalue((prev) => prev + 1);
     } else {
@@ -270,7 +273,9 @@ export default function PartOne({
                   className={` rounded text-white px-4 py-2 ${
                     Styles.optionButton
                   } ${
-                    facing._id === item._id
+                    facing.some(
+                      (selectedItem) => selectedItem._id === item._id
+                    )
                       ? "bg-[#2a4acb] border-2 border-[#2a4acb]"
                       : "bg-[#6592d3]  border-2 border-[#6592d3]"
                   }`}
@@ -281,11 +286,12 @@ export default function PartOne({
             </div>
           ) : (
             <div className="flex flex-wrap space-x-2">
-             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+             <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
             </div>
           )}
         </div>
-       
+        
+
         {/* Is Enabled */}
         {roles.includes("Admin") && (
           <div>
@@ -490,7 +496,7 @@ export default function PartOne({
             </div>
           ) : (
             <div className="flex flex-wrap space-x-2">
-             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+             <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
             </div>
           )}
         </div>
@@ -539,7 +545,7 @@ export default function PartOne({
               </div>
             ) : (
               <div className="flex flex-wrap space-x-2">
-              <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+              <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
              </div>
             )}
           </div>

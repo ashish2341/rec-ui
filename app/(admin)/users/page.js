@@ -93,7 +93,7 @@ export default function Users() {
         </h1>
         <div className="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
           <div>
-            <Link href={"/testiMonials/addTestiMonials"}>
+            {/* <Link href={"/testiMonials/addTestiMonials"}>
               {" "}
               <button
                 className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
@@ -101,7 +101,7 @@ export default function Users() {
               >
                 + Add User
               </button>
-            </Link>
+            </Link> */}
           </div>
           <label htmlFor="table-search" className="sr-only">
             Search
@@ -202,12 +202,12 @@ export default function Users() {
                     >
                       <i className="bi bi-pencil-square"></i>
                     </Link>
-                    <Link
+                    {/* <Link
                       href=""
                       className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                     >
                       <i className="bi bi-eye-fill"></i>
-                    </Link>
+                    </Link> */}
                     <Link
                       href="#"
                       className="font-medium text-blue-600 dark:text-blue-500 hover:underline"

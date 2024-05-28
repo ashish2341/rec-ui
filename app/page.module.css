@@ -728,6 +728,9 @@ font-size: 0.8rem;
 
 
 @media screen and (max-width: 750px) {
+   .crousalItemSearchIcon{
+       z-index: 8;
+   }
     .bannerHidden{
         overflow-x: hidden;
     }

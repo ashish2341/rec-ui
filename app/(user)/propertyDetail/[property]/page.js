@@ -39,8 +39,8 @@ const PropertyDetail = ({ params }) => {
   const [Email, setEmail] = useState("");
   const [Message, setMessage] = useState("test");
   const [MolileNumber, setPhone] = useState("");
-  const [EnquiryData, setEnquiryData] = useState(new Date());
-  const [EnquiryDataShow, setEnquiryDataShow] = useState(new Date());
+  const [EnquiryData, setEnquiryData] = useState();
+  const [EnquiryDataShow, setEnquiryDataShow] = useState();
   const [EnquiryType, setEnquiryType] = useState("Property");
   const [listData, setListData] = useState(false);
   const [listPropertiesData, setListPropertiesData] = useState(false);
@@ -76,9 +76,8 @@ const PropertyDetail = ({ params }) => {
       Email,
       Message,
       MolileNumber,
-      EnquiryDate:EnquiryData.selectedDay,
+      EnquiryDate:EnquiryDataShow,
       EnquiryType,
-      // IsEnquiryVisiable,
       DeveloperId:listPropertiesData?.Builder?._id,
       PropertyId:listPropertiesData?._id
     };
@@ -112,8 +111,10 @@ const PropertyDetail = ({ params }) => {
     setPhone(e.target.value);
   };
   const handleEnquiryData = (date) => {
-    setEnquiryData({ selectedDay: date });
-    setEnquiryDataShow(EnquiryData);
+     const selectedDate = new Date(date);
+     selectedDate.setDate(selectedDate.getDate() + 1);
+     setEnquiryDataShow(selectedDate);
+    setEnquiryData(date);
     console.log("date",EnquiryData)
   };
 
@@ -1247,7 +1248,7 @@ const PropertyDetail = ({ params }) => {
                 <div className={`mb-5`}>
                   <DayPicker
                     mode="single"
-                    selected={EnquiryData.selectedDay}
+                    selected={EnquiryData}
                     onDayClick={handleEnquiryData}
                     className={`${styles.rdp}`}
                     modifiersStyles={{

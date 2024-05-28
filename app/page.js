@@ -52,10 +52,10 @@ export default function Home() {
   ];
 
   const facingSubHeading =[
-    "Eastward Bound: Discover Homes with the Rising Sun",
-    "Twilight Haven: Western-Facing Residences",
-    "Northern Comforts: Find Your Haven in Homes Facing North",
-    "Southern Serenity: Seek Solace in Homes Facing South"
+    "Eastward Bound: Explore Homes Awakened by the Rising Sun",
+    "Twilight Haven: Embrace the Glow of Western-Facing Residences",
+    "Find Your Haven: Northern Comforts in North-Facing Homes",
+    "Southern Serenity: Find Tranquility in Homes Embracing the South"
   ]
 
  // fetching Data for facing

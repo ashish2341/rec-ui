@@ -1,6 +1,6 @@
 
 .astroLeftUpImg{
-  border-radius: 1rem;    
+  border-radius: 1rem;
   height: 3%;
   width: 100%;
 }
@@ -16,7 +16,7 @@
  }
 
  .rdp {
-    --rdp-cell-size: 35px; 
+    --rdp-cell-size: 35px;
   }
 
 .astroDetails{
@@ -59,7 +59,7 @@
     }
     .buyingZodicInputMain{
       margin-top: 2rem;
-    
+
     }
     .buyingZodicRight{
       width: 50%;
@@ -80,3 +80,32 @@
         margin: 1rem;
         color: grey;
       }
+
+@media screen and (max-width: 850px) {
+    .astroDetails{
+        display: block;
+        margin-top: 2rem;
+        margin-left: 2rem;
+        margin-right: 2rem;
+    }
+    .astroLeft{
+        width: 100%;
+    }
+    .divideDetailPageRight{
+        width: 100%;
+    }
+    .buyingOptionWithZodic{
+      margin-left: 1rem;
+      margin-right: 1rem;
+    }
+    .buyingZodicLeft{
+      width: 100%;
+    }
+    .buyingZodicRight{
+      display: none;
+    }
+    .zodaicButtons{
+        display: grid;
+        grid-template-columns: auto auto;
+    }
+}

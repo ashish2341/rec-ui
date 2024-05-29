@@ -910,7 +910,7 @@ const PropertyDetail = ({ params }) => {
               <div className={`${styles.amenitiesBox}`}>
                 <Accordion className="border-none">
                   <AccordionPanel>
-                    <AccordionTitle>Aminities</AccordionTitle>
+                    <AccordionTitle>Amenities</AccordionTitle>
                     {listPropertiesData ? (
                       <AccordionContent
                         className={`${styles.AccordionContent}`}

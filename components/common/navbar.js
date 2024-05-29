@@ -23,7 +23,7 @@ export default function Navbar() {
             />
           </Link>
           <MegaDropdown
-            className="items-center navbarMainUl justify-between hidden w-full md:flex md:w-auto md:order-1 "
+
           />
         </div>
 
@@ -172,9 +172,6 @@ export default function Navbar() {
               >
                 Builder
               </Link>
-            </li>
-            <li>
-                <SearchNavBar />
             </li>
           </ul>
         </div>

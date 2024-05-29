@@ -51,7 +51,6 @@ const SearchBar = (props) => {
     setBudgetDisplayValue(e.target.innerText)
     setIsDropdownOpenB(false);
   }
-
   const handlePropertyChange = (e) => {
     setPropertyValue(e.target.value);
     setPropertyDisplayValue(e.target.innerText);
@@ -136,8 +135,8 @@ const SearchBar = (props) => {
             <div
               //ref={dropdownRefBudget}
               id="buy-dropdown"
-              className={`z-1000 ${isDropdownOpen ? 'block' : 'hidden'} overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
-              style={{ maxHeight: "200px" }}
+              className={`z-1000 ${isDropdownOpenB ? 'block' : 'hidden'} ${styles.buydropDownList}  overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
+              style={{ maxHeight: "200px", width: "15%"}}
             >
               <ul
                 className="py-2 text-sm text-gray-700 dark:text-gray-200"
@@ -187,7 +186,7 @@ const SearchBar = (props) => {
             <div
               id="budget-dropdown"
               className={`z-1000 ${isDropdownOpen ? 'block' : 'hidden'} overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
-              style={{ maxHeight: "200px" }} // Adjust the max height as per your requirement
+              style={{ maxHeight: "200px", width: "15%" }} // Adjust the max height as per your requirement
             >
               <ul
                 className="py-2 text-sm text-gray-700 dark:text-gray-200"
@@ -243,8 +242,8 @@ const SearchBar = (props) => {
             <div
               //ref={dropdownRefProperty}
               id="dropdown"
-              className={`z-1000 ${isDropdownOpen ? 'block' : 'hidden'} overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
-              style={{ maxHeight: "200px" }}
+              className={`z-1000 ${isDropdownOpenP ? 'block' : 'hidden'} overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
+              style={{ maxHeight: "200px", width: "15%" }}
             >
               <ul
                 className="py-2 text-sm text-gray-700 dark:text-gray-200"

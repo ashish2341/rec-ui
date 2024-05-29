@@ -22,7 +22,10 @@ export default function PropertyImagesForm({
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("propertyData")
     );
-    console.log("localStorageData from localstorage", sessionStoragePropertyData);
+    console.log(
+      "localStorageData from localstorage",
+      sessionStoragePropertyData
+    );
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
       setImage(sessionStoragePropertyData?.Images || "");
@@ -53,7 +56,9 @@ export default function PropertyImagesForm({
     console.log("mediaData before set localstorge", mediaData);
 
     if (mediaData) {
-      const localStorageData = JSON.parse(sessionStorage.getItem("propertyData"));
+      const localStorageData = JSON.parse(
+        sessionStorage.getItem("propertyData")
+      );
       const newProjectData = { ...localStorageData, ...mediaData };
       console.log("newProjectData before set localStorage", newProjectData);
       sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
@@ -343,7 +348,7 @@ export default function PropertyImagesForm({
         // // Step 3: Update the object in local storage with the modified array
         const updatedData = { ...storedData, Videos: videoArray };
         console.log("updatedData", updatedData);
-         sessionStorage.setItem("EditPropertyData", JSON.stringify(updatedData));
+        sessionStorage.setItem("EditPropertyData", JSON.stringify(updatedData));
       }
     }
     setVideo(newArray);
@@ -444,6 +449,17 @@ export default function PropertyImagesForm({
   return (
     <>
       <div>
+        {mainBackPageValue == 0 || btnShowonInputChange == false ? (
+          <div className="flex justify-end w-1/2 mb-4 relative -top-20 ml-[25rem]">
+            <button
+              onClick={SubmitForm}
+              type="button"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
+            >
+              Save
+            </button>
+          </div>
+        ) : null}
         <form>
           <div className="grid gap-4 mb-4 sm:grid-cols-1">
             <div className="border border-gray-300 p-3 rounded-lg">
@@ -599,17 +615,6 @@ export default function PropertyImagesForm({
             </div>
           </div>
         </form>
-        {mainBackPageValue == 0 || btnShowonInputChange == false ? (
-          <div>
-            <button
-              onClick={SubmitForm}
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
-            >
-              Save
-            </button>
-          </div>
-        ) : null}
       </div>
     </>
   );

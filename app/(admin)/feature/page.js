@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from "next/link";
 import { deleteFeatures } from "@/api-functions/feature/deleteFeature";
 import { getFeatures } from "@/api-functions/feature/getFeature";
@@ -15,13 +15,13 @@ export default function Feature() {
   const [listData, setListData] = useState(false);
   const [deleteId, setDeleteId] = useState();
   const [page, setPage] = useState(1);
-  const [searchData,setSearchData]=useState("")
+  const [searchData, setSearchData] = useState("");
 
   useEffect(() => {
     getAllFeature();
-  }, [page,searchData]);
+  }, [page, searchData]);
   const getAllFeature = async () => {
-    let feature = await getFeatures(page,searchData);
+    let feature = await getFeatures(page, searchData);
     if (feature?.resData?.success == true) {
       setListData(feature?.resData);
       toast.success(feature?.resData?.message);
@@ -34,7 +34,6 @@ export default function Feature() {
   const handleDelete = async () => {
     // Perform delete operation
     let res = await deleteFeatures(deleteId);
-    console.log("res", res);
     if (res?.resData?.success == true) {
       getAllFeature();
       setDeleteId("");
@@ -54,23 +53,20 @@ export default function Feature() {
   const deleteFeature = async (id) => {
     setDeleteId(id);
     setIsPopupOpen(true);
-
   };
 
   const handlePageChange = (newPage) => {
-    console.log(newPage)
     setPage(newPage);
   };
-  const searchInputChange=(e)=>{
-  
-    setSearchData(e.target.value)
-  }
+  const searchInputChange = (e) => {
+    setSearchData(e.target.value);
+  };
   return (
     <section>
       <div className="p-3 relative overflow-x-auto shadow-md sm:rounded-lg">
-      <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
-      Features
-      </h1>
+        <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
+          Features
+        </h1>
         <div className="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
           <div>
             <Link href="/feature/addFeature">
@@ -83,10 +79,7 @@ export default function Feature() {
               </button>
             </Link>
           </div>
-          <label htmlFor="table-search" className="sr-only">
-            Search
-          </label>
-          <div className="relative">
+          {listData?.data?.length > 0 ? (  <div className="relative">
             <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
               <svg
                 className="w-5 h-5 text-gray-500 dark:text-gray-400"
@@ -109,73 +102,91 @@ export default function Feature() {
               placeholder="Search users"
               onChange={searchInputChange}
             />
-          </div>
+          </div>):(null)}
+        
         </div>
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              <th scope="col" className="px-6 py-3">
-                Feature
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Is Enabled
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Icon
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-          {listData?.data?.map((item, index) => (
-              <tr
-                key={index}
-                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-              >
-                <td
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  {item.Feature}
-                </td>
-                <td className="px-6 py-4 text-blue-600 dark:text-blue-500">
-                  <i
-                    className={` ${
-                      item.IsEnabled
-                        ? "bi bi-hand-thumbs-up-fill text-green-600	"
-                        : "bi bi-hand-thumbs-down-fill text-red-500"
-                    } `}
-                    style={{ fontSize: "24px" }}
-                  ></i>
-                </td>
-                <td className="px-6 py-4">{item.Icon}</td>
-
-                <td className="px-6 py-4">
-                  <div className="flex items-center space-x-2">
-                    <Link
-                      href={`/feature/${item._id}`}
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+        {listData ? (
+          listData?.data?.length > 0 ? (
+            <div>
+              {" "}
+              <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th scope="col" className="px-6 py-3">
+                      Feature
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Is Enabled
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Icon
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {listData?.data?.map((item, index) => (
+                    <tr
+                      key={index}
+                      className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                     >
-                      <i className="bi bi-pencil-square"></i>
-                    </Link>
-                    {/* <i className="bi bi-eye-fill"></i> */}
-                    <i
-                      onClick={() => deleteFeature(item._id)}
-                      className="bi bi-trash-fill"
-                    ></i>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <Pagination 
-         data={listData}
-         pageNo={handlePageChange}
-         pageVal={page}
-         />
+                      <td
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      >
+                        {item.Feature}
+                      </td>
+                      <td className="px-6 py-4 text-blue-600 dark:text-blue-500">
+                        <i
+                          className={` ${
+                            item.IsEnabled
+                              ? "bi bi-hand-thumbs-up-fill text-green-600	"
+                              : "bi bi-hand-thumbs-down-fill text-red-500"
+                          } `}
+                          style={{ fontSize: "24px" }}
+                        ></i>
+                      </td>
+                      <td className="px-6 py-4">
+                        {" "}
+                        <img
+                          className="imageCircle"
+                          src={item.Icon}
+                          width={100}
+                          height={100}
+                        />
+                      </td>
+
+                      <td className="px-6 py-4">
+                        <div className="flex items-center space-x-2">
+                          <Link
+                            href={`/feature/${item._id}`}
+                            className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                          >
+                            <i className="bi bi-pencil-square"></i>
+                          </Link>
+                          {/* <i className="bi bi-eye-fill"></i> */}
+                          <i
+                            onClick={() => deleteFeature(item._id)}
+                            className="bi bi-trash-fill"
+                          ></i>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <Pagination
+                data={listData}
+                pageNo={handlePageChange}
+                pageVal={page}
+              />
+            </div>
+          ) : (
+            <h1 className={`bigNotFound`}>No Data Found</h1>
+          )
+        ) : null}
       </div>
 
       <Popup

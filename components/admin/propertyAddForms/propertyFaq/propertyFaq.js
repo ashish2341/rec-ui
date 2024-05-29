@@ -83,6 +83,15 @@ export default function PropertyFaqForm({ valueForNext, valueForNextPage }) {
   return (
     <>
       <div>
+      <div className="flex justify-end w-1/2 mb-4 relative -top-20 ml-[25rem]">
+            <button
+              onClick={SubmitForm}
+              type="button"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
+            >
+              Next
+            </button>
+          </div>
         <form>
           <h3 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white">
             Faq Details
@@ -148,15 +157,7 @@ export default function PropertyFaqForm({ valueForNext, valueForNextPage }) {
             Add More
           </button>
         </form>
-        <div>
-          <button
-            onClick={SubmitForm}
-            type="button"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
-          >
-            Next
-          </button>
-        </div>
+       
       </div>
     </>
   );

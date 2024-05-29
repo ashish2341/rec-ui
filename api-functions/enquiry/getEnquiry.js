@@ -12,7 +12,6 @@ export const GetEnquiryApi = async (
 ) => {
   const token = Cookies.get("token");
   setLoading(true);
-  console.log("GetEnquiryApi filterType", filterType);
   try {
     const res = await fetch(
       `${API_BASE_URL}/enquiry/allProjectEnquiry?page=${page}&pageSize=${PAGE_LIMIT}&search=${
@@ -29,7 +28,6 @@ export const GetEnquiryApi = async (
       }
     );
     const resData = await res.json();
-    console.log("resData", resData);
 
     if (resData?.statusCode == 200) {
       setLoading(false);

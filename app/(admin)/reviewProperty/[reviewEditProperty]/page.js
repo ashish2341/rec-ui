@@ -14,16 +14,24 @@ import Spinner from "@/components/common/loading";
 import { ToastContainer, toast } from "react-toastify";
 import { UpdatePropertyApi } from "@/api-functions/property/updateProperty";
 import { useRouter } from "next/navigation";
+import Stepper from "@/components/common/stepper/stepper";
 export default function EditProject(params) {
   console.log("params", params);
   const {
     data: listEditData,
- 
+
     error,
   } = useFetch(
-    `${API_BASE_URL}/properties/${params?.params?.reviewEditProperty}`
+    `${API_BASE_URL}/properties/${params?.params?.editProperty}`
   );
-
+  const stepperArray = [
+    "Basic details",
+    "Property details",
+    "Feature/Amenity",
+    "Location details",
+    "Faq details",
+    "Property Images",
+  ];
   console.log("property listEditData of outSide",listEditData)
   const [pageValue, setPageValue] = useState(1);
   const [activePage, setActivePage] = useState();
@@ -32,6 +40,7 @@ export default function EditProject(params) {
   const [valueForBack, setValueForBack] = useState(0);
   const [loading, setLoading] = useState(false);
   const [isRender, setIsRender] = useState(false);
+  const [propertyBackvalue, setPropertyBackvalue] = useState(0);
 const router=useRouter()
   useEffect(() => {
     const token = Cookies.get("token");
@@ -61,7 +70,7 @@ const router=useRouter()
         }else{
           toast.error(data.error)
         }
-       
+
       } catch (error) {
         console.error("Error fetching data:", error);
         setLoading(false);
@@ -71,15 +80,6 @@ const router=useRouter()
     fetchData();
   }, [params]);
 
-  // useEffect(()=>{
-  //   console.log("property listEditData inside useEffect",listEditData?.data)
-  //   if(listEditData?.data.length>0){
-  //     sessionStorage.setItem("EditPropertyData",JSON.stringify(listEditData?.data))
-  //     console.log("useEffect working in side Uodate")
-  //     // setLocalStoragePropertyData(JSON.parse(sessionStorage.getItem('EditPropertyData')))
-  //   }
-
-  // },[listEditData])
   const handleAmenitiesChange = (amenities) => {
     console.log("amenities", amenities);
     setSelectedAmenities(amenities);
@@ -99,6 +99,9 @@ const router=useRouter()
   const handelBackPage = () => {
     setPageValue(pageValue - 1);
     setValueForBack(0);
+    if (pageValue == 3 || pageValue ==4) {
+      setPropertyBackvalue(0);
+    }
   };
 
   const handelBackValue = (value) => {
@@ -165,7 +168,7 @@ const router=useRouter()
         }),
         DiscountPercentage: propertyData?.DiscountPercentage,
         DiscountForYears: propertyData?.DiscountForYears,
-        Surveillance: propertyData?.Surveillance.map((item) => item),
+        Surveillance: propertyData?.Surveillance.map((item) => item.value),
         Features: propertyData?.Features.map((item)=>{
           return item._id
         }),
@@ -195,17 +198,13 @@ const router=useRouter()
         }),
         Brochure:propertyData?.Brochure,
         Builder:propertyData?.Builder?._id
-        // Builder:"66322d1f893b152a776d2095"
       };
       const propertyId=params?.params?.reviewEditProperty;
-      // console.log("propertyId",propertyId)
-       console.log("finalizePropertyData", finalizePropertyData);
       let res = await UpdatePropertyApi(finalizePropertyData,propertyId);
-      console.log(" Property res", res);
       if (res?.resData?.success == true) {
         if (typeof window !== "undefined") {
            sessionStorage.removeItem("EditPropertyData");
-           router.push("/reviewProperty");
+           router.push("/property");
         }
         toast.success(res?.resData?.message);
       } else {
@@ -213,200 +212,102 @@ const router=useRouter()
         return false;
       }
       }
-   
-   
+
+
   };
+
   return (
     <section>
-      {loading && <Spinner />}
-      <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
-        Update Your Property Details
-      </h1>
+      <div className="flex">
+        <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
+          Update Your Property Details
+        </h1>
+        {pageValue > 1 ? (
+          pageValue == 1 ? null : (pageValue == 2 && propertyBackvalue == 0) ||
+            (pageValue == 3 && propertyBackvalue == 0) ? (
+            <button
+              onClick={handelBackPage}
+              type="button"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5 ml-10"
+              >
+              Back
+            </button>
+          ) : pageValue == 1 || pageValue == 2 || pageValue == 3 ? (
+           null
+          ) : ( <button
+            onClick={handelBackPage}
+            type="button"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5 ml-10"
+          >
+            Back
+          </button>)
+        ) : null}
+      </div>
 
-      <ol className="flex items-center w-full mb-4 sm:mb-5">
-        <li className="w-full">
-          <div
-            className={`${
-              pageValue == 2 || pageValue > 2 ? Styles.activeMain : ""
-            } flex w-full items-center text-black-600 dark:text-blue-500 after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-500 after:border-4 after:inline-block dark:after:border-blue-800`}
-          >
-            <div
-              className={`flex items-center justify-center w-10 h-10 ${
-                pageValue == 1
-                  ? Styles.actiivetab
-                  : pageValue > 1
-                  ? "bg-blue-500"
-                  : "bg-blue-100"
-              } rounded-full lg:h-12 lg:w-12 dark:bg-blue-800 shrink-0`}
-            >
-              1
-            </div>
+      <div className="container mx-auto p-4">
+        <div className={`${Styles.propertyContainer}`}>
+          <div className={`${Styles.column1}`}>
+            <Stepper steppers={stepperArray} pageNumber={pageValue} />
           </div>
-          <p>Basic details</p>
-        </li>
-        <li className="w-full">
-          <div
-            className={`${
-              pageValue == 3 || pageValue > 3 ? Styles.activeMain : ""
-            } flex w-full items-center text-black-600 dark:text-blue-500 after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-100 after:border-4 after:inline-block dark:after:border-blue-800`}
-          >
-            <div
-              className={`flex items-center justify-center w-10 h-10 ${
-                pageValue == 2
-                  ? Styles.actiivetab
-                  : pageValue > 2
-                  ? "bg-blue-500"
-                  : "bg-blue-100"
-              } rounded-full lg:h-12 lg:w-12 dark:bg-blue-800 shrink-0`}
-            >
-              2
-            </div>
-          </div>
-          <p>Property details</p>
-        </li>
-        <li className="w-full">
-          <div
-            className={`${
-              pageValue == 4 || pageValue > 4 ? Styles.activeMain : ""
-            } flex w-full items-center text-black-600 dark:text-blue-500 after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-100 after:border-4 after:inline-block dark:after:border-blue-800`}
-          >
-            <div
-              className={`flex items-center justify-center w-10 h-10 ${
-                pageValue == 3
-                  ? Styles.actiivetab
-                  : pageValue > 3
-                  ? "bg-blue-500"
-                  : "bg-blue-100"
-              } rounded-full lg:h-12 lg:w-12 dark:bg-blue-800 shrink-0`}
-            >
-              3
-            </div>
-          </div>
-          <p>Feature/Amenity</p>
-        </li>
-        <li className="w-full">
-          <div
-            className={`${
-              pageValue == 5 || pageValue > 5 ? Styles.activeMain : ""
-            } flex w-full items-center text-black-600 dark:text-blue-500 after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-100 after:border-4 after:inline-block dark:after:border-blue-800`}
-          >
-            <div
-              className={`flex items-center justify-center w-10 h-10 ${
-                pageValue == 4
-                  ? Styles.actiivetab
-                  : pageValue > 4
-                  ? "bg-blue-500"
-                  : "bg-blue-100"
-              } rounded-full lg:h-12 lg:w-12 dark:bg-blue-800 shrink-0`}
-            >
-              4
-            </div>
-          </div>
-          <p>Location details</p>
-        </li>
-        <li className="w-full">
-          <div
-            className={`${
-              pageValue == 6 || pageValue > 6 ? Styles.activeMain : ""
-            } flex w-full items-center text-black-600 dark:text-blue-500 after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-100 after:border-4 after:inline-block dark:after:border-blue-800`}
-          >
-            <div
-              className={`flex items-center justify-center w-10 h-10 ${
-                pageValue == 5
-                  ? Styles.actiivetab
-                  : pageValue > 5
-                  ? "bg-blue-500"
-                  : "bg-blue-100"
-              } rounded-full lg:h-12 lg:w-12 dark:bg-blue-800 shrink-0`}
-            >
-              5
-            </div>
-          </div>
-          <p>Faq details</p>
-        </li>
-        <li className="w-full">
-          <div className={` flex items-center text-black-600 w-full`}>
-            <div
-              className={`flex items-center justify-center w-10 h-10 ${
-                pageValue == 6
-                  ? Styles.actiivetab
-                  : pageValue > 6
-                  ? "bg-blue-500"
-                  : "bg-blue-100"
-              } rounded-full lg:h-12 lg:w-12 dark:bg-blue-800 shrink-0`}
-            >
-              6
-            </div>
-          </div>
-          <p>Property Images</p>
-        </li>
-        
-        {/* <li className="flex w-full items-center text-black-600 after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-100 after:border-4 after:inline-block dark:after:border-blue-700">
-        <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full lg:h-12 lg:w-12 dark:bg-gray-700 shrink-0">
-            2
-        </div>
-    </li>
-    <li className="flex items-center text-black-600 w-full">
-        <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full lg:h-12 lg:w-12 dark:bg-gray-700 shrink-0">
-            3
-        </div>
-    </li> */}
-      </ol>
-      {pageValue > 1 ? (
-        <button
-          onClick={handelBackPage}
-          type="button"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5 mb-5"
-        >
-          Back
-        </button>
-      ) : null}
-      {isRender ? (
-        pageValue == 1 ? (
-          <BasicDetailsForm
-            valueForNext={handelNextBtnValue} //here it's value comes from child component
-            valueForNextPage={pageValue} //here its value pass from parent to child component
-          />
-        ) : pageValue == 2 ? (
-          <PropertyDetailsForm
-            valueForNext={handelNextBtnValue} //here it's value comes from child component
-            valueForNextPage={pageValue} //here its value pass from parent to child component
-          />
-        ) : pageValue == 3 ? (
-          <FeaturesDetailsForm
-            onAmenitiesChange={handleAmenitiesChange}
-            onFeaturesChange={handleFeaturesChange}
-            valueForNext={handelNextBtnValue} //here it's value comes from child component
-            valueForNextPage={pageValue} //here its value pass from parent to child component
-          />
-        ) : pageValue == 4 ? (
-          <LocationDetailsForm
-            valueForNext={handelNextBtnValue} //here it's value comes from child component
-            valueForNextPage={pageValue} //here its value pass from parent to child component
-          />
-        ) : pageValue == 5 ?(
-          <PropertyFaqForm
-            valueForNext={handelNextBtnValue} //here it's value comes from child component
-            valueForNextPage={pageValue} //here its value pass from parent to child component
-          />
-        ):(
-          <PropertyImagesForm
-            valueForNextPage={pageValue} //here its value pass from parent to child component
-            valueForBack={handelBackValue} //here it's value comes from child component
-            mainBackPageValue={valueForBack} //here its value pass from parent to child component
-          />
-        )
-      ) : null}
 
-      {valueForBack == 1 ? (
-        <button
-        onClick={submitPropertyData}
-          type="button"
-          className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mt-5"
-        >
-          Finish
-        </button>
-      ) : null}
+          <div className={`${Styles.column2}`}>
+          {valueForBack === 1 && (
+            <div className="flex justify-end w-1/2 mb-4 relative -top-20 ml-[25rem]">
+              <button
+                onClick={submitPropertyData}
+                type="button"
+                className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mt-5"
+              >
+                Finish
+              </button>
+              </div>
+            )}
+          {pageValue === 1 && isRender ? (
+            <BasicDetailsForm
+              valueForNext={handelNextBtnValue}
+              valueForNextPage={pageValue}
+            />
+          ):null}
+            {pageValue === 2 && (
+              <PropertyDetailsForm
+                setPropertyBackvalue={setPropertyBackvalue}
+                valueForNext={handelNextBtnValue}
+                valueForNextPage={pageValue}
+              />
+            )}
+            {pageValue === 3 && (
+              <FeaturesDetailsForm
+                setPropertyBackvalue={setPropertyBackvalue}
+                onAmenitiesChange={handleAmenitiesChange}
+                onFeaturesChange={handleFeaturesChange}
+                valueForNext={handelNextBtnValue}
+                valueForNextPage={pageValue}
+              />
+            )}
+            {pageValue === 4 && (
+              <LocationDetailsForm
+                valueForNext={handelNextBtnValue}
+                valueForNextPage={pageValue}
+              />
+            )}
+            {pageValue === 5 && (
+              <PropertyFaqForm
+                valueForNext={handelNextBtnValue}
+                valueForNextPage={pageValue}
+              />
+            )}
+            {pageValue === 6 && (
+              <PropertyImagesForm
+                valueForNextPage={pageValue}
+                valueForBack={handelBackValue}
+                mainBackPageValue={valueForBack}
+              />
+            )}
+
+            
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

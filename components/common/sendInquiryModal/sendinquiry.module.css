@@ -1,3 +1,7 @@
 .inquiryModal{
     max-width: 48rem !important;
 }
+.usercheckbox{
+    margin-right: 1rem !important;
+    margin-bottom: 2rem;
+}

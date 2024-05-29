@@ -65,7 +65,7 @@ export default function DateRange({
           />
         </div>
         <div className="ml-2" onClick={clearInput}>
-        <i class="bi bi-x-square-fill text-red-500 text-2xl"></i>
+        <i className="bi bi-x-square-fill text-red-500 text-2xl"></i>
           
         </div>
       </div>

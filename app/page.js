@@ -515,6 +515,17 @@ console.log("testimonialData",testimonialData);
               alt="...a"
             />
           </div>
+           {/*
+               {bannerData?.data.map(item => (
+               <div className="overflow-hidden duration-700 ease-in-out" data-carousel-item>
+            <img
+              src={item.Url}
+              className= {`${styles.crousalItemLeftImageS} absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
+              alt="...a"
+            />
+          </div>
+            ))}
+          */}
           <div className="overflow-hidden duration-700 ease-in-out" data-carousel-item>
             <img
               src={bannerData?.data[2].Url}
@@ -620,7 +631,7 @@ console.log("testimonialData",testimonialData);
       <div className={`${styles.propertiesByAreaMain} propertiesByArea`}>
         <div>
           <h2 className={`${styles.propertiesByAreaMainHead}`}>
-            Properties by <span className="blueText">Area</span>
+            Popular Properties by <span className="blueText">Localities</span>
           </h2>
           <div className={`${styles.propertiesByAreaMainTextMain}`}>
             <p className={`${styles.propertiesByAreaMainText}`}>
@@ -720,8 +731,8 @@ console.log("testimonialData",testimonialData);
                     type="date"
                     value={Dob}
                     onChange={handleDob}
-                    id="last_name"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    id="date"
+                    className="bg-gray-50 uppercase border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Dob"
                     required
                   />

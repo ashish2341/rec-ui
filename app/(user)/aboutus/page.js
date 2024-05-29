@@ -43,7 +43,7 @@ const AboutUs = () => {
                             post-transaction services to consumers for both buying and renting.
                         </p>
                     </div>
-                    <div className={`${styles.aboutWelcomeImg} ml-10`}>
+                    <div className={`${styles.aboutWelcomeImg}`}>
                         <img
                             src="../../../img/contactusImg1.jpg"
                         />

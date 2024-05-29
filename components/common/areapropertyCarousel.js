@@ -30,7 +30,7 @@ export default function AreaMultiCarousel({ UI }) {
         responsive={responsive}
         infinite={true}
         autoPlay={true}
-        autoPlaySpeed={1000}
+        autoPlaySpeed={1900}
         draggable
         swipeable
         containerClass="carousel-container"

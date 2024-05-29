@@ -44,9 +44,9 @@ const MegaDropdown = () => {
       </button>
       <div
         id="dropdownNavbarLocation"
-        className={`${styles.listBoardBack} z-10 ${
-          isOpen ? "block" : "hidden"
-        } mt-10 font-normal bg-gray-100 divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600`}
+        className={`${styles.listBoardBack} ${
+          isOpen ? "grid" : "hidden"
+        } font-normal bg-gray-100 divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600`}
       >
         <ul
           className={`${styles.listBoard} p-2 text-sm text-gray-700 dark:text-gray-400`}

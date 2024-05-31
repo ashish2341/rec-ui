@@ -19,3 +19,13 @@
     color: white !important;
     ;
 }
+.progressBar{
+    width: 80% !important;
+    padding: 0;
+    margin-right: 8rem;
+    background-color: rgb(225 244 246) !important;
+   
+}
+/* .insideprogressBar{
+   
+} */

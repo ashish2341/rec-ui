@@ -18,6 +18,7 @@ export default function AddProject() {
   const [selectedFeatures, setSelectedFeatures] = useState([]);
   const [valueForBack, setValueForBack] = useState(0);
   const [propertyBackvalue, setPropertyBackvalue] = useState(0);
+  let [basisPagebuttonvalue,setBasisPagebuttonvalue]=useState("Residential")
   const router = useRouter();
   const handleAmenitiesChange = (amenities) => {
     console.log("amenities", amenities);
@@ -38,7 +39,7 @@ export default function AddProject() {
   const handelBackPage = () => {
     setPageValue(pageValue - 1);
     setValueForBack(0);
-    if (pageValue == 3 || pageValue ==4) {
+    if (pageValue == 3 || pageValue == 4) {
       setPropertyBackvalue(0);
     }
   };
@@ -144,109 +145,158 @@ export default function AddProject() {
       }
     }
   };
-
-  const stepperArray = [
-    "Basic details",
-    "Property details",
-    "Feature/Amenity",
-    "Location details",
-    "Faq details",
-    "Property Images",
+  let stepperArray=""
+if(basisPagebuttonvalue=="Residential"){
+   stepperArray = [{
+    name:"Basic details",
+    value:1
+  },
+  
+  {
+    name:"Location details",
+    value:2
+  },
+  {
+    name:"Property details",
+    value:3
+  },
+  // {
+  //   name: "Feature/Amenity",
+  //   value:4
+  // },
+  // {
+  //   name:"Faq details",
+  //   value:5
+  // },
+  // {
+  //   name:"Property Images",
+  //   value:6
+  // }
   ];
+}
+if(basisPagebuttonvalue=="Commercial"){
+   stepperArray = [{
+    name:"Basic details",
+    value:1
+  },
+  
+  {
+    name:"Location details",
+    value:2
+  },
+  {
+    name:"Property details",
+    value:3
+  },
+  {
+    name: "Feature/Amenity",
+    value:4
+  },
+  {
+    name:"Faq details",
+    value:5
+  },
+  {
+    name:"Property Images",
+    value:6
+  }
+  ];
+}
   console.log("propertyBackvalue", propertyBackvalue);
   console.log("pageValue", pageValue);
   return (
-    <section>
-      <div className="flex">
-        <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
-          Add Your Property Details
-        </h1>
+    <section >
+      {/* <div className="flex">
         {pageValue > 1 ? (
-          pageValue == 1 ? null : (pageValue == 2 && propertyBackvalue == 0) ||
-            (pageValue == 3 && propertyBackvalue == 0) ? (
+          pageValue == 1 ? null : (pageValue == 3 && propertyBackvalue == 0) ||
+            (pageValue == 4 && propertyBackvalue == 0) ? (
             <button
               onClick={handelBackPage}
               type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5 ml-10"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  ml-70"
             >
               Back
             </button>
-          ) : pageValue == 1 || pageValue == 2 || pageValue == 3 ? (
-           null
-          ) : ( <button
-            onClick={handelBackPage}
-            type="button"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5 ml-10"
+          ) : pageValue == 1 || pageValue == 3 || pageValue == 4 ? null : (
+            <button
+              onClick={handelBackPage}
+              type="button"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  ml-70"
             >
-            Back
-          </button>)
+              Back
+            </button>
+          )
         ) : null}
-      </div>
+      </div> */}
 
-      <div className="container mx-auto p-4">
+      
         <div className={`${Styles.propertyContainer}`}>
           <div className={`${Styles.column1}`}>
-            <Stepper steppers={stepperArray} pageNumber={pageValue} />
+            {stepperArray &&  (<Stepper steppers={stepperArray} pageNumber={pageValue} setPageValue={setPageValue}/>) }
+           
           </div>
 
           <div className={`${Styles.column2}`}>
-          {valueForBack === 1 && (
-            <div className="flex justify-end w-1/2 mb-4 relative -top-20 ml-[25rem]">
-              <button
-                onClick={submitPropertyData}
-                type="button"
-                className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mt-5"
-              >
-                Finish
-              </button>
-              </div>
-            )}
-            {pageValue === 1 && (
-              <BasicDetailsForm
-                valueForNext={handelNextBtnValue}
-                valueForNextPage={pageValue}
-              />
-            )}
-            {pageValue === 2 && (
-              <PropertyDetailsForm
-                setPropertyBackvalue={setPropertyBackvalue}
-                valueForNext={handelNextBtnValue}
-                valueForNextPage={pageValue}
-              />
-            )}
-            {pageValue === 3 && (
-              <FeaturesDetailsForm
-                setPropertyBackvalue={setPropertyBackvalue}
-                onAmenitiesChange={handleAmenitiesChange}
-                onFeaturesChange={handleFeaturesChange}
-                valueForNext={handelNextBtnValue}
-                valueForNextPage={pageValue}
-              />
-            )}
-            {pageValue === 4 && (
-              <LocationDetailsForm
-                valueForNext={handelNextBtnValue}
-                valueForNextPage={pageValue}
-              />
-            )}
-            {pageValue === 5 && (
-              <PropertyFaqForm
-                valueForNext={handelNextBtnValue}
-                valueForNextPage={pageValue}
-              />
-            )}
-            {pageValue === 6 && (
-              <PropertyImagesForm
-                valueForNextPage={pageValue}
-                valueForBack={handelBackValue}
-                mainBackPageValue={valueForBack}
-              />
-            )}
-
-            
+            <div className={`${Styles.insidecolumn2}`}>
+              {valueForBack === 1 && (
+                <div className="flex justify-end w-1/2 mb-4 relative -top-20 ml-[25rem]">
+                  <button
+                    onClick={submitPropertyData}
+                    type="button"
+                    className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mt-5"
+                  >
+                    Finish
+                  </button>
+                </div>
+              )}
+              {pageValue === 1 && (
+                <BasicDetailsForm
+                  valueForNext={handelNextBtnValue}
+                  valueForNextPage={pageValue}
+                  activeButton={basisPagebuttonvalue}
+                  setBasisPagebuttonvalue={setBasisPagebuttonvalue}
+                />
+              )}
+               {pageValue === 2 && (
+                <LocationDetailsForm
+                  valueForNext={handelNextBtnValue}
+                  valueForNextPage={pageValue}
+                />
+              )}
+              {pageValue === 3 && (
+                <PropertyDetailsForm
+                  setPropertyBackvalue={setPropertyBackvalue}
+                  valueForNext={handelNextBtnValue}
+                  valueForNextPage={pageValue}
+                />
+              )}
+              {pageValue === 4 && (
+                <FeaturesDetailsForm
+                  setPropertyBackvalue={setPropertyBackvalue}
+                  onAmenitiesChange={handleAmenitiesChange}
+                  onFeaturesChange={handleFeaturesChange}
+                  valueForNext={handelNextBtnValue}
+                  valueForNextPage={pageValue}
+                />
+              )}
+             
+              {pageValue === 5 && (
+                <PropertyFaqForm
+                  valueForNext={handelNextBtnValue}
+                  valueForNextPage={pageValue}
+                />
+              )}
+              {pageValue === 6 && (
+                <PropertyImagesForm
+                  valueForNextPage={pageValue}
+                  valueForBack={handelBackValue}
+                  mainBackPageValue={valueForBack}
+                />
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      
     </section>
   );
 }

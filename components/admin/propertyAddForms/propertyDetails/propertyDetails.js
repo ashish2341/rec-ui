@@ -41,10 +41,6 @@ export default function PropertyDetailsForm({
   ];
   return (
     <>
-    
-      <h3 className="mb-4 text-lg font-medium leading-none underline text-gray-900 dark:text-white">
-        Property Details{" "}
-      </h3>
       <div className="mb-5 "> 
       <ButtonStepper forStepper={stepperArray} forpageValue={propertyPageValue}/>
       </div>

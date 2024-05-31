@@ -20,14 +20,24 @@
 .propertyContainer {
     display: flex;
     gap: 1rem; /* Adjust the gap as needed */
+    margin-right: 1rem;
+   
   }
   
   .column1 {
     flex: 0 0 30%;
-    margin-top: 2rem;
+    height: 100%;
   }
   
   .column2 {
     flex: 0 0 70%;
+    height: 75vh;
+    
+   
   }
+ .insidecolumn2{
+  overflow-y: auto;
+  height: 100%;
+  
+ }
   

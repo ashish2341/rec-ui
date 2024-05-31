@@ -145,7 +145,7 @@ export default function LocationDetailsForm({
   return (
     <>
       <div>
-      <div className="flex justify-end w-1/2 mb-4 relative -top-20 ml-[25rem]">
+      <div className="flex justify-end  mb-4  mr-4 ml-[25rem]">
             <button
               onClick={SubmitForm}
               type="button"
@@ -155,9 +155,6 @@ export default function LocationDetailsForm({
             </button>
           </div>
         <form>
-          <h3 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white">
-            Location Details
-          </h3>
           <div className="grid gap-4 mb-4 sm:grid-cols-2">
             <div>
               <label
@@ -362,9 +359,11 @@ export default function LocationDetailsForm({
               />
             </div>
           </div>
+         
         </form>
         
       </div>
+      
     </>
   );
 }

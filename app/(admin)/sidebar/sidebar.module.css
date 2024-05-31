@@ -1,5 +1,7 @@
 .admintext{
     color: white;
+    font-weight: bolder;
+
 }
 .inactiveTab{
     color: white !important;
@@ -21,4 +23,8 @@
 
 .sidebarMain{
     background-color: #2b4ac7 !important;
+}
+.logobox{
+    background-color: #0a1c2ab3;
+    border-radius: 10px;
 }

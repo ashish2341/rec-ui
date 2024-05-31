@@ -12,7 +12,7 @@ export default function ButtonStepper({ forStepper, forpageValue }) {
             }`}
           >
             <span
-              className={`flex items-center justify-center w-12 h-12 border-4 rounded-full shrink-0  ${
+              className={`flex items-center justify-center w-8 h-8 border-4 rounded-full shrink-0  ${
                 forpageValue == index + 1
                   ? `dark:border-blue-500  border-blue-600`
                   : `border-gray-500  dark:border-gray-400`

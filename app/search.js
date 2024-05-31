@@ -30,6 +30,7 @@ const SearchBar = (props) => {
     { value1: 3000000, value2: 6000000, label: " 30 L- 60 L" },
     { value1: 6000000, value2: 10000000, label: "60 L- 1 Cr" },
     { value1: 10000000, value2: 20000000, label: "1 Cr- 2 Cr" },
+    { value1: 20000000, value2: 50000000, label: "2 Cr- 5 Cr" },
   ];
 
   const handleLocationChange = (e) => {

@@ -631,7 +631,7 @@ console.log("testimonialData",testimonialData);
       <div className={`${styles.propertiesByAreaMain} propertiesByArea`}>
         <div>
           <h2 className={`${styles.propertiesByAreaMainHead}`}>
-            Popular Properties by <span className="blueText">Localities</span>
+            Popular <span className="blueText">Localities</span>
           </h2>
           <div className={`${styles.propertiesByAreaMainTextMain}`}>
             <p className={`${styles.propertiesByAreaMainText}`}>

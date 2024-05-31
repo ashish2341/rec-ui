@@ -858,19 +858,19 @@ const PropertyDetail = ({ params }) => {
                             onClick={copyURL}
                             className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                           >
-                            <i class="bi bi-link-45deg mr-2"></i> Copy Url
+                            <i className="bi bi-link-45deg mr-2"></i> Copy Url
                           </button>
                           <button
                             onClick={handleRedirect}
                             className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                           >
-                            <i class="bi bi-facebook mr-2"></i>Facebook
+                            <i className="bi bi-facebook mr-2"></i>Facebook
                           </button>
                           <button
                             onClick={handleRedirectTwitter}
                             className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                           >
-                            <i class="bi bi-twitter mr-2"></i>Twitter
+                            <i className="bi bi-twitter mr-2"></i>Twitter
                           </button>
                         </div>
                       </div>

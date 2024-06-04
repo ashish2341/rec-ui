@@ -8,7 +8,7 @@ import { Carousel } from "flowbite-react";
 const PropertyListCard = ({ item }) => {
   return (
     <>
-      <div className={`mb-3 ml-3 ${styles.GeneralDetailsBox}`}>
+      <div className={`mb-3 ml-3 mr-3 ${styles.GeneralDetailsBox}`}>
         <div className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row  hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
           <div className={`flex w-full ${styles.cardContent}`}>
             <div className={`w-full ${styles.leftCardContent}`}>

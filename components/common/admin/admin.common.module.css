@@ -1,7 +1,7 @@
 .optionButton{
     width: auto;
     height: 2.5rem;
-    border-radius: 5px !important;
+    border-radius: 26px !important;
     margin-left: 1px !important;
     margin-bottom: 1rem;
     margin-right: 10px !important;
@@ -9,22 +9,35 @@
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.1), 0 8px 17px 0 rgba(0, 0, 0, 0.1) !important;
 
 }
+
 .scrollable {
     max-height: 170px; /* Adjust height as needed */
     overflow-y: auto;
     padding-right: 10px; /* To avoid content hiding behind scrollbar */
     padding-top: 10px;
   }
-  .continueBtn{
-    position: relative;
-    top: -56px;
-    left: 16rem;
-    width: 70%;
-}
-.noDataHead{
+
+  .bigactiveButton{
+    background-color: #d2d7ea !important;
+    color:#0a45ed;
+    border: none !important;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.1), 0 8px 17px 0 rgba(0, 0, 0, 0.1) !important;
+  }
+ .bigInactiveButton{
+  /* background-color: #fffcf2 !important */
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.1), 0 8px 17px 0 rgba(0, 0, 0, 0.1) !important;
+ 
+ }
+ .noDataHead{
   font-weight: 600;
   margin: 0.5rem;
   color: grey;
   text-align: center;
   font-size: 1rem;
+}
+.arrayButtonIconBox{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
 }

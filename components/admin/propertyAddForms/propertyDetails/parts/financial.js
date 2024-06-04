@@ -10,7 +10,18 @@ import Cookies from "js-cookie";
 import { FormatNumber } from "@/utils/commonHelperFn";
 import Styles from "../propertypage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
-export default function PartFour({ setPropertyPageValue }) {
+import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
+import NumberInput from "@/components/common/admin/numberInput/numberInput";
+export default function FinancialDetailsPage({ setPropertyPageValue }) {
+  const sessionStoragePropertyData = JSON.parse(
+    sessionStorage.getItem("propertyData")
+  );
+  const propertTypWithSubTypeValue =
+    sessionStoragePropertyData?.PropertyTypeWithSubtype.Name || "";
+  const propertTypeValue = sessionStoragePropertyData?.PropertyType || "";
+  const PropertyForValue = sessionStoragePropertyData?.PropertyFor || "";
+  const conditionArray = [true, false];
+  const monthArray = ["None", 1, 2, 3, 4, "Custom"];
   const [perUnitPrice, setPerUnitPrice] = useState("");
   const [isDisplayPrice, setIsDisplayPrice] = useState("");
   const [isNegotiable, setIsNegotiable] = useState("");
@@ -18,78 +29,108 @@ export default function PartFour({ setPropertyPageValue }) {
   const [endPrice, setEndPrice] = useState("");
   const [discountPercentage, setDiscountPercentage] = useState("");
   const [discountForYears, setDiscountForYears] = useState("");
-  const [pricePerSquareFeet, setPricePerSquareFeet] = useState("");
-
+  const [securityDepositMonth, setSecurityDepositMonth] = useState("");
+  const [posessionDate, setPosessionDate] = useState("");
+  const [monthlyRent, setMonthlyRent] = useState("");
+  const [customMonth, setCustomMonth] = useState("");
+  const [electricityCharge, setElectricityCharge] = useState("");
+  const [waterCharge, setWaterCharge] = useState("");
+  const [dgUpsCharge, setDgUpsCharge] = useState("");
+  const [lockPeriod, setLockPeriod] = useState("");
+  const [increaseRent, setIncreaseaRent] = useState("");
+  const [taxCharge, setTaxCharge] = useState("");
+  const [preReleasedBtn, setPreReleasedBtn] = useState("");
+  const [curentRent, setCurrentRent] = useState("");
+  const [leaseYears, setLeaseYears] = useState("");
+  const [expectedReturn, setExpectedReturn] = useState("");
+  console.log("propertTypWithSubTypeValue", propertTypWithSubTypeValue);
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("propertyData")
     );
     console.log(
-      "localStorageData from localstorage",
-      sessionStoragePropertyData.Facing
+      "sessionStoragePropertyData?.PreReleasedBtn",
+      sessionStoragePropertyData?.PreReleasedBtn
     );
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
-      console.log(
-        "if function called sessionStoragePropertyData.PropertyFor ",
-        sessionStoragePropertyData.ProeprtyFor
-      );
-      console.log(
-        "sessionStoragePropertyData?.Brochure",
-        sessionStoragePropertyData?.Brochure
-      );
-
       setStartPrice(sessionStoragePropertyData?.TotalPrice?.MinValue || "");
       setEndPrice(sessionStoragePropertyData?.TotalPrice?.MaxValue || "");
       setPerUnitPrice(sessionStoragePropertyData?.PerUnitPrice || "");
-      setIsDisplayPrice(
-        sessionStoragePropertyData?.IsDisplayPrice === true
-          ? true
-          : sessionStoragePropertyData?.IsDisplayPrice === undefined
-          ? null
-          : false
-      );
-      setIsNegotiable(
-        sessionStoragePropertyData?.IsNegotiable === true
-          ? true
-          : sessionStoragePropertyData.IsNegotiable === undefined
-          ? null
-          : false
-      );
 
-      setPricePerSquareFeet(
-        sessionStoragePropertyData?.PricePerSquareFeet || ""
-      );
+     setCurrentRent(sessionStoragePropertyData?.CurrentRent || "")
+     setLeaseYears(sessionStoragePropertyData?.LeaseYears || "")
+     setExpectedReturn(sessionStoragePropertyData?.ExpectedReturn || "")
 
       setDiscountPercentage(
         sessionStoragePropertyData?.DiscountPercentage || ""
       );
       setDiscountForYears(sessionStoragePropertyData?.DiscountForYears || "");
+      setPreReleasedBtn(
+        sessionStoragePropertyData?.PreReleasedBtn === true
+          ? true
+          : sessionStoragePropertyData?.PreReleasedBtn === undefined
+          ? null
+          : sessionStoragePropertyData?.PreReleasedBtn === ""? null:false
+      );
+      setTaxCharge(
+        sessionStoragePropertyData?.TaxCharge === true
+          ? true
+          : sessionStoragePropertyData?.TaxCharge === undefined
+          ? null
+          : sessionStoragePropertyData?.TaxCharge === ""? null:false
+      );
+      setDgUpsCharge(
+        sessionStoragePropertyData?.DgUpsCharge === true
+        ? true
+        : sessionStoragePropertyData?.DgUpsCharge === undefined
+        ? null
+        : sessionStoragePropertyData?.DgUpsCharge === ""? null:false
+      );
+      setIsNegotiable(
+        sessionStoragePropertyData?.IsNegotiable === true
+        ? true
+        : sessionStoragePropertyData?.IsNegotiable === undefined
+        ? null
+        : sessionStoragePropertyData?.IsNegotiable === ""? null:false
+      );
     }
   }, []);
-  const handleIsDisplayPrice = (e) => {
-    console.log("handleIsDisplayPrice", e.target.value);
-    setIsDisplayPrice(e.target.value === "true");
-  };
-
-  const handleIsNegotiable = (e) => {
-    console.log("handleIsNegotiable", e.target.value);
-    setIsNegotiable(e.target.value === "true");
-  };
+ 
 
   const checkRequiredFields = () => {
-    const requiredFields = [
+    if(propertTypeValue=="Residential"){
+      var requiredFields = [
+        startPrice,
+        endPrice,
+      ];
+    }
+   if(propertTypeValue=="Commercial" ){
+    var requiredFields = [
       startPrice,
       endPrice,
-      perUnitPrice,
-      isDisplayPrice,
-      isNegotiable,
-      pricePerSquareFeet,
-      discountPercentage,
-      discountForYears,
+      preReleasedBtn
+     
     ];
-console.log("requiredFields",requiredFields)
+   }
+   if(propertTypeValue=="Commercial" && preReleasedBtn==false){
+    var requiredFields = [
+      startPrice,
+      endPrice,
+      expectedReturn
+    ];
+   }
+   if(propertTypeValue=="Commercial" && preReleasedBtn==true){
+    var requiredFields = [
+      startPrice,
+      endPrice,
+      curentRent,
+      leaseYears
+    ];
+   }
+    
+    console.log("requiredFields", requiredFields);
     // Check if any required field is empty
     const isEmpty = requiredFields.some(
       (field) => field === "" || field === null || field === undefined
@@ -108,13 +149,26 @@ console.log("requiredFields",requiredFields)
           MinValue: parseInt(startPrice),
           MaxValue: parseInt(endPrice),
         },
-        PerUnitPrice:parseInt( perUnitPrice),
-        IsDisplayPrice: isDisplayPrice,
         IsNegotiable: isNegotiable,
-        PricePerSquareFeet: parseInt(pricePerSquareFeet),
-        DiscountPercentage: parseInt(discountPercentage),
-        DiscountForYears: parseInt(discountForYears),
+     
       };
+     if(propertTypeValue=="Commercial"){
+      
+      fourthPropertyData.TaxCharge=taxCharge;
+      fourthPropertyData.PreReleasedBtn=preReleasedBtn;
+      if(preReleasedBtn==false){
+        fourthPropertyData.ExpectedReturn=expectedReturn;
+      }
+      if(preReleasedBtn==true){
+        fourthPropertyData.CurrentRent=curentRent;
+        fourthPropertyData.LeaseYears=leaseYears;
+
+      }
+      if(propertTypWithSubTypeValue=="Office"){
+        fourthPropertyData.DgUpsCharge=dgUpsCharge;
+      }
+       
+     }
       console.log("fourthPropertyData", fourthPropertyData);
       const localStorageData = JSON.parse(
         sessionStorage.getItem("propertyData")
@@ -126,17 +180,18 @@ console.log("requiredFields",requiredFields)
       toast.error("Please fill in all required fields!");
     }
   };
+console.log("preleasedBtn",preReleasedBtn)
   return (
     <>
-    <div className={`flex justify-end ${Styles.continueBtn}`} >
-    <ContinueButton modalSubmit={SubmitForm} />
-    </div>
+      <div className={`flex justify-end ${Styles.continueBtn}`}>
+        <ContinueButton modalSubmit={SubmitForm} />
+      </div>
       <div className="grid gap-4 mb-4 sm:grid-cols-2">
         {/* Start Price */}
         <div>
           <label
             htmlFor="startPrice"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+            className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
           >
             Start Price
           </label>
@@ -154,7 +209,7 @@ console.log("requiredFields",requiredFields)
         <div>
           <label
             htmlFor="endPrice"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+            className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
           >
             End Price
           </label>
@@ -168,9 +223,75 @@ console.log("requiredFields",requiredFields)
             onChange={(e) => setEndPrice(e.target.value)}
           />
         </div>
+        {/* is negotiable */}
+        <PropertyBigButtons
+        forRequired={false}
+          labelName={"Is Negotiable"}
+          itemArray={conditionArray}
+          activeBtnvalue={isNegotiable}
+          changeState={setIsNegotiable}
+        />
+        {propertTypeValue == "Commercial" &&
+          propertTypWithSubTypeValue == "Office" && (
+            // is dg-ups charged
+            <PropertyBigButtons
+              labelName={"DG & UPS Charge included?"}
+              forRequired={false}
+              itemArray={conditionArray}
+              activeBtnvalue={dgUpsCharge}
+              changeState={setDgUpsCharge}
+            />
+          )}
+        {propertTypeValue == "Commercial" && PropertyForValue == "Sell" && (
+          <PropertyBigButtons
+          forRequired={false}
+            labelName={"Tax & Govt. charge included?"}
+            itemArray={conditionArray}
+            activeBtnvalue={taxCharge}
+            changeState={setTaxCharge}
+          />
+        )}
+      </div>
+      {propertTypeValue == "Commercial" && (
+        <>
+          <h3 className="block mb-2 text-md font-lg underline font-bold text-gray-500 dark:text-white">
+            OTHER DETAILS
+          </h3>
+          <PropertyBigButtons
+            labelName={"Is it pre-leased/pre-rented?"}
+            itemArray={conditionArray}
+            activeBtnvalue={preReleasedBtn}
+            changeState={setPreReleasedBtn}
+          />
 
-        {/* PerUnitPrice */}
-        <div>
+          {preReleasedBtn == true && (
+            <div className="grid gap-4 mb-4 sm:grid-cols-2">
+              <NumberInput
+                labelName={" Current Rent per Month"}
+                inputValue={curentRent}
+                dynamicState={setCurrentRent}
+              />
+              <NumberInput
+                labelName={" Lease Years"}
+                inputValue={leaseYears}
+                dynamicState={setLeaseYears}
+              />
+            </div>
+          )}
+          {preReleasedBtn == false && (
+            <div className="grid gap-4 mb-4 sm:grid-cols-2">
+              <NumberInput
+                labelName={"Expected Return on Investment"}
+                inputValue={expectedReturn}
+                dynamicState={setExpectedReturn}
+              />
+             
+            </div>
+          )}
+        </>
+      )}
+      {/* PerUnitPrice */}
+      {/* <div>
           <label
             htmlFor="perUnitPrice"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
@@ -186,9 +307,9 @@ console.log("requiredFields",requiredFields)
             value={perUnitPrice}
             onChange={(e) => setPerUnitPrice(e.target.value)}
           />
-        </div>
-        {/* PricePerSquareFeet */}
-        <div>
+        </div> */}
+      {/* PricePerSquareFeet */}
+      {/* <div>
           <label
             htmlFor="pricePerSquareFeet"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
@@ -204,9 +325,9 @@ console.log("requiredFields",requiredFields)
             value={pricePerSquareFeet}
             onChange={(e) => setPricePerSquareFeet(e.target.value)}
           />
-        </div>
-        {/* is displayprice  */}
-        <div>
+        </div> */}
+      {/* is displayprice  */}
+      {/* <div>
           <label
             htmlFor="isDisplayPrice"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
@@ -238,9 +359,9 @@ console.log("requiredFields",requiredFields)
           <label htmlFor="isDisplayPrice" className="ml-2">
             No
           </label>
-        </div>
-        {/* is negotiable */}
-        <div>
+        </div> */}
+      {/* is negotiable */}
+      {/* <div>
           <label
             htmlFor="isNegotiable"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
@@ -272,10 +393,10 @@ console.log("requiredFields",requiredFields)
           <label htmlFor="isNegotiable" className="ml-2">
             No
           </label>
-        </div>
+        </div> */}
 
-        {/* DiscountPercentage */}
-        <div>
+      {/* DiscountPercentage */}
+      {/* <div>
           <label
             htmlFor="discountPercentage"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
@@ -291,10 +412,10 @@ console.log("requiredFields",requiredFields)
             value={discountPercentage}
             onChange={(e) => setDiscountPercentage(e.target.value)}
           />
-        </div>
+        </div> */}
 
-        {/* DiscountForYears */}
-        <div>
+      {/* DiscountForYears */}
+      {/* <div>
           <label
             htmlFor="discountForYears"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
@@ -310,8 +431,7 @@ console.log("requiredFields",requiredFields)
             value={discountForYears}
             onChange={(e) => setDiscountForYears(e.target.value)}
           />
-        </div>
-      </div>
+        </div> */}
     </>
   );
 }

@@ -43,12 +43,12 @@ export default function Login() {
     }
     let res = await loginUser({Mobile,Password})
    
-    if(res.token){
+    if(res?.token){
       router.push("/dashboard");
       toast.success("LogIn Successfully")
 
     }else{
-      toast.error(res.errMessage);
+      toast.error(res?.errMessage);
       return;
     }
   };

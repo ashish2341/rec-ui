@@ -5,13 +5,31 @@ import Select from "react-select";
 import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 
-export default function PropertyFaqForm({ valueForNext, valueForNextPage }) {
-  const initialFieldState = {
-    Question: "",
-    Answer: "",
-  };
+export default function PropertyFaqForm({
+  valueForNextPage,
+  mainBackPageValue,
+  valueForBack,
+}) {
+  const initialFieldState = [{
+    Question: "What is the first step in buying a property?",
+    Answer: "The first step is usually to determine your budget and secure financing. This often involves getting pre-approved for a mortgage to understand how much you can afford.",
+  },
+  {
+    Question: "What should I consider when choosing a location?",
+    Answer: "Consider factors such as proximity to work, quality of schools, neighborhood safety, local amenities (shops, parks, restaurants), and future development plans.",
+  },
+  {
+    Question: "What is staging and how important is it?",
+    Answer: "Staging involves arranging and decorating your home to make it more appealing to buyers. It's important because a well-staged home can sell faster and for a higher price.",
+  },
+  {
+    Question: "How can I improve my home's value before selling?",
+    Answer: "Simple improvements like fresh paint, landscaping, minor repairs, and deep cleaning can significantly enhance your home's appeal and value.",
+  }
+];
 
-  const [faqFields, setFaqFields] = useState([initialFieldState]);
+  const [faqFields, setFaqFields] = useState(initialFieldState);
+  const [btnShowonInputChange, setBtnShowonInputChange] = useState(false);
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
@@ -22,10 +40,8 @@ export default function PropertyFaqForm({ valueForNext, valueForNextPage }) {
       sessionStoragePropertyData
     );
     // Update state values if data exists in localStorage
-    if (sessionStoragePropertyData.Faq) {
-     
-
-      setFaqFields(sessionStoragePropertyData?.Faq || "");
+    if (sessionStoragePropertyData) {
+      setFaqFields(sessionStoragePropertyData?.Faq || initialFieldState);
     }
   }, []);
 
@@ -77,32 +93,33 @@ export default function PropertyFaqForm({ valueForNext, valueForNextPage }) {
     const localStorageData = JSON.parse(sessionStorage.getItem("propertyData"));
     const newPropertyData = { ...localStorageData, ...faqDetailsData };
     sessionStorage.setItem("propertyData", JSON.stringify(newPropertyData));
-    valueForNext(valueForNextPage + 1);
+    valueForBack(mainBackPageValue + 1);
+    setBtnShowonInputChange(true);
   };
 
   return (
     <>
       <div>
-      <div className="flex justify-end w-1/2 mb-4 relative -top-20 ml-[25rem]">
+      {mainBackPageValue == 0 || btnShowonInputChange == false ? (
+          <div className="flex justify-end w-full mb-4">
             <button
               onClick={SubmitForm}
               type="button"
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
             >
-              Next
+              Save
             </button>
           </div>
+        ) : null}
+      
         <form>
-          <h3 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white">
-            Faq Details
-          </h3>
           {faqFields.length != 0
             ? faqFields.map((field, index) => (
                 <div className="grid gap-4 mb-2 sm:grid-cols-3" key={index}>
                   <div>
                     <label
                       htmlFor={`question-${index}`}
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                      className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
                     >
                       Question
                     </label>
@@ -114,12 +131,13 @@ export default function PropertyFaqForm({ valueForNext, valueForNextPage }) {
                       onChange={(e) =>
                         handleFieldChange(index, "Question", e.target.value)
                       }
+                      rows={4}
                     />
                   </div>
                   <div>
                     <label
                       htmlFor={`answer-${index}`}
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                      className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
                     >
                       Answer
                     </label>
@@ -131,6 +149,7 @@ export default function PropertyFaqForm({ valueForNext, valueForNextPage }) {
                       onChange={(e) =>
                         handleFieldChange(index, "Answer", e.target.value)
                       }
+                      rows={4}
                     />
                   </div>
                   {/* <div></div> */}
@@ -157,7 +176,6 @@ export default function PropertyFaqForm({ valueForNext, valueForNextPage }) {
             Add More
           </button>
         </form>
-       
       </div>
     </>
   );

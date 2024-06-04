@@ -19,3 +19,22 @@
     color: white !important;
     ;
 }
+.progressBar{
+    width: 85% !important;
+    padding: 0;
+    margin-right: 8rem;
+    background-color: rgb(225 244 246) !important;
+   
+}
+.InprogressBtn{
+    background-color: #6592d3 !important;
+}
+.progressText{
+    color: #6592d3 !important;
+}
+.completedText{
+    color: #2a4acb !important;
+}
+.completedBtn{
+  background-color: #2a4acb !important;
+}

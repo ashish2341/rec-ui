@@ -10,8 +10,21 @@ import Cookies from "js-cookie";
 import { FormatNumber } from "@/utils/commonHelperFn";
 import Styles from "../propertypage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
+import ApiButtons from "@/components/common/admin/propertyapiButtons/ApiButtons";
+import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
 
-export default function PartTwo({ setPropertyPageValue }) {
+export default function RoomDetailPage({ setPropertyPageValue }) {
+  const sessionStoragePropertyData = JSON.parse(
+    sessionStorage.getItem("propertyData")
+  );
+  const propertTypWithSubTypeValue =
+    sessionStoragePropertyData?.PropertyTypeWithSubtype.Name || "";
+  const propertTypeValue = sessionStoragePropertyData?.PropertyType || "";
+  const PropertyForValue = sessionStoragePropertyData?.PropertyFor || "";
+  // fetching Data for bhkTypeData
+  const { data: bhkTypeData } = useFetch(`${API_BASE_URL_FOR_MASTER}/bhkType`);
+  // console.log("bhkTypeData", bhkTypeData);
+  const [bhkType, setBhkType] = useState("");
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
   const [floorNumber, setFloorNumber] = useState("");
@@ -44,25 +57,20 @@ export default function PartTwo({ setPropertyPageValue }) {
 
       setBedrooms(sessionStoragePropertyData?.Bedrooms || "");
       setBathrooms(sessionStoragePropertyData?.Bathrooms || "");
-
       setFloorNumber(sessionStoragePropertyData?.FloorNumber || "");
       setTotalFloors(sessionStoragePropertyData?.TotalFloors || "");
-
-      setFloorsAllowed(sessionStoragePropertyData?.FloorsAllowed || "");
-
-      setBalconies(sessionStoragePropertyData?.Balconies || "");
+      setBhkType(sessionStoragePropertyData?.BhkType || "");
     }
   }, []);
   const checkRequiredFields = () => {
-    const requiredFields = [
-      bathrooms,
-      bedrooms,
-      balconies,
-      floorNumber,
-      floorsAllowed,
-      totalFloors,
-     
-    ];
+
+    if (
+      propertTypeValue == "Residential" 
+    ) {
+      var requiredFields = [bhkType, bedrooms,bathrooms,floorNumber,totalFloors];
+    }else{
+      var requiredFields = [floorNumber,totalFloors];
+    }
 
     // Check if any required field is empty
     const isEmpty = requiredFields.some(
@@ -72,121 +80,71 @@ export default function PartTwo({ setPropertyPageValue }) {
     return !isEmpty;
   };
   const SubmitForm = () => {
-    const allFieldsFilled = checkRequiredFields();
-    console.log("floorNumber",floorNumber)
-    console.log("floorsAllowed",floorsAllowed)
-    console.log("totalFloors",totalFloors)
+    const allFieldsFilled = true;
     if (allFieldsFilled) {
-
-      const secondPropertyData={
-        Bedrooms: bedrooms,
-        Bathrooms: bathrooms,
-        FloorNumber:parseInt(floorNumber),
+      const secondPropertyData = {
+        
+        FloorNumber: parseInt(floorNumber),
         TotalFloors: parseInt(totalFloors),
-        FloorsAllowed: parseInt(floorsAllowed),
-        Balconies: balconies,
+      };
+      if (
+        propertTypeValue == "Residential" 
+      ) {
+        secondPropertyData.BhkType=bhkType;
+        secondPropertyData.Bedrooms=bedrooms;
+        secondPropertyData.Bathrooms=bathrooms;
       }
-
-      console.log("secondPropertyData",secondPropertyData)
+      console.log("secondPropertyData", secondPropertyData);
       const localStorageData = JSON.parse(
         sessionStorage.getItem("propertyData")
       );
       const newProjectData = { ...localStorageData, ...secondPropertyData };
       sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
       setPropertyPageValue((prev) => prev + 1);
-    }else{
+    } else {
       toast.error("Please fill in all required fields!");
     }
-   
   };
   return (
     <>
-    <div className={`flex justify-end ${Styles.continueBtn}`} >
-    <ContinueButton modalSubmit={SubmitForm} />
-    </div>
-      <div className="grid gap-4 mb-4 sm:grid-cols-2">
-        {/* Bedrooms */}
-        <div>
-          <label
-            htmlFor="bedrooms"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-          >
-            Bedrooms
-          </label>
+      <div className={`flex justify-end ${Styles.continueBtn}`}>
+        <ContinueButton modalSubmit={SubmitForm} />
+      </div>
+      <div className="grid gap-4 mb-4 sm:grid-cols-1">
+        {propertTypeValue == "Residential" && (
+          <>
+            {/* BhkType */}
+            {bhkTypeData && (
+              <ApiButtons
+                itemArray={bhkTypeData}
+                stateItem={bhkType}
+                labelName={"Bhk Type"}
+                ValueName={"Type"}
+                changeState={setBhkType}
+              />
+            )}
 
-          <input
-            type="number"
-            name="bedrooms"
-            id="bedrooms"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Number of Bedrooms"
-            value={bedrooms}
-            disabled
-          />
-          <div
-            className={`flex flex-wrap space-x-2 mt-4 ${
-              bedRoomarray.length > 8 ? `${Styles.scrollable}` : ""
-            }`}
-          >
-            {bedRoomarray.map((item, index) => (
-              <button
-                key={index}
-                onClick={() => setBedrooms(item)}
-                className={` rounded text-white px-4 py-2 ${
-                  Styles.optionButton
-                } ${
-                  bedrooms == item
-                    ? "bg-[#2a4acb] border-2 border-[#2a4acb]"
-                    : "bg-[#6592d3]  border-2 border-[#6592d3]"
-                }`}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-        </div>
-        {/* Bathrooms */}
-        <div>
-          <label
-            htmlFor="bathrooms"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-          >
-            Bathrooms
-          </label>
-          <input
-            type="number"
-            name="bathrooms"
-            id="bathrooms"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Number of Bathrooms"
-            value={bathrooms}
-            // onChange={(e) => setBathrooms(e.target.value)}
-            disabled
-          />
-          <div
-            className={`flex flex-wrap space-x-2 mt-4 ${
-              bathroomarray.length > 8 ? `${Styles.scrollable}` : ""
-            }`}
-          >
-            {bathroomarray.map((item, index) => (
-              <button
-                key={index}
-                onClick={() => setBathrooms(item)}
-                className={` rounded text-white px-4 py-2 ${
-                  Styles.optionButton
-                } ${
-                  bathrooms == item
-                    ? "bg-[#2a4acb] border-2 border-[#2a4acb]"
-                    : "bg-[#6592d3]  border-2 border-[#6592d3]"
-                }`}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-        </div>
+            {/* Bedrooms */}
+
+            <PropertyBigButtons
+              labelName={"Bedrooms"}
+              itemArray={bedRoomarray}
+              activeBtnvalue={bedrooms}
+              changeState={setBedrooms}
+            />
+
+            {/* Bathrooms */}
+            <PropertyBigButtons
+              labelName={"Bathrooms"}
+              itemArray={bathroomarray}
+              activeBtnvalue={bathrooms}
+              changeState={setBathrooms}
+            />
+          </>
+        )}
+
         {/* Balconies */}
-        <div>
+        {/* <div>
           <label
             htmlFor="balconies"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
@@ -224,12 +182,12 @@ export default function PartTwo({ setPropertyPageValue }) {
               </button>
             ))}
           </div>
-        </div>
+        </div> */}
         {/* FloorNumber */}
         <div>
           <label
             htmlFor="floorNumber"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+            className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
           >
             Floor Number
           </label>
@@ -248,7 +206,7 @@ export default function PartTwo({ setPropertyPageValue }) {
         <div>
           <label
             htmlFor="totalFloors"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+            className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
           >
             Total Floors
           </label>
@@ -264,7 +222,7 @@ export default function PartTwo({ setPropertyPageValue }) {
         </div>
 
         {/* FloorsAllowed */}
-        <div>
+        {/* <div>
           <label
             htmlFor="floorsAllowed"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
@@ -280,7 +238,7 @@ export default function PartTwo({ setPropertyPageValue }) {
             value={floorsAllowed}
             onChange={(e) => setFloorsAllowed(e.target.value)}
           />
-        </div>
+        </div> */}
       </div>
     </>
   );

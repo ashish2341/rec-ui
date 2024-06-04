@@ -10,6 +10,9 @@ import { GetPropertyApi } from "@/api-functions/property/getProperty";
 import { DeleteProperty } from "@/api-functions/property/deleteProperty";
 import Cookies from "js-cookie";
 import { GetPropertyBybuilderApi } from "@/api-functions/property/getPropertyBybuilder";
+import styles from "./builder.module.css"
+import LoadingSideImg from "@/components/common/sideImgLoader";
+import PropertyListCard from "@/components/common/propertyListCard/listCard";
 export default function Property() {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
@@ -137,7 +140,7 @@ export default function Property() {
             />
           </div>
         </div>
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        {roles.includes("Admin") && ( <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
@@ -181,7 +184,7 @@ export default function Property() {
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                  {item.Titile}
+                  {item.Title}
                 </th>
                 <td className="px-6 py-4">{item?.ProeprtyFor}</td>
                 <td className="px-6 py-4">{item?.Facing[0]?.Facing}</td>
@@ -252,9 +255,25 @@ export default function Property() {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table>) }
+       {roles.includes("Developer") && ( listData ? (
+                listData?.data?.length > 0 ? (
+                  listData?.data?.map((cardData,index) => (
+                    <div key={cardData._id}>
+                      <PropertyListCard item={cardData} />
+                    </div>
+                  ))
+                ) : (
+                  <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
+                )
+              ) : (
+                <div className={`mb-3 ml-3 ${styles.GeneralDetailsBox}`}>
+                <LoadingSideImg />
+              </div>
+              ))}
       </div>
-      <Pagination data={listData} pageNo={handlePageChange} pageVal={page} />
+      {roles.includes("Admin") && (<Pagination data={listData} pageNo={handlePageChange} pageVal={page} />)}
+      
       <Popup
         isOpen={isPopupOpen}
         title="Are you sure you want to delete this Testimonial ?"

@@ -45,10 +45,10 @@ export default function Home() {
 
 
   const facingImage = [
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReP8AAhBIsdTqNY-ErnY3nVk60JkcovJIIz2fW-iYhln7HUdRlgqDYxNbCpwIFSIhfD2Y&usqp=CAU",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt79ykE71UgWsM-KsGEV8ZQ9Hi_dVYL4YKLPRPUK9psLFTZ5MV2ke9c-JHgiKtNP1Nsro&usqp=CAU",
-    "https://etc.usf.edu/clipart/74400/74418/74418_145_m3-1_b_md.gif",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHQAi0N6tRh1Hv2NRi6k3wf2NjDm72aDCOOEAcpWFoeiMZ6_2TiaY_ecSzh0vvhWvVmWs&usqp=CAU",
+    "img/3.png",
+    "img/4.png",
+    "img/1.png",
+    "img/2.png",
   ];
 
   const facingSubHeading =[

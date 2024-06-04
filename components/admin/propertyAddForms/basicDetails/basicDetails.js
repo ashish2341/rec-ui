@@ -24,9 +24,11 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
     `${API_BASE_URL_FOR_MASTER}/propertyWithSubTypes`
   );
    console.log("propertySubTypeData", propertySubTypeData);
-  const sessionStoragePropertyData = JSON.parse(
+
+  const sessionStoragePropertyData =typeof sessionstorage != "undefined" && JSON.parse(
     sessionStorage.getItem("propertyData")
   );
+
   const propertTypWithSubTypeValue =
     sessionStoragePropertyData?.PropertyTypeWithSubtype || "";
   const [propertyTypeWithSubtype, setPropertyTypeWithSubtype] = useState("");

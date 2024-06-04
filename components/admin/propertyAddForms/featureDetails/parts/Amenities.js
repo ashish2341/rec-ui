@@ -6,7 +6,8 @@ import useFetch from "@/customHooks/useFetch";
 import Cookies from "js-cookie";
 import Styles from "../featurepage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
-export default function PartOne({
+import ArrayButtons from "@/components/common/admin/arrayButtons/arrayButtons";
+export default function AmenityPage({
   setPropertyPageValue,
   setPropertyBackvalue,
 }) {
@@ -34,33 +35,18 @@ export default function PartOne({
         "sessionStoragePropertyData Aminities ",
         sessionStoragePropertyData?.Aminities
       );
-      setSelectedAmenities(
-        sessionStoragePropertyData?.Aminities || []
-      );
+      setSelectedAmenities(sessionStoragePropertyData?.Aminities || []);
     }
   }, []);
-  const handleAmenityChange = (itemId) => {
-    setSelectedAmenities((prev) => {
-      const isSelected = prev.some(
-        (selectedItemId) => selectedItemId === itemId
-      );
-      if (isSelected) {
-        return prev.filter((selectedItemId) => selectedItemId !== itemId);
-      } else {
-        return [...prev, itemId];
-      }
-    });
-  };
-  console.log("selectedAminities",selectedAmenities)
+
+  console.log("selectedAminities", selectedAmenities);
   const SubmitForm = () => {
     if (selectedAmenities.length == 0) {
       toast.error("Please select a Amenity.");
       return false;
     }
     const AmenityData = {
-      
       Aminities: selectedAmenities,
-
     };
     console.log("AmenityData", AmenityData);
     const localStorageData = JSON.parse(sessionStorage.getItem("propertyData"));
@@ -74,45 +60,14 @@ export default function PartOne({
       <div className={`flex justify-end `}>
         <ContinueButton modalSubmit={SubmitForm} />
       </div>
-
-      <div className="container mx-auto px-4 py-8">
-        {/* Amenity Box */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4">Amenity</h2>
-          {aminitiesData && selectedAmenities ? (
-            <div>
-              {aminitiesData ? (
-                <div
-                  className={`flex flex-wrap space-x-2 mt-4 ${
-                    aminitiesData?.data.length > 20 ? "scrollable" : ""
-                  }`}
-                >
-                  {aminitiesData?.data.map((item) => (
-                    <button
-                      key={item._id}
-                      onClick={() => handleAmenityChange(item._id)}
-                      className={`rounded text-white px-4 py-2 ${
-                        Styles.optionButton
-                      } ${
-                        selectedAmenities.some(
-                          (selectedItemId) => selectedItemId === item._id
-                        )
-                          ? "bg-[#2a4acb] border-2 border-[#2a4acb]"
-                          : "bg-[#6592d3] border-2 border-[#6592d3]"
-                      }`}
-                    >
-                      {item.Aminity}
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                null
-              )}
-            </div>
-          ) : 
-          null}
-        </div>
-      </div>
+      <ArrayButtons
+        itemArray={aminitiesData}
+        selectItems={selectedAmenities}
+        labelName={"Amenity"}
+        buttonName={"Aminity"}
+        setValueinState={setSelectedAmenities}
+      />
+      
     </>
   );
 }

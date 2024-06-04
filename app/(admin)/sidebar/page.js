@@ -95,7 +95,7 @@ export default function Sidebar({ children }) {
                   alt="Admin Image"
                   className="w-14 h-14 rounded-full mb-4"
                 />
-                <span className={`ms-3 mb-4 ${Styles.admintext}`}>{name}</span>
+                <span className={`ms-3 mb-4 ${Styles.admintext}`}>Hi {name}</span>
               </div>
             ) : (
               <div className="flex flex-col items-center">
@@ -104,7 +104,7 @@ export default function Sidebar({ children }) {
                   alt="Builder Image"
                   className="w-14 h-14  rounded-full mb-4"
                 />
-                <span className={`ms-3 mb-4 ${Styles.admintext}`}>{name}</span>
+                <span className={`ms-3 mb-4 ${Styles.admintext}`}>Hi {name}</span>
               </div>
             )}
           </div>

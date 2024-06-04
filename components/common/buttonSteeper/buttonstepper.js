@@ -1,9 +1,9 @@
-export default function ButtonStepper({ forStepper, forpageValue }) {
+export default function ButtonStepper({ forStepper, forpageValue  }) {
   return (
     <>
       <ol className="items-center flex justify-center w-full space-y-4 sm:flex sm:space-x-8 sm:space-y-0 rtl:space-x-reverse">
         {forStepper.map((item, index) => (
-          <li
+                 <li
             key={index}
             className={`flex items-center  space-x-2.5 rtl:space-x-reverse ${
               forpageValue == index + 1

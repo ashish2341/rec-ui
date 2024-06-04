@@ -2,11 +2,13 @@ import { Link } from "react-scroll";
 import Styles from "./stepper.module.css";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-const Stepper = ({ steppers, pageNumber, setPageValue }) => {
+import styles from "react-day-picker/dist/style.css";
+const Stepper = ({ steppers, pageNumber, setPageValue ,setValueForBack }) => {
   const [activePage, setActivePage] = useState(pageNumber);
   const router = useRouter();
   const returnPreviousPage = (previousPagevalue) => {
     setPageValue(previousPagevalue);
+    setValueForBack(0)
   };
   const returnPage = () => {
     router.push("/property");
@@ -72,12 +74,12 @@ const Stepper = ({ steppers, pageNumber, setPageValue }) => {
                         r="48"
                         stroke="blue"
                         strokeWidth="4"
-                        fill="green"
+                        fill="#6592d3"
                       />
                     </svg>
                   ) : pageNumber > index + 1 ? (
                     <svg
-                      className={`"w-2 h-2 text-white-500 dark:text-white-400" ${Styles.rightMark}`}
+                      className={`"w-3 h-3 text-white-500 dark:text-white-400" ${Styles.rightMark}`}
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -110,19 +112,19 @@ const Stepper = ({ steppers, pageNumber, setPageValue }) => {
                   )}
                 </span>
                 {pageNumber == index + 1 ? (
-                  <h3 className="text-sm italic font-bold leading-tight text-green-600 cursor-pointer">
+                  <h3 className={`text-sm italic font-bold leading-tight text-blue-600  cursor-pointer ${Styles.progressText}`}>
                     {item.name}{" "}
-                    <button className="inline-flex items-center px-1.5 py-0.5 ml-2 border border-transparent text-xs font-medium rounded-full text-white bg-green-600 hover:bg-green-700 focus:outline-none cursor-pointer opacity-75 hover:opacity-100">
+                    <button className={`inline-flex items-center px-1.5 py-0.5 ml-2 border border-transparent text-xs font-medium rounded-full text-white bg-green-600 hover:bg-green-700 focus:outline-none cursor-pointer opacity-75 hover:opacity-100 ${Styles.InprogressBtn}`}>
                       In Progress
                     </button>
                   </h3>
                 ) : item.value < pageNumber ? (
                   <h3
                     onClick={() => returnPreviousPage(item.value)}
-                    className="text-sm font-bold leading-tight text-blue-600 cursor-pointer"
+                    className={`text-sm font-bold leading-tight text-blue-600 cursor-pointer ${Styles.completedText}`}
                   >
                     {item.name}
-                    <button className="inline-flex items-center px-1.5 py-0.5 ml-2 border border-transparent text-xs font-medium rounded-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none  cursor-pointer opacity-75 hover:opacity-100">
+                    <button className={`inline-flex items-center px-1.5 py-0.5 ml-2 border border-transparent text-xs font-medium rounded-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none  cursor-pointer  hover:opacity-100 ${Styles.completedBtn}`}>
                       Completed
                     </button>
                   </h3>
@@ -141,7 +143,7 @@ const Stepper = ({ steppers, pageNumber, setPageValue }) => {
           </ol>
           <p className="text-sm font-medium leading-tight  ml-4 text-centre ">
             <span className="mr-2 text-grey-600">Need Help?</span>
-            <i class="bi bi-telephone-forward-fill mr-2 text-blue-600"></i>
+            <i className="bi bi-telephone-forward-fill mr-2 text-blue-600"></i>
             <span className="underline text-blue-600"> Call 7785548975</span>
           </p>
         </div>

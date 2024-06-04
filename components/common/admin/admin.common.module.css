@@ -21,6 +21,23 @@
     background-color: #d2d7ea !important;
     color:#0a45ed;
     border: none !important;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.1), 0 8px 17px 0 rgba(0, 0, 0, 0.1) !important;
   }
-  .biginActiveButton{
-  }
+ .bigInactiveButton{
+  /* background-color: #fffcf2 !important */
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.1), 0 8px 17px 0 rgba(0, 0, 0, 0.1) !important;
+ 
+ }
+ .noDataHead{
+  font-weight: 600;
+  margin: 0.5rem;
+  color: grey;
+  text-align: center;
+  font-size: 1rem;
+}
+.arrayButtonIconBox{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+}

@@ -3,12 +3,8 @@ import { ToastContainer, toast } from "react-toastify";
 import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import ButtonStepper from "@/components/common/buttonSteeper/buttonstepper";
-import PartOne from "./parts/partOne";
-import PartTwo from "./parts/partTwo";
-import PartThree from "./parts/partThree";
-import PartFour from "./parts/partFour";
-import PartFive from "./parts/partFive";
-
+import AmenityPage from "./parts/Amenities";
+import FeaturePage from "./parts/Features";
 
 export default function FeaturesDetailsForm({
   onAmenitiesChange,
@@ -17,8 +13,6 @@ export default function FeaturesDetailsForm({
   valueForNextPage,
   setPropertyBackvalue,
 }) {
-
-
   const [propertyPageValue, setPropertyPageValue] = useState(1);
 
   const handelBack = (value) => {
@@ -32,21 +26,18 @@ export default function FeaturesDetailsForm({
     valueForNext(value);
   };
   const stepperArray = [
-    {name:"Aminities",number:1},
-    {name:"Features",number:2},
-    {name:"Floors",number:3},
-    {name:"Fitting",number:4},
-    {name:"Walls",number:5}
+    { name: "Aminities", number: 1 },
+    { name: "Features", number: 2 },
   ];
   return (
     <>
-      <h3 className="mb-4 text-lg font-medium leading-none underline text-gray-900 dark:text-white">
-        Feature Details{" "}
-      </h3>
-      <div className="mb-5 "> 
-      <ButtonStepper forStepper={stepperArray} forpageValue={propertyPageValue}/>
+      <div className="mb-5 ">
+        <ButtonStepper
+          forStepper={stepperArray}
+          forpageValue={propertyPageValue}
+        />
       </div>
-     
+
       {propertyPageValue > 1 ? (
         <button
           onClick={handelBack}
@@ -61,28 +52,30 @@ export default function FeaturesDetailsForm({
       ) : null}
 
       {propertyPageValue == 1 && (
-        <PartOne
+        <AmenityPage
           setPropertyPageValue={setPropertyPageValue}
           setPropertyBackvalue={setPropertyBackvalue}
         />
       )}
       {propertyPageValue == 2 && (
-        <PartTwo setPropertyPageValue={setPropertyPageValue} />
+        <FeaturePage
+          valueForNextfromSix={handelvalueForNextfromSix}
+          valueForNextPagefromSix={valueForNextPage}
+        />
       )}
-      {propertyPageValue == 3 && (
+      {/* {propertyPageValue == 3 && (
         <PartThree setPropertyPageValue={setPropertyPageValue} />
       )}
       {propertyPageValue == 4 && (
         <PartFour setPropertyPageValue={setPropertyPageValue} />
       )}
-      
+
       {propertyPageValue == 5 && (
         <PartFive
           valueForNextfromSix={handelvalueForNextfromSix}
           valueForNextPagefromSix={valueForNextPage}
         />
-      )}
-    
+      )} */}
     </>
   );
 }

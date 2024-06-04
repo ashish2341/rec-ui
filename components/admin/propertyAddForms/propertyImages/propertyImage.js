@@ -3,19 +3,15 @@ import { useState, useRef, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { ImageString } from "@/api-functions/auth/authAction";
 
-export default function PropertyImagesForm({
-  valueForNextPage,
-  mainBackPageValue,
-  valueForBack,
+export default function PropertyImagesForm({ valueForNext, valueForNextPage
+ 
 }) {
   const [image, setImage] = useState([]);
   const [video, setVideo] = useState([]);
-  const [documents, setDocuments] = useState([]);
   const imageInputRef = useRef(null);
   const VideoInputRef = useRef(null);
-  const documentInputRef = useRef(null);
   const [mediaShowValue, setMediaShowValue] = useState(false);
-  const [btnShowonInputChange, setBtnShowonInputChange] = useState(false);
+ 
 
   useEffect(() => {
     // Retrieve data from localStorage
@@ -30,7 +26,6 @@ export default function PropertyImagesForm({
     if (sessionStoragePropertyData) {
       setImage(sessionStoragePropertyData?.Images || "");
       setVideo(sessionStoragePropertyData?.Videos || "");
-      setDocuments(sessionStoragePropertyData?.Documents || "");
     }
   }, []);
 
@@ -39,18 +34,10 @@ export default function PropertyImagesForm({
       toast.error("Image is required.");
       return false;
     }
-    if (video.length == 0) {
-      toast.error("Video is required.");
-      return false;
-    }
-    if (documents.length == 0) {
-      toast.error("Document is required.");
-      return false;
-    }
+ 
 
     const mediaData = {
       Images: image,
-      Documents: documents,
       Videos: video,
     };
     console.log("mediaData before set localstorge", mediaData);
@@ -62,8 +49,8 @@ export default function PropertyImagesForm({
       const newProjectData = { ...localStorageData, ...mediaData };
       console.log("newProjectData before set localStorage", newProjectData);
       sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
-      valueForBack(mainBackPageValue + 1);
-      setBtnShowonInputChange(true);
+      valueForNext(valueForNextPage + 1);
+      
     }
   };
 
@@ -142,12 +129,8 @@ export default function PropertyImagesForm({
       if (imageInputRef.current) {
         imageInputRef.current.value = "";
       }
-      if (btnShowonInputChange == true) {
-        setBtnShowonInputChange(false);
-      }
-      if (mainBackPageValue == 1) {
-        valueForBack(mainBackPageValue - 1);
-      }
+    
+     
     }
   };
 
@@ -232,104 +215,11 @@ export default function PropertyImagesForm({
       if (VideoInputRef.current) {
         VideoInputRef.current.value = "";
       }
-      if (btnShowonInputChange == true) {
-        setBtnShowonInputChange(false);
-      }
-      if (mainBackPageValue == 1) {
-        valueForBack(mainBackPageValue - 1);
-      }
+      
     }
   };
 
-  const handleDocumentInputChange = async (event) => {
-    const acceptedFileTypes = [
-      "application/pdf",
-      "application/doc",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ];
-
-    const files = Array.from(event.target.files);
-    console.log("Document Files", files);
-    console.log("files.type", files.type);
-
-    // Check file types
-    const invalidFiles = files.filter(
-      (file) => !acceptedFileTypes.includes(file.type)
-    );
-
-    if (invalidFiles.length > 0) {
-      toast.error("Please upload a file in PDF/DOC/DOCX format.");
-      if (documentInputRef.current) {
-        documentInputRef.current.value = "";
-      }
-    } else {
-      const documentString = [];
-
-      // Map each file to its corresponding image string asynchronously
-      await Promise.all(
-        files.map(async (item) => {
-          console.log("image File inside map", item);
-          const formData = new FormData();
-          formData.append("profilePic", item);
-
-          try {
-            const res = await ImageString(formData);
-            if (res.successMessage) {
-              console.log("Image Response", res.successMessage.imageUrl);
-              documentString.push(res.successMessage.imageUrl);
-            } else {
-              toast.error(res.errMessage);
-              return false;
-            }
-          } catch (error) {
-            console.error("Error occurred while converting image:", error);
-            toast.error("Error occurred while converting image.");
-            return false;
-          }
-        })
-      );
-
-      console.log(
-        "documentString files data after convert string",
-        documentString
-      );
-
-      // Filter unique files based on filename
-      const uniqueFiles = documentString.filter((url) => {
-        const filename = url.substring(
-          url.lastIndexOf("-") + 1,
-          url.lastIndexOf(".")
-        );
-        console.log("documentString filename", filename);
-        if (documents.length > 0) {
-          return !documents.some((existingFile) => {
-            const existingFilename = existingFile.substring(
-              existingFile.lastIndexOf("-") + 1,
-              existingFile.lastIndexOf(".")
-            );
-            console.log("documents existingFilename", existingFilename);
-            return existingFilename === filename;
-          });
-        } else {
-          return filename;
-        }
-      });
-
-      console.log("uniqueFiles data after convert string", uniqueFiles);
-
-      // Update the document state
-      setDocuments([...documents, ...uniqueFiles]);
-      if (documentInputRef.current) {
-        documentInputRef.current.value = "";
-      }
-      if (btnShowonInputChange == true) {
-        setBtnShowonInputChange(false);
-      }
-      if (mainBackPageValue == 1) {
-        valueForBack(mainBackPageValue - 1);
-      }
-    }
-  };
+  
 
   const removeVideo = (index) => {
     const newArray = [...video];
@@ -356,12 +246,7 @@ export default function PropertyImagesForm({
     if (newArray.length == 0) {
       clearVideoInput();
     }
-    if (btnShowonInputChange == true) {
-      setBtnShowonInputChange(false);
-    }
-    if (mainBackPageValue == 1) {
-      valueForBack(mainBackPageValue - 1);
-    }
+   
   };
   const clearVideoInput = () => {
     if (VideoInputRef.current) {
@@ -395,12 +280,7 @@ export default function PropertyImagesForm({
     if (newArray.length == 0) {
       clearImageInput();
     }
-    if (btnShowonInputChange == true) {
-      setBtnShowonInputChange(false);
-    }
-    if (mainBackPageValue == 1) {
-      valueForBack(mainBackPageValue - 1);
-    }
+   
   };
   const clearImageInput = () => {
     if (imageInputRef.current) {
@@ -408,67 +288,29 @@ export default function PropertyImagesForm({
     }
   };
 
-  const removeDocument = (index) => {
-    const newArray = [...documents];
-    newArray.splice(index, 1);
-    // Step 1: Retrieve the object from local storage
 
-    const storedData = JSON.parse(sessionStorage.getItem("propertyData"));
-    const documentsArray = storedData?.Documents;
-    console.log("documentsArray", documentsArray);
-    if (documents.length == documentsArray.length) {
-      if (documentsArray.length > 0) {
-        // // Step 2: Modify the array by removing the desired item
-        documentsArray.splice(index, 1);
-        console.log("documentsArray after splicce", documentsArray);
-
-        // // Step 3: Update the object in local storage with the modified array
-        const updatedData = { ...storedData, Documents: documentsArray };
-        console.log("updatedData", updatedData);
-        sessionStorage.setItem("EditPropertyData", JSON.stringify(updatedData));
-      }
-    }
-    setDocuments(newArray);
-
-    if (newArray.length == 0) {
-      cleardocumentInput();
-    }
-  };
-  const cleardocumentInput = () => {
-    if (documentInputRef.current) {
-      documentInputRef.current.value = "";
-    }
-    if (btnShowonInputChange == true) {
-      setBtnShowonInputChange(false);
-    }
-    if (mainBackPageValue == 1) {
-      valueForBack(mainBackPageValue - 1);
-    }
-  };
 
   return (
     <>
       <div>
-        {mainBackPageValue == 0 || btnShowonInputChange == false ? (
-          <div className="flex justify-end w-1/2 mb-4 relative -top-20 ml-[25rem]">
-            <button
-              onClick={SubmitForm}
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
-            >
-              Save
-            </button>
-          </div>
-        ) : null}
+      <div className="flex justify-end w-full mb-4">
+          <button
+            onClick={SubmitForm}
+            type="button"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
+          >
+            Next
+          </button>
+        </div>
         <form>
           <div className="grid gap-4 mb-4 sm:grid-cols-1">
             <div className="border border-gray-300 p-3 rounded-lg">
-              <h3 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white">
+              <h3 className="block mb-2 text-lg font-lg underline font-bold text-gray-500 dark:text-white">
                 Property Images
               </h3>
               <label
                 htmlFor="imageInput"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
               >
                 Upload Image
               </label>
@@ -514,14 +356,14 @@ export default function PropertyImagesForm({
             </div>
 
             <div className="border border-gray-300 p-3 rounded-lg">
-              <h3 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white">
+              <h3 className="block mb-2 text-lg font-lg underline font-bold text-gray-500 dark:text-white">
                 Property Videos
               </h3>
               <label
                 htmlFor="videoInput"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
               >
-                Upload Video
+                Upload Video <span className="text-xs font-bold ml-1 pb-2 text-red-600">(Optional)</span>
               </label>
               <input
                 type="file"
@@ -564,55 +406,7 @@ export default function PropertyImagesForm({
               ) : null}
             </div>
 
-            <div className="border border-gray-300 p-3 rounded-lg">
-              <h3 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white">
-                Property Documents
-              </h3>
-              <label
-                htmlFor="documentInput"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Upload Document
-              </label>
-              <input
-                type="file"
-                id="documentInput"
-                name="documentInput"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                ref={documentInputRef}
-                multiple
-                accept=".pdf,.doc,.docx"
-                onChange={handleDocumentInputChange}
-                required
-              />
-              {documents.length > 0 ? (
-                <div>
-                  <div className="ml-2 mt-3 underline font-bold">
-                    <h3>Selected Document</h3>
-                  </div>
-                  <div className="flex flex-wrap relative mt-3">
-                    {documents.map((document, index) => (
-                      <div key={index} className="mr-4 mb-4 relative">
-                        <iframe
-                          title={`Document ${index}`}
-                          src={document}
-                          className="h-48 w-64 border border-black rounded-lg"
-                        />
-                        <button
-                          className="absolute top-0 right-0 p-1"
-                          onClick={() => removeDocument(index)}
-                        >
-                          <i
-                            className="bi bi-x-circle-fill"
-                            style={{ color: "red" }}
-                          ></i>
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-            </div>
+            
           </div>
         </form>
       </div>

@@ -32,12 +32,15 @@
   .column2 {
     flex: 0 0 70%;
     height: 75vh;
+    /* margin-top: -1rem; */
     
    
   }
  .insidecolumn2{
   overflow-y: auto;
   height: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
   
  }
   

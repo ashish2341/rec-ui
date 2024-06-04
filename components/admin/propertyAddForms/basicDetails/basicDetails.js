@@ -4,52 +4,177 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Styles from "../propertyAdd.module.css";
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
-export default function BasicDetailsForm({ valueForNext, valueForNextPage,activeButton,setBasisPagebuttonvalue }) {
+import ApiButtons from "@/components/common/admin/propertyapiButtons/ApiButtons";
+import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import useFetch from "@/customHooks/useFetch";
+import Cookies from "js-cookie";
+export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
+  const roleData = Cookies.get("roles") ?? "";
+  const name = Cookies.get("name");
+  const roles = roleData && JSON.parse(roleData);
+  const userId = Cookies.get("userId");
+  // fetching Data for facing
+  const {
+    data: facingData,
+    loading,
+    error,
+  } = useFetch(`${API_BASE_URL_FOR_MASTER}/facing`);
+  console.log("facingData", facingData);
+  const { data: propertySubTypeData } = useFetch(
+    `${API_BASE_URL_FOR_MASTER}/propertyWithSubTypes`
+  );
+   console.log("propertySubTypeData", propertySubTypeData);
+  const sessionStoragePropertyData = JSON.parse(
+    sessionStorage.getItem("propertyData")
+  );
+  const propertTypWithSubTypeValue =
+    sessionStoragePropertyData?.PropertyTypeWithSubtype || "";
+  const [propertyTypeWithSubtype, setPropertyTypeWithSubtype] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [highlight, setHighlight] = useState("");
-  // const [lokkingButton,setLookingButtton]=useState
+  const [propertyType, setPropertyType] = useState("");
+  const [Propertyfor, setPropertyfor] = useState("Sell");
+  const [facing, setFacing] = useState("");
+  const [isEnabled, setIsEnabled] = useState(true);
+  const [isFeatured, setIsFeatured] = useState(true);
+  const [propertySubTypevalue, setPropertySubTypeValue] = useState("");
+
+  const propertyTypeArray = ["Residential", "Commercial"];
+  const lookingToArray = ["Sell"];
+  const IsEnabledArray = [true, false];
+  const IsFeaturedArray = [true, false];
+  let propertySubTypeArray ={data:""};
+  if(propertySubTypeData){
+    const newpropertySubTypeArray=propertySubTypeData?.data?.filter(item=>item.Type=="Residential")
+    console.log("newpropertySubTypeArray",newpropertySubTypeArray)
+  }
+  
+  if (propertySubTypeData &&
+    Propertyfor &&
+    propertyType &&
+    Propertyfor == "Sell" &&
+    propertyType == "Residential"
+  ) {
+    propertySubTypeArray.data=propertySubTypeData?.data?.filter(item=>item.Type=="Residential")
+   
+  }
+  if (propertySubTypeData &&
+    Propertyfor.length > 0 &&
+    propertyType.length > 0 &&
+    (Propertyfor == "Rent" || Propertyfor == "Sell") &&
+    propertyType == "Commercial"
+  ) {
+    propertySubTypeArray.data=propertySubTypeData?.data?.filter(item=>item.Type=="Commercial")
+    
+  }
   useEffect(() => {
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("propertyData")
     );
 
-    console.log(
-      "localStorageData from localstorage",
-      sessionStoragePropertyData
-    );
     if (sessionStoragePropertyData) {
+      console.log(
+        "sessionStoragePropertyData?.IsFeatured",
+        sessionStoragePropertyData?.IsFeatured
+      );
+      setPropertyTypeWithSubtype(
+        sessionStoragePropertyData?.PropertyTypeWithSubtype || []
+      );
       setTitle(sessionStoragePropertyData?.Titile || "");
       setDescription(sessionStoragePropertyData?.Description || "");
-      setHighlight(sessionStoragePropertyData?.Highlight || "");
+      setPropertyType(sessionStoragePropertyData?.PropertyType || "");
+      setPropertyfor(sessionStoragePropertyData?.PropertyFor || "Sell");
+      setPropertySubTypeValue(
+        sessionStoragePropertyData?.PropertyTypeWithSubtype || ""
+      );
+      setFacing(sessionStoragePropertyData?.Facing || "");
+      if (roles.includes("Admin")) {
+        setIsEnabled(
+          sessionStoragePropertyData?.IsEnabled === true
+            ? true
+            : sessionStoragePropertyData?.IsEnabled === undefined
+            ? true
+            : sessionStoragePropertyData?.IsEnabled === ""
+            ? true
+            : false
+        );
+        setIsFeatured(
+          sessionStoragePropertyData?.IsFeatured === true
+            ? true
+            : sessionStoragePropertyData?.IsFeatured === undefined
+            ? true
+            : sessionStoragePropertyData?.IsFeatured === ""
+            ? true
+            : false
+        );
+      } else {
+        setIsEnabled(
+          sessionStoragePropertyData?.IsEnabled === false
+            ? false
+            : sessionStoragePropertyData?.IsEnabled === undefined
+            ? false
+            : false
+        );
+        setIsFeatured(
+          sessionStoragePropertyData?.IsFeatured === false
+            ? false
+            : sessionStoragePropertyData?.IsFeatured === undefined
+            ? null
+            : false
+        );
+      }
     }
   }, []);
+  const checkRequiredFields = () => {
+    var requiredFields = [
+      title,
+      description,
+      propertyType,
+      Propertyfor,
+      facing,
+      isEnabled,
+      isFeatured,
+      propertyTypeWithSubtype,
+    ];
 
+    // Check if any required field is empty
+    const isEmpty = requiredFields.some(
+      (field) => field === "" || field === null || field === undefined
+    );
+
+    return !isEmpty;
+  };
   const SubmitForm = () => {
-    // if (title === "") {
-    //   toast.error("Title  is required.");
-    //   return false;
-    // }
-    // if (description === "") {
-    //   toast.error("Description is required.");
-    //   return false;
-    // }
-    // if (highlight === "") {
-    //   toast.error("Highlight is required.");
-    //   return false;
-    // }
-    // const basicDetailsData = {
-    //   Titile: title.trim(),
-    //   Description: description.trim(),
-    //   Highlight: highlight.trim(),
-    // };
-    // const updatedProjectData = {
-    //   ...JSON.parse(sessionStorage.getItem("propertyData")),
-    //   ...basicDetailsData,
-    // };
-    // sessionStorage.setItem("propertyData", JSON.stringify(updatedProjectData));
+    const allFieldsFilled = checkRequiredFields();
 
-    valueForNext(valueForNextPage + 1);
+    if (allFieldsFilled) {
+      const basicDetailsData = {
+        Titile: title,
+        Description: description,
+        PropertyType: propertyType,
+        PropertyFor: Propertyfor,
+        Facing: facing,
+        IsEnabled: isEnabled,
+        IsFeatured: isFeatured,
+        PropertyTypeWithSubtype: propertyTypeWithSubtype,
+      };
+      if((sessionStoragePropertyData && propertTypWithSubTypeValue )&& (propertTypWithSubTypeValue != propertyTypeWithSubtype)){
+            sessionStorage.removeItem("propertyData")
+      }
+      
+      const updatedProjectData = {
+        ...JSON.parse(sessionStorage.getItem("propertyData")),
+        ...basicDetailsData,
+      };
+      sessionStorage.setItem(
+        "propertyData",
+        JSON.stringify(updatedProjectData)
+      );
+
+      valueForNext(valueForNextPage + 1);
+    } else {
+      toast.error("Please fill in all required fields!");
+    }
   };
 
   const handelTitleChange = (event) => {
@@ -58,15 +183,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage,active
   const handelDescriptionChange = (event) => {
     setDescription(() => event.target.value);
   };
-  const handelHighlightChange = (event) => {
-    setHighlight(() => event.target.value);
-  };
-
-const activeBtnValue=(value)=>{
-  setBasisPagebuttonvalue(value)
-}
-const propertyTypeArray=["Residential","Commercial"]
-const lookingToArray=["Rent","Sale"]
+  console.log("isFeatured", isFeatured);
   return (
     <>
       <div>
@@ -81,39 +198,98 @@ const lookingToArray=["Rent","Sale"]
         </div>
         <form>
           <div className="grid gap-4 mb-4 sm:grid-cols-1">
-            <div className="mb-4">
-              <label
-                htmlFor="PropertyType"
-                className="block mb-2 text-lg font-medium font-bold text-gray-900 dark:text-white required"
-              >
-                Property Type
-              </label>
-              <PropertyBigButtons buttonArray={propertyTypeArray} activeButtonvalue={activeButton} handelValue={activeBtnValue}/>
+            <div className="grid gap-4 mb-4 sm:grid-cols-2">
+              <PropertyBigButtons
+                labelName={"Property Type"}
+                itemArray={propertyTypeArray}
+                activeBtnvalue={propertyType}
+                changeState={setPropertyType}
+              />
+
+              <PropertyBigButtons
+                labelName={"Looking To"}
+                itemArray={lookingToArray}
+                activeBtnvalue={Propertyfor}
+                changeState={setPropertyfor}
+              />
             </div>
-            <div className="mb-4">
-            <label
-                htmlFor="LookingTo"
-                className="block mb-2 text-lg font-medium font-bold text-gray-900 dark:text-white required"
+
+            {propertySubTypeArray?.data?.length > 0 && (
+              
+                <ApiButtons
+                  itemArray={propertySubTypeArray}
+                  stateItem={propertyTypeWithSubtype}
+                  labelName={"Property SubType"}
+                  ValueName={"Name"}
+                  changeState={setPropertyTypeWithSubtype}
+                />
+            )}
+            <div>
+              <label
+                htmlFor="title"
+                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
               >
-                Looking To
+                Property Name
               </label>
-              <PropertyBigButtons buttonArray={lookingToArray} activeButtonvalue={activeButton} handelValue={activeBtnValue}/>
+              <input
+                type="text"
+                name="title"
+                id="title"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Property Name"
+                required=""
+                value={title}
+                onChange={handelTitleChange}
+              />
+            </div>
+            {/*Facing  */}
+            {facingData && (
+              <ApiButtons
+                itemArray={facingData}
+                stateItem={facing}
+                labelName={"Facing"}
+                ValueName={"Facing"}
+                changeState={setFacing}
+              />
+            )}
+
+            <div className="grid gap-4 mb-4 sm:grid-cols-2">
+              {/* Is Enabled */}
+
+              {roles.includes("Admin") && (
+                <PropertyBigButtons
+                  labelName={"Is Enabled"}
+                  itemArray={IsEnabledArray}
+                  activeBtnvalue={isEnabled}
+                  changeState={setIsEnabled}
+                />
+              )}
+
+              {/*  Is Featured*/}
+              {roles.includes("Admin") && (
+                <PropertyBigButtons
+                  labelName={"Is Featured"}
+                  itemArray={IsFeaturedArray}
+                  activeBtnvalue={isFeatured}
+                  changeState={setIsFeatured}
+                />
+              )}
             </div>
             <div>
               <label
-                htmlFor="highlight"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                htmlFor="description"
+                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
               >
-                Highlight
+                Description
               </label>
               <textarea
                 type="text"
-                name="highlight"
-                id="highlight"
+                name="description"
+                id="description"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required=""
-                value={highlight}
-                onChange={handelHighlightChange}
+                value={description}
+                onChange={handelDescriptionChange}
               />
             </div>
           </div>

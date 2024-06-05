@@ -18,6 +18,7 @@ export default function PropertyDetailsForm({
   setPropertyBackvalue,
   valueForNext,
   valueForNextPage,
+  setPageValueInsidePropertyForm
 }) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
@@ -27,12 +28,15 @@ export default function PropertyDetailsForm({
     sessionStorage.getItem("propertyData")
   );
   const propertTypWithSubTypeValue =
-    sessionStoragePropertyData?.PropertyTypeWithSubtype || "";
+    sessionStoragePropertyData?.PropertyTypeWithSubtype.Name || "";
   const propertTypeValue = sessionStoragePropertyData?.PropertyType || "";
   const PropertyForValue = sessionStoragePropertyData?.PropertyFor || "";
 
   const [propertyPageValue, setPropertyPageValue] = useState(1);
-
+  console.log("PropertyDetailsForm propertyPageValue",propertyPageValue)
+useEffect(()=>{
+  setPageValueInsidePropertyForm(propertyPageValue)
+},[propertyPageValue])
   const handelBack = (value) => {
     setPropertyPageValue(propertyPageValue - 1);
 

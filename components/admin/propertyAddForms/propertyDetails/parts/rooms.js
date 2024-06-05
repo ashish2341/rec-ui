@@ -63,13 +63,16 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
     }
   }, []);
   const checkRequiredFields = () => {
-
-    if (
-      propertTypeValue == "Residential" 
-    ) {
-      var requiredFields = [bhkType, bedrooms,bathrooms,floorNumber,totalFloors];
-    }else{
-      var requiredFields = [floorNumber,totalFloors];
+    if (propertTypeValue == "Residential") {
+      var requiredFields = [
+        bhkType,
+        bedrooms,
+        bathrooms,
+        floorNumber,
+        totalFloors,
+      ];
+    } else {
+      var requiredFields = [floorNumber, totalFloors];
     }
 
     // Check if any required field is empty
@@ -83,16 +86,13 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
     const allFieldsFilled = true;
     if (allFieldsFilled) {
       const secondPropertyData = {
-        
         FloorNumber: parseInt(floorNumber),
         TotalFloors: parseInt(totalFloors),
       };
-      if (
-        propertTypeValue == "Residential" 
-      ) {
-        secondPropertyData.BhkType=bhkType;
-        secondPropertyData.Bedrooms=bedrooms;
-        secondPropertyData.Bathrooms=bathrooms;
+      if (propertTypeValue == "Residential") {
+        secondPropertyData.BhkType = bhkType;
+        secondPropertyData.Bedrooms = bedrooms;
+        secondPropertyData.Bathrooms = bathrooms;
       }
       console.log("secondPropertyData", secondPropertyData);
       const localStorageData = JSON.parse(
@@ -110,79 +110,7 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
       <div className={`flex justify-end ${Styles.continueBtn}`}>
         <ContinueButton modalSubmit={SubmitForm} />
       </div>
-      <div className="grid gap-4 mb-4 sm:grid-cols-1">
-        {propertTypeValue == "Residential" && (
-          <>
-            {/* BhkType */}
-            {bhkTypeData && (
-              <ApiButtons
-                itemArray={bhkTypeData}
-                stateItem={bhkType}
-                labelName={"Bhk Type"}
-                ValueName={"Type"}
-                changeState={setBhkType}
-              />
-            )}
-
-            {/* Bedrooms */}
-
-            <PropertyBigButtons
-              labelName={"Bedrooms"}
-              itemArray={bedRoomarray}
-              activeBtnvalue={bedrooms}
-              changeState={setBedrooms}
-            />
-
-            {/* Bathrooms */}
-            <PropertyBigButtons
-              labelName={"Bathrooms"}
-              itemArray={bathroomarray}
-              activeBtnvalue={bathrooms}
-              changeState={setBathrooms}
-            />
-          </>
-        )}
-
-        {/* Balconies */}
-        {/* <div>
-          <label
-            htmlFor="balconies"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-          >
-            Balconies
-          </label>
-          <input
-            type="number"
-            name="balconies"
-            id="balconies"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Number of Balconies"
-            value={balconies}
-            // onChange={(e) => setBalconies(e.target.value)}
-            disabled
-          />
-          <div
-            className={`flex flex-wrap space-x-2 mt-4 ${
-              balconiesarray.length > 8 ? `${Styles.scrollable}` : ""
-            }`}
-          >
-            {balconiesarray.map((item, index) => (
-              <button
-                key={index}
-                onClick={() => setBalconies(item)}
-                className={` rounded text-white px-4 py-2 ${
-                  Styles.optionButton
-                } ${
-                  balconies == item
-                    ? "bg-[#2a4acb] border-2 border-[#2a4acb]"
-                    : "bg-[#6592d3]  border-2 border-[#6592d3]"
-                }`}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-        </div> */}
+      <div className="grid gap-4 mb-4 sm:grid-cols-2">
         {/* FloorNumber */}
         <div>
           <label
@@ -220,26 +148,41 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
             onChange={(e) => setTotalFloors(e.target.value)}
           />
         </div>
-
-        {/* FloorsAllowed */}
-        {/* <div>
-          <label
-            htmlFor="floorsAllowed"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-          >
-            Floors Allowed
-          </label>
-          <input
-            type="number"
-            name="floorsAllowed"
-            id="floorsAllowed"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Floors Allowed"
-            value={floorsAllowed}
-            onChange={(e) => setFloorsAllowed(e.target.value)}
-          />
-        </div> */}
       </div>
+      <div className="grid gap-4 mb-4 sm:grid-cols-1">
+        {propertTypeValue == "Residential" && (
+          <>
+            {/* BhkType */}
+            {bhkTypeData && (
+              <ApiButtons
+                itemArray={bhkTypeData}
+                stateItem={bhkType}
+                labelName={"Bhk Type"}
+                ValueName={"Type"}
+                changeState={setBhkType}
+              />
+            )}
+
+            {/* Bedrooms */}
+
+            <PropertyBigButtons
+              labelName={"Bedrooms"}
+              itemArray={bedRoomarray}
+              activeBtnvalue={bedrooms}
+              changeState={setBedrooms}
+            />
+
+            {/* Bathrooms */}
+            <PropertyBigButtons
+              labelName={"Bathrooms"}
+              itemArray={bathroomarray}
+              activeBtnvalue={bathrooms}
+              changeState={setBathrooms}
+            />
+          </>
+        )}
+      </div>
+     
     </>
   );
 }

@@ -11,6 +11,7 @@ export default function Sidebar({ children }) {
   const pathname = usePathname();
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
+  const profilePhoto = Cookies.get("profilePhoto");
   const roles = roleData && JSON.parse(roleData);
 
   const [activeTab, setActiveTab] = useState(pathname.replace("/", ""));
@@ -30,6 +31,12 @@ export default function Sidebar({ children }) {
   };
   const handleDelete = () => {
     if (typeof window !== "undefined") {
+      const sessionStoragePropertyData = JSON.parse(
+        sessionStorage.getItem("propertyData")
+      );
+      if(sessionStoragePropertyData){
+        sessionStorage.removeItem("propertyData")
+      }
       localStorage.removeItem("token");
       Cookies.remove("token");
       Cookies.remove("name");
@@ -91,7 +98,7 @@ export default function Sidebar({ children }) {
             {roles.includes("Admin") ? (
               <div className="flex flex-col items-center">
                 <img
-                  src={"img/profile_pic.jpg"}
+                  src={profilePhoto }
                   alt="Admin Image"
                   className="w-14 h-14 rounded-full mb-4"
                 />
@@ -100,7 +107,7 @@ export default function Sidebar({ children }) {
             ) : (
               <div className="flex flex-col items-center">
                 <img
-                  src={"img/builder_demo_logo.jpg"}
+                  src={profilePhoto}
                   alt="Builder Image"
                   className="w-14 h-14  rounded-full mb-4"
                 />

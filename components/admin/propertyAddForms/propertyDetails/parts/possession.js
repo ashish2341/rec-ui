@@ -103,7 +103,7 @@ export default function PossessionDetailsPage({
 
   const checkRequiredFields = () => {
     var requiredFields = [posessionStatus, posessionDate, brochure];
-    if (PropertyStatusValue.Status != "Under Contruction") {
+    if (sessionStoragePropertyData?.PropertyStatus && PropertyStatusValue.Status != "Under Contruction") {
       var requiredFields = [
         posessionStatus,
         posessionDate,

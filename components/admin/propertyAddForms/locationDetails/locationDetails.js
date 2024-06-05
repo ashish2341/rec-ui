@@ -22,10 +22,10 @@ export default function LocationDetailsForm({
   const [landmark, setLandmark] = useState("");
   const [pincode, setPincode] = useState("");
   const [area, setArea] = useState("");
-  const [locationDetails, setLocationDetails] = useState({
-    Latitude: "",
-    Longitude: "",
-  });
+  // const [locationDetails, setLocationDetails] = useState({
+  //   Latitude: "",
+  //   Longitude: "",
+  // });
 
   useEffect(() => {
     // Retrieve data from localStorage
@@ -44,10 +44,10 @@ export default function LocationDetailsForm({
       setAddress(sessionStoragePropertyData?.Address || "");
       setLandmark(sessionStoragePropertyData?.Landmark || "");
       setPincode(sessionStoragePropertyData?.PinCode || "");
-      setLocationDetails({
-        Latitude: sessionStoragePropertyData?.Location?.Latitude || "",
-        Longitude: sessionStoragePropertyData?.Location?.Longitude || "",
-      });
+      // setLocationDetails({
+      //   Latitude: sessionStoragePropertyData?.Location?.Latitude || "",
+      //   Longitude: sessionStoragePropertyData?.Location?.Longitude || "",
+      // });
       setArea(sessionStoragePropertyData.Area || "");
     }
   }, []);
@@ -82,12 +82,12 @@ export default function LocationDetailsForm({
     setPincode(event.target.value);
   };
 
-  const handleLocationChange = (e) => {
-    const { name, value } = e.target;
-    console.log("name", name);
-    console.log("value", value);
-    setLocationDetails({ ...locationDetails, [name]: value });
-  };
+  // const handleLocationChange = (e) => {
+  //   const { name, value } = e.target;
+  //   console.log("name", name);
+  //   console.log("value", value);
+  //   setLocationDetails({ ...locationDetails, [name]: value });
+  // };
 
   const SubmitForm = () => {
     if (address === "") {
@@ -107,7 +107,7 @@ export default function LocationDetailsForm({
     const locationDetailsData = {
       City: city.trim(),
       Address: address.trim(),
-      Location: locationDetails,
+      // Location: locationDetails,
       Area: area,
     };
     console.log("locationDetailsData", locationDetailsData);

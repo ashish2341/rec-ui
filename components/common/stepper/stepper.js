@@ -1,11 +1,16 @@
+
+
 import { Link } from "react-scroll";
 import Styles from "./stepper.module.css";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "react-day-picker/dist/style.css";
-const Stepper = ({ steppers, pageNumber, setPageValue ,setValueForBack }) => {
+const Stepper = ({ steppers, pageNumber, setPageValue ,setValueForBack,propertyScoreValue }) => {
   const [activePage, setActivePage] = useState(pageNumber);
+
   const router = useRouter();
+
+ 
   const returnPreviousPage = (previousPagevalue) => {
     setPageValue(previousPagevalue);
     setValueForBack(0)
@@ -38,9 +43,10 @@ const Stepper = ({ steppers, pageNumber, setPageValue ,setValueForBack }) => {
           <div className="w-full bg-blue-400 rounded-full dark:bg-blue-700 mt-2">
             <div
               className="bg-yellow-400 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
-              style={{ width: "45%" }}
+              
+              style={propertyScoreValue ?{ width: `${propertyScoreValue}%` }:{ width: "0%" }}
             >
-              45%
+              {propertyScoreValue ? propertyScoreValue : "0"}%
             </div>
           </div>
         </div>

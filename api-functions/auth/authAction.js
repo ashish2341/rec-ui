@@ -26,6 +26,7 @@ export const loginUser = async (payload,setLoading=()=>{}) => {
       Cookies.set("token", resData?.message);
       Cookies.set("userId", resData?.userId);
       Cookies.set("name", resData?.firstName);
+      Cookies.set("profilePhoto", resData?.profilePhoto);
       Cookies.set("roles", JSON.stringify(resData?.role));
 
       setLoading(false);

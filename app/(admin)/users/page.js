@@ -53,13 +53,13 @@ export default function Users() {
       setListUserData(users?.resData?.data?.user);
       setListEnqData(users?.resData?.data?.enquiries);
       toast.success(users?.resData?.message);
+      console.log("listPropData",users?.resData?.data);
       return false;
     } else {
       toast.error(users?.errMessage);
       return false;
     }
   };
-  console.log("listPropData",listPropData);
   console.log("listUserData",listUserData);
   console.log("listEnqData",listEnqData);
 

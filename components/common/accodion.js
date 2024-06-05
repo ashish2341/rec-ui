@@ -57,7 +57,7 @@ const Accordion = ({ listData }) => {
                     <p className={`${styles.heroSectionBottomBoxText}`}>
                       {" "}
                       <i className="bi bi-house-door-fill"></i>
-                      <span className="ml-1">{item.PropertyType.Type}</span>
+                      <span className="ml-1">{item.PropertySubtype.Name}</span>
                     </p>
                   </div>
                 </div>
@@ -90,7 +90,7 @@ const Accordion = ({ listData }) => {
                       </h2>
                       <p className={` ${styles.heroSectionBottomBoxText}`}>
                         {" "}
-                        {item.BuiltAreaType.Type}
+                        {item.BuiltUpArea}
                       </p>
                     </div>
                     {/* <div className={`${styles.heroSectionVL}`}></div> */}

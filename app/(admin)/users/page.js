@@ -8,21 +8,32 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { GetUserApi } from "@/api-functions/user/getUsers";
+import { GetUserDetailsById } from "@/api-functions/user/getUserDataById";
 import { DeleteUser } from "@/api-functions/user/deleteUser";
 import { UpdateUserApi } from "@/api-functions/user/updateUser";
+import { Button, Modal } from "flowbite-react";
+import styles from "./user.module.css";
+import { Table, Card } from "flowbite-react";
+
 
 export default function Users() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [listData, setListData] = useState(false);
+  const [listPropData, setListPropData] = useState();
+  const [listUserData, setListUserData] = useState();
+  const [listEnqData, setListEnqData] = useState();
   const [deleteId, setDeleteId] = useState();
+  const [userId, setUserId] = useState();
   const [page, setPage] = useState(1);
   const [searchData, setSearchData] = useState("");
   const [isSubmitClicked,setIsSubmitClicked]=useState(0)
+  const [openModal, setOpenModal] = useState(false);
 
-  console.log("listData", listData);
   useEffect(() => {
     getAllUser();
-  }, [page, searchData ,isSubmitClicked]);
+    getUserDetails();
+}, [page, searchData ,isSubmitClicked, userId]);
+
   const getAllUser = async () => {
     let users = await GetUserApi(page, searchData);
     if (users?.resData?.success == true) {
@@ -34,6 +45,24 @@ export default function Users() {
       return false;
     }
   };
+
+  const getUserDetails = async () => {
+    let users = await GetUserDetailsById(userId);
+    if (users?.resData?.success == true) {
+      setListPropData(users?.resData?.data?.properties);
+      setListUserData(users?.resData?.data?.user);
+      setListEnqData(users?.resData?.data?.enquiries);
+      toast.success(users?.resData?.message);
+      console.log("listPropData",users?.resData?.data);
+      return false;
+    } else {
+      toast.error(users?.errMessage);
+      return false;
+    }
+  };
+  console.log("listUserData",listUserData);
+  console.log("listEnqData",listEnqData);
+
   const searchInputChange = (e) => {
     setSearchData(e.target.value);
   };
@@ -51,6 +80,14 @@ export default function Users() {
       toast.error(res.errMessage);
       return false;
     }
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   };
 
   const handleCancel = () => {
@@ -85,6 +122,12 @@ export default function Users() {
         return false;
       }
   };
+
+  const buttonId = (e) => {
+      setOpenModal(true);
+      setUserId(e.target.value);
+      console.log("user",userId)
+  }
   return (
     <section>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -164,7 +207,7 @@ export default function Users() {
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                  {item?.FirstName}
+                  <button onClick={buttonId} value={item._id} className={`${styles.nameLink}`}>{item?.FirstName}</button>
                 </td>
                 <td className="px-6 py-4"> {item?.EmailId}</td>
                 <td className="px-6 py-4"> {item?.Mobile}</td>
@@ -190,7 +233,7 @@ export default function Users() {
                   onChange={handleCheckboxChange(item._id)}
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
-                    
+
                   </div>
                 </td>
 
@@ -223,7 +266,7 @@ export default function Users() {
             ))}
           </tbody>
         </table>
-       
+
       </div>
       <Pagination data={listData} pageNo={handlePageChange} pageVal={page} />
       <Popup
@@ -234,7 +277,104 @@ export default function Users() {
         onConfirm={handleDelete}
         onCancel={handleCancel}
       />
-      
+      <Modal dismissible className={`bg-transparent/[.5] ${styles.ModalContent} `} size="7xl" show={openModal} onClose={() => setOpenModal(false)}>
+        <Modal.Header>User Details</Modal.Header>
+        <Modal.Body className={`${styles.ModalContent}`}  >
+          <div className="flex">
+          <div>
+           <h1 className="text-md mb-3">User Info : </h1>
+              <Card  className="max-w-sm h-80 mr-6">
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <Table.Body className="divide-y">
+                        <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                          <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                            {'Email'}
+                          </Table.Cell>
+                          <Table.Cell>{listUserData ? listUserData.EmailId : null}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                          <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                            {'Mobile'}
+                          </Table.Cell>
+                          <Table.Cell>{listUserData ? listUserData.Mobile : null}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                          <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                            {'Role'}
+                          </Table.Cell>
+                          <Table.Cell>{listUserData ? listUserData.Roles.map(item => (
+                              item.Role
+                          )) : null}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                          <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                            {'Date'}
+                          </Table.Cell>
+                          <Table.Cell>{listUserData ? formatDate(listUserData.CreatedDate) : null}</Table.Cell>
+                        </Table.Row>
+                      </Table.Body>
+                    </Table>
+                  </div>
+              </Card>
+          </div>
+          <div className="mr-6">
+          <h1 className="text-md mb-3">Enquiry Info : </h1>
+              <Card className="max-w-3xl h-80 overflow-y-auto max-h-80">
+              {listEnqData ? <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><span className="font-medium text-gray-900">Total Enquiries : {" "}</span>{listEnqData.length}</p> : null}
+              <div className="overflow-x-auto">
+                <Table>
+                <Table.Head>
+                 <Table.HeadCell>S. No.</Table.HeadCell>
+                 <Table.HeadCell>Name</Table.HeadCell>
+                 <Table.HeadCell>Type</Table.HeadCell>
+                  <Table.HeadCell>Date</Table.HeadCell>
+                 </Table.Head>
+                  <Table.Body className="divide-y">
+                  {listEnqData ?
+                    listEnqData.map((item,index) => (
+                  <Table.Row key={index} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                     <Table.Cell>{index + 1}</Table.Cell>
+                     <Table.Cell>{item.Name}</Table.Cell>
+                     <Table.Cell>{item.EnquiryType}</Table.Cell>
+                     <Table.Cell>{formatDate(item.CreatedDate)}</Table.Cell>
+                    </Table.Row>
+                    )) : null}
+
+                  </Table.Body>
+                </Table>
+              </div>
+              </Card>
+          </div>
+          <div>
+          <h1 className="text-md mb-3">Property Info : </h1>
+              <Card className="max-w-3xl  overflow-y-auto max-h-80">
+              {listPropData ? <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><span className="font-medium text-gray-900">Total Properties : {" "}</span>{listPropData.length}</p> : null}
+              <div className="overflow-x-auto">
+                <Table>
+                <Table.Head>
+                 <Table.HeadCell>S. No.</Table.HeadCell>
+                  <Table.HeadCell>Property</Table.HeadCell>
+                 </Table.Head>
+                  <Table.Body className="divide-y">
+                  {listPropData ?
+                      listPropData.map((item,index) => (
+                  <Table.Row key={index} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                     <Table.Cell>{index + 1}</Table.Cell>
+                      <Table.Cell>{item.Titile}</Table.Cell>
+                    </Table.Row>
+                    )) : null}
+
+                  </Table.Body>
+                </Table>
+              </div>
+              </Card>
+          </div>
+          </div>
+
+
+        </Modal.Body>
+      </Modal>
     </section>
   );
 }

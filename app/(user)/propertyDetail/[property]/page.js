@@ -23,6 +23,7 @@ import {
   AccordionPanel,
   AccordionTitle,
 } from "flowbite-react";
+import {  Modal } from "flowbite-react";
 import MultiCarousel from "@/components/common/carousel";
 import Spinner from "@/components/common/loading";
 import SkeletonLoader from "@/components/common/loader";
@@ -50,9 +51,72 @@ const PropertyDetail = ({ params }) => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [aminityData, setAminityData] = useState(false);
   const [BrochureData, setBrochureData] = useState("");
+  const [openModal, setOpenModal] = useState(false);
 
   const [page, setPage] = useState(1);
   const [activeSection, setActiveSection] = useState("general");
+  const [contactName, setContactName] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactMessage, setContactMessage] = useState("");
+  const [contactMolileNumber, setcontactPhone] = useState("");
+  const [contactEnquiryData, setcontactEnquiryData] = useState("");
+  const [contactEnquiryType, setcontactEnquiryType] = useState("ContactUs");
+
+  const currentDate = new Date().toISOString().slice(0, 10);
+
+  const addcontactEnquiryData = async () => {
+      if (contactName === "") {
+        toast.error("Name  is required");
+        return false;
+      }
+      if (contactEmail === "") {
+        toast.error("Email is required");
+        return false;
+      }
+      if (contactMessage === "") {
+        toast.error("Message is required");
+        return false;
+      }
+      if (contactMolileNumber === ""){
+        toast.error("Number is required");
+        return false;
+      }
+      if (!/^(\+\d{1,3}[- ]?)?\d{10}$/.test(contactMolileNumber)) {
+        toast.error('Please enter a valid 10-digit mobile number');
+        return false;
+      }
+      let contactpayload = { Name: contactName, Email : contactEmail, Message : contactMessage, MolileNumber : contactMolileNumber,EnquiryDate:  contactEnquiryData, EnquiryType:contactEnquiryType };
+      let res = await addEnquiry(contactpayload);
+       if(res?.resData?.success == true){
+         toast.success(res?.resData?.message);
+         setContactName("");
+         setcontactPhone("");
+         setContactMessage("");
+         setContactEmail("");
+         setOpenModal(false);
+        }else{
+          toast.error(res.errMessage);
+          return false;
+        }
+    }
+
+    const handlecontactNameChange = (e) => {
+      setContactName(e.target.value);
+      setcontactEnquiryData(currentDate);
+    };
+    const handlecontactEmailChange = (e) => {
+      setContactEmail(e.target.value);
+    };
+    const handlecontactPhoneChange = (e) => {
+      setcontactPhone(e.target.value);
+    };
+    const handlecontactMessageChange = (e) => {
+      setContactMessage(e.target.value);
+    };
+
+  const modalButton = (e) => {
+      setOpenModal(true);
+  }
 
   const addEnquiryData = async () => {
     if (Name === "") {
@@ -69,6 +133,10 @@ const PropertyDetail = ({ params }) => {
     }
     if (MolileNumber === "") {
       toast.error("Number is required");
+      return false;
+    }
+    if (!/^(\+\d{1,3}[- ]?)?\d{10}$/.test(MolileNumber)) {
+      toast.error('Please enter a valid 10-digit mobile number');
       return false;
     }
     let payload = {
@@ -108,7 +176,12 @@ const PropertyDetail = ({ params }) => {
     setEmail(e.target.value);
   };
   const handlePhoneChange = (e) => {
-    setPhone(e.target.value);
+      setPhone(e.target.value);
+  };
+
+
+  const validateMobileNumber = (inputMobileNumber) => {
+    return /^\d{10}$/.test(inputMobileNumber);
   };
   const handleEnquiryData = (date) => {
      const selectedDate = new Date(date);
@@ -152,7 +225,7 @@ const PropertyDetail = ({ params }) => {
                 <p className={`text-gray-700`}>{item.Address}</p>
               </div>
               <h2 className={` ${styles.populerPropertiesBoxHead}`}>
-                {item.Titile}
+                {item.Title}
               </h2>
               <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
                 <div className="flex">
@@ -353,6 +426,17 @@ const PropertyDetail = ({ params }) => {
     listPropertiesData.Surveillance
   );
 
+  function convertSystem(number) {
+      if (number >= 10000000) {
+          return (number / 10000000).toFixed(2) + 'Cr';
+      } else if (number >= 100000) {
+          return (number / 100000).toFixed(2) + 'L';
+      } else if (number >= 1000) {
+          return (number / 1000).toFixed(2) + 'K';
+      } else {
+          return number.toString();
+      }
+  }
   return (
     <>
       {/* {isLoading && <Spinner />} */}
@@ -406,7 +490,7 @@ const PropertyDetail = ({ params }) => {
           <div className={`${styles.heroSectionBottomBox}`}>
             <div className={`${styles.BottomBoxcontenet}`}>
               <h2 className={`${styles.heroSectionBottomBoxHead}`}>
-                {listPropertiesData.Titile}
+                {listPropertiesData.Title}
               </h2>
               <p className={`${styles.heroSectionBottomBoxText}`}>
                 {" "}
@@ -480,19 +564,31 @@ const PropertyDetail = ({ params }) => {
                 Amenities
               </Link>
             </li>
+            {/*
             <li className="me-2">
               <Link href="#bank" className="nonActiveBar">
                 Bank Offers
               </Link>
             </li>
+            */}
+            { listPropertiesData?.ProeprtyType == "Commercial" ?
+            null :
             <li className="me-2">
               <Link href="#specifications" className="nonActiveBar">
                 Specifications
               </Link>
             </li>
+            }
+            {/*
             <li className="me-2">
               <Link href="#location" className="nonActiveBar">
                 Location
+              </Link>
+            </li>
+            */}
+            <li className="me-2">
+              <Link href="#faq" className="nonActiveBar">
+                FAQ
               </Link>
             </li>
           </ul>
@@ -508,7 +604,7 @@ const PropertyDetail = ({ params }) => {
         <div className={`${styles.BottomBoxcontenet} flex justify-between`}>
           <div>
             <h2 className={`${styles.heroSectionBottomBoxHead} text-2xl`}>
-              {listPropertiesData.Titile}
+              {listPropertiesData.Title}
             </h2>
             <p className={`${styles.heroSectionBottomBoxText}`}>
               {" "}
@@ -555,7 +651,7 @@ const PropertyDetail = ({ params }) => {
                 Project Type
               </h2>
               <p className={`${styles.heroSectionBottomBoxText}`}>
-                {listPropertiesData?.PropertyType?.Type}
+                {listPropertiesData?.ProeprtyType}
               </p>
             </div>
             <div className={`${styles.heroSectionVL}`}></div>
@@ -587,20 +683,22 @@ const PropertyDetail = ({ params }) => {
                       {listPropertiesData.TotalPrice?.DisplayValue}
                     </p>
                   </div>
+                  { listPropertiesData?.ProeprtyType == "Commercial" ?
                   <div>
-                    <p className={`${styles.GeneralDetailsBoxName}`}> Area:</p>
+                    <p className={`${styles.GeneralDetailsBoxName}`}>Lease Years:</p>
                     <p className={`${styles.GeneralDetailsBoxValue}`}>
-                      {
-                        listPropertiesData?.AreaUnits?.InSquareMeter
-                    }{" "}{listPropertiesData?.AreaUnits?.Unit}
+                      {listPropertiesData.LeaseYears}
                     </p>
                   </div>
-                  <div>
-                    <p className={`${styles.GeneralDetailsBoxName}`}>Rooms:</p>
-                    <p className={`${styles.GeneralDetailsBoxValue}`}>
-                      {listPropertiesData.Bedrooms}
-                    </p>
-                  </div>
+                    :
+                    <div>
+                      <p className={`${styles.GeneralDetailsBoxName}`}>Rooms:</p>
+                      <p className={`${styles.GeneralDetailsBoxValue}`}>
+                        {listPropertiesData.Bedrooms}
+                      </p>
+                    </div>
+                  }
+
                   <div>
                     <p className={`${styles.GeneralDetailsBoxName}`}>Floor:</p>
                     <p className={`${styles.GeneralDetailsBoxValue}`}>
@@ -624,7 +722,7 @@ const PropertyDetail = ({ params }) => {
 
                 {expanded && (
                   <div className={`${styles.GeneralDetailsBoxMoreContent}`}>
-                    <p>{listPropertiesData.Highlight}</p>
+                    <p>{listPropertiesData?.Area?.AreaDescription}</p>
                   </div>
                 )}
                 <div
@@ -661,7 +759,10 @@ const PropertyDetail = ({ params }) => {
                         aria-controls="profile"
                         aria-selected="false"
                       >
-                        {listPropertiesData?.BhkType?.Type}
+                      { listPropertiesData?.ProeprtyType == "Commercial" ?
+                          listPropertiesData?.LocationHub
+                        : listPropertiesData?.BhkType?.Type
+                      }
                       </button>
                     </li>
                     <li className="me-2" role="presentation">
@@ -699,19 +800,26 @@ const PropertyDetail = ({ params }) => {
                     role="tabpanel"
                     aria-labelledby="profile-tab"
                   >
+                   <p className={`${styles.configureLiHead}`}>Legend</p>
                     <div className="flex">
-                      <ol className={`${styles.configureOl}`}>
-                        <li className={`${styles.configureLiHead}`}>Legend</li>
+                    { listPropertiesData?.ProeprtyType == "Commercial" ?
+                    (
+                    <ol className={`${styles.configureOl}`}>
+                      <li>{listPropertiesData.CarpetArea} Carpet Area</li>
+                      <li>{listPropertiesData.EntranceWidth} Entrance Width</li>
+                      <li>{listPropertiesData.CellingHeight} Celling Height</li>
+                      <li>{listPropertiesData.PrivateParking} Private Parking</li>
+                      <li>{listPropertiesData.PublicParking} Public Parking</li>
+                    </ol>
+                    )
+                     :
+                      (<ol className={`${styles.configureOl}`}>
+
                         <li>{listPropertiesData.CarpetArea} Carpet Area</li>
-                        <li>{listPropertiesData.Balconies} Balcony</li>
                         <li>{listPropertiesData.Bathrooms} Bathroom</li>
-                        <li>
-                          Scalable area -{" "}
-                          {
-                            listPropertiesData?.AreaUnits?.InSquareMeter
-                        }{" "}{listPropertiesData?.AreaUnits?.Unit}
-                        </li>
-                      </ol>
+                        <li>{listPropertiesData.Bedrooms} Bedrooms</li>
+                      </ol>)
+                   }
                       <div className={`${styles.configureImg}`}>
                         <img src="/img/Map.jpeg" alt="" />
                       </div>
@@ -735,13 +843,11 @@ const PropertyDetail = ({ params }) => {
                   >
                     {" "}
                     <div className="flex">
-                    <h1 className="font-semibold mr-2">Surveillance :</h1>
+                    <h1 className="font-semibold mr-2">Property Status :</h1>
                     <div className="flex">
-                      {listPropertiesData?.Surveillance?.map((item,index) =>(
-                      <div className="flex mr-2" key={index} >
-                        <p>{item},</p>
+                      <div className="flex mr-2">
+                        <p>{listPropertiesData?.PropertyStatus?.Status}</p>
                       </div>
-                    ))}
                     </div>
                     </div>
                     <div className="flex">
@@ -750,12 +856,14 @@ const PropertyDetail = ({ params }) => {
                         {listPropertiesData?.Fencing?.Fencing}
                       </div>
                     </div>
+                    { listPropertiesData?.ProeprtyType == "Commercial" ?
                     <div className="flex">
-                      <h1 className="font-semibold mr-2">Soil :</h1>
+                      <h1 className="font-semibold mr-2">Suitable For :</h1>
                       <div>
-                        {listPropertiesData?.Soil?.Soil}
+                        {listPropertiesData?.SuitableFor}
                       </div>
                     </div>
+                    : null }
                   </div>
                 </div>
               </div>
@@ -777,6 +885,7 @@ const PropertyDetail = ({ params }) => {
                         {listPropertiesData.LandArea} Acres
                       </p>
                     </div>
+                    {/*
                     <div className={`${styles.overviewBoxMainContent}`}>
                       <h2 className={`${styles.overviewBoxMainContentHead}`}>
                         Size
@@ -787,14 +896,17 @@ const PropertyDetail = ({ params }) => {
                     }{" "}{listPropertiesData?.AreaUnits?.Unit}
                       </p>
                     </div>
+                    */}
+                    { listPropertiesData?.ProeprtyType == "Commercial" ?
                     <div className={`${styles.overviewBoxMainContent}`}>
                       <h2 className={`${styles.overviewBoxMainContentHead}`}>
                         Avg. Price
                       </h2>
                       <p className={`${styles.overviewBoxMainContentText}`}>
-                        {listPropertiesData.PricePerSquareFeet} k/sq.ft.
+                        {convertSystem(listPropertiesData.CurentRent)} per month
                       </p>
                     </div>
+                    : null }
                     <div className={`${styles.overviewBoxMainContent}`}>
                       <h2 className={`${styles.overviewBoxMainContentHead}`}>
                         Posession Date
@@ -821,6 +933,14 @@ const PropertyDetail = ({ params }) => {
                     </div>
                     <div className={`${styles.overviewBoxMainContent}`}>
                       <h2 className={`${styles.overviewBoxMainContentHead}`}>
+                        Ownership Type
+                      </h2>
+                      <p className={`${styles.overviewBoxMainContentText}`}>
+                        {listPropertiesData?.OwnershipType?.Ownership}
+                      </p>
+                    </div>
+                    <div className={`${styles.overviewBoxMainContent}`}>
+                      <h2 className={`${styles.overviewBoxMainContentHead}`}>
                         Furnished
                       </h2>
                       <p className={`${styles.overviewBoxMainContentText}`}>
@@ -829,25 +949,34 @@ const PropertyDetail = ({ params }) => {
                     </div>
                     <div className={`${styles.overviewBoxMainContent}`}>
                       <h2 className={`${styles.overviewBoxMainContentHead}`}>
+                        Property Type
+                      </h2>
+                      <p className={`${styles.overviewBoxMainContentText}`}>
+                        {listPropertiesData?.PropertySubtype?.Name}
+                      </p>
+                    </div>
+                    {/*
+                    <div className={`${styles.overviewBoxMainContent}`}>
+                      <h2 className={`${styles.overviewBoxMainContentHead}`}>
                         RERA Number
                       </h2>
                       <p className={`${styles.overviewBoxMainContentText}`}>
                         {listPropertiesData?.ReraNumber}
                       </p>
                     </div>
+                    */}
                   </div>
                 ) : (
                   <LoadingText />
                 )}
                 <div className={`${styles.overviewBoxBottomMain}`}>
-                  <Link href="/contactus">
                     <button
                       type="button"
+                      onClick={modalButton}
                       className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                       Ask For Detail
                     </button>
-                  </Link>
                   {/* <button type="button" onClick={copyURL} className="text-grey border border-gray-600 bg-white-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Share</button> */}
                   <Popover
                     aria-labelledby="default-popover"
@@ -858,19 +987,19 @@ const PropertyDetail = ({ params }) => {
                             onClick={copyURL}
                             className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                           >
-                            <i class="bi bi-link-45deg mr-2"></i> Copy Url
+                            <i className="bi bi-link-45deg mr-2"></i> Copy Url
                           </button>
                           <button
                             onClick={handleRedirect}
                             className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                           >
-                            <i class="bi bi-facebook mr-2"></i>Facebook
+                            <i className="bi bi-facebook mr-2"></i>Facebook
                           </button>
                           <button
                             onClick={handleRedirectTwitter}
                             className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                           >
-                            <i class="bi bi-twitter mr-2"></i>Twitter
+                            <i className="bi bi-twitter mr-2"></i>Twitter
                           </button>
                         </div>
                       </div>
@@ -910,7 +1039,7 @@ const PropertyDetail = ({ params }) => {
               <div className={`${styles.amenitiesBox}`}>
                 <Accordion className="border-none">
                   <AccordionPanel>
-                    <AccordionTitle>Aminities</AccordionTitle>
+                    <AccordionTitle>Amenities</AccordionTitle>
                     {listPropertiesData ? (
                       <AccordionContent
                         className={`${styles.AccordionContent}`}
@@ -953,23 +1082,25 @@ const PropertyDetail = ({ params }) => {
           </div>
 
           {/* bank */}
+          {/*
+
           <div id="bank" className={`${styles.bank} bank page`}>
             <div className="bankMain">
               <h2 className={`${styles.bankMainHead}`}>BANK LOAN OFFERS</h2>
               <div className={`${styles.bankBox}`}>
-                {/* <Slider  {...settings} className={`${styles.sliderr}`}> */}
-                {}
                 {loanDetails?.ByBank?.length > 0 ? (
                   <MultiCarousel UI={ShowBank} />
                 ) : (
                   <SkeletonLoader />
                 )}
-                {/*  </Slider> */}
               </div>
             </div>
           </div>
+          */}
 
           {/* Specifications */}
+          { listPropertiesData?.ProeprtyType == "Commercial" ?
+          null :
           <div id="specifications" className={` ${styles.faq} faq mt-16 page`}>
             <div className={` ${styles.faqMain}`}>
               <h2 className={`${styles.amenitiesMainHead}`}>SPECIFICATIONS</h2>
@@ -977,7 +1108,7 @@ const PropertyDetail = ({ params }) => {
             <div className={`${styles.amenitiesBox}`}>
               <div className={` ${styles.faqLeft}`}>
                 <Accordion className="border-none">
-                  <AccordionPanel>
+                  {/*<AccordionPanel>
                     <AccordionTitle>Floor & Counter</AccordionTitle>
                     {listPropertiesData ? (
                       <AccordionContent
@@ -1035,7 +1166,7 @@ const PropertyDetail = ({ params }) => {
                     ) : (
                       <LoadingText />
                     )}
-                  </AccordionPanel>
+                  </AccordionPanel>  */}
                   <AccordionPanel>
                     <AccordionTitle>Fitting</AccordionTitle>
                     {listPropertiesData ? (
@@ -1082,20 +1213,12 @@ const PropertyDetail = ({ params }) => {
                             {listPropertiesData?.Fitting?.Windows}
                           </p>
                         </div>
-                        <div className="mr-6 p-4">
-                          <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">
-                            Others
-                          </span>
-                          <p className="">
-                            {listPropertiesData?.Fitting?.Others}
-                          </p>
-                        </div>
                       </AccordionContent>
                     ) : (
                       <LoadingText />
                     )}
                   </AccordionPanel>
-                  <AccordionPanel>
+                 {/*<AccordionPanel>
                     <AccordionTitle>Wall & Ceiling</AccordionTitle>
                     {listPropertiesData ? (
                       <AccordionContent
@@ -1137,13 +1260,13 @@ const PropertyDetail = ({ params }) => {
                     ) : (
                       <LoadingText />
                     )}
-                  </AccordionPanel>
+                  </AccordionPanel> */}
                 </Accordion>
               </div>
             </div>
           </div>
-
-          {/* location */}
+        }
+          {/* location
           <div id="location" className={`${styles.location} location page`}>
             <div className="locationMain">
               <h2 className={`${styles.locationMainHead}`}>LOCATION</h2>
@@ -1165,9 +1288,9 @@ const PropertyDetail = ({ params }) => {
               </div>
             </div>
           </div>
-
+          */}
           {/* FAQ */}
-          <div className={`${styles.amenities} amenities mb-4`}>
+          <div id="faq" className={`${styles.amenities} amenities mb-4 page`}>
             <div className={` ${styles.faq} faq`}>
               <div className={` ${styles.faqMain}`}>
                 <h2 className={`${styles.amenitiesMainHead}`}>
@@ -1299,6 +1422,67 @@ const PropertyDetail = ({ params }) => {
       <PersonalLoanCalculator/>
       </div> */}
       <Footer />
+      <Modal dismissible className={`bg-transparent/[.5] `} show={openModal} onClose={() => setOpenModal(false)}>
+        <Modal.Header>Ask For Detail</Modal.Header>
+        <Modal.Body >
+        <div className={`${styles.contactLeftFormData}`}>
+            <div className="mb-6 mt-3">
+            <label>Your Name</label>
+            <input
+                type="text"
+                value={contactName}
+                onChange={handlecontactNameChange}
+                id="Name"
+                className="bg-gray-50 border rounded-md border-blue-700 text-gray-900 text-sm focus:ring-blue-700 focus:border-blue-700 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required
+            />
+            </div>
+            <div className="mb-6">
+                <label>Your Email</label>
+                <input
+                    type="email"
+                    value={contactEmail}
+                    onChange={handlecontactEmailChange}
+                    id="email"
+                    className="bg-gray-50 border rounded-md border-blue-700 text-gray-900 text-sm focus:ring-blue-700 focus:border-blue-700 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    required
+                />
+            </div>
+            <div className="mb-6">
+                <label>Your Phone</label>
+                <input
+                    type="text"
+                    value={contactMolileNumber}
+                    onChange={handlecontactPhoneChange}
+                    id="Phone"
+                    className="bg-gray-50 border rounded-md border-blue-700 text-gray-900 text-sm  focus:ring-blue-700 focus:border-blue-700 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    required
+                />
+            </div>
+            <div className="mb-6">
+                <label>Your Message</label>
+                <textarea
+                    type="text"
+                    value={contactMessage}
+                    onChange={handlecontactMessageChange}
+                    id="Message"
+                    className="bg-gray-50 border rounded-md border-blue-700 text-gray-900 text-sm focus:ring-blue-700 focus:border-blue-700 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    required
+                />
+            </div>
+
+        </div>
+        </Modal.Body>
+        <Modal.Footer>
+            <button
+                className={` ${styles.agentRightMainContenBtn} text-white rounded-md bg-blue-700 h-12 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium  text-sm w-full sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                type="button"
+                onClick={addcontactEnquiryData}
+                >
+                Send
+            </button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

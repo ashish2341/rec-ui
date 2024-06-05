@@ -122,6 +122,12 @@ export default function Signup() {
       toast.error("Pincode number must be 6 digits long");
       return false;
     }
+
+    //Validate Image 
+    if(image==""){
+      toast.error("Profile Picture is required");
+      return false;
+    }
     // Validate Email Address
     if (Email === "") {
       toast.error("Email address is required");
@@ -151,9 +157,10 @@ export default function Signup() {
       Country:Country,
       PinCode:Pincode,
       EmailId:Email,
-      Role:"Client"
+      Role:"Client",
+      ProfilePhoto:image
     };
-    
+    console.log("signupData",signupData);
     let res = await SignUpUser(signupData)
     console.log("resdata inside page ",res)
     if(res.successMessage){
@@ -165,7 +172,7 @@ export default function Signup() {
       toast.error(res.errMessage);
       return;
     }
-    console.log(signupData);
+  
   };
   const  handleImageInputChange = async (event) => {
     const acceptedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
@@ -362,7 +369,7 @@ export default function Signup() {
                 htmlFor="imageInput"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
               >
-                Upload Image
+                Upload Profile Picture
               </label>
               <input
                 type="file"

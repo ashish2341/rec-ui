@@ -45,10 +45,10 @@ export default function Home() {
 
 
   const facingImage = [
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReP8AAhBIsdTqNY-ErnY3nVk60JkcovJIIz2fW-iYhln7HUdRlgqDYxNbCpwIFSIhfD2Y&usqp=CAU",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt79ykE71UgWsM-KsGEV8ZQ9Hi_dVYL4YKLPRPUK9psLFTZ5MV2ke9c-JHgiKtNP1Nsro&usqp=CAU",
-    "https://etc.usf.edu/clipart/74400/74418/74418_145_m3-1_b_md.gif",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHQAi0N6tRh1Hv2NRi6k3wf2NjDm72aDCOOEAcpWFoeiMZ6_2TiaY_ecSzh0vvhWvVmWs&usqp=CAU",
+    "img/3.png",
+    "img/4.png",
+    "img/1.png",
+    "img/2.png",
   ];
 
   const facingSubHeading =[
@@ -97,7 +97,7 @@ export default function Home() {
     loading: testimonialDataLoading,
     error: testimonialDataError,
 } = useFetch(`${API_BASE_URL}/testimonial/allTestimonial?page=1&pageSize=5`);
-console.log("testimonialData",testimonialData);
+console.log("propertyByapartmentType",propertyByapartmentType);
   const {
     data: faqData,
     loading: faqLoading,
@@ -134,7 +134,7 @@ console.log("testimonialData",testimonialData);
             </div>
           </div>
           <div>
-            <h2 className={` ${styles.apartmentTypeBoxHead}`}>{item?.areaInfo?.Type}</h2>
+            <h2 className={` ${styles.apartmentTypeBoxHead}`}>{item?.areaInfo?.Name}</h2>
             <p className={` ${styles.apartmentTypeBoxText}`}>
               {item?.propertiesCount} Properties
             </p>
@@ -162,24 +162,42 @@ console.log("testimonialData",testimonialData);
             <p className={`text-gray-700`}>{item.Address}</p>
           </div>
           <h2 className={` ${styles.populerPropertiesBoxHead}`}>
-            {item.Titile}
+            {item.Title}
           </h2>
           <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
+           { item?.ProeprtyType == "Commercial" ?
+           <div className="flex">
+           <i className="fa fa-solid fa-car"></i>
+             <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
+             {item.PrivateParking}  Parking
+             </p>
+           </div>
+            :
             <div className="flex">
             <i className="fa fa-bed"></i>
               <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
               {item.Bedrooms} Bed Room
               </p>
             </div>
+           }
+           { item?.ProeprtyType == "Commercial" ?
+           <div className="flex">
+           <i className="fa fa-solid fa-ruler-vertical"></i>
+             <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
+             {item.CellingHeight} Height
+             </p>
+           </div>
+            :
             <div className="flex">
               <i className="fa fa-bath"></i>
               <p className={` ${styles.populerPropertiesBoxText} ml-1 `}>
               {item.Bathrooms} Baths
               </p>
             </div>
+           }
+
             <div className="flex">
               <i className="fa fa-area-chart"></i>
-
               <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
                 {item.LandArea} Land Area
               </p>
@@ -299,7 +317,7 @@ console.log("testimonialData",testimonialData);
             <div className={` ${styles.populerPropertiesLocationMain} flex`}>
               <h1 className={` ${styles.propertiesByAreaBoxHead}`}>{item?.areaInfo?.Area}</h1>
             </div>
-            <p className={`${styles.smallText}text-gray-900`}>{item?.propertiesCount} properties</p>
+            <p className={`${styles.smallText}text-gray-900`}>{item?.propertiesCount} Properties</p>
           </div>
           </Link>
         </div>
@@ -371,6 +389,10 @@ console.log("testimonialData",testimonialData);
     if(Dob=="" || ZodiacName=="" || ZodaicMolileNumber == ""){
       toast.warn("Please fill D.O.B. & Name Field.")
       return false
+    }
+    if (!/^(\+\d{1,3}[- ]?)?\d{10}$/.test(ZodaicMolileNumber)) {
+      toast.error('Please enter a valid 10-digit mobile number');
+      return false;
     }
     setOpenModal(true);
     let ZodiacData = { Name : ZodiacName, MobileNumber : ZodaicMolileNumber, DateOfBirth: Dob};
@@ -515,6 +537,17 @@ console.log("testimonialData",testimonialData);
               alt="...a"
             />
           </div>
+           {/*
+               {bannerData?.data.map(item => (
+               <div className="overflow-hidden duration-700 ease-in-out" data-carousel-item>
+            <img
+              src={item.Url}
+              className= {`${styles.crousalItemLeftImageS} absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
+              alt="...a"
+            />
+          </div>
+            ))}
+          */}
           <div className="overflow-hidden duration-700 ease-in-out" data-carousel-item>
             <img
               src={bannerData?.data[2].Url}
@@ -620,7 +653,7 @@ console.log("testimonialData",testimonialData);
       <div className={`${styles.propertiesByAreaMain} propertiesByArea`}>
         <div>
           <h2 className={`${styles.propertiesByAreaMainHead}`}>
-            Properties by <span className="blueText">Area</span>
+            Popular <span className="blueText">Localities</span>
           </h2>
           <div className={`${styles.propertiesByAreaMainTextMain}`}>
             <p className={`${styles.propertiesByAreaMainText}`}>
@@ -720,8 +753,8 @@ console.log("testimonialData",testimonialData);
                     type="date"
                     value={Dob}
                     onChange={handleDob}
-                    id="last_name"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    id="date"
+                    className="bg-gray-50 uppercase border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Dob"
                     required
                   />

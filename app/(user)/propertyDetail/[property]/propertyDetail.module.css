@@ -167,6 +167,7 @@
 }
 .configureOl {
   width: 60%;
+  list-style: disc;
 }
 .configureOl li{
   font-size: 0.85rem;
@@ -493,6 +494,11 @@
 
   .GeneralDetailsBox{
     padding: 1rem 1rem 1rem 1rem;
+ }
+
+ .similarMainType{
+       margin-left: 0.5rem;
+       margin-right: 0.5rem;
  }
 
   .detailSectionBar{

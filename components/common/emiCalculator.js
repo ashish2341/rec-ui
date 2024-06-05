@@ -11,47 +11,47 @@ const PersonalLoanCalculator = () => {
   const [totalInterest, setTotalInterest] = useState(0);
 
   useEffect(() => {
-    calculateRepayment();
+    calculateEMI();
   }, [loanAmount, interestRate, loanTerm]);
 
-  useEffect(() => {
-    setEmiPerMonth(calculateInitialEmi());
-  }, []); // Call only once when the component is mounted
 
-  function calculateInitialEmi() {
-    const monthlyInterestRate = interestRate / 100 / 12;
-    const numberOfPayments = loanTerm * 12;
-    const initialMonthlyPayment =
-      loanAmount *
-      monthlyInterestRate /
-      (1 - Math.pow(1 + monthlyInterestRate, -numberOfPayments));
-    const initialEmiPerMonth = initialMonthlyPayment / numberOfPayments;
-    return initialEmiPerMonth.toFixed(2);
-  }
+   function calculateEMI(loanAmount, interestRate, loanTerm) {
+    // Convert interest rate from percentage to decimal
+    interestRate = interestRate / 100;
 
-  const calculateRepayment = () => {
-    if (!loanAmount || !interestRate || !loanTerm) {
-      return;
-    }
-    const monthlyInterestRate = interestRate / 100 / 12;
+    // Monthly interest rate
+    const monthlyInterestRate = interestRate / 12;
+
+    // Total number of payments
     const numberOfPayments = loanTerm * 12;
-    const monthlyPayment =
-      loanAmount *
-      monthlyInterestRate /
-      (1 - Math.pow(1 + monthlyInterestRate, -numberOfPayments));
-    setMonthlyPayment(monthlyPayment);
-    calculateEmiPerMonth(); // Update EMI per month after setting monthly payment
-    const totalAmount = monthlyPayment * numberOfPayments;
+
+    // Calculate EMI
+      const emi = loanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments) / (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+    // Total payable amount
+    const totalAmount = emi * numberOfPayments;
+
+    // Total interest payable
     const totalInterest = totalAmount - loanAmount;
-    setTotalAmount(totalAmount);
-    setTotalInterest(totalInterest);
-  };
 
-  const calculateEmiPerMonth = () => {
-    const numberOfPayments = loanTerm * 12;
-    const emiPerMonth = monthlyPayment / numberOfPayments;
-    setEmiPerMonth(emiPerMonth.toFixed(2));
-  };
+    // Principal amount
+    const principalAmount = totalAmount - totalInterest;
+
+    return {
+        emi: Math.round(emi),
+        principalAmount: Math.round(principalAmount),
+        totalInterest: Math.round(totalInterest),
+        totalAmount: Math.round(totalAmount)
+    };
+}
+
+
+const emiDetails = calculateEMI(loanAmount, interestRate, loanTerm);
+console.log("Monthly EMI:", emiDetails.emi);
+console.log("Principal Amount:", emiDetails.principalAmount);
+console.log("Total Interest:", emiDetails.totalInterest);
+console.log("Total Amount:", emiDetails.totalAmount);
+
+
 
   const handleLoanAmountChange = (e) => {
     setLoanAmount(parseInt(e.target.value));
@@ -148,7 +148,7 @@ const PersonalLoanCalculator = () => {
           />
         </div>
         <div className="mb-6 flex justify-between p-3 border border-gray-300 rounded-lg mt-4">
-          <span className="text-center text-gray-600">Monthly EMI: ₹ {emiPerMonth}</span>
+          <span className="text-center text-gray-600">Monthly EMI: ₹ { emiDetails.emi}</span>
           <button
             className="block text-center text-blue-500 underline"
             onClick={toggleBreakdown}
@@ -159,8 +159,8 @@ const PersonalLoanCalculator = () => {
 
         {showBreakdown && (
           <div className="p-4 border border-gray-300 rounded-lg mt-4">
-            <p>Total Amount: ₹ {totalAmount.toFixed(2)}</p>
-            <p>Total Interest: ₹ {totalInterest.toFixed(2)}</p>
+            <p>Total Amount: ₹ {emiDetails.totalAmount.toFixed(2)}</p>
+            <p>Total Interest: ₹ {emiDetails.totalInterest.toFixed(2)}</p>
           </div>
         )}
       </div>

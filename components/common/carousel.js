@@ -1,7 +1,7 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
- 
+
 
 const MultiCarousel = ({ UI }) => {
   const responsive = {
@@ -28,7 +28,7 @@ const MultiCarousel = ({ UI }) => {
         responsive={responsive}
         infinite={true}
         autoPlay={true}
-        autoPlaySpeed={1000}
+        autoPlaySpeed={2000}
         draggable
         swipeable
         containerClass="carousel-container"

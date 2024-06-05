@@ -228,8 +228,8 @@ const router=useRouter()
             <button
               onClick={handelBackPage}
               type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ml-20"
-            >
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5 ml-10"
+              >
               Back
             </button>
           ) : pageValue == 1 || pageValue == 2 || pageValue == 3 ? (
@@ -237,7 +237,7 @@ const router=useRouter()
           ) : ( <button
             onClick={handelBackPage}
             type="button"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ml-20"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5 ml-10"
           >
             Back
           </button>)
@@ -251,6 +251,17 @@ const router=useRouter()
           </div>
 
           <div className={`${Styles.column2}`}>
+          {valueForBack === 1 && (
+            <div className="flex justify-end w-1/2 mb-4 relative -top-20 ml-[25rem]">
+              <button
+                onClick={submitPropertyData}
+                type="button"
+                className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mt-5"
+              >
+                Finish
+              </button>
+              </div>
+            )}
           {pageValue === 1 && isRender ? (
             <BasicDetailsForm
               valueForNext={handelNextBtnValue}
@@ -293,15 +304,7 @@ const router=useRouter()
               />
             )}
 
-            {valueForBack === 1 && (
-              <button
-                onClick={submitPropertyData}
-                type="button"
-                className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mt-5"
-              >
-                Finish
-              </button>
-            )}
+         
           </div>
         </div>
       </div>

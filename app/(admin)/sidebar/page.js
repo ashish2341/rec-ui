@@ -11,6 +11,7 @@ export default function Sidebar({ children }) {
   const pathname = usePathname();
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
+  const profilePhoto = Cookies.get("profilePhoto");
   const roles = roleData && JSON.parse(roleData);
 
   const [activeTab, setActiveTab] = useState(pathname.replace("/", ""));
@@ -30,6 +31,12 @@ export default function Sidebar({ children }) {
   };
   const handleDelete = () => {
     if (typeof window !== "undefined") {
+      const sessionStoragePropertyData = JSON.parse(
+        sessionStorage.getItem("propertyData")
+      );
+      if(sessionStoragePropertyData){
+        sessionStorage.removeItem("propertyData")
+      }
       localStorage.removeItem("token");
       Cookies.remove("token");
       Cookies.remove("name");
@@ -82,10 +89,31 @@ export default function Sidebar({ children }) {
         <div
           className={` ${Styles.sidebarMain} h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800`}
         >
-          <div className="mb-4 text-center">
-            <span className={`ms-3 ${Styles.admintext}`}>
+          <div
+            className={`flex flex-col items-center mb-4 text-center ${Styles.logobox}`}
+          >
+            <span className={`ms-3 mb-4 mt-4 ${Styles.admintext}`}>
               {roles.includes("Admin") ? "Admin" : "Builder"}
             </span>
+            {roles.includes("Admin") ? (
+              <div className="flex flex-col items-center">
+                <img
+                  src={profilePhoto }
+                  alt="Admin Image"
+                  className="w-14 h-14 rounded-full mb-4"
+                />
+                <span className={`ms-3 mb-4 ${Styles.admintext}`}>Hi {name}</span>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center">
+                <img
+                  src={profilePhoto}
+                  alt="Builder Image"
+                  className="w-14 h-14  rounded-full mb-4"
+                />
+                <span className={`ms-3 mb-4 ${Styles.admintext}`}>Hi {name}</span>
+              </div>
+            )}
           </div>
           <ul className="space-y-2 font-medium">
             <li>
@@ -118,7 +146,7 @@ export default function Sidebar({ children }) {
             </li>
             {roles.includes("Developer") && (
               <>
-               <li>
+                <li>
                   <Link
                     href="/property"
                     onClick={() => handleTabClick("property")}
@@ -142,11 +170,10 @@ export default function Sidebar({ children }) {
                       <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z" />
                     </svg>
                     <span className={` flex-1 ms-3 whitespace-nowrap`}>
-                       Property
+                      Property
                     </span>
                   </Link>
                 </li>
-
               </>
             )}
 
@@ -420,62 +447,67 @@ export default function Sidebar({ children }) {
                     <span className="flex-1 ms-3 whitespace-nowrap">FAQ</span>
                   </Link>
                 </li>
-
-
-
-
               </>
             )}
             <li>
-                  <Link
-                    href="/projectInquiry"
-                    onClick={() => handleTabClick("projectInquiry")}
-                    className={` ${
-                      activeTab === "projectInquiry"
-                        ? Styles.activeTab
-                        : Styles.inactiveTab
-                    } flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group`}
-                  >
-                    <svg
-                      className={`${
-                        activeTab === "projectInquiry"
-                          ? Styles.activeTab
-                          : Styles.inactiveTab
-                      }${Styles.tabText} flex-shrink-0 w-5 h-5  transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white`}
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 18 21"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15.5 14.5l-4-4"
-                      />
-                      <circle
-                        cx="7"
-                        cy="7"
-                        r="5"
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        fill="none"
-                      />
-                    </svg>
-                    <span className={` flex-1 ms-3 whitespace-nowrap`}>
-                      Inquiry
-                    </span>
-                  </Link>
-                </li>
+              <Link
+                href="/projectInquiry"
+                onClick={() => handleTabClick("projectInquiry")}
+                className={` ${
+                  activeTab === "projectInquiry"
+                    ? Styles.activeTab
+                    : Styles.inactiveTab
+                } flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group`}
+              >
+                <svg
+                  className={`${
+                    activeTab === "projectInquiry"
+                      ? Styles.activeTab
+                      : Styles.inactiveTab
+                  }${
+                    Styles.tabText
+                  } flex-shrink-0 w-5 h-5  transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white`}
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 18 21"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M15.5 14.5l-4-4"
+                  />
+                  <circle
+                    cx="7"
+                    cy="7"
+                    r="5"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    fill="none"
+                  />
+                </svg>
+                <span className={` flex-1 ms-3 whitespace-nowrap`}>
+                  Inquiry
+                </span>
+              </Link>
+            </li>
           </ul>
+          {/* <div>
+          <img
+                  src="/img/house_demo_img.jpg"
+                  // className="h-8"
+                  alt="Flowbite Logo"
+                />
+          </div> */}
         </div>
       </aside>
 
       <div className="p-4 sm:ml-64">
-        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
+        <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
           <nav className="border-gray-200 dark:bg-gray-900">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
               <a
@@ -547,7 +579,7 @@ export default function Sidebar({ children }) {
             </div>
           </nav>
         </div>
-        <div className="mt-3 p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
+        <div className="mt-3 p-2 pb-0 h-full border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
           {children}
         </div>
       </div>

@@ -1,0 +1,70 @@
+import Styles from "../admin.common.module.css";
+
+export default function ArrayButtons({
+  itemArray,
+  selectItems,
+  labelName,
+  buttonName,
+  setValueinState,
+}) {
+  const handleValueChange = (itemId) => {
+    setValueinState((prev) => {
+      const isSelected = prev.some(
+        (selectedItemId) => selectedItemId === itemId
+      );
+      if (isSelected) {
+        return prev.filter((selectedItemId) => selectedItemId !== itemId);
+      } else {
+        return [...prev, itemId];
+      }
+    });
+  };
+  return (
+    <>
+      <div className="container mx-auto px-4 py-8">
+        {/* Amenity Box */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 className="block mb-2 text-xl font-lg underline font-bold text-gray-500 dark:text-white">{labelName}</h2>
+          {itemArray && selectItems ? (
+            <div>
+              {itemArray?.data?.length > 0 ? (
+                <div
+                  className={`grid grid-cols-6 gap-2  ${
+                    itemArray?.data?.length > 12 ? "scrollable" : ""
+                  }`}
+                >
+                  {itemArray?.data.map((item) => (
+                    <button
+                      key={item?._id}
+                      type="button"
+                      onClick={() => handleValueChange(item?._id)}
+                      className={`rounded-lg mt-4 text-black font-medium px-6 py-4 bg-[#ffffff] border border-black ${
+                        Styles.bigInactiveButton
+                      }
+                       ${
+                         selectItems?.some(
+                           (selectedItemId) => selectedItemId === item?._id
+                         ) && Styles.bigactiveButton
+                       }`}
+                    ><img
+                    className={`${Styles.arrayButtonIconBox}`}
+                    src={item.Icon}
+                    width="22"
+                    height="22"
+                  />
+                      {item?.[buttonName]}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-wrap space-x-2">
+                  <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+                </div>
+              )}
+            </div>
+          ) : null}
+        </div>
+      </div>
+    </>
+  );
+}

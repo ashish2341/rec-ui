@@ -30,6 +30,7 @@ const SearchBar = (props) => {
     { value1: 3000000, value2: 6000000, label: " 30 L- 60 L" },
     { value1: 6000000, value2: 10000000, label: "60 L- 1 Cr" },
     { value1: 10000000, value2: 20000000, label: "1 Cr- 2 Cr" },
+    { value1: 20000000, value2: 50000000, label: "2 Cr- 5 Cr" },
   ];
 
   const handleLocationChange = (e) => {
@@ -51,7 +52,6 @@ const SearchBar = (props) => {
     setBudgetDisplayValue(e.target.innerText)
     setIsDropdownOpenB(false);
   }
-
   const handlePropertyChange = (e) => {
     setPropertyValue(e.target.value);
     setPropertyDisplayValue(e.target.innerText);
@@ -136,8 +136,8 @@ const SearchBar = (props) => {
             <div
               //ref={dropdownRefBudget}
               id="buy-dropdown"
-              className={`z-1000 ${isDropdownOpen ? 'block' : 'hidden'} overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
-              style={{ maxHeight: "200px" }}
+              className={`z-1000 ${isDropdownOpenB ? 'block' : 'hidden'} ${styles.buydropDownList}  overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
+              style={{ maxHeight: "200px", width: "15%"}}
             >
               <ul
                 className="py-2 text-sm text-gray-700 dark:text-gray-200"
@@ -187,7 +187,7 @@ const SearchBar = (props) => {
             <div
               id="budget-dropdown"
               className={`z-1000 ${isDropdownOpen ? 'block' : 'hidden'} overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
-              style={{ maxHeight: "200px" }} // Adjust the max height as per your requirement
+              style={{ maxHeight: "200px", width: "15%" }} // Adjust the max height as per your requirement
             >
               <ul
                 className="py-2 text-sm text-gray-700 dark:text-gray-200"
@@ -243,8 +243,8 @@ const SearchBar = (props) => {
             <div
               //ref={dropdownRefProperty}
               id="dropdown"
-              className={`z-1000 ${isDropdownOpen ? 'block' : 'hidden'} overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
-              style={{ maxHeight: "200px" }}
+              className={`z-1000 ${isDropdownOpenP ? 'block' : 'hidden'} overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
+              style={{ maxHeight: "200px", width: "17%" }}
             >
               <ul
                 className="py-2 text-sm text-gray-700 dark:text-gray-200"
@@ -257,9 +257,9 @@ const SearchBar = (props) => {
                         value={item._id}
                         onClick={handlePropertyChange}
                         type="button"
-                        className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        className="inline-flex text-nowrap w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
-                        {item.Type}
+                        {item.Name}
                       </button>
                     </li>
                   ))) : null}

@@ -97,7 +97,7 @@ export default function Home() {
     loading: testimonialDataLoading,
     error: testimonialDataError,
 } = useFetch(`${API_BASE_URL}/testimonial/allTestimonial?page=1&pageSize=5`);
-console.log("testimonialData",testimonialData);
+console.log("propertyByapartmentType",propertyByapartmentType);
   const {
     data: faqData,
     loading: faqLoading,
@@ -134,7 +134,7 @@ console.log("testimonialData",testimonialData);
             </div>
           </div>
           <div>
-            <h2 className={` ${styles.apartmentTypeBoxHead}`}>{item?.areaInfo?.Type}</h2>
+            <h2 className={` ${styles.apartmentTypeBoxHead}`}>{item?.areaInfo?.Name}</h2>
             <p className={` ${styles.apartmentTypeBoxText}`}>
               {item?.propertiesCount} Properties
             </p>
@@ -162,24 +162,42 @@ console.log("testimonialData",testimonialData);
             <p className={`text-gray-700`}>{item.Address}</p>
           </div>
           <h2 className={` ${styles.populerPropertiesBoxHead}`}>
-            {item.Titile}
+            {item.Title}
           </h2>
           <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
+           { item?.ProeprtyType == "Commercial" ?
+           <div className="flex">
+           <i className="fa fa-solid fa-car"></i>
+             <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
+             {item.PrivateParking}  Parking
+             </p>
+           </div>
+            :
             <div className="flex">
             <i className="fa fa-bed"></i>
               <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
               {item.Bedrooms} Bed Room
               </p>
             </div>
+           }
+           { item?.ProeprtyType == "Commercial" ?
+           <div className="flex">
+           <i className="fa fa-solid fa-ruler-vertical"></i>
+             <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
+             {item.CellingHeight} Height
+             </p>
+           </div>
+            :
             <div className="flex">
               <i className="fa fa-bath"></i>
               <p className={` ${styles.populerPropertiesBoxText} ml-1 `}>
               {item.Bathrooms} Baths
               </p>
             </div>
+           }
+
             <div className="flex">
               <i className="fa fa-area-chart"></i>
-
               <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
                 {item.LandArea} Land Area
               </p>
@@ -299,7 +317,7 @@ console.log("testimonialData",testimonialData);
             <div className={` ${styles.populerPropertiesLocationMain} flex`}>
               <h1 className={` ${styles.propertiesByAreaBoxHead}`}>{item?.areaInfo?.Area}</h1>
             </div>
-            <p className={`${styles.smallText}text-gray-900`}>{item?.propertiesCount} properties</p>
+            <p className={`${styles.smallText}text-gray-900`}>{item?.propertiesCount} Properties</p>
           </div>
           </Link>
         </div>
@@ -371,6 +389,10 @@ console.log("testimonialData",testimonialData);
     if(Dob=="" || ZodiacName=="" || ZodaicMolileNumber == ""){
       toast.warn("Please fill D.O.B. & Name Field.")
       return false
+    }
+    if (!/^(\+\d{1,3}[- ]?)?\d{10}$/.test(ZodaicMolileNumber)) {
+      toast.error('Please enter a valid 10-digit mobile number');
+      return false;
     }
     setOpenModal(true);
     let ZodiacData = { Name : ZodiacName, MobileNumber : ZodaicMolileNumber, DateOfBirth: Dob};

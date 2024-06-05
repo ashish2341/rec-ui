@@ -244,7 +244,7 @@ const SearchBar = (props) => {
               //ref={dropdownRefProperty}
               id="dropdown"
               className={`z-1000 ${isDropdownOpenP ? 'block' : 'hidden'} overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
-              style={{ maxHeight: "200px", width: "15%" }}
+              style={{ maxHeight: "200px", width: "17%" }}
             >
               <ul
                 className="py-2 text-sm text-gray-700 dark:text-gray-200"
@@ -257,9 +257,9 @@ const SearchBar = (props) => {
                         value={item._id}
                         onClick={handlePropertyChange}
                         type="button"
-                        className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        className="inline-flex text-nowrap w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
-                        {item.Type}
+                        {item.Name}
                       </button>
                     </li>
                   ))) : null}

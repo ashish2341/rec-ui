@@ -82,7 +82,9 @@ const PropertyListCard = ({ item }) => {
                 </p>
                 <p className="mb-4 font-normal text-gray-700 dark:text-gray-400">
                   <span className=" font-bold text-gray-700 dark:text-gray-400">
-                    {item.BhkType.Type}
+                    {item?.ProeprtyType == "Commercial" ?
+                        item.PropertySubtype.Name  : item.BhkType?.Type
+                    }
                   </span>{" "}
                   for {item.ProeprtyFor} in {item.Area.Area},{item.State}
                 </p>

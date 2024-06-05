@@ -394,7 +394,7 @@ const FeaturedProperty = (params) => {
                 </button>
                 <div
                   id="dropdownPropertyType"
-                  className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+                  className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-54 dark:bg-gray-700"
                 >
                   <ul
                     className="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
@@ -403,14 +403,14 @@ const FeaturedProperty = (params) => {
                     {propertyTypeData ? (
                       propertyTypeData?.data?.map((item, index) => (
                         <li key={index}>
-                          <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
+                          <div className="flex text-left p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
                               id={`checkbox-item-${index}`}
                               type="checkbox"
                               name="propertyType"
                               value={JSON.stringify({
                                 id: item._id,
-                                label: item.Type,
+                                label: item.Name,
                               })}
                               checked={payload.propertyType.some(
                                 (obj) => obj.id === item._id
@@ -420,9 +420,9 @@ const FeaturedProperty = (params) => {
                             />
                             <label
                               htmlFor={`checkbox-item-${index}`}
-                              className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
+                              className="w-full text-nowrap ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
-                              {item.Type}
+                              {item.Name}
                             </label>
                           </div>
                         </li>
@@ -1100,7 +1100,7 @@ const FeaturedProperty = (params) => {
                         setRangeModalValue={setRangeModalValue}
                         setPayload={setPayload}
                       />):(null)}
-                    
+
 
                       {/* <PriceRangeSlider
                             isShow={rangeModalvalue}

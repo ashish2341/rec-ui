@@ -167,6 +167,7 @@
 }
 .configureOl {
   width: 60%;
+  list-style: disc;
 }
 .configureOl li{
   font-size: 0.85rem;

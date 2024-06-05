@@ -11,6 +11,7 @@ import { AddProperty } from "@/api-functions/property/addProperty";
 import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Stepper from "@/components/common/stepper/stepper";
+import { GetPropertyScore } from "@/utils/commonHelperFn";
 export default function AddProject() {
   const [pageValue, setPageValue] = useState(1);
   const [activePage, setActivePage] = useState();
@@ -18,9 +19,44 @@ export default function AddProject() {
   const [selectedFeatures, setSelectedFeatures] = useState([]);
   const [valueForBack, setValueForBack] = useState(0);
   const [propertyBackvalue, setPropertyBackvalue] = useState(0);
-
+  const [propertyScoreinPercentage, setPropertyScoreinPercentage] =
+    useState("");
   let [basisPagebuttonvalue, setBasisPagebuttonvalue] = useState("");
+  const [pageValueInsidePropertyForm, setPageValueInsidePropertyForm] =
+    useState();
   const router = useRouter();
+
+  useEffect(() => {
+    const sessionStoragePropertyData = JSON.parse(
+      sessionStorage.getItem("propertyData")
+    );
+    if (sessionStoragePropertyData) {
+      console.log(
+        "AddProject sessionStoragePropertyData",
+        sessionStoragePropertyData
+      );
+      const PropertyTypeWithSubtypeValue =
+        sessionStoragePropertyData?.PropertyTypeWithSubtype.Name;
+      console.log(
+        "AddProject PropertyTypeWithSubtypeValue",
+        PropertyTypeWithSubtypeValue
+      );
+      const propertyScore = GetPropertyScore(
+        sessionStoragePropertyData,
+        PropertyTypeWithSubtypeValue
+      );
+      if(propertyScore != NaN){
+        const CompletePercentage={
+          CompletePercentage:propertyScore
+        }
+        setPropertyScoreinPercentage(propertyScore);
+        const newPropertyData = { ...sessionStoragePropertyData, ...CompletePercentage };
+      sessionStorage.setItem("propertyData", JSON.stringify(newPropertyData));
+        console.log("AddProject propertyScore", propertyScore);
+      }
+      
+    }
+  }, [pageValue, pageValueInsidePropertyForm,propertyBackvalue,valueForBack]);
   const handleAmenitiesChange = (amenities) => {
     console.log("amenities", amenities);
     setSelectedAmenities(amenities);
@@ -82,9 +118,15 @@ export default function AddProject() {
         City: propertyData?.City,
         Address: propertyData?.Address,
         Area: propertyData?.Area?._id,
-        Location: propertyData?.Location,
+        Location: {
+          Latitude: "",
+          Longitude: "",
+        },
         Images: propertyData?.Images?.map((URL) => ({ URL })),
-        Videos: propertyData?.Videos == ""?[]:propertyData?.Videos?.map((URL) => ({ URL })),
+        Videos:
+          propertyData?.Videos == ""
+            ? []
+            : propertyData?.Videos?.map((URL) => ({ URL })),
         AreaUnits: propertyData?.PlotAreaData?.AreaUnits?._id,
         BhkType: propertyData?.BhkType?._id,
         Fitting: propertyData?.Fitting,
@@ -134,7 +176,7 @@ export default function AddProject() {
         toast.error(res.errMessage);
         return false;
       }
-    }
+     }
   };
   let stepperArray = "";
 
@@ -202,6 +244,7 @@ export default function AddProject() {
               pageNumber={pageValue}
               setPageValue={setPageValue}
               setValueForBack={setValueForBack}
+              propertyScoreValue={propertyScoreinPercentage}
             />
           )}
         </div>
@@ -236,6 +279,7 @@ export default function AddProject() {
                 setPropertyBackvalue={setPropertyBackvalue}
                 valueForNext={handelNextBtnValue}
                 valueForNextPage={pageValue}
+                setPageValueInsidePropertyForm={setPageValueInsidePropertyForm}
               />
             )}
             {pageValue === 4 && (

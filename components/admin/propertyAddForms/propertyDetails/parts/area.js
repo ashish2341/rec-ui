@@ -160,23 +160,18 @@ if (
   };
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
+    console.log("fittingValues",fittingValues)
     if (allFieldsFilled) {
       const thirdPropertyData = {
         Fencing: fencing,
         Flooring: flooring,
         Furnished: furnished,
         BuiltUpArea: builtUpArea,
-        LandArea: parseInt(landArea),
-        CarpetArea: parseInt(carpetArea),
-        Fitting: fittingValues,
+        LandArea:landArea? parseInt(landArea):null,
+        CarpetArea:carpetArea? parseInt(carpetArea):null,
+        Fitting: fittingValues ?fittingValues:null ,
       };
       if (propertTypWithSubTypeValue == "Plot") {
-        (thirdPropertyData.Fencing = ""),
-          (thirdPropertyData.Flooring = ""),
-          (thirdPropertyData.Furnished = ""),
-          (thirdPropertyData.BuiltUpArea = ""),
-          (thirdPropertyData.LandArea = ""),
-          (thirdPropertyData.CarpetArea = ""),
           (thirdPropertyData.PlotAreaData = {
             PlotArea: plotArea,
             AreaUnits: areaUnits,
@@ -210,7 +205,7 @@ if (
       <div className={`flex justify-end ${Styles.continueBtn}`}>
         <ContinueButton modalSubmit={SubmitForm} />
       </div>
-      <div className="grid gap-4 mb-4 sm:grid-cols-1">
+      <div className="grid gap-4 mb-4 sm:grid-cols-2">
         {propertTypWithSubTypeValue && propertTypWithSubTypeValue == "Plot" && (
           <>
             {/* Plot Area */}
@@ -281,108 +276,7 @@ if (
           </>
         )}
 
-        {/* BuiltAreaType */}
-        {/* <div>
-          <label
-            htmlFor="builtAreaType"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-          >
-            Built Area Type
-          </label>
-          <input
-            type="text"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Built Area Type"
-            required=""
-            value={builtAreaType.Type}
-            disabled={true}
-          />
-          {builtAreaTypesData ? (
-            <div
-              className={`flex flex-wrap space-x-2 mt-4 ${
-                builtAreaTypesData?.data?.length > 8
-                  ? `${Styles.scrollable}`
-                  : ""
-              }`}
-            >
-              {builtAreaTypesData?.data?.map((item) => (
-                <button
-                  key={item._id}
-                  onClick={() =>
-                    setBuiltAreaType({
-                      _id: item._id,
-                      Type: item.Type,
-                    })
-                  }
-                  className={` rounded text-white px-4 py-2 ${
-                    Styles.optionButton
-                  } ${
-                    builtAreaType._id === item._id
-                      ? "bg-[#2a4acb] border-2 border-[#2a4acb]"
-                      : "bg-[#6592d3]  border-2 border-[#6592d3]"
-                  }`}
-                >
-                  {item.Type}
-                </button>
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-wrap space-x-2">
-              <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
-            </div>
-          )}
-        </div> */}
-
-        {/*  Area Unit */}
-        {/* <div>
-          <label
-            htmlFor="areaUnit"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-          >
-            Area Unit
-          </label>
-          <input
-            type="text"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Area Unit"
-            required=""
-            value={areaUnits.Unit}
-            disabled={true}
-          />
-          {areaUnitData ? (
-            <div
-              className={`flex flex-wrap space-x-2 mt-4 ${
-                areaUnitData?.data?.length > 8 ? `${Styles.scrollable}` : ""
-              }`}
-            >
-              {areaUnitData?.data?.map((item) => (
-                <button
-                  key={item._id}
-                  onClick={() =>
-                    setAreaUnits({
-                      _id: item._id,
-                      Unit: item.Unit,
-                    })
-                  }
-                  className={` rounded text-white px-4 py-2 ${
-                    Styles.optionButton
-                  } ${
-                    areaUnits._id === item._id
-                      ? "bg-[#2a4acb] border-2 border-[#2a4acb]"
-                      : "bg-[#6592d3]  border-2 border-[#6592d3]"
-                  }`}
-                >
-                  {item.Unit}
-                </button>
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-wrap space-x-2">
-             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
-            </div>
-          )}
-        
-        </div> */}
+     
       </div>
 
       {propertTypWithSubTypeValue != "Plot" && (

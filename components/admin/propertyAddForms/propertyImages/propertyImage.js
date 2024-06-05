@@ -238,7 +238,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage
         // // Step 3: Update the object in local storage with the modified array
         const updatedData = { ...storedData, Videos: videoArray };
         console.log("updatedData", updatedData);
-        sessionStorage.setItem("EditPropertyData", JSON.stringify(updatedData));
+        sessionStorage.setItem("propertyData", JSON.stringify(updatedData));
       }
     }
     setVideo(newArray);
@@ -263,18 +263,20 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage
     const storedData = JSON.parse(sessionStorage.getItem("propertyData"));
     const imageArray = storedData?.Images;
     console.log("imageArray", imageArray);
-    if (image.length == imageArray.length) {
-      console.log("Image session if called");
-      if (imageArray.length > 0) {
-        // // Step 2: Modify the array by removing the desired item
-        imageArray.splice(index, 1);
-        console.log("imageArray after splicce", imageArray);
-        // // Step 3: Update the object in local storage with the modified array
-        const updatedData = { ...storedData, Images: imageArray };
-        console.log("updatedData", updatedData);
-        sessionStorage.setItem("EditPropertyData", JSON.stringify(updatedData));
+      if (image.length == imageArray.length) {
+        console.log("Image session if called");
+        if (imageArray.length > 0) {
+          // // Step 2: Modify the array by removing the desired item
+          imageArray.splice(index, 1);
+          console.log("imageArray after splicce", imageArray);
+          // // Step 3: Update the object in local storage with the modified array
+          const updatedData = { ...storedData, Images: imageArray };
+          console.log("updatedData", updatedData);
+          sessionStorage.setItem("propertyData", JSON.stringify(updatedData));
+        }
       }
-    }
+    
+    
 
     setImage(newArray);
     if (newArray.length == 0) {
@@ -341,6 +343,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage
                         />
                         <button
                           className="absolute top-0 right-0 p-1  "
+                          type="button"
                           onClick={() => removeImage(index)}
                         >
                           <i

@@ -28,7 +28,7 @@ export default function PropertyBigButtons({itemArray, activeBtnvalue, changeSta
   console.log("activeBtnvalue",activeBtnvalue)
   return (
     <>
-      <div className="mb-4">
+      <div className="mb-2">
         <label
           htmlFor="PropertyType"
           className={`block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white ${forRequired==false ? "":"required"} `}

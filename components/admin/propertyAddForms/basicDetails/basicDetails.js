@@ -23,14 +23,9 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
   const { data: propertySubTypeData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/propertyWithSubTypes`
   );
-   console.log("propertySubTypeData", propertySubTypeData);
 
-  const sessionStoragePropertyData =typeof sessionstorage != "undefined" && JSON.parse(
-    sessionStorage.getItem("propertyData")
-  );
 
-  const propertTypWithSubTypeValue =
-    sessionStoragePropertyData?.PropertyTypeWithSubtype || "";
+ 
   const [propertyTypeWithSubtype, setPropertyTypeWithSubtype] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -39,7 +34,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
   const [facing, setFacing] = useState("");
   const [isEnabled, setIsEnabled] = useState(true);
   const [isFeatured, setIsFeatured] = useState(true);
-  const [propertySubTypevalue, setPropertySubTypeValue] = useState("");
+  const [propertTypWithSubTypeValue, setPropertTypWithSubTypeValue] = useState("");
 
   const propertyTypeArray = ["Residential", "Commercial"];
   const lookingToArray = ["Sell"];
@@ -76,18 +71,18 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
 
     if (sessionStoragePropertyData) {
       console.log(
-        "sessionStoragePropertyData?.IsFeatured",
-        sessionStoragePropertyData?.IsFeatured
+        " sessionStoragePropertyData?.PropertyTypeWithSubtype ",
+        sessionStoragePropertyData?.PropertyTypeWithSubtype 
       );
       setPropertyTypeWithSubtype(
-        sessionStoragePropertyData?.PropertyTypeWithSubtype || []
+        sessionStoragePropertyData?.PropertyTypeWithSubtype || ""
       );
       setTitle(sessionStoragePropertyData?.Titile || "");
       setDescription(sessionStoragePropertyData?.Description || "");
       setPropertyType(sessionStoragePropertyData?.PropertyType || "");
       setPropertyfor(sessionStoragePropertyData?.PropertyFor || "Sell");
-      setPropertySubTypeValue(
-        sessionStoragePropertyData?.PropertyTypeWithSubtype || ""
+      setPropertTypWithSubTypeValue(
+        sessionStoragePropertyData?.PropertyTypeWithSubtype?.Name || ""
       );
       setFacing(sessionStoragePropertyData?.Facing || "");
       if (roles.includes("Admin")) {
@@ -160,7 +155,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
         IsFeatured: isFeatured,
         PropertyTypeWithSubtype: propertyTypeWithSubtype,
       };
-      if((sessionStoragePropertyData && propertTypWithSubTypeValue )&& (propertTypWithSubTypeValue != propertyTypeWithSubtype)){
+      if((propertTypWithSubTypeValue )&& (propertTypWithSubTypeValue != propertyTypeWithSubtype?.Name)){
             sessionStorage.removeItem("propertyData")
       }
       
@@ -200,7 +195,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
         </div>
         <form>
           <div className="grid gap-4 mb-4 sm:grid-cols-1">
-            <div className="grid gap-4 mb-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
               <PropertyBigButtons
                 labelName={"Property Type"}
                 itemArray={propertyTypeArray}
@@ -255,7 +250,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
               />
             )}
 
-            <div className="grid gap-4 mb-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
               {/* Is Enabled */}
 
               {roles.includes("Admin") && (
@@ -292,6 +287,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
                 required=""
                 value={description}
                 onChange={handelDescriptionChange}
+                rows={5}
               />
             </div>
           </div>

@@ -83,3 +83,85 @@ export const ArrayNumbertoString = (numberArray) => {
 
   return formattedStrings;
 };
+
+//TO find out Property Score
+
+function countNonNullProperties(obj) {
+  let count = 0;
+  const skipObjNames = [
+    "Facing",
+    "PropertyTypeWithSubtype",
+    "Area",
+    "TotalPrice",
+    "OwnershipType",
+    "PropertyStatus",
+    "Builder",
+    "Fencing",
+    "Flooring",
+    "Furnished",
+    "PosessionStatus",
+    "BhkType",
+  ];
+
+  function isObjectEmpty(obj) {
+    return Object.keys(obj).length === 0 && obj.constructor === Object;
+  }
+
+  function countProperties(obj) {
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (key === "CompletePercentage") {
+          continue; // Skip this key
+        }
+        if (Array.isArray(obj[key])) {
+          // If it's an array, count the key itself if the array is not empty
+          if (obj[key].length > 0) {
+            count++;
+          }
+        } else if (typeof obj[key] !== "object" || obj[key] === null) {
+          if (obj[key] !== undefined && obj[key] !== null && obj[key] !== "") {
+            count++;
+          }
+        } else {
+          if (skipObjNames.includes(key) || isObjectEmpty(obj[key])) {
+            // Check if the key itself is not null or undefined or empty string
+            if (
+              obj[key] !== undefined &&
+              obj[key] !== null &&
+              obj[key] !== ""
+            ) {
+              count++;
+            }
+          } else {
+            countProperties(obj[key]);
+          }
+        }
+      }
+    }
+  }
+
+  countProperties(obj);
+
+  return count;
+}
+
+export const GetPropertyScore = (obj, type) => {
+  const types = [
+    { type: "Apartment", fields: 41 },
+    { type: "Independent House", fields: 41 },
+    { type: "Independent Floor", fields: 41 },
+    { type: "Villa", fields: 41 },
+    { type: "Plot", fields: 27 },
+    { type: "Office", fields: 44 },
+    { type: "Retail Shop", fields: 45 },
+    { type: "Showroom", fields: 45 },
+    { type: "Warehouse", fields: 41 },
+  ];
+
+  const allFields = types.find((f) => f.type == type)?.fields;
+  const fieldValue = countNonNullProperties(obj);
+  console.log("GetPropertyScore fieldValue", fieldValue);
+  // const fillFields  = Object.values(obj)?.filter(type => type)?.length
+  const compPerc = (fieldValue / allFields) * 100;
+  return parseInt(compPerc);
+};

@@ -468,23 +468,26 @@ const PropertyDetail = ({ params }) => {
               <LoadingImg />
             )}
           </div>
-          {listPropertiesData ? (
-            listPropertiesData?.Videos?.map((videoDatas) => (
-              <div
-                key={videoDatas._id}
-                className={`${styles.heroSectionLeftVideoMain}`}
-              >
-                <video
-                  controls
-                  className="h-48 w-64 border border-black rounded-lg"
-                >
-                  <source src={videoDatas.URL} type="video/mp4" />
-                </video>
-              </div>
-            ))
+          {videoData ?
+             videoData == "" ? (
+            <div className={`${styles.heroSectionNoLeftVideoMain}`}>
+                <p className="text-gray-400 text-xl font-semibold">No video available</p>
+            </div>
           ) : (
-            <LoadingImg />
-          )}
+              listPropertiesData?.Videos?.map((videoDatas) => (
+                <div
+                  key={videoDatas._id}
+                  className={`${styles.heroSectionLeftVideoMain}`}
+                >
+                  <video
+                    controls
+                    className="h-48 w-64 border border-black rounded-lg"
+                  >
+                    <source src={videoDatas.URL} type="video/mp4" />
+                  </video>
+                </div>
+              ))
+          ) : <LoadingImg />}
         </div>
         {/* <div className={`${styles.heroSectionBottomMain}`}>
           <div className={`${styles.heroSectionBottomBox}`}>
@@ -806,8 +809,8 @@ const PropertyDetail = ({ params }) => {
                     (
                     <ol className={`${styles.configureOl}`}>
                       <li>{listPropertiesData.CarpetArea} Carpet Area</li>
-                      <li>{listPropertiesData.EntranceWidth} Entrance Width</li>
-                      <li>{listPropertiesData.CellingHeight} Celling Height</li>
+                      {listPropertiesData.EntranceWidth ? <li>{listPropertiesData.EntranceWidth} Entrance Width</li> : null}
+                      {listPropertiesData.CellingHeight ? <li> {listPropertiesData.CellingHeight} Celling Height</li> : null}
                       <li>{listPropertiesData.PrivateParking} Private Parking</li>
                       <li>{listPropertiesData.PublicParking} Public Parking</li>
                     </ol>
@@ -857,13 +860,15 @@ const PropertyDetail = ({ params }) => {
                       </div>
                     </div>
                     { listPropertiesData?.ProeprtyType == "Commercial" ?
-                    <div className="flex">
+                       listPropertiesData?.SuitableFor ?
+                    (<div className="flex">
                       <h1 className="font-semibold mr-2">Suitable For :</h1>
                       <div>
                         {listPropertiesData?.SuitableFor}
                       </div>
-                    </div>
-                    : null }
+                    </div>)
+                    : (null)
+                : null}
                   </div>
                 </div>
               </div>
@@ -923,6 +928,7 @@ const PropertyDetail = ({ params }) => {
                         {listPropertiesData.ProeprtyFor}
                       </p>
                     </div>
+                    {listPropertiesData?.Flooring?.Flooring ?
                     <div className={`${styles.overviewBoxMainContent}`}>
                       <h2 className={`${styles.overviewBoxMainContentHead}`}>
                         Flooring
@@ -930,7 +936,7 @@ const PropertyDetail = ({ params }) => {
                       <p className={`${styles.overviewBoxMainContentText}`}>
                         {listPropertiesData?.Flooring?.Flooring}
                       </p>
-                    </div>
+                    </div> : null }
                     <div className={`${styles.overviewBoxMainContent}`}>
                       <h2 className={`${styles.overviewBoxMainContentHead}`}>
                         Ownership Type
@@ -939,6 +945,7 @@ const PropertyDetail = ({ params }) => {
                         {listPropertiesData?.OwnershipType?.Ownership}
                       </p>
                     </div>
+                    {listPropertiesData?.Furnished?.Furnished ?
                     <div className={`${styles.overviewBoxMainContent}`}>
                       <h2 className={`${styles.overviewBoxMainContentHead}`}>
                         Furnished
@@ -946,7 +953,7 @@ const PropertyDetail = ({ params }) => {
                       <p className={`${styles.overviewBoxMainContentText}`}>
                         {listPropertiesData?.Furnished?.Furnished}
                       </p>
-                    </div>
+                    </div> : null }
                     <div className={`${styles.overviewBoxMainContent}`}>
                       <h2 className={`${styles.overviewBoxMainContentHead}`}>
                         Property Type
@@ -1173,46 +1180,73 @@ const PropertyDetail = ({ params }) => {
                       <AccordionContent
                         className={`${styles.AccordionContent}`}
                       >
+                       {listPropertiesData?.Fitting?.Electrical ?
                         <div className="mr-6 p-4">
-                          <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">
-                            Electrical
-                          </span>
+                          <div className="flex mb-2 text-gray-500 dark:text-gray-400 justify-center text-sm">
+                            <img
+                                height="22"
+                                width="22"
+                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtjD2HikxPtTLMjHJr3VNfMeaiciwxiAmuAw&s"
+                             />
+                          </div>
                           <p className="">
                             {listPropertiesData?.Fitting?.Electrical}
                           </p>
-                        </div>
+                        </div> : null }
+                        {listPropertiesData?.Fitting?.Toilets ?
                         <div className="mr-6 p-4">
-                          <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">
-                            Toilets
-                          </span>
+                        <div className="flex mb-2 text-gray-500 dark:text-gray-400 justify-center text-sm">
+                          <img
+                              height="22"
+                              width="22"
+                              src="https://static.thenounproject.com/png/3121-200.png"
+                           />
+                        </div>
                           <p className="">
                             {listPropertiesData?.Fitting?.Toilets}
                           </p>
-                        </div>
+                        </div> : null }
+                        {listPropertiesData?.Fitting?.Kitchen ?
                         <div className="mr-6 p-4">
-                          <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">
-                            Kitchen
-                          </span>
+                        <div className="flex mb-2 text-gray-500 dark:text-gray-400 justify-center text-sm">
+                          <img
+                              height="22"
+                              width="22"
+                              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQumKkG8e5rs6BShE68NTO2WGEKecI6J7rytQ&s"
+                           />
+                        </div>
                           <p className="">
                             {listPropertiesData?.Fitting?.Kitchen}
                           </p>
-                        </div>
+                        </div> : null
+                        }
+                        {listPropertiesData?.Fitting?.Doors ?
                         <div className="mr-6 p-4">
-                          <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">
-                            Doors
-                          </span>
+                        <div className="flex mb-2 text-gray-500 dark:text-gray-400 justify-center text-sm">
+                          <img
+                              height="22"
+                              width="22"
+                              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA-MCzqU6Wu3Bub9RTn9jr4yf3wlM4Lrd8iw&s"
+                           />
+                        </div>
                           <p className="">
                             {listPropertiesData?.Fitting?.Doors}
                           </p>
-                        </div>
+                        </div> : null
+                        }
+                        {listPropertiesData?.Fitting?.Windows ?
                         <div className="mr-6 p-4">
-                          <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">
-                            Windows
-                          </span>
+                        <div className="flex mb-2 text-gray-500 dark:text-gray-400 justify-center text-sm">
+                          <img
+                              height="22"
+                              width="22"
+                              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfV4D5yA3-gy_sfi8iDEm3ehCVFuJ79JYCnw&s"
+                           />
+                        </div>
                           <p className="">
                             {listPropertiesData?.Fitting?.Windows}
                           </p>
-                        </div>
+                        </div> : null }
                       </AccordionContent>
                     ) : (
                       <LoadingText />

@@ -127,7 +127,7 @@ export default function AddProject() {
           propertyData?.Videos == ""
             ? []
             : propertyData?.Videos?.map((URL) => ({ URL })),
-        AreaUnits: propertyData?.PlotAreaData?.AreaUnits?._id,
+        AreaUnits: propertyData?.AreaUnits?._id,
         BhkType: propertyData?.BhkType?._id,
         Fitting: propertyData?.Fitting,
         Faq: propertyData?.Faq,
@@ -141,15 +141,15 @@ export default function AddProject() {
         CustomSuitable: propertyData?.CustomSuitable,
         CustomZoneType: propertyData?.CustomZoneType,
         BuiltUpArea: propertyData?.BuiltUpArea,
-        PlotArea: propertyData?.PlotAreaData?.PlotArea,
-        PlotLength: propertyData?.PlotAreaData?.PlotLength,
-        Plotwidth: propertyData?.PlotAreaData?.PlotWidth,
+        PlotArea: propertyData?.PlotArea,
+        PlotLength: propertyData?.PlotLength,
+        Plotwidth: propertyData?.PlotWidth,
         WallType: propertyData?.WallType,
         CellingHeight: propertyData?.CellingHeight,
         EntranceWidth: propertyData?.EntranceWidth,
         TaxCharge: propertyData?.TaxCharge,
         LeasedOrRented: propertyData?.PreReleasedBtn,
-        CurentRent: propertyData?.CurrentRent,
+        CurentRent: propertyData?.CurentRent,
         LeaseYears: propertyData?.LeaseYears,
         ExpectedReturn: propertyData?.ExpectedReturn,
         DgUpsCharge: propertyData?.DgUpsCharge,
@@ -162,6 +162,7 @@ export default function AddProject() {
         PublicWashroom: propertyData?.PublicWashroom,
         PrivateWashroom: propertyData?.PrivateWashroom,
         CompletePercentage: propertyData?.CompletePercentage,
+        LandAreaUnit:propertyData?.LandAreaUnit
       };
       console.log("finalizePropertyData", finalizePropertyData);
       let res = await AddProperty(finalizePropertyData);

@@ -2,16 +2,15 @@
 import { useState, useRef, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { ImageString } from "@/api-functions/auth/authAction";
+import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
 
-export default function PropertyImagesForm({ valueForNext, valueForNextPage
- 
-}) {
+export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
   const [image, setImage] = useState([]);
   const [video, setVideo] = useState([]);
   const imageInputRef = useRef(null);
   const VideoInputRef = useRef(null);
   const [mediaShowValue, setMediaShowValue] = useState(false);
- 
+  const [mediaLoading, setMediaLoading] = useState(false);
 
   useEffect(() => {
     // Retrieve data from localStorage
@@ -34,7 +33,6 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage
       toast.error("Image is required.");
       return false;
     }
- 
 
     const mediaData = {
       Images: image,
@@ -50,11 +48,11 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage
       console.log("newProjectData before set localStorage", newProjectData);
       sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
       valueForNext(valueForNextPage + 1);
-      
     }
   };
 
   const handleImageInputChange = async (event) => {
+    setMediaLoading(true);
     const acceptedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
 
     const files = Array.from(event.target.files);
@@ -125,16 +123,20 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage
       console.log("uniqueFiles data after convert string", uniqueFiles);
 
       // Update the image state
-      setImage([...image, ...uniqueFiles]);
+      if (uniqueFiles) {
+
+        setImage([...image, ...uniqueFiles]);
+        setMediaLoading(false)
+      }
+
       if (imageInputRef.current) {
         imageInputRef.current.value = "";
       }
-    
-     
     }
   };
 
   const handleVideoInputChange = async (event) => {
+    setMediaLoading(true);
     const acceptedFileTypes = [
       "video/mp4",
       "video/webm",
@@ -210,16 +212,16 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage
       console.log("uniqueFiles data after convert string", uniqueFiles);
 
       // Update the video state
+      if (uniqueFiles) {
+        setVideo([...video, ...uniqueFiles]);
+        setMediaLoading(false);
+      }
 
-      setVideo([...video, ...uniqueFiles]);
       if (VideoInputRef.current) {
         VideoInputRef.current.value = "";
       }
-      
     }
   };
-
-  
 
   const removeVideo = (index) => {
     const newArray = [...video];
@@ -246,7 +248,6 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage
     if (newArray.length == 0) {
       clearVideoInput();
     }
-   
   };
   const clearVideoInput = () => {
     if (VideoInputRef.current) {
@@ -263,26 +264,23 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage
     const storedData = JSON.parse(sessionStorage.getItem("propertyData"));
     const imageArray = storedData?.Images;
     console.log("imageArray", imageArray);
-      if (image.length == imageArray.length) {
-        console.log("Image session if called");
-        if (imageArray.length > 0) {
-          // // Step 2: Modify the array by removing the desired item
-          imageArray.splice(index, 1);
-          console.log("imageArray after splicce", imageArray);
-          // // Step 3: Update the object in local storage with the modified array
-          const updatedData = { ...storedData, Images: imageArray };
-          console.log("updatedData", updatedData);
-          sessionStorage.setItem("propertyData", JSON.stringify(updatedData));
-        }
+    if (image.length == imageArray.length) {
+      console.log("Image session if called");
+      if (imageArray.length > 0) {
+        // // Step 2: Modify the array by removing the desired item
+        imageArray.splice(index, 1);
+        console.log("imageArray after splicce", imageArray);
+        // // Step 3: Update the object in local storage with the modified array
+        const updatedData = { ...storedData, Images: imageArray };
+        console.log("updatedData", updatedData);
+        sessionStorage.setItem("propertyData", JSON.stringify(updatedData));
       }
-    
-    
+    }
 
     setImage(newArray);
     if (newArray.length == 0) {
       clearImageInput();
     }
-   
   };
   const clearImageInput = () => {
     if (imageInputRef.current) {
@@ -290,12 +288,10 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage
     }
   };
 
-
-
   return (
     <>
       <div>
-      <div className="flex justify-end w-full mb-4">
+        <div className="flex justify-end w-full mb-4">
           <button
             onClick={SubmitForm}
             type="button"
@@ -327,7 +323,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage
                 onChange={handleImageInputChange}
                 required
               />
-
+              {mediaLoading && <LoaderForMedia />}
               {image.length > 0 ? (
                 <div>
                   <div className="ml-2 mt-3 underline font-bold">
@@ -366,7 +362,10 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage
                 htmlFor="videoInput"
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
               >
-                Upload Video <span className="text-xs font-bold ml-1 pb-2 text-red-600">(Optional)</span>
+                Upload Video{" "}
+                <span className="text-xs font-bold ml-1 pb-2 text-red-600">
+                  (Optional)
+                </span>
               </label>
               <input
                 type="file"
@@ -379,6 +378,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage
                 onChange={handleVideoInputChange}
                 required
               />
+              {mediaLoading && <LoaderForMedia />}
               {video.length > 0 ? (
                 <div>
                   <div className="ml-2 mt-3 underline font-bold">
@@ -408,8 +408,6 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage
                 </div>
               ) : null}
             </div>
-
-            
           </div>
         </form>
       </div>

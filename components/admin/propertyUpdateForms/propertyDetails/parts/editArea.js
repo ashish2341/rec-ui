@@ -31,18 +31,20 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
   );
   console.log("furnishedesData", furnishedesData);
 
+ 
+
   // fetching Data for areaUnitData
   const { data: areaUnitData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/areaunits`
   );
   // console.log("areaUnitData", areaUnitData);
   const sessionStoragePropertyData = JSON.parse(
-    sessionStorage.getItem("propertyData")
+    sessionStorage.getItem("EditPropertyData")
   );
   const propertTypWithSubTypeValue =
-    sessionStoragePropertyData?.PropertyTypeWithSubtype.Name || "";
-  const propertTypeValue = sessionStoragePropertyData?.PropertyType || "";
-  const PropertyForValue = sessionStoragePropertyData?.PropertyFor || "";
+    sessionStoragePropertyData?.PropertySubtype.Name || "";
+  const propertTypeValue = sessionStoragePropertyData?.ProeprtyType || "";
+  const PropertyForValue = sessionStoragePropertyData?.ProeprtyFor || "";
   const [fittingValues, setFittingValues] = useState({
     Electrical: "",
     Toilets: "",
@@ -72,11 +74,12 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
     "Cenented walls",
     "Plastered walls",
   ];
+  const defaultOption = [{ value: "", label: "no data found" }];
   const staticAreaUnitArray=["Sq-ft","Sq-yrd","Sq-m","Acre"]
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
-      sessionStorage.getItem("propertyData")
+      sessionStorage.getItem("EditPropertyData")
     );
     console.log(
       "localStorageData from localstorage",
@@ -92,7 +95,9 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
         Windows: sessionStoragePropertyData?.Fitting?.Windows || "",
       });
       setEntranceWidth(sessionStoragePropertyData?.EntranceWidth || "");
-      setWallType(sessionStoragePropertyData?.WallType || "");
+      setWallType(
+        sessionStoragePropertyData?.WallType || ""
+      );
       setCellingHeight(sessionStoragePropertyData?.CellingHeight || "");
       setFencing(sessionStoragePropertyData?.Fencing || "");
       setFlooring(sessionStoragePropertyData?.Flooring || "");
@@ -105,7 +110,7 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
       setAreaUnits(sessionStoragePropertyData?.AreaUnits || "");
       setPlotArea(sessionStoragePropertyData?.PlotArea);
       setPlotLength(sessionStoragePropertyData?.PlotLength);
-      setPlotWidth(sessionStoragePropertyData?.PlotWidth);
+      setPlotWidth(sessionStoragePropertyData?.Plotwidth);
       setLandAreaUnit(sessionStoragePropertyData?.LandAreaUnit);
     }
   }, []);
@@ -116,40 +121,39 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
     }));
   };
   const checkRequiredFields = () => {
-    if (
-      propertTypWithSubTypeValue != "Plot" &&
-      (propertTypeValue == "Residential" || propertTypeValue == "Commercial")
-    ) {
-      var requiredFields = [fencing, flooring, furnished, builtUpArea];
-    }
-    if (propertTypWithSubTypeValue == "Plot") {
+    if (propertTypWithSubTypeValue != "Plot" && (propertTypeValue=="Residential" || propertTypeValue=="Commercial")) {
+      var requiredFields = [
+        fencing,
+        flooring,
+        furnished,
+        builtUpArea,
+      ];
+     
+    } if(propertTypWithSubTypeValue == "Plot") {
       var requiredFields = [plotArea, plotLength, plotwidth];
     }
-    if (
-      propertTypeValue == "Commercial" &&
-      propertTypWithSubTypeValue == "Office"
-    ) {
-      var requiredFields = [
-        fencing,
-        flooring,
-        furnished,
-        builtUpArea,
-        wallType,
-      ];
-    }
-    if (
-      propertTypWithSubTypeValue == "Retail Shop" ||
-      propertTypWithSubTypeValue == "Showroom"
-    ) {
-      var requiredFields = [
-        fencing,
-        flooring,
-        furnished,
-        builtUpArea,
-        entranceWidth,
-        cellingHeight,
-      ];
-    }
+if(propertTypeValue=="Commercial" && propertTypWithSubTypeValue == "Office" ){
+  var requiredFields = [
+    fencing,
+    flooring,
+    furnished,
+    builtUpArea,
+    wallType
+  ];
+}
+if (
+  propertTypWithSubTypeValue == "Retail Shop" ||
+  propertTypWithSubTypeValue == "Showroom"
+){
+  var requiredFields = [
+    fencing,
+    flooring,
+    furnished,
+    builtUpArea,
+    entranceWidth,
+    cellingHeight
+  ];
+}
     // Check if any required field is empty
     const isEmpty = requiredFields.some(
       (field) => field === "" || field === null || field === undefined
@@ -159,7 +163,6 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
   };
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
-   
     if(propertTypWithSubTypeValue !="Plot"){
       if((landArea==""||landArea==null) && (landAreaUnit  != ""||landAreaUnit  != null)){
             toast.error("Please fill Land Area field.") 
@@ -173,7 +176,7 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
     }
     if (allFieldsFilled) {
       const thirdPropertyData = {
-        
+     
       };
       if(propertTypWithSubTypeValue !="Plot"){
         thirdPropertyData.Fencing= fencing,
@@ -186,10 +189,11 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
         thirdPropertyData.Fitting= fittingValues ? fittingValues : "";
       }
       if (propertTypWithSubTypeValue == "Plot") {
-        thirdPropertyData.PlotArea= plotArea,
-        thirdPropertyData.AreaUnits= areaUnits,
-        thirdPropertyData.PlotLength= plotLength,
-        thirdPropertyData.PlotWidth= plotwidth;
+          
+            thirdPropertyData.PlotArea= plotArea,
+            thirdPropertyData.AreaUnits= areaUnits,
+            thirdPropertyData.PlotLength= plotLength,
+            thirdPropertyData. Plotwidth= plotwidth;
         
       }
       if (propertTypWithSubTypeValue == "Office") {
@@ -204,17 +208,15 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
       }
       console.log("thirdPropertyData", thirdPropertyData);
       const localStorageData = JSON.parse(
-        sessionStorage.getItem("propertyData")
+        sessionStorage.getItem("EditPropertyData")
       );
       const newProjectData = { ...localStorageData, ...thirdPropertyData };
-      sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
+      sessionStorage.setItem("EditPropertyData", JSON.stringify(newProjectData));
       setPropertyPageValue((prev) => prev + 1);
     } else {
       toast.error("Please fill in all required fields!");
     }
   };
-
-
   return (
     <>
       <div className={`flex justify-end ${Styles.continueBtn}`}>
@@ -290,6 +292,8 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
             </div>
           </>
         )}
+
+     
       </div>
 
       {propertTypWithSubTypeValue != "Plot" && (
@@ -334,7 +338,7 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
               changeState={setFurnished}
             />
           )}
-          <div className="grid gap-4 mb-4 mt-5 sm:grid-cols-2">
+          <div className="grid gap-4 mb-4 sm:grid-cols-2">
             {/* Builtup ARea */}
             <div>
               <label
@@ -371,8 +375,8 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                 onChange={(e) => setCarpetArea(e.target.value)}
               />
             </div>
-            {/* LandArea */}
-            <div>
+             {/* LandArea */}
+             <div>
               <label
                 htmlFor="landArea"
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white "
@@ -442,115 +446,116 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                 onChange={(e) => setCellingHeight(e.target.value)}
               />
             </div>
+           
           </div>
         </>
       )}
-      {propertTypWithSubTypeValue &&
-        propertTypeValue &&
-        propertTypWithSubTypeValue != "Plot" &&
-        propertTypeValue == "Residential" && (
-          <>
-            <h2 className="block mb-2 text-xl mt-12 font-lg underline font-bold text-gray-500 dark:text-white">
-              {" "}
-              Fitting Details
-            </h2>
-            <div className="grid gap-4 mb-4 sm:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="Electrical"
-                  className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
-                >
-                  Electrical
-                </label>
-                <input
-                  type="text"
-                  name="Electrical"
-                  id="Electrical"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Electrical"
-                  value={fittingValues.Electrical}
-                  onChange={(e) =>
-                    handleFittingChange("Electrical", e.target.value)
-                  }
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="Toilets"
-                  className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
-                >
-                  Toilets
-                </label>
-                <input
-                  type="text"
-                  name="Toilets"
-                  id="Toilets"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Toilets"
-                  value={fittingValues.Toilets}
-                  onChange={(e) =>
-                    handleFittingChange("Toilets", e.target.value)
-                  }
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="Kitchen"
-                  className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
-                >
-                  Kitchen
-                </label>
-                <input
-                  type="text"
-                  name="Kitchen"
-                  id="Kitchen"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Kitchen"
-                  value={fittingValues.Kitchen}
-                  onChange={(e) =>
-                    handleFittingChange("Kitchen", e.target.value)
-                  }
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="Doors"
-                  className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
-                >
-                  Doors
-                </label>
-                <input
-                  type="text"
-                  name="Doors"
-                  id="Doors"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Doors"
-                  value={fittingValues.Doors}
-                  onChange={(e) => handleFittingChange("Doors", e.target.value)}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="Windows"
-                  className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
-                >
-                  Windows
-                </label>
-                <input
-                  type="text"
-                  name="Windows"
-                  id="Windows"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Windows"
-                  value={fittingValues.Windows}
-                  onChange={(e) =>
-                    handleFittingChange("Windows", e.target.value)
-                  }
-                />
-              </div>
-            </div>
-          </>
-        )}
+       {(propertTypWithSubTypeValue && propertTypeValue) &&
+              (propertTypWithSubTypeValue != "Plot" && propertTypeValue=="Residential") && (
+                <>
+                  <h2 className="block mb-2 text-xl mt-12 font-lg underline font-bold text-gray-500 dark:text-white">
+                    {" "}
+                    Fitting Details
+                  </h2>
+                  <div className="grid gap-4 mb-4 sm:grid-cols-2">
+                    <div>
+                      <label
+                        htmlFor="Electrical"
+                        className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
+                      >
+                        Electrical
+                      </label>
+                      <input
+                        type="text"
+                        name="Electrical"
+                        id="Electrical"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Electrical"
+                        value={fittingValues.Electrical}
+                        onChange={(e) =>
+                          handleFittingChange("Electrical", e.target.value)
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="Toilets"
+                        className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
+                      >
+                        Toilets
+                      </label>
+                      <input
+                        type="text"
+                        name="Toilets"
+                        id="Toilets"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Toilets"
+                        value={fittingValues.Toilets}
+                        onChange={(e) =>
+                          handleFittingChange("Toilets", e.target.value)
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="Kitchen"
+                        className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
+                      >
+                        Kitchen
+                      </label>
+                      <input
+                        type="text"
+                        name="Kitchen"
+                        id="Kitchen"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Kitchen"
+                        value={fittingValues.Kitchen}
+                        onChange={(e) =>
+                          handleFittingChange("Kitchen", e.target.value)
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="Doors"
+                        className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
+                      >
+                        Doors
+                      </label>
+                      <input
+                        type="text"
+                        name="Doors"
+                        id="Doors"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Doors"
+                        value={fittingValues.Doors}
+                        onChange={(e) =>
+                          handleFittingChange("Doors", e.target.value)
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="Windows"
+                        className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
+                      >
+                        Windows
+                      </label>
+                      <input
+                        type="text"
+                        name="Windows"
+                        id="Windows"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Windows"
+                        value={fittingValues.Windows}
+                        onChange={(e) =>
+                          handleFittingChange("Windows", e.target.value)
+                        }
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
     </>
   );
 }

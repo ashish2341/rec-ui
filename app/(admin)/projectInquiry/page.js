@@ -36,6 +36,7 @@ export default function ProjectInquiry() {
   const [isDeleted, setIsDeleted] = useState(false);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   useEffect(() => {
     initFlowbite(); // Call initCarousels() when component mounts
   }, []);
@@ -146,7 +147,9 @@ export default function ProjectInquiry() {
     return inquiry?.AllowedUser?.find((item) => item?.UserId == loginUserId)
       ?.Status;
   };
-
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
   return (
     <section>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3">
@@ -175,53 +178,52 @@ export default function ProjectInquiry() {
                   />
                 ) : null}
                 {roles.includes("Admin") && (
-                  <li className="me-2  list-none">
-                    <button
-                      id="dropdownPossessionButton"
-                      data-dropdown-toggle="dropdownPossession"
-                      className="text-black bg-white rounded-lg border border-gray-200  hover:bg-gray-100 hover:text-blue-700 focus:ring-gray-100  focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
-                      type="button"
-                    >
-                      {" "}
-                      {typeOnButton && typeOnButton}
-                      <svg
-                        className="w-2.5 h-2.5 ms-3"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 10 6"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="m1 1 4 4 4-4"
-                        />
-                      </svg>
-                    </button>
-
-                    <div
-                      id="dropdownPossession"
-                      className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-                    >
-                      <ul
-                        className="p-2 text-sm text-gray-700 dark:text-gray-200 list-none"
-                        aria-labelledby="dropdownPossessionButton"
-                      >
-                        {inquiryItem.map((item, index) => (
-                          <li key={index} onClick={() => enquiryType(item)}>
-                            <Link
-                              href=""
-                              className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
-                            >
-                              {item}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </li>
+                   <li className="me-2 list-none relative"> {/* Ensure relative positioning */}
+                   <button
+                     id="dropdownPossessionButton"
+                     onClick={toggleDropdown}
+                     className="text-black bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:ring-gray-100 focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
+                     type="button"
+                   >
+                     {typeOnButton && typeOnButton}
+                     <svg
+                       className="w-2.5 h-2.5 ms-3"
+                       aria-hidden="true"
+                       xmlns="http://www.w3.org/2000/svg"
+                       fill="none"
+                       viewBox="0 0 10 6"
+                     >
+                       <path
+                         stroke="currentColor"
+                         strokeLinecap="round"
+                         strokeLinejoin="round"
+                         strokeWidth="2"
+                         d="m1 1 4 4 4-4"
+                       />
+                     </svg>
+                   </button>
+             
+                   <div
+                     id="dropdownPossession"
+                     className={`z-10 ${isDropdownOpen ? 'block' : 'hidden'} absolute top-full mt-2 bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
+                   >
+                     <ul
+                       className="p-2 text-sm text-gray-700 dark:text-gray-200 list-none"
+                       aria-labelledby="dropdownPossessionButton"
+                     >
+                       {inquiryItem.map((item, index) => (
+                         <li key={index} onClick={() => enquiryType(item)}>
+                           <Link
+                             href="#"
+                             className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
+                           >
+                             {item}
+                           </Link>
+                         </li>
+                       ))}
+                     </ul>
+                   </div>
+                 </li>
                 )}
               </div>
 

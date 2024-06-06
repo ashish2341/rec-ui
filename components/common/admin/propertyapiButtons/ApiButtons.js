@@ -40,8 +40,6 @@ export default function ApiButtons({
   ValueName,
   changeState,
 }) {
-  console.log("ValueName", ValueName);
-  console.log("itemArray", itemArray);
   return (
     <>
       <div className="mb-2">

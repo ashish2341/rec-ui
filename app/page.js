@@ -119,7 +119,7 @@ console.log("propertyByapartmentType",propertyByapartmentType);
   const ShowApartmentProperties = () => {
 
     return propertyByapartmentType?.data?.map((item,index) => (
-      <Link key={index}  href={`/propertyList/property?propertyTypeID=${item._id}&propertyTypeLabel=${item?.areaInfo?.Type}`}  >
+      <Link key={index}  href={`/propertyList/property?propertyTypeID=${item._id}&propertyTypeLabel=${item?.areaInfo?.Name}`}  >
         <div
           className="p-1"
         >
@@ -181,10 +181,16 @@ console.log("propertyByapartmentType",propertyByapartmentType);
             </div>
            }
            { item?.ProeprtyType == "Commercial" ?
+            item.CellingHeight ?
            <div className="flex">
-           <i className="fa fa-solid fa-ruler-vertical"></i>
              <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-             {item.CellingHeight} Height
+             <span className="">&#xf548;</span>{item.CellingHeight} Height
+             </p>
+           </div> :
+           <div className="flex">
+             <i class="fa fa-solid fa-receipt">‌</i>
+             <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
+             {item.CarpetArea} Carpet Area
              </p>
            </div>
             :

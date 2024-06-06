@@ -1,30 +1,30 @@
 .optionButton{
-    width: auto;
-    height: 2.5rem;
-    border-radius: 26px !important;
-    margin-left: 1px !important;
-    margin-bottom: 1rem;
-    margin-right: 10px !important;
-    /* box-shadow: 0 4px 6px rgba(173, 216, 230, 0.5) !important;  */
-    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.1), 0 8px 17px 0 rgba(0, 0, 0, 0.1) !important;
+  width: auto;
+  height: 2.5rem;
+  border-radius: 5px !important;
+  margin-left: 1px !important;
+  margin-bottom: 1rem;
+  margin-right: 10px !important;
+  /* box-shadow: 0 4px 6px rgba(173, 216, 230, 0.5) !important;  */
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.1), 0 8px 17px 0 rgba(0, 0, 0, 0.1) !important;
 
 }
 .scrollable {
-    max-height: 170px; /* Adjust height as needed */
-    overflow-y: auto;
-    padding-right: 10px; /* To avoid content hiding behind scrollbar */
-    padding-top: 10px;
-  }
-  .continueBtn{
-    position: relative;
-    top: -56px;
-    left: 16rem;
-    width: 70%;
+  max-height: 170px; /* Adjust height as needed */
+  overflow-y: auto;
+  padding-right: 10px; /* To avoid content hiding behind scrollbar */
+  padding-top: 10px;
 }
-  .noDataHead{
-  font-weight: 600;
-  margin: 0.5rem;
-  color: grey;
-  text-align: center;
-  font-size: 1rem;
+.continueBtn{
+  position: relative;
+  top: -56px;
+  left: 16rem;
+  width: 70%;
+}
+.noDataHead{
+font-weight: 600;
+margin: 0.5rem;
+color: grey;
+text-align: center;
+font-size: 1rem;
 }

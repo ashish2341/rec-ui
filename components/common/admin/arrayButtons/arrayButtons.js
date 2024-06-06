@@ -7,13 +7,14 @@ export default function ArrayButtons({
   buttonName,
   setValueinState,
 }) {
+
   const handleValueChange = (itemId) => {
     setValueinState((prev) => {
       const isSelected = prev.some(
-        (selectedItemId) => selectedItemId === itemId
+        (selectedItemId) => selectedItemId._id ? selectedItemId._id === itemId : selectedItemId=== itemId
       );
       if (isSelected) {
-        return prev.filter((selectedItemId) => selectedItemId !== itemId);
+        return prev.filter((selectedItemId) => selectedItemId._id ? selectedItemId._id !== itemId : selectedItemId !== itemId);
       } else {
         return [...prev, itemId];
       }
@@ -29,9 +30,7 @@ export default function ArrayButtons({
             <div>
               {itemArray?.data?.length > 0 ? (
                 <div
-                  className={`grid grid-cols-6 gap-2  ${
-                    itemArray?.data?.length > 12 ? "scrollable" : ""
-                  }`}
+                  className={`grid grid-cols-6 gap-2`}
                 >
                   {itemArray?.data.map((item) => (
                     <button
@@ -43,7 +42,7 @@ export default function ArrayButtons({
                       }
                        ${
                          selectItems?.some(
-                           (selectedItemId) => selectedItemId === item?._id
+                           (selectedItemId) => selectedItemId._id ? selectedItemId._id === item?._id : selectedItemId=== item?._id
                          ) && Styles.bigactiveButton
                        }`}
                     ><img

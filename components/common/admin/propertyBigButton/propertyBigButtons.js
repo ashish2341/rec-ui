@@ -15,7 +15,7 @@ function RenderBigButtons({ buttonArray, activeButtonvalue, setStateDynamic}) {
             className={`rounded-lg text-black font-medium px-6 py-4 bg-[#fffcf2] border border-black mb-4 ${
               Styles.bigInactiveButton
             }
-             ${activeButtonvalue == item && Styles.bigactiveButton} `}
+             ${activeButtonvalue === item && Styles.bigactiveButton} `}
           >
             {item === true ? "Yes" : item === false ? "No" : item}
           </button>
@@ -25,7 +25,7 @@ function RenderBigButtons({ buttonArray, activeButtonvalue, setStateDynamic}) {
   );
 }
 export default function PropertyBigButtons({itemArray, activeBtnvalue, changeState,labelName,forRequired}) {
-  console.log("activeBtnvalue",activeBtnvalue)
+
   return (
     <>
       <div className="mb-2">

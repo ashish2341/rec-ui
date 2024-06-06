@@ -19,7 +19,6 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
     loading,
     error,
   } = useFetch(`${API_BASE_URL_FOR_MASTER}/facing`);
-  console.log("facingData", facingData);
   const { data: propertySubTypeData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/propertyWithSubTypes`
   );
@@ -32,8 +31,8 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
   const [propertyType, setPropertyType] = useState("");
   const [Propertyfor, setPropertyfor] = useState("Sell");
   const [facing, setFacing] = useState("");
-  const [isEnabled, setIsEnabled] = useState(true);
-  const [isFeatured, setIsFeatured] = useState(true);
+  const [isEnabled, setIsEnabled] = useState( true );
+  const [isFeatured, setIsFeatured] = useState( true);
   const [propertTypWithSubTypeValue, setPropertTypWithSubTypeValue] = useState("");
 
   const propertyTypeArray = ["Residential", "Commercial"];
@@ -43,7 +42,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
   let propertySubTypeArray ={data:""};
   if(propertySubTypeData){
     const newpropertySubTypeArray=propertySubTypeData?.data?.filter(item=>item.Type=="Residential")
-    console.log("newpropertySubTypeArray",newpropertySubTypeArray)
+    
   }
   
   if (propertySubTypeData &&
@@ -64,16 +63,26 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
     propertySubTypeArray.data=propertySubTypeData?.data?.filter(item=>item.Type=="Commercial")
     
   }
+  
+  useEffect(()=>{
+   
+    if(propertyTypeWithSubtype.Name != propertTypWithSubTypeValue ){
+      setTitle("");
+      setDescription("");
+      setFacing("");
+      if (roles.includes("Admin")) {
+        setIsEnabled(true)
+        setIsFeatured(true)
+      }
+    }
+  },[propertyTypeWithSubtype])
   useEffect(() => {
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("propertyData")
     );
 
     if (sessionStoragePropertyData) {
-      console.log(
-        " sessionStoragePropertyData?.PropertyTypeWithSubtype ",
-        sessionStoragePropertyData?.PropertyTypeWithSubtype 
-      );
+   
       setPropertyTypeWithSubtype(
         sessionStoragePropertyData?.PropertyTypeWithSubtype || ""
       );
@@ -106,18 +115,22 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
         );
       } else {
         setIsEnabled(
-          sessionStoragePropertyData?.IsEnabled === false
-            ? false
-            : sessionStoragePropertyData?.IsEnabled === undefined
-            ? false
-            : false
+          sessionStoragePropertyData?.IsEnabled === true
+          ? true
+          : sessionStoragePropertyData?.IsEnabled === undefined
+          ? false
+          : sessionStoragePropertyData?.IsEnabled === ""
+          ? false
+          : false
         );
         setIsFeatured(
-          sessionStoragePropertyData?.IsFeatured === false
-            ? false
-            : sessionStoragePropertyData?.IsFeatured === undefined
-            ? null
-            : false
+          sessionStoragePropertyData?.IsFeatured === true
+          ? true
+          : sessionStoragePropertyData?.IsFeatured === undefined
+          ? false
+          : sessionStoragePropertyData?.IsFeatured === ""
+          ? false
+          : false
         );
       }
     }
@@ -155,6 +168,10 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
         IsFeatured: isFeatured,
         PropertyTypeWithSubtype: propertyTypeWithSubtype,
       };
+      if(roles.includes("Developer")){
+        basicDetailsData. IsEnabled= false,
+        basicDetailsData. IsFeatured= false;
+      }
       if((propertTypWithSubTypeValue )&& (propertTypWithSubTypeValue != propertyTypeWithSubtype?.Name)){
             sessionStorage.removeItem("propertyData")
       }
@@ -180,7 +197,6 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
   const handelDescriptionChange = (event) => {
     setDescription(() => event.target.value);
   };
-  console.log("isFeatured", isFeatured);
   return (
     <>
       <div>

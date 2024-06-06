@@ -64,6 +64,12 @@
   border-left: 3px solid;
   height: 100%;
 }
+.heroSectionNoLeftVideoMain{
+    border: 1px solid gray;
+    border-radius: 0.75rem;
+    display: grid;
+    place-items: center;
+}
 
 /* detailSectionBar */
 .detailSectionBar{

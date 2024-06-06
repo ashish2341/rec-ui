@@ -203,24 +203,42 @@ const BuilderHomePage = (params) => {
                                 <p className={`text-gray-700`}>{item.Address}</p>
                                 </div>
                                 <h2 className={` ${styles.populerPropertiesBoxHead} font-semibold text-2xl pt-2`}>
-                                {item.Titile}
+                                {item.Title}
                                 </h2>
                                 <h2 className={` ${styles.populerPropertiesBoxHead} text-sm pt-2`}>
                                     <ReadMore text={item.Description} maxLength={100}/>
                                 </h2>
                                 <div className={` ${styles.populerPropertiesBoxDetail} flex justify-between pt-2`}>
-                                    <div className="flex">
-                                    <i className="fa fa-bed"></i>
-                                        <p className={` ${styles.populerPropertiesBoxText} ml-1 mr-3`}>
-                                        {item.Bedrooms} Bed Room
-                                        </p>
-                                    </div>
-                                    <div className="flex">
-                                        <i className="fa fa-bath"></i>
-                                        <p className={` ${styles.populerPropertiesBoxText} ml-1 mr-3`}>
-                                        {item.Bathrooms} Baths
-                                        </p>
-                                    </div>
+                                { item?.ProeprtyType == "Commercial" ?
+                                <div className="flex">
+                                <i className="fa fa-solid fa-car"></i>
+                                  <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
+                                  {item.PrivateParking}  Parking
+                                  </p>
+                                </div>
+                                 :
+                                 <div className="flex">
+                                 <i className="fa fa-bed"></i>
+                                   <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
+                                   {item.Bedrooms} Bed Room
+                                   </p>
+                                 </div>
+                                }
+                                { item?.ProeprtyType == "Commercial" ?
+                                <div className="flex">
+                                <i className="fa fa-solid fa-ruler-vertical"></i>
+                                  <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
+                                  {item.CellingHeight} Height
+                                  </p>
+                                </div>
+                                 :
+                                 <div className="flex">
+                                   <i className="fa fa-bath"></i>
+                                   <p className={` ${styles.populerPropertiesBoxText} ml-1 `}>
+                                   {item.Bathrooms} Baths
+                                   </p>
+                                 </div>
+                                }
                                     <div className="flex">
                                         <i className="fa fa-area-chart"></i>
 

@@ -7,42 +7,69 @@ import LocationDetailsForm from "@/components/admin/propertyUpdateForms/location
 import PropertyFaqForm from "@/components/admin/propertyUpdateForms/propertyFaq/propertyFaq";
 import { useEffect, useState } from "react";
 import Styles from "./editProperty.module.css";
-import useFetch from "@/customHooks/useFetch";
+import { useRouter } from "next/navigation";
+import Stepper from "@/components/common/stepper/stepper";
+import { GetPropertyScore } from "@/utils/commonHelperFn";
 import { API_BASE_URL } from "@/utils/constants";
 import Cookies from "js-cookie";
 import Spinner from "@/components/common/loading";
 import { ToastContainer, toast } from "react-toastify";
 import { UpdatePropertyApi } from "@/api-functions/property/updateProperty";
-import { useRouter } from "next/navigation";
-import Stepper from "@/components/common/stepper/stepper";
-export default function EditProject(params) {
-  console.log("params", params);
-  const {
-    data: listEditData,
-
-    error,
-  } = useFetch(
-    `${API_BASE_URL}/properties/${params?.params?.editProperty}`
-  );
-  const stepperArray = [
-    "Basic details",
-    "Property details",
-    "Feature/Amenity",
-    "Location details",
-    "Faq details",
-    "Property Images",
-  ];
-  console.log("property listEditData of outSide",listEditData)
+export default function EditProperty(params) {
   const [pageValue, setPageValue] = useState(1);
   const [activePage, setActivePage] = useState();
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [selectedFeatures, setSelectedFeatures] = useState([]);
   const [valueForBack, setValueForBack] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [isRender, setIsRender] = useState(false);
   const [propertyBackvalue, setPropertyBackvalue] = useState(0);
-const router=useRouter()
+  const [propertyScoreinPercentage, setPropertyScoreinPercentage] = useState("");
+  let [basisPagebuttonvalue, setBasisPagebuttonvalue] = useState("");
+  const [pageValueInsidePropertyForm, setPageValueInsidePropertyForm] =useState();
+    const [loading, setLoading] = useState(false);
+  const [isRender, setIsRender] = useState(false);
+  const router = useRouter();
+
   useEffect(() => {
+    const sessionStoragePropertyData = JSON.parse(
+      sessionStorage.getItem("EditPropertyData")
+    );
+    if (sessionStoragePropertyData) {
+      console.log(
+        "EditProperty sessionStoragePropertyData",
+        sessionStoragePropertyData
+      );
+      const PropertyTypeWithSubtypeValue =
+        sessionStoragePropertyData?.PropertySubtype?.Name || "";
+      console.log(
+        "EditProperty PropertyTypeWithSubtypeValue",
+        PropertyTypeWithSubtypeValue
+      );
+      const propertyScore = GetPropertyScore(
+        sessionStoragePropertyData,
+        PropertyTypeWithSubtypeValue
+      );
+      if(propertyScore != NaN){
+        const CompletePercentage={
+          CompletePercentage:propertyScore
+        }
+        setPropertyScoreinPercentage(propertyScore);
+        const newPropertyData = { ...sessionStoragePropertyData, ...CompletePercentage };
+      sessionStorage.setItem("EditPropertyData", JSON.stringify(newPropertyData));
+        console.log("EditProperty propertyScore", propertyScore);
+      }
+      
+    }
+  }, [pageValue, pageValueInsidePropertyForm,propertyBackvalue,valueForBack]);
+
+  useEffect(() => {
+    const addPropertyData = JSON.parse(sessionStorage.getItem("propertyData"));
+    if(addPropertyData){
+      sessionStorage.removeItem("propertyData")
+    }
+    const editPropertyData = JSON.parse(sessionStorage.getItem("EditPropertyData"));
+    if(editPropertyData){
+      sessionStorage.removeItem("EditPropertyData")
+    }
     const token = Cookies.get("token");
     setLoading(true);
     const fetchData = async () => {
@@ -99,7 +126,7 @@ const router=useRouter()
   const handelBackPage = () => {
     setPageValue(pageValue - 1);
     setValueForBack(0);
-    if (pageValue == 3 || pageValue ==4) {
+    if (pageValue == 3 || pageValue == 4) {
       setPropertyBackvalue(0);
     }
   };
@@ -109,96 +136,93 @@ const router=useRouter()
   };
 
   const submitPropertyData = async () => {
-    const propertyData = JSON.parse(sessionStorage.getItem("EditPropertyData"));
-    console.log("all Property Data for update ", propertyData);
-    console.log("propertyData?.Aminities", propertyData?.Images);
-    if (propertyData){
-      const loanDetails= {
-        ByBank:propertyData?.LoanDetails?.ByBank.map((item)=>{
-          return item._id
-        }),
-        LoanSince:propertyData?.LoanDetails?.LoanSince ,
-        LoanTill:propertyData?.LoanDetails?. LoanTill
-      }
+    const EditPropertyData = JSON.parse(sessionStorage.getItem("EditPropertyData"));
 
+    if (EditPropertyData) {
       const finalizePropertyData = {
-        Titile: propertyData?.Titile,
-        Description: propertyData?.Description,
-        Highlight: propertyData?.Highlight,
-        Facing: propertyData?.Facing?.map((item)=>{
+        Title: EditPropertyData?.Title,
+        Description: EditPropertyData?.Description,
+        Facing: EditPropertyData?.Facing?.map((item)=>{
           return item._id
         }),
-        IsEnabled: propertyData?.IsEnabled,
-        IsExclusive: propertyData?.IsExclusive,
-        IsFeatured: propertyData?.IsFeatured,
-        IsNew: propertyData?.IsNew,
-        ProeprtyFor: propertyData?.ProeprtyFor,
-        PropertyType: propertyData?.PropertyType?._id,
-        Bedrooms: propertyData?.Bedrooms,
-        Bathrooms: propertyData?.Bathrooms,
-        Fencing: propertyData?.Fencing?._id,
-        Flooring: propertyData?.Flooring?._id,
-        Furnished: propertyData?.Furnished?._id,
-        BuiltAreaType: propertyData?.BuiltAreaType?._id,
-        LandArea: propertyData?.LandArea,
-        CoveredArea: propertyData?.CoveredArea,
-        CarpetArea: propertyData?.CarpetArea,
-        TotalPrice: propertyData?.TotalPrice,
-        PerUnitPrice: propertyData?.PerUnitPrice,
-        IsDisplayPrice: propertyData?.IsDisplayPrice,
-        IsNegotiable: propertyData?.IsNegotiable,
-        PosessionStatus: propertyData?.PosessionStatus._id,
-        PosessionDate: propertyData?.PosessionDate,
-        FloorNumber: propertyData?.FloorNumber,
-        TotalFloors: propertyData?.TotalFloors,
-        IsSingleProperty: propertyData?.IsSingleProperty,
-        PricePerSquareFeet: propertyData?.PricePerSquareFeet,
-        FloorsAllowed: propertyData?.FloorsAllowed,
-        IsInterstedInJoinedVenture: propertyData?.IsInterstedInJoinedVenture,
-        Balconies: propertyData?.Balconies,
-        Soil: propertyData?.Soil?._id,
-        IsLoanable: propertyData?.IsLoanable,
-        IsAlreadyLoaned: propertyData?.IsAlreadyLoaned,
-        LoanDetails: loanDetails,
-        OwnershipType: propertyData?.OwnershipType?._id,
-        PropertyStatus: propertyData?.PropertyStatus?._id,
-        IsSold: propertyData?.IsSold,
-        Preferences: propertyData?.Preferences.map((item)=>{
+        IsEnabled: EditPropertyData?.IsEnabled,
+        IsFeatured: EditPropertyData?.IsFeatured,
+        ProeprtyFor: EditPropertyData?.ProeprtyFor,
+        PropertySubtype: EditPropertyData?.PropertySubtype?._id,
+        ProeprtyType: EditPropertyData?.ProeprtyType,
+        Bedrooms: EditPropertyData?.Bedrooms,
+        Bathrooms: EditPropertyData?.Bathrooms,
+        Fencing: EditPropertyData?.Fencing?._id,
+        Flooring: EditPropertyData?.Flooring?._id,
+        Furnished: EditPropertyData?.Furnished?._id,
+        LandArea: EditPropertyData?.LandArea,
+        CarpetArea: EditPropertyData?.CarpetArea,
+        TotalPrice: EditPropertyData?.TotalPrice,
+        IsNegotiable: EditPropertyData?.IsNegotiable,
+        PosessionStatus: EditPropertyData?.PosessionStatus?._id,
+        PosessionDate: EditPropertyData?.PosessionDate,
+        FloorNumber: EditPropertyData?.FloorNumber,
+        TotalFloors: EditPropertyData?.TotalFloors,
+        OwnershipType: EditPropertyData?.OwnershipType?._id,
+        PropertyStatus: EditPropertyData?.PropertyStatus?._id,
+        Features: EditPropertyData?.Features.map((item)=>{
           return item._id
         }),
-        DiscountPercentage: propertyData?.DiscountPercentage,
-        DiscountForYears: propertyData?.DiscountForYears,
-        Surveillance: propertyData?.Surveillance.map((item) => item.value),
-        Features: propertyData?.Features.map((item)=>{
+        Aminities: EditPropertyData?.Aminities.map((item)=>{
           return item._id
         }),
-        Aminities: propertyData?.Aminities.map((item)=>{
-          return item._id
-        }),
-        City: propertyData?.City,
-        State: propertyData?.State,
-        Country: propertyData?.Country,
-        Address: propertyData?.Address,
-        Area: propertyData?.Area?._id,
-        PinCode:propertyData?.PinCode,
-        Landmark:propertyData?.Landmark,
-        Location: propertyData?.Location,
-        Images: propertyData?.Images.map((item) => ({URL:item.URL} )),
-        Videos: propertyData?.Videos.map((item) => ({URL:item.URL} )),
-        Documents: propertyData?.Documents.map((item) => ({URL:item.URL} )),
-        AreaUnits:propertyData?.AreaUnits?._id,
-        ReraNumber:propertyData?.ReraNumber,
-        BhkType:propertyData?.BhkType?._id,
-        FloorAndCounter:propertyData?.FloorAndCounter,
-        Fitting:propertyData?.Fitting,
-        WallAndCeiling:propertyData?.WallAndCeiling,
-        Faq:propertyData?.Faq.map((item)=>{
+        City: EditPropertyData?.City,
+        Address: EditPropertyData?.Address,
+        Area: EditPropertyData?.Area?._id,
+        Location: {
+          Latitude: "",
+          Longitude: "",
+        },
+        Images: EditPropertyData?.Images?.map((item) => ({URL:item.URL} )),
+        Videos: EditPropertyData?.Videos?.Videos == ""
+        ? []
+        :EditPropertyData?.Videos?.map((item) => ({URL:item.URL} )),
+        AreaUnits: EditPropertyData?.AreaUnits?._id,
+        BhkType: EditPropertyData?.BhkType?._id,
+        Fitting: EditPropertyData?.Fitting,
+        Faq:EditPropertyData?.Faq.map((item)=>{
           return {Question:item.Question,
             Answer:item.Answer}
         }),
-        Brochure:propertyData?.Brochure,
-        Builder:propertyData?.Builder?._id
+        Brochure: EditPropertyData?.Brochure,
+        Builder: EditPropertyData?.Builder?._id,
+        OwnerName: EditPropertyData?.OwnerName,
+        SuitableFor: EditPropertyData?.SuitableFor,
+        ZoneType: EditPropertyData?.ZoneType,
+        LocationHub: EditPropertyData?.LocationHub,
+        CustomLocationHub: EditPropertyData?.CustomLocationHub,
+        CustomSuitable: EditPropertyData?.CustomSuitable,
+        CustomZoneType: EditPropertyData?.CustomZoneType,
+        BuiltUpArea: EditPropertyData?.BuiltUpArea,
+        PlotArea: EditPropertyData?.PlotArea,
+        PlotLength: EditPropertyData?.PlotLength,
+        Plotwidth: EditPropertyData?.Plotwidth,
+        WallType: EditPropertyData?.WallType,
+        CellingHeight: EditPropertyData?.CellingHeight,
+        EntranceWidth: EditPropertyData?.EntranceWidth,
+        TaxCharge: EditPropertyData?.TaxCharge,
+        LeasedOrRented: EditPropertyData?.LeasedOrRented,
+        CurentRent: EditPropertyData?.CurentRent,
+        LeaseYears: EditPropertyData?.LeaseYears,
+        ExpectedReturn: EditPropertyData?.ExpectedReturn,
+        DgUpsCharge: EditPropertyData?.DgUpsCharge,
+        AgeofProperty: EditPropertyData?.AgeOfProperty,
+        Staircase: EditPropertyData?.StairCase,
+        passengerLifts: EditPropertyData?.PassengerLifts,
+        ServiceLifts: EditPropertyData?.ServiceLifts,
+        PublicParking: EditPropertyData?.PublicParking,
+        PrivateParking: EditPropertyData?.PrivateParking,
+        PublicWashroom: EditPropertyData?.PublicWashroom,
+        PrivateWashroom: EditPropertyData?.PrivateWashroom,
+        CompletePercentage: EditPropertyData?.CompletePercentage,
+        LandAreaUnit:EditPropertyData?.LandAreaUnit
       };
+      console.log("finalizePropertyData", finalizePropertyData);
       const propertyId=params?.params?.editProperty;
       let res = await UpdatePropertyApi(finalizePropertyData,propertyId);
       if (res?.resData?.success == true) {
@@ -211,71 +235,113 @@ const router=useRouter()
         toast.error(res.errMessage);
         return false;
       }
-      }
-
-
+    }
   };
+  let stepperArray = "";
 
+  stepperArray = [
+    {
+      name: "Basic details",
+      value: 1,
+    },
+
+    {
+      name: "Location details",
+      value: 2,
+    },
+    {
+      name: "Property details",
+      value: 3,
+    },
+    {
+      name: "Feature/Amenity",
+      value: 4,
+    },
+
+    {
+      name: "Property Images",
+      value: 5,
+    },
+    {
+      name: "Faq details",
+      value: 6,
+    },
+  ];
+  // }
+  console.log("propertyBackvalue", propertyBackvalue);
+  console.log("pageValue", pageValue);
   return (
     <section>
-      <div className="flex">
-        <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
-          Update Your Property Details
-        </h1>
+      {/* <div className="flex">
         {pageValue > 1 ? (
-          pageValue == 1 ? null : (pageValue == 2 && propertyBackvalue == 0) ||
-            (pageValue == 3 && propertyBackvalue == 0) ? (
+          pageValue == 1 ? null : (pageValue == 3 && propertyBackvalue == 0) ||
+            (pageValue == 4 && propertyBackvalue == 0) ? (
             <button
               onClick={handelBackPage}
               type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5 ml-10"
-              >
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  ml-70"
+            >
               Back
             </button>
-          ) : pageValue == 1 || pageValue == 2 || pageValue == 3 ? (
-           null
-          ) : ( <button
-            onClick={handelBackPage}
-            type="button"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5 ml-10"
-          >
-            Back
-          </button>)
+          ) : pageValue == 1 || pageValue == 3 || pageValue == 4 ? null : (
+            <button
+              onClick={handelBackPage}
+              type="button"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  ml-70"
+            >
+              Back
+            </button>
+          )
         ) : null}
-      </div>
+      </div> */}
 
-      <div className="container mx-auto p-4">
-        <div className={`${Styles.propertyContainer}`}>
-          <div className={`${Styles.column1}`}>
-            <Stepper steppers={stepperArray} pageNumber={pageValue} />
-          </div>
+      <div className={`${Styles.propertyContainer}`}>
+        <div className={`${Styles.column1}`}>
+          {stepperArray && (
+            <Stepper
+              steppers={stepperArray}
+              pageNumber={pageValue}
+              setPageValue={setPageValue}
+              setValueForBack={setValueForBack}
+              propertyScoreValue={propertyScoreinPercentage}
+            />
+          )}
+        </div>
 
-          <div className={`${Styles.column2}`}>
-          {valueForBack === 1 && (
-            <div className="flex justify-end w-1/2 mb-4 relative -top-20 ml-[25rem]">
-              <button
-                onClick={submitPropertyData}
-                type="button"
-                className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mt-5"
-              >
-                Finish
-              </button>
+        <div className={`${Styles.column2}`}>
+          <div className={`${Styles.insidecolumn2}`}>
+            {valueForBack === 1 && (
+              <div className="flex justify-end w-full mb-4">
+                <button
+                  onClick={submitPropertyData}
+                  type="button"
+                  className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mt-5"
+                >
+                  Finish
+                </button>
               </div>
             )}
-          {pageValue === 1 && isRender ? (
-            <BasicDetailsForm
-              valueForNext={handelNextBtnValue}
-              valueForNextPage={pageValue}
-            />
-          ):null}
+            {pageValue === 1 &&  isRender && (
+              <BasicDetailsForm
+                valueForNext={handelNextBtnValue}
+                valueForNextPage={pageValue}
+              />
+            )}
             {pageValue === 2 && (
-              <PropertyDetailsForm
-                setPropertyBackvalue={setPropertyBackvalue}
+              <LocationDetailsForm
                 valueForNext={handelNextBtnValue}
                 valueForNextPage={pageValue}
               />
             )}
             {pageValue === 3 && (
+              <PropertyDetailsForm
+                setPropertyBackvalue={setPropertyBackvalue}
+                valueForNext={handelNextBtnValue}
+                valueForNextPage={pageValue}
+                setPageValueInsidePropertyForm={setPageValueInsidePropertyForm}
+              />
+            )}
+            {pageValue === 4 && (
               <FeaturesDetailsForm
                 setPropertyBackvalue={setPropertyBackvalue}
                 onAmenitiesChange={handleAmenitiesChange}
@@ -284,27 +350,20 @@ const router=useRouter()
                 valueForNextPage={pageValue}
               />
             )}
-            {pageValue === 4 && (
-              <LocationDetailsForm
-                valueForNext={handelNextBtnValue}
-                valueForNextPage={pageValue}
-              />
-            )}
+
             {pageValue === 5 && (
-              <PropertyFaqForm
+              <PropertyImagesForm
                 valueForNext={handelNextBtnValue}
                 valueForNextPage={pageValue}
               />
             )}
             {pageValue === 6 && (
-              <PropertyImagesForm
+              <PropertyFaqForm
                 valueForNextPage={pageValue}
                 valueForBack={handelBackValue}
                 mainBackPageValue={valueForBack}
               />
             )}
-
-         
           </div>
         </div>
       </div>

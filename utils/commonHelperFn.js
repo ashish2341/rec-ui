@@ -102,7 +102,25 @@ function countNonNullProperties(obj) {
     "PosessionStatus",
     "BhkType",
   ];
-
+  const skipKeyNames = [
+    "ApprovedBy",
+    "CreatedBy",
+    "CreatedDate",
+    "Documents",
+    "IsDeleted",
+    "LoanDetails",
+    "Location",
+    "Preferences",
+    "Surveillance",
+    "UpdatedBy",
+    "UpdatedDate",
+    "__v",
+    "_id",
+    "CompletePercentage",
+     "DgUpsCharge",
+     "LeasedOrRented",
+     "TaxCharge"
+  ];
   function isObjectEmpty(obj) {
     return Object.keys(obj).length === 0 && obj.constructor === Object;
   }
@@ -110,12 +128,14 @@ function countNonNullProperties(obj) {
   function countProperties(obj) {
     for (let key in obj) {
       if (obj.hasOwnProperty(key)) {
-        if (key === "CompletePercentage") {
+        if (skipKeyNames.includes(key)) {
+           console.log("Skip keys name ",key)
           continue; // Skip this key
         }
         if (Array.isArray(obj[key])) {
           // If it's an array, count the key itself if the array is not empty
           if (obj[key].length > 0) {
+            //  console.log("If it's an array, count the key itself if the array is not empty",key)
             count++;
           }
         } else if (typeof obj[key] !== "object" || obj[key] === null) {
@@ -147,15 +167,15 @@ function countNonNullProperties(obj) {
 
 export const GetPropertyScore = (obj, type) => {
   const types = [
-    { type: "Apartment", fields: 41 },
-    { type: "Independent House", fields: 41 },
-    { type: "Independent Floor", fields: 41 },
-    { type: "Villa", fields: 41 },
+    { type: "Apartment", fields: 42 },
+    { type: "Independent House", fields: 42 },
+    { type: "Independent Floor", fields: 42 },
+    { type: "Villa", fields: 42 },
     { type: "Plot", fields: 27 },
-    { type: "Office", fields: 44 },
-    { type: "Retail Shop", fields: 45 },
-    { type: "Showroom", fields: 45 },
-    { type: "Warehouse", fields: 41 },
+    { type: "Office", fields: 45 },
+    { type: "Retail Shop", fields: 46 },
+    { type: "Showroom", fields: 46 },
+    { type: "Warehouse", fields: 42 },
   ];
 
   const allFields = types.find((f) => f.type == type)?.fields;

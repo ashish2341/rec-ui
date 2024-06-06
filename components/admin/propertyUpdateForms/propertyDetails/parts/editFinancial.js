@@ -14,12 +14,12 @@ import PropertyBigButtons from "@/components/common/admin/propertyBigButton/prop
 import NumberInput from "@/components/common/admin/numberInput/numberInput";
 export default function FinancialDetailsPage({ setPropertyPageValue }) {
   const sessionStoragePropertyData = JSON.parse(
-    sessionStorage.getItem("propertyData")
+    sessionStorage.getItem("EditPropertyData")
   );
   const propertTypWithSubTypeValue =
-    sessionStoragePropertyData?.PropertyTypeWithSubtype.Name || "";
-  const propertTypeValue = sessionStoragePropertyData?.PropertyType || "";
-  const PropertyForValue = sessionStoragePropertyData?.PropertyFor || "";
+    sessionStoragePropertyData?.PropertySubtype.Name || "";
+  const propertTypeValue = sessionStoragePropertyData?.ProeprtyType || "";
+  const PropertyForValue = sessionStoragePropertyData?.ProeprtyFor || "";
   const conditionArray = [true, false];
   const monthArray = ["None", 1, 2, 3, 4, "Custom"];
   const [perUnitPrice, setPerUnitPrice] = useState("");
@@ -56,10 +56,10 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
-      sessionStorage.getItem("propertyData")
+      sessionStorage.getItem("EditPropertyData")
     );
     console.log(
-      "sessionStoragePropertyData?.IsNegotiable ",
+      "sessionStoragePropertyData?.PreReleasedBtn",
       sessionStoragePropertyData?.PreReleasedBtn
     );
     // Update state values if data exists in localStorage
@@ -73,72 +73,77 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
         }
       );
 
-      setCurrentRent(sessionStoragePropertyData?.CurentRent || "");
-      setLeaseYears(sessionStoragePropertyData?.LeaseYears || "");
-      setExpectedReturn(sessionStoragePropertyData?.ExpectedReturn || "");
+     setCurrentRent(sessionStoragePropertyData?.CurentRent || "")
+     setLeaseYears(sessionStoragePropertyData?.LeaseYears || "")
+     setExpectedReturn(sessionStoragePropertyData?.ExpectedReturn || "")
 
       setDiscountPercentage(
         sessionStoragePropertyData?.DiscountPercentage || ""
       );
       setDiscountForYears(sessionStoragePropertyData?.DiscountForYears || "");
       setPreReleasedBtn(
-        sessionStoragePropertyData?.PreReleasedBtn === true
+        sessionStoragePropertyData?.LeasedOrRented === true
           ? true
-          : sessionStoragePropertyData?.PreReleasedBtn === false
-          ? false
-          : sessionStoragePropertyData?.PreReleasedBtn === undefined
+          : sessionStoragePropertyData?.LeasedOrRented === undefined
           ? ""
-          : ""
+          : sessionStoragePropertyData?.LeasedOrRented === ""? "":false
       );
       setTaxCharge(
         sessionStoragePropertyData?.TaxCharge === true
           ? true
-          : sessionStoragePropertyData?.TaxCharge === false
-          ? false
           : sessionStoragePropertyData?.TaxCharge === undefined
           ? ""
-          : sessionStoragePropertyData?.TaxCharge === ""
-          ? ""
-          : false
+          : sessionStoragePropertyData?.TaxCharge === ""? "":false
       );
       setDgUpsCharge(
         sessionStoragePropertyData?.DgUpsCharge === true
-          ? true
-          : sessionStoragePropertyData?.DgUpsCharge === false
-          ? false
-          : sessionStoragePropertyData?.DgUpsCharge === undefined
-          ? ""
-          : sessionStoragePropertyData?.DgUpsCharge === ""
-          ? ""
-          : false
+        ? true
+        : sessionStoragePropertyData?.DgUpsCharge === undefined
+        ? ""
+        : sessionStoragePropertyData?.DgUpsCharge === ""? "":false
       );
-
       setIsNegotiable(
         sessionStoragePropertyData?.IsNegotiable === true
-          ? true
-          : sessionStoragePropertyData?.IsNegotiable === false
-          ? false
-          : sessionStoragePropertyData?.IsNegotiable === undefined
-          ? ""
-          : ""
+        ? true
+        : sessionStoragePropertyData?.IsNegotiable === undefined
+        ? ""
+        : sessionStoragePropertyData?.IsNegotiable === ""? "":false
       );
     }
   }, []);
+ 
 
   const checkRequiredFields = () => {
-    if (propertTypeValue == "Residential") {
-      var requiredFields = [startPrice, endPrice];
+    if(propertTypeValue=="Residential"){
+      var requiredFields = [
+        startPrice,
+        endPrice,
+      ];
     }
-    if (propertTypeValue == "Commercial") {
-      var requiredFields = [startPrice, endPrice, preReleasedBtn];
-    }
-    if (propertTypeValue == "Commercial" && preReleasedBtn == false) {
-      var requiredFields = [startPrice, endPrice, expectedReturn];
-    }
-    if (propertTypeValue == "Commercial" && preReleasedBtn == true) {
-      var requiredFields = [startPrice, endPrice, curentRent, leaseYears];
-    }
-
+   if(propertTypeValue=="Commercial" ){
+    var requiredFields = [
+      startPrice,
+      endPrice,
+      preReleasedBtn
+     
+    ];
+   }
+   if(propertTypeValue=="Commercial" && preReleasedBtn==false){
+    var requiredFields = [
+      startPrice,
+      endPrice,
+      expectedReturn
+    ];
+   }
+   if(propertTypeValue=="Commercial" && preReleasedBtn==true){
+    var requiredFields = [
+      startPrice,
+      endPrice,
+      curentRent,
+      leaseYears
+    ];
+   }
+    
     console.log("requiredFields", requiredFields);
     // Check if any required field is empty
     const isEmpty = requiredFields.some(
@@ -149,64 +154,62 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
   };
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
-
     if (allFieldsFilled) {
       const fourthPropertyData = {
         TotalPrice: {
           DisplayValue: `${startPrice} ${priceUnit?.minPriceUnit?.value} - ${endPrice} ${priceUnit?.maxPriceUnit?.value}`,
-          MinValue:
-            startPrice *(priceUnit?.minPriceUnit?.value == "Lacs" ? 100000 : 10000000),
-          MaxValue:
-            endPrice *(priceUnit?.maxPriceUnit?.value == "Lacs" ? 100000 : 10000000),
+          MinValue:startPrice*(priceUnit?.minPriceUnit?.value=="Lacs" ? 100000 :10000000),
+          MaxValue: endPrice*(priceUnit?.maxPriceUnit?.value=="Lacs" ? 100000 :10000000),
           MinPriceUnit:priceUnit?.minPriceUnit?.value,
           MaxPriceUnit:priceUnit?.maxPriceUnit?.value
         },
-        IsNegotiable: isNegotiable ? isNegotiable : undefined,
+       
+        IsNegotiable: isNegotiable ? isNegotiable: undefined,
+     
       };
-      if (propertTypeValue == "Commercial") {
-        (fourthPropertyData.TaxCharge = taxCharge ? taxCharge : undefined),
-          (fourthPropertyData.PreReleasedBtn = preReleasedBtn);
-        if (preReleasedBtn == false) {
-          fourthPropertyData.ExpectedReturn = expectedReturn;
-          if (curentRent && leaseYears) {
-            fourthPropertyData.CurentRent = "";
-            fourthPropertyData.LeaseYears = "";
-          }
-        }
-        if (preReleasedBtn == true) {
-          fourthPropertyData.CurentRent = curentRent;
-          fourthPropertyData.LeaseYears = leaseYears;
-          if (expectedReturn) {
-            fourthPropertyData.ExpectedReturn = "";
-          }
-        }
-        if (propertTypWithSubTypeValue == "Office") {
-          fourthPropertyData.DgUpsCharge = dgUpsCharge
-            ? dgUpsCharge
-            : undefined;
+     if(propertTypeValue=="Commercial"){
+      
+      fourthPropertyData.TaxCharge=taxCharge ? taxCharge: undefined;
+      fourthPropertyData.LeasedOrRented=preReleasedBtn;
+      if (preReleasedBtn == false) {
+        fourthPropertyData.ExpectedReturn = expectedReturn;
+        if (curentRent && leaseYears) {
+          fourthPropertyData.CurentRent = "";
+          fourthPropertyData.LeaseYears = "";
         }
       }
+      if (preReleasedBtn == true) {
+        fourthPropertyData.CurentRent = curentRent;
+        fourthPropertyData.LeaseYears = leaseYears;
+        if (expectedReturn) {
+          fourthPropertyData.ExpectedReturn = "";
+        }
+      }
+      if(propertTypWithSubTypeValue=="Office"){
+        fourthPropertyData.DgUpsCharge=dgUpsCharge ? dgUpsCharge: undefined;
+      }
+       
+     }
       console.log("fourthPropertyData", fourthPropertyData);
       const localStorageData = JSON.parse(
-        sessionStorage.getItem("propertyData")
+        sessionStorage.getItem("EditPropertyData")
       );
       const newProjectData = { ...localStorageData, ...fourthPropertyData };
-      sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
+      sessionStorage.setItem("EditPropertyData", JSON.stringify(newProjectData));
       setPropertyPageValue((prev) => prev + 1);
     } else {
       toast.error("Please fill in all required fields!");
     }
   };
-  console.log("preleasedBtn", preReleasedBtn);
-
+console.log("preleasedBtn",preReleasedBtn)
   return (
     <>
       <div className={`flex justify-end ${Styles.continueBtn}`}>
         <ContinueButton modalSubmit={SubmitForm} />
       </div>
       <div className="grid gap-4 mb-4 sm:grid-cols-2">
-        {/* Start Price */}
-        <div className="grid gap-4 mb-4 sm:grid-cols-2">
+         {/* Start Price */}
+         <div className="grid gap-4 mb-4 sm:grid-cols-2">
           {" "}
           <div>
             <label
@@ -285,10 +288,9 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
             />
           </div>
         </div>
-
         {/* is negotiable */}
         <PropertyBigButtons
-          forRequired={false}
+        forRequired={false}
           labelName={"Is Negotiable"}
           itemArray={conditionArray}
           activeBtnvalue={isNegotiable}
@@ -307,7 +309,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
           )}
         {propertTypeValue == "Commercial" && PropertyForValue == "Sell" && (
           <PropertyBigButtons
-            forRequired={false}
+          forRequired={false}
             labelName={"Tax & Govt. charge included?"}
             itemArray={conditionArray}
             activeBtnvalue={taxCharge}
@@ -348,6 +350,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
                 inputValue={expectedReturn}
                 dynamicState={setExpectedReturn}
               />
+             
             </div>
           )}
         </>

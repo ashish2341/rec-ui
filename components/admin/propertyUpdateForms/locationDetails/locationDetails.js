@@ -4,8 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
 import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
-import Styles from "../propertyDetails/propertypage.module.css";
-
+import Styles from "../propertyDetails/propertypage.module.css"
 export default function LocationDetailsForm({
   valueForNext,
   valueForNextPage,
@@ -23,10 +22,10 @@ export default function LocationDetailsForm({
   const [landmark, setLandmark] = useState("");
   const [pincode, setPincode] = useState("");
   const [area, setArea] = useState("");
-  const [locationDetails, setLocationDetails] = useState({
-    Latitude: "",
-    Longitude: "",
-  });
+  // const [locationDetails, setLocationDetails] = useState({
+  //   Latitude: "",
+  //   Longitude: "",
+  // });
 
   useEffect(() => {
     // Retrieve data from localStorage
@@ -45,10 +44,10 @@ export default function LocationDetailsForm({
       setAddress(sessionStoragePropertyData?.Address || "");
       setLandmark(sessionStoragePropertyData?.Landmark || "");
       setPincode(sessionStoragePropertyData?.PinCode || "");
-      setLocationDetails({
-        Latitude: sessionStoragePropertyData?.Location?.Latitude || "",
-        Longitude: sessionStoragePropertyData?.Location?.Longitude || "",
-      });
+      // setLocationDetails({
+      //   Latitude: sessionStoragePropertyData?.Location?.Latitude || "",
+      //   Longitude: sessionStoragePropertyData?.Location?.Longitude || "",
+      // });
       setArea(sessionStoragePropertyData.Area || "");
     }
   }, []);
@@ -69,8 +68,8 @@ export default function LocationDetailsForm({
   };
 
   const handleAddressChange = (event) => {
-    console.log("Address changed:", event.target.value);
-    setAddress(event.target.value);
+    
+     setAddress(event.target.value);
   };
 
   const handleLandmarkChange = (event) => {
@@ -83,12 +82,12 @@ export default function LocationDetailsForm({
     setPincode(event.target.value);
   };
 
-  const handleLocationChange = (e) => {
-    const { name, value } = e.target;
-    console.log("name", name);
-    console.log("value", value);
-    setLocationDetails({ ...locationDetails, [name]: value });
-  };
+  // const handleLocationChange = (e) => {
+  //   const { name, value } = e.target;
+  //   console.log("name", name);
+  //   console.log("value", value);
+  //   setLocationDetails({ ...locationDetails, [name]: value });
+  // };
 
   const SubmitForm = () => {
     if (address === "") {
@@ -104,43 +103,16 @@ export default function LocationDetailsForm({
       toast.error("City is required.");
       return false;
     }
-    if (state === "") {
-      toast.error("State is required.");
-      return false;
-    }
-    if (country === "") {
-      toast.error("Country is required.");
-      return false;
-    }
-
-    if (landmark === "") {
-      toast.error("Landmark is required.");
-      return false;
-    }
-    if (pincode === "") {
-      toast.error("Pincode  is required.");
-      return false;
-    }
-    if (!/^\d{6}$/.test(pincode)) {
-      toast.error("Pincode number must be 6 digits long");
-      return false;
-    }
 
     const locationDetailsData = {
       City: city.trim(),
-      State: state.trim(),
-      Country: country.trim(),
       Address: address.trim(),
-      Landmark: landmark.trim(),
-      PinCode: pincode.trim(),
-      Location: locationDetails,
+      // Location: locationDetails,
       Area: area,
     };
     console.log("locationDetailsData", locationDetailsData);
-    const sessionStorageData = JSON.parse(
-      sessionStorage.getItem("EditPropertyData")
-    );
-    const newProjectData = { ...sessionStorageData, ...locationDetailsData };
+    const localStorageData = JSON.parse(sessionStorage.getItem("EditPropertyData"));
+    const newProjectData = { ...localStorageData, ...locationDetailsData };
     sessionStorage.setItem("EditPropertyData", JSON.stringify(newProjectData));
     valueForNext(valueForNextPage + 1);
   };
@@ -148,49 +120,44 @@ export default function LocationDetailsForm({
   return (
     <>
       <div>
-      <div className="flex justify-end w-1/2 mb-4 relative -top-20 ml-[25rem]">
-          <button
-            onClick={SubmitForm}
-            type="button"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
-          >
-            Next
-          </button>
-        </div>
+      <div className="flex justify-end  mb-4  mr-4 ml-[25rem]">
+            <button
+              onClick={SubmitForm}
+              type="button"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
+            >
+              Next
+            </button>
+          </div>
         <form>
-          <h3 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white">
-            Location Details
-          </h3>
-          <div className="grid gap-4 mb-4 sm:grid-cols-2">
+          <div className="grid gap-4 mb-4 sm:grid-cols-1">
             <div>
               <label
                 htmlFor="address"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Address
+                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"              >
+                Locality
               </label>
-              <input
+              <textarea
                 type="text"
                 name="address"
                 id="address"
                 value={address}
                 onChange={handleAddressChange}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Address"
+                placeholder="Locality"
                 required=""
               />
             </div>
-            <div>
+            {/* <div>
               <label
                 htmlFor="area"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
+                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"              >
                 Area
               </label>
               <input
                 type="text"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Property Type"
+                placeholder="Area"
                 required=""
                 value={area.Area}
                 disabled={true}
@@ -198,14 +165,16 @@ export default function LocationDetailsForm({
               {areaData ? (
                 <div
                   className={`flex flex-wrap space-x-2 mt-4 ${
-                    areaData?.data?.length > 8 ? `${Styles.scrollable}` : ""
+                    areaData?.data?.length > 8
+                      ? `${Styles.scrollable}`
+                      : ""
                   }`}
                 >
                   {areaData?.data?.map((item) => (
                     <button
                       key={item._id}
                       onClick={(event) => {
-                        event.preventDefault(); // Prevent the default form submission behavior
+                        event.preventDefault();  // Prevent the default form submission behavior
                         setArea({
                           _id: item._id,
                           Area: item.Area,
@@ -225,15 +194,46 @@ export default function LocationDetailsForm({
                 </div>
               ) : (
                 <div className="flex flex-wrap space-x-2">
-                  <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
-                </div>
+             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
+            </div>
+              )}
+             
+            </div> */}
+            <div>
+              <label
+                htmlFor="area"
+                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"              >
+              
+                Area
+              </label>
+              {areaData ? (
+                <Select
+                  options={areaData.data.map((element) => ({
+                    value: element._id,
+                    label: element.Area,
+                  }))}
+                  placeholder="Select One"
+                  onChange={(e)=>setArea({
+                    _id:e.value,Area:e.label
+                  })}
+                  required={true}
+                  value={{value:area._id,label:area.Area}}
+                />
+              ) : (
+                <Select
+                  options={defaultOption.map((element) => ({
+                    value: element.value,
+                    label: element.label,
+                  }))}
+                  placeholder="Select One"
+                  required={true}
+                />
               )}
             </div>
             <div>
               <label
                 htmlFor="city"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
+                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"              >
                 City
               </label>
               <input
@@ -247,88 +247,11 @@ export default function LocationDetailsForm({
                 required=""
               />
             </div>
-
-            <div>
-              <label
-                htmlFor="state"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                State
-              </label>
-              <input
-                type="text"
-                name="state"
-                id="state"
-                value={state}
-                onChange={handleStateChange}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="State"
-                required=""
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="country"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Country
-              </label>
-              <input
-                type="text"
-                name="country"
-                id="country"
-                value={country}
-                onChange={handleCountryChange}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Country"
-                required=""
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="landmark"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Landmark
-              </label>
-              <input
-                type="text"
-                name="landmark"
-                id="landmark"
-                value={landmark}
-                onChange={handleLandmarkChange}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Landmark"
-                required=""
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="pincode"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                PinCode
-              </label>
-              <input
-                type="number"
-                name="pincode"
-                id="pincode"
-                value={pincode}
-                onChange={handlePincodeChange}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="PinCode"
-                required=""
-              />
-            </div>
-
-            <div>
+            {/* <div>
               <label
                 htmlFor="latitude"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
+                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required" 
+                >             
                 Latitude
               </label>
               <input
@@ -346,8 +269,7 @@ export default function LocationDetailsForm({
             <div>
               <label
                 htmlFor="longitude"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
+                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"              >
                 Longitude
               </label>
               <input
@@ -360,11 +282,13 @@ export default function LocationDetailsForm({
                 placeholder="Longitude"
                 required=""
               />
-            </div>
+            </div> */}
           </div>
+         
         </form>
-       
+        
       </div>
+      
     </>
   );
 }

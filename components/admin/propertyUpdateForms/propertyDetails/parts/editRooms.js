@@ -15,12 +15,12 @@ import PropertyBigButtons from "@/components/common/admin/propertyBigButton/prop
 
 export default function RoomDetailPage({ setPropertyPageValue }) {
   const sessionStoragePropertyData = JSON.parse(
-    sessionStorage.getItem("propertyData")
+    sessionStorage.getItem("EditPropertyData")
   );
   const propertTypWithSubTypeValue =
-    sessionStoragePropertyData?.PropertyTypeWithSubtype.Name || "";
-  const propertTypeValue = sessionStoragePropertyData?.PropertyType || "";
-  const PropertyForValue = sessionStoragePropertyData?.PropertyFor || "";
+    sessionStoragePropertyData?.PropertySubtype.Name || "";
+  const propertTypeValue = sessionStoragePropertyData?.ProeprtyType || "";
+  const PropertyForValue = sessionStoragePropertyData?.ProeprtyFor || "";
   // fetching Data for bhkTypeData
   const { data: bhkTypeData } = useFetch(`${API_BASE_URL_FOR_MASTER}/bhkType`);
   // console.log("bhkTypeData", bhkTypeData);
@@ -38,22 +38,12 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
-      sessionStorage.getItem("propertyData")
+      sessionStorage.getItem("EditPropertyData")
     );
-    console.log(
-      "localStorageData from localstorage",
-      sessionStoragePropertyData.Facing
-    );
+   
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
-      console.log(
-        "if function called sessionStoragePropertyData.PropertyFor ",
-        sessionStoragePropertyData.ProeprtyFor
-      );
-      console.log(
-        "sessionStoragePropertyData?.Brochure",
-        sessionStoragePropertyData?.Brochure
-      );
+    
 
       setBedrooms(sessionStoragePropertyData?.Bedrooms || "");
       setBathrooms(sessionStoragePropertyData?.Bathrooms || "");
@@ -96,10 +86,10 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
       }
       console.log("secondPropertyData", secondPropertyData);
       const localStorageData = JSON.parse(
-        sessionStorage.getItem("propertyData")
+        sessionStorage.getItem("EditPropertyData")
       );
       const newProjectData = { ...localStorageData, ...secondPropertyData };
-      sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
+      sessionStorage.setItem("EditPropertyData", JSON.stringify(newProjectData));
       setPropertyPageValue((prev) => prev + 1);
     } else {
       toast.error("Please fill in all required fields!");

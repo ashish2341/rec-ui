@@ -28,9 +28,9 @@ export default function PropertyDetailsForm({
     sessionStorage.getItem("propertyData")
   );
   const propertTypWithSubTypeValue =
-    sessionStoragePropertyData?.PropertyTypeWithSubtype.Name || "";
-  const propertTypeValue = sessionStoragePropertyData?.PropertyType || "";
-  const PropertyForValue = sessionStoragePropertyData?.PropertyFor || "";
+    sessionStoragePropertyData?.PropertySubtype.Name || "";
+  const propertTypeValue = sessionStoragePropertyData?.ProeprtyType || "";
+  const PropertyForValue = sessionStoragePropertyData?.ProeprtyFor || "";
 
   const [propertyPageValue, setPropertyPageValue] = useState(1);
   console.log("PropertyDetailsForm propertyPageValue",propertyPageValue)
@@ -87,12 +87,13 @@ useEffect(()=>{
     <>
       <div className="mb-5 ">
         <ButtonStepper
+        setPropertyPageValue={setPropertyPageValue}
           forStepper={stepperArray}
           forpageValue={propertyPageValue}
         />
       </div>
 
-      {propertyPageValue > 1 ? (
+      {/* {propertyPageValue > 1 ? (
         <button
           onClick={handelBack}
           type="button"
@@ -103,7 +104,7 @@ useEffect(()=>{
           </span>{" "}
           Back
         </button>
-      ) : null}
+      ) : null} */}
       {propertTypeValue && (propertTypeValue == "Residential" ) && propertTypWithSubTypeValue != "Plot" && (
         <>
           {propertyPageValue == 1 && (

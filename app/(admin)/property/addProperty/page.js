@@ -31,39 +31,33 @@ export default function AddProject() {
       sessionStorage.getItem("propertyData")
     );
     if (sessionStoragePropertyData) {
-      console.log(
-        "AddProject sessionStoragePropertyData",
-        sessionStoragePropertyData
-      );
       const PropertyTypeWithSubtypeValue =
-        sessionStoragePropertyData?.PropertyTypeWithSubtype.Name;
-      console.log(
-        "AddProject PropertyTypeWithSubtypeValue",
-        PropertyTypeWithSubtypeValue
-      );
+        sessionStoragePropertyData?.PropertySubtype?.Name;
+
       const propertyScore = GetPropertyScore(
         sessionStoragePropertyData,
         PropertyTypeWithSubtypeValue
       );
-      if(propertyScore != NaN){
-        const CompletePercentage={
-          CompletePercentage:propertyScore
-        }
+      if (propertyScore != NaN) {
+        const CompletePercentage = {
+          CompletePercentage: propertyScore,
+        };
         setPropertyScoreinPercentage(propertyScore);
-        const newPropertyData = { ...sessionStoragePropertyData, ...CompletePercentage };
-      sessionStorage.setItem("propertyData", JSON.stringify(newPropertyData));
-        console.log("AddProject propertyScore", propertyScore);
+        const newPropertyData = {
+          ...sessionStoragePropertyData,
+          ...CompletePercentage,
+        };
+        sessionStorage.setItem("propertyData", JSON.stringify(newPropertyData));
       }
-      
     }
-  }, [pageValue, pageValueInsidePropertyForm,propertyBackvalue,valueForBack]);
+  }, [pageValue, pageValueInsidePropertyForm, propertyBackvalue, valueForBack]);
   const handleAmenitiesChange = (amenities) => {
-    console.log("amenities", amenities);
+
     setSelectedAmenities(amenities);
   };
 
   const handleFeaturesChange = (features) => {
-    console.log("features", features);
+
     setSelectedFeatures(features);
   };
   const handelNextBtnValue = (value) => {
@@ -90,18 +84,18 @@ export default function AddProject() {
 
     if (propertyData) {
       const finalizePropertyData = {
-        Title: propertyData?.Titile,
+        Title: propertyData?.Title,
         Description: propertyData?.Description,
         Facing: [propertyData?.Facing?._id],
         IsEnabled: propertyData?.IsEnabled,
         IsFeatured: propertyData?.IsFeatured,
-        ProeprtyFor: propertyData?.PropertyFor,
-        PropertySubtype: propertyData?.PropertyTypeWithSubtype?._id,
-        ProeprtyType: propertyData?.PropertyType,
+        ProeprtyFor: propertyData?.ProeprtyFor,
+        PropertySubtype: propertyData?.PropertySubtype?._id,
+        ProeprtyType: propertyData?.ProeprtyType,
         Bedrooms: propertyData?.Bedrooms,
         Bathrooms: propertyData?.Bathrooms,
-        Fencing: propertyData?.Fencing?._id,
-        Flooring: propertyData?.Flooring?._id,
+        Fencing: propertyData?.Fencing,
+        Flooring: propertyData?.Flooring,
         Furnished: propertyData?.Furnished?._id,
         LandArea: propertyData?.LandArea,
         CarpetArea: propertyData?.CarpetArea,
@@ -134,7 +128,7 @@ export default function AddProject() {
         Brochure: propertyData?.Brochure,
         Builder: propertyData?.Builder?._id,
         OwnerName: propertyData?.OwnerName,
-        SuitableFor: propertyData?.Suitable,
+        SuitableFor: propertyData?.SuitableFor,
         ZoneType: propertyData?.ZoneType,
         LocationHub: propertyData?.LocationHub,
         CustomLocationHub: propertyData?.CustomLocationHub,
@@ -148,25 +142,30 @@ export default function AddProject() {
         CellingHeight: propertyData?.CellingHeight,
         EntranceWidth: propertyData?.EntranceWidth,
         TaxCharge: propertyData?.TaxCharge,
-        LeasedOrRented: propertyData?.PreReleasedBtn,
+        LeasedOrRented: propertyData?.LeasedOrRented,
         CurentRent: propertyData?.CurentRent,
         LeaseYears: propertyData?.LeaseYears,
         ExpectedReturn: propertyData?.ExpectedReturn,
         DgUpsCharge: propertyData?.DgUpsCharge,
-        AgeofProperty: propertyData?.AgeOfProperty,
+        AgeofProperty: propertyData?.AgeofProperty,
         Staircase: propertyData?.StairCase,
-        passengerLifts: propertyData?.PassengerLifts,
+        passengerLifts: propertyData?.passengerLifts,
         ServiceLifts: propertyData?.ServiceLifts,
         PublicParking: propertyData?.PublicParking,
         PrivateParking: propertyData?.PrivateParking,
         PublicWashroom: propertyData?.PublicWashroom,
         PrivateWashroom: propertyData?.PrivateWashroom,
         CompletePercentage: propertyData?.CompletePercentage,
-        LandAreaUnit:propertyData?.LandAreaUnit
+        LandAreaUnit: propertyData?.LandAreaUnit,
+        CustomFencing: propertyData?.CustomFencing,
+        CustomFlooring: propertyData?.CustomFlooring,
+        CustomWallType: propertyData?.CustomWallType,
+        FloorPlan: propertyData?.FloorPlan,
+        PaymentPlan: propertyData?.PaymentPlan,
       };
       console.log("finalizePropertyData", finalizePropertyData);
       let res = await AddProperty(finalizePropertyData);
-      console.log(" Property res", res);
+      
       if (res?.resData?.success == true) {
         if (typeof window !== "undefined") {
           sessionStorage.removeItem("propertyData");
@@ -177,7 +176,7 @@ export default function AddProject() {
         toast.error(res.errMessage);
         return false;
       }
-     }
+    }
   };
   let stepperArray = "";
 
@@ -196,7 +195,7 @@ export default function AddProject() {
       value: 3,
     },
     {
-      name: "Feature/Amenity",
+      name: "Amenity/Feature",
       value: 4,
     },
 
@@ -209,9 +208,8 @@ export default function AddProject() {
       value: 6,
     },
   ];
-  // }
-  console.log("propertyBackvalue", propertyBackvalue);
-  console.log("pageValue", pageValue);
+  
+  
   return (
     <section>
       {/* <div className="flex">
@@ -251,18 +249,7 @@ export default function AddProject() {
         </div>
 
         <div className={`${Styles.column2}`}>
-          <div className={`${Styles.insidecolumn2}`}>
-            {valueForBack === 1 && (
-              <div className="flex justify-end w-full mb-4">
-                <button
-                  onClick={submitPropertyData}
-                  type="button"
-                  className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mt-5"
-                >
-                  Finish
-                </button>
-              </div>
-            )}
+          {/* <div className={`${Styles.insidecolumn2}`}> */}
             {pageValue === 1 && (
               <BasicDetailsForm
                 valueForNext={handelNextBtnValue}
@@ -306,8 +293,19 @@ export default function AddProject() {
                 mainBackPageValue={valueForBack}
               />
             )}
+            {valueForBack === 1 && (
+              <div className="grid gap-4 mb-4 sm:grid-cols-1">
+                <button
+                  onClick={submitPropertyData}
+                  type="button"
+                  className=" ml-10 mr-10 mb-5 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-lg px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mt-5"
+                >
+                  Finish
+                </button>
+              </div>
+            )}
           </div>
-        </div>
+        {/* </div> */}
       </div>
     </section>
   );

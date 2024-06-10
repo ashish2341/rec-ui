@@ -85,23 +85,23 @@ export const ArrayNumbertoString = (numberArray) => {
 };
 
 //TO find out Property Score
-
 function countNonNullProperties(obj) {
   let count = 0;
+  let countedKeys = [];
   const skipObjNames = [
     "Facing",
-    "PropertyTypeWithSubtype",
+    "PropertySubtype",
     "Area",
     "TotalPrice",
     "OwnershipType",
     "PropertyStatus",
     "Builder",
-    "Fencing",
-    "Flooring",
     "Furnished",
     "PosessionStatus",
     "BhkType",
+    "AreaUnits",
   ];
+
   const skipKeyNames = [
     "ApprovedBy",
     "CreatedBy",
@@ -117,10 +117,71 @@ function countNonNullProperties(obj) {
     "__v",
     "_id",
     "CompletePercentage",
-     "DgUpsCharge",
-     "LeasedOrRented",
-     "TaxCharge"
+    "LeasedOrRented",
   ];
+  if (obj?.ProeprtyType === "Residential") {
+    skipKeyNames.push("DgUpsCharge", "LeasedOrRented", "TaxCharge");
+    if (obj?.Fencing === "Other") {
+      skipKeyNames.push("Fencing");
+    }
+    if (obj?.Flooring === "Other") {
+      skipKeyNames.push("Flooring");
+    }
+    countProperties(obj);
+  }
+  if (obj?.PropertySubtype?.Name === "Office") {
+    if (obj?.Fencing === "Other") {
+      skipKeyNames.push("Fencing");
+    }
+    if (obj?.Flooring === "Other") {
+      skipKeyNames.push("Flooring");
+    }
+    if (obj?.ZoneType === "Others") {
+      skipKeyNames.push("ZoneType");
+    }
+    if (obj?.WallType === "Other") {
+      skipKeyNames.push("WallType");
+    }
+    if (obj?.LocationHub === "Others") {
+      skipKeyNames.push("LocationHub");
+    }
+    countProperties(obj);
+  }
+  if (
+    obj?.ProeprtyType === "Commercial" &&
+    obj?.PropertySubtype?.Name !== "Office"
+  ) {
+    skipKeyNames.push("DgUpsCharge");
+    if (obj?.PropertySubtype?.Name === "Warehouse") {
+      if (obj?.ZoneType === "Others") {
+        skipKeyNames.push("ZoneType");
+      }
+      if (obj?.LocationHub === "Others") {
+        skipKeyNames.push("LocationHub");
+      }
+      if (obj?.Fencing === "Other") {
+        skipKeyNames.push("Fencing");
+      }
+      if (obj?.Flooring === "Other") {
+        skipKeyNames.push("Flooring");
+      }
+    }
+    if (obj?.PropertySubtype?.Name !== "Warehouse") {
+      if (obj?.SuitableFor === "Others") {
+        skipKeyNames.push("SuitableFor");
+      }
+      if (obj?.LocationHub === "Others") {
+        skipKeyNames.push("LocationHub");
+      }
+      if (obj?.Fencing === "Other") {
+        skipKeyNames.push("Fencing");
+      }
+      if (obj?.Flooring === "Other") {
+        skipKeyNames.push("Flooring");
+      }
+    }
+    countProperties(obj);
+  }
   function isObjectEmpty(obj) {
     return Object.keys(obj).length === 0 && obj.constructor === Object;
   }
@@ -129,7 +190,6 @@ function countNonNullProperties(obj) {
     for (let key in obj) {
       if (obj.hasOwnProperty(key)) {
         if (skipKeyNames.includes(key)) {
-           console.log("Skip keys name ",key)
           continue; // Skip this key
         }
         if (Array.isArray(obj[key])) {
@@ -137,10 +197,12 @@ function countNonNullProperties(obj) {
           if (obj[key].length > 0) {
             //  console.log("If it's an array, count the key itself if the array is not empty",key)
             count++;
+            countedKeys.push(key);
           }
         } else if (typeof obj[key] !== "object" || obj[key] === null) {
           if (obj[key] !== undefined && obj[key] !== null && obj[key] !== "") {
             count++;
+            countedKeys.push(key);
           }
         } else {
           if (skipObjNames.includes(key) || isObjectEmpty(obj[key])) {
@@ -151,6 +213,7 @@ function countNonNullProperties(obj) {
               obj[key] !== ""
             ) {
               count++;
+              countedKeys.push(key);
             }
           } else {
             countProperties(obj[key]);
@@ -160,22 +223,44 @@ function countNonNullProperties(obj) {
     }
   }
 
-  countProperties(obj);
-
   return count;
 }
 
 export const GetPropertyScore = (obj, type) => {
   const types = [
-    { type: "Apartment", fields: 42 },
-    { type: "Independent House", fields: 42 },
-    { type: "Independent Floor", fields: 42 },
-    { type: "Villa", fields: 42 },
-    { type: "Plot", fields: 27 },
-    { type: "Office", fields: 45 },
-    { type: "Retail Shop", fields: 46 },
-    { type: "Showroom", fields: 46 },
-    { type: "Warehouse", fields: 42 },
+    {
+      type: "Apartment",
+      fields: obj?.PropertyStatus?.Status !== "Under Contruction" ? 46 : 45,
+    },
+    {
+      type: "Independent House",
+      fields: obj?.PropertyStatus?.Status !== "Under Contruction" ? 46 : 45,
+    },
+    {
+      type: "Independent Floor",
+      fields: obj?.PropertyStatus?.Status !== "Under Contruction" ? 46 : 45,
+    },
+    {
+      type: "Villa",
+      fields: obj?.PropertyStatus?.Status !== "Under Contruction" ? 46 : 45,
+    },
+    { type: "Plot", fields: 29 },
+    {
+      type: "Office",
+      fields: obj?.PropertyStatus?.Status !== "Under Contruction" ? 50 : 49,
+    },
+    {
+      type: "Retail Shop",
+      fields: obj?.PropertyStatus?.Status !== "Under Contruction" ? 48 : 47,
+    },
+    {
+      type: "Showroom",
+      fields: obj?.PropertyStatus?.Status !== "Under Contruction" ? 48 : 47,
+    },
+    {
+      type: "Warehouse",
+      fields: obj?.PropertyStatus?.Status !== "Under Contruction" ? 48 : 47,
+    },
   ];
 
   const allFields = types.find((f) => f.type == type)?.fields;

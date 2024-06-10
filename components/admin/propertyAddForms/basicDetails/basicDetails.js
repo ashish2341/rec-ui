@@ -5,9 +5,10 @@ import { ToastContainer, toast } from "react-toastify";
 import Styles from "../propertyAdd.module.css";
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
 import ApiButtons from "@/components/common/admin/propertyapiButtons/ApiButtons";
-import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER ,conditionalArray, lookingToArray ,propertyTypeArray } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import Cookies from "js-cookie";
+import NextButton from "@/components/common/admin/nextButton/nextButton"
 export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
@@ -23,75 +24,71 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
     `${API_BASE_URL_FOR_MASTER}/propertyWithSubTypes`
   );
 
-
- 
   const [propertyTypeWithSubtype, setPropertyTypeWithSubtype] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [propertyType, setPropertyType] = useState("");
   const [Propertyfor, setPropertyfor] = useState("Sell");
   const [facing, setFacing] = useState("");
-  const [isEnabled, setIsEnabled] = useState( true );
-  const [isFeatured, setIsFeatured] = useState( true);
-  const [propertTypWithSubTypeValue, setPropertTypWithSubTypeValue] = useState("");
+  const [isEnabled, setIsEnabled] = useState(true);
+  const [isFeatured, setIsFeatured] = useState(true);
+  const [propertTypWithSubTypeValue, setPropertTypWithSubTypeValue] =
+    useState("");
 
-  const propertyTypeArray = ["Residential", "Commercial"];
-  const lookingToArray = ["Sell"];
-  const IsEnabledArray = [true, false];
-  const IsFeaturedArray = [true, false];
-  let propertySubTypeArray ={data:""};
-  if(propertySubTypeData){
-    const newpropertySubTypeArray=propertySubTypeData?.data?.filter(item=>item.Type=="Residential")
-    
-  }
-  
-  if (propertySubTypeData &&
+
+
+  let propertySubTypeArray = { data: "" };
+ 
+
+  if (
+    propertySubTypeData &&
     Propertyfor &&
     propertyType &&
     Propertyfor == "Sell" &&
     propertyType == "Residential"
   ) {
-    propertySubTypeArray.data=propertySubTypeData?.data?.filter(item=>item.Type=="Residential")
-   
+    propertySubTypeArray.data = propertySubTypeData?.data?.filter(
+      (item) => item.Type == "Residential"
+    );
   }
-  if (propertySubTypeData &&
+  if (
+    propertySubTypeData &&
     Propertyfor.length > 0 &&
     propertyType.length > 0 &&
     (Propertyfor == "Rent" || Propertyfor == "Sell") &&
     propertyType == "Commercial"
   ) {
-    propertySubTypeArray.data=propertySubTypeData?.data?.filter(item=>item.Type=="Commercial")
-    
+    propertySubTypeArray.data = propertySubTypeData?.data?.filter(
+      (item) => item.Type == "Commercial"
+    );
   }
-  
-  useEffect(()=>{
-   
-    if(propertyTypeWithSubtype.Name != propertTypWithSubTypeValue ){
+
+  useEffect(() => {
+    if (propertyTypeWithSubtype.Name != propertTypWithSubTypeValue) {
       setTitle("");
       setDescription("");
       setFacing("");
       if (roles.includes("Admin")) {
-        setIsEnabled(true)
-        setIsFeatured(true)
+        setIsEnabled(true);
+        setIsFeatured(true);
       }
     }
-  },[propertyTypeWithSubtype])
+  }, [propertyTypeWithSubtype]);
   useEffect(() => {
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("propertyData")
     );
 
     if (sessionStoragePropertyData) {
-   
       setPropertyTypeWithSubtype(
-        sessionStoragePropertyData?.PropertyTypeWithSubtype || ""
+        sessionStoragePropertyData?.PropertySubtype || ""
       );
-      setTitle(sessionStoragePropertyData?.Titile || "");
+      setTitle(sessionStoragePropertyData?.Title || "");
       setDescription(sessionStoragePropertyData?.Description || "");
-      setPropertyType(sessionStoragePropertyData?.PropertyType || "");
-      setPropertyfor(sessionStoragePropertyData?.PropertyFor || "Sell");
+      setPropertyType(sessionStoragePropertyData?.ProeprtyType || "");
+      setPropertyfor(sessionStoragePropertyData?.ProeprtyFor || "Sell");
       setPropertTypWithSubTypeValue(
-        sessionStoragePropertyData?.PropertyTypeWithSubtype?.Name || ""
+        sessionStoragePropertyData?.PropertySubtype?.Name || ""
       );
       setFacing(sessionStoragePropertyData?.Facing || "");
       if (roles.includes("Admin")) {
@@ -116,21 +113,21 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
       } else {
         setIsEnabled(
           sessionStoragePropertyData?.IsEnabled === true
-          ? true
-          : sessionStoragePropertyData?.IsEnabled === undefined
-          ? false
-          : sessionStoragePropertyData?.IsEnabled === ""
-          ? false
-          : false
+            ? true
+            : sessionStoragePropertyData?.IsEnabled === undefined
+            ? false
+            : sessionStoragePropertyData?.IsEnabled === ""
+            ? false
+            : false
         );
         setIsFeatured(
           sessionStoragePropertyData?.IsFeatured === true
-          ? true
-          : sessionStoragePropertyData?.IsFeatured === undefined
-          ? false
-          : sessionStoragePropertyData?.IsFeatured === ""
-          ? false
-          : false
+            ? true
+            : sessionStoragePropertyData?.IsFeatured === undefined
+            ? false
+            : sessionStoragePropertyData?.IsFeatured === ""
+            ? false
+            : false
         );
       }
     }
@@ -159,23 +156,26 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
 
     if (allFieldsFilled) {
       const basicDetailsData = {
-        Titile: title,
+        Title: title,
         Description: description,
-        PropertyType: propertyType,
-        PropertyFor: Propertyfor,
+        ProeprtyType: propertyType,
+        ProeprtyFor: Propertyfor,
         Facing: facing,
         IsEnabled: isEnabled,
         IsFeatured: isFeatured,
-        PropertyTypeWithSubtype: propertyTypeWithSubtype,
+        PropertySubtype: propertyTypeWithSubtype,
       };
-      if(roles.includes("Developer")){
-        basicDetailsData. IsEnabled= false,
-        basicDetailsData. IsFeatured= false;
+      if (roles.includes("Developer")) {
+        (basicDetailsData.IsEnabled = false),
+          (basicDetailsData.IsFeatured = false);
       }
-      if((propertTypWithSubTypeValue )&& (propertTypWithSubTypeValue != propertyTypeWithSubtype?.Name)){
-            sessionStorage.removeItem("propertyData")
+      if (
+        propertTypWithSubTypeValue &&
+        propertTypWithSubTypeValue != propertyTypeWithSubtype?.Name
+      ) {
+        sessionStorage.removeItem("propertyData");
       }
-      
+
       const updatedProjectData = {
         ...JSON.parse(sessionStorage.getItem("propertyData")),
         ...basicDetailsData,
@@ -200,15 +200,6 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
   return (
     <>
       <div>
-        <div className="flex justify-end w-full">
-          <button
-            onClick={SubmitForm}
-            type="button"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
-          >
-            Next
-          </button>
-        </div>
         <form>
           <div className="grid gap-4 mb-4 sm:grid-cols-1">
             <div className="grid gap-4 sm:grid-cols-2">
@@ -228,14 +219,13 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
             </div>
 
             {propertySubTypeArray?.data?.length > 0 && (
-              
-                <ApiButtons
-                  itemArray={propertySubTypeArray}
-                  stateItem={propertyTypeWithSubtype}
-                  labelName={"Property SubType"}
-                  ValueName={"Name"}
-                  changeState={setPropertyTypeWithSubtype}
-                />
+              <ApiButtons
+                itemArray={propertySubTypeArray}
+                stateItem={propertyTypeWithSubtype}
+                labelName={"Property SubType"}
+                ValueName={"Name"}
+                changeState={setPropertyTypeWithSubtype}
+              />
             )}
             <div>
               <label
@@ -272,7 +262,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
               {roles.includes("Admin") && (
                 <PropertyBigButtons
                   labelName={"Is Enabled"}
-                  itemArray={IsEnabledArray}
+                  itemArray={conditionalArray}
                   activeBtnvalue={isEnabled}
                   changeState={setIsEnabled}
                 />
@@ -282,7 +272,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
               {roles.includes("Admin") && (
                 <PropertyBigButtons
                   labelName={"Is Featured"}
-                  itemArray={IsFeaturedArray}
+                  itemArray={conditionalArray}
                   activeBtnvalue={isFeatured}
                   changeState={setIsFeatured}
                 />
@@ -308,6 +298,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
             </div>
           </div>
         </form>
+       <NextButton onSubmit={SubmitForm} butonSubName={"add Location Details"}/>
       </div>
     </>
   );

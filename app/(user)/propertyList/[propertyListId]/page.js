@@ -71,9 +71,9 @@ const PropertyListPage = (params) => {
   } = params.searchParams;
   if (budgetData) {
     var budgetStr = budgetData.split(",");
-    console.log("budgetStr", budgetStr);
+    // console.log("budgetStr", budgetStr);
     var parsedNumbers = AbbreviatedNumberParser(budgetStr);
-    console.log("parsedNumbers", parsedNumbers);
+    // console.log("parsedNumbers", parsedNumbers);
   }
 
   const [payload, setPayload] = useState({
@@ -96,13 +96,13 @@ const PropertyListPage = (params) => {
     IsFeatured: "",
     IsExclusive: "",
   });
-  console.log("Outeside payload", payload);
+  // console.log("Outeside payload", payload);
   const pathname = usePathname();
   const [expanded, setExpanded] = useState(false);
   const [activeSection, setActiveSection] = useState("general");
   const [direction, setDirection] = useState("west");
   const [listData, setListData] = useState("");
-  const [numToShow, setNumToShow] = useState(2);
+  const [numToShow, setNumToShow] = useState(4);
   const [listDataForShow, setListDataForShow] = useState("");
   const [resetBtnValue, setResetBtnValue] = useState(false);
   const [rangeModalvalue, setRangeModalValue] = useState(true);
@@ -145,7 +145,7 @@ const PropertyListPage = (params) => {
         ? [{ id: areaId, label: areaLabel }]
         : prevPayload.areaType,
     }));
-    console.log("area useEffect working");
+    // console.log("area useEffect working");
     setResetBtnValue(true);
   }, [areaId, areaLabel]);
   useEffect(() => {
@@ -228,12 +228,12 @@ const PropertyListPage = (params) => {
     ],
   };
   const getAllFilterProperties = async (payloadData) => {
-    console.log("payloadData", payloadData);
+    // console.log("payloadData", payloadData);
     let properties = await GetPropertyByQueryApi(payloadData);
     if (properties?.resData?.success == true) {
       setListData(properties?.resData.data);
-      console.log("properties?.resData?.data", properties?.resData?.data);
-      setListDataForShow(properties?.resData?.data.slice(0, 2));
+      // console.log("properties?.resData?.data", properties?.resData?.data);
+      setListDataForShow(properties?.resData?.data.slice(0, 4));
       return false;
     } else {
       toast.error(properties?.errMessage);
@@ -242,21 +242,26 @@ const PropertyListPage = (params) => {
   };
 
   const showMoreItems = () => {
-    const newNumToShow = numToShow + 2;
+    const newNumToShow = numToShow + 4;
     setListDataForShow(listData.slice(0, newNumToShow));
     setNumToShow(newNumToShow);
   };
 
   const showLessItems = () => {
-    const newNumToShow = numToShow - 2;
+    const newNumToShow = numToShow - 4;
     setListDataForShow(listData.slice(0, newNumToShow));
     setNumToShow(newNumToShow);
   };
-
+  
   const handleCheckBoxChange = (event) => {
+ 
     const { name, checked } = event.target;
+    console.log("handleCheckBoxChange name",name)
+    console.log("handleCheckBoxChange checked",checked)
     const valueObject = JSON.parse(event.target.value);
     const { id, label } = valueObject;
+    console.log("handleCheckBoxChange id",id)
+    console.log("handleCheckBoxChange label",label)
     setPayload((prevPayload) => ({
       ...prevPayload,
       [name]: checked
@@ -329,22 +334,22 @@ const PropertyListPage = (params) => {
         }
       }
       console.log("updatedFilters", updatedFilters);
-      let keyWithSingleObject = null; // Variable to store the key with exactly one object in its array
+      // let keyWithSingleObject = null; // Variable to store the key with exactly one object in its array
 
-      for (let key in payload) {
-        if (Array.isArray(payload[key]) && payload[key].length === 1) {
-          if (keyWithSingleObject === null) {
-            keyWithSingleObject = key; // Store the key if it meets the condition for the first time
-          } else {
-            keyWithSingleObject = null; // Reset the variable if another key with single object is found
-            break; // Exit the loop since there are multiple keys with single object
-          }
-        }
-      }
+      // for (let key in payload) {
+      //   if (Array.isArray(payload[key]) && payload[key].length === 1) {
+      //     if (keyWithSingleObject === null) {
+      //       keyWithSingleObject = key; // Store the key if it meets the condition for the first time
+      //     } else {
+      //       keyWithSingleObject = null; // Reset the variable if another key with single object is found
+      //       break; // Exit the loop since there are multiple keys with single object
+      //     }
+      //   }
+      // }
 
-      if (keyWithSingleObject !== null) {
-        resetSelectItem(); // Perform action if exactly one key with one object is found
-      }
+      // if (keyWithSingleObject !== null) {
+      //   resetSelectItem(); // Perform action if exactly one key with one object is found
+      // }
       // Return the modified state
       return updatedFilters;
     });
@@ -374,7 +379,7 @@ const PropertyListPage = (params) => {
 
   //here upload payload data which is comes from the child component sortbutton
   const updatePayload = (newPayload) => {
-    console.log("newPayload", newPayload);
+    // console.log("newPayload", newPayload);
     setPayload((prevPayload) => ({
       ...prevPayload,
       ...newPayload, // Merge the new payload with the existing state
@@ -428,7 +433,7 @@ const PropertyListPage = (params) => {
                         <li key={index}>
                           <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
-                              id={`checkbox-item-${index}`}
+                              id={`checkbox-item-${item._id}`}
                               type="checkbox"
                               value={JSON.stringify({
                                 id: item._id,
@@ -442,7 +447,7 @@ const PropertyListPage = (params) => {
                               className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
-                              htmlFor={`checkbox-item-${index}`}
+                              htmlFor={`checkbox-item-${item._id}`}
                               className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
                               {item.Facing}
@@ -502,7 +507,7 @@ const PropertyListPage = (params) => {
                         <li key={index}>
                           <div className="flex text-left p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
-                              id={`checkbox-item-${index}`}
+                              id={`checkbox-item-${item._id}`}
                               type="checkbox"
                               name="propertyType"
                               value={JSON.stringify({
@@ -516,7 +521,7 @@ const PropertyListPage = (params) => {
                               className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
-                              htmlFor={`checkbox-item-${index}`}
+                              htmlFor={`checkbox-item-${item._id}`}
                               className="w-full text-nowrap ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
                               {item.Name}
@@ -577,7 +582,7 @@ const PropertyListPage = (params) => {
                         <li key={index}>
                           <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
-                              id={`checkbox-item-${index}`}
+                              id={`checkbox-item-${item._id}`}
                               type="checkbox"
                               name="areaType"
                               value={JSON.stringify({
@@ -591,7 +596,7 @@ const PropertyListPage = (params) => {
                               className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
-                              htmlFor={`checkbox-item-${index}`}
+                              htmlFor={`checkbox-item-${item._id}`}
                               className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
                               {item.Area}
@@ -609,50 +614,7 @@ const PropertyListPage = (params) => {
                   </ul>
                 </div>
               </li>
-              <div
-                id="dropdownUsers"
-                className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700  "
-              >
-                <ul
-                  className="h-48 py-2 overflow-y-auto text-gray-700 dark:text-gray-200"
-                  aria-labelledby="dropdownUsersButton"
-                >
-                  {areaData?.data?.length > 0 ? (
-                    areaData?.data?.map((item, index) => (
-                      <li key={index}>
-                        <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
-                          <input
-                            id={`checkbox-item-${index}`}
-                            type="checkbox"
-                            name="areaType"
-                            value={JSON.stringify({
-                              id: item._id,
-                              label: item.Area,
-                            })}
-                            checked={payload.areaType.some(
-                              (obj) => obj.id === item._id
-                            )}
-                            onChange={handleCheckBoxChange}
-                            className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                          />
-                          <label
-                            htmlFor={`checkbox-item-${index}`}
-                            className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
-                          >
-                            {item.Area}
-                          </label>
-                        </div>
-                      </li>
-                    ))
-                  ) : (
-                    <li>
-                      <p className="block px-4 py-2 hover:bg-white dark:hover:bg-gray-200 dark:hover:text-white">
-                        No data found
-                      </p>
-                    </li>
-                  )}
-                </ul>
-              </div>
+            
 
               {/* Range type */}
               <li className="me-2 mt-3">
@@ -705,7 +667,7 @@ const PropertyListPage = (params) => {
                             )}
                           />
                           <label
-                            htmlFor={`checkbox-item-${index}`}
+                             htmlFor={`checkbox-item-${index}`}
                             className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                           >
                             {item.label}
@@ -757,7 +719,7 @@ const PropertyListPage = (params) => {
                         <li key={index}>
                           <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
-                              id={`checkbox-item-${index}`}
+                              id={`checkbox-item-${item._id}`}
                               type="checkbox"
                               value={JSON.stringify({
                                 id: item._id,
@@ -771,7 +733,7 @@ const PropertyListPage = (params) => {
                               className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
-                              htmlFor={`checkbox-item-${index}`}
+                              htmlFor={`checkbox-item-${item._id}`}
                               className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
                               {item.Type}
@@ -831,7 +793,7 @@ const PropertyListPage = (params) => {
                         <li key={index}>
                           <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
-                              id={`checkbox-item-${index}`}
+                              id={`checkbox-item-${item._id}`}
                               type="checkbox"
                               value={JSON.stringify({
                                 id: item._id,
@@ -845,7 +807,7 @@ const PropertyListPage = (params) => {
                               className="w-4  h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
-                              htmlFor={`checkbox-item-${index}`}
+                              htmlFor={`checkbox-item-${item._id}`}
                               className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
                               {item.Status}
@@ -905,7 +867,7 @@ const PropertyListPage = (params) => {
                         <li key={index}>
                           <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
-                              id={`checkbox-item-${index}`}
+                              id={`checkbox-item-${item._id}`}
                               type="checkbox"
                               value={JSON.stringify({
                                 id: item._id,
@@ -919,7 +881,7 @@ const PropertyListPage = (params) => {
                               className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
-                              htmlFor={`checkbox-item-${index}`}
+                              htmlFor={`checkbox-item-${item._id}`}
                               className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
                               {item.Possession}
@@ -1016,7 +978,7 @@ const PropertyListPage = (params) => {
                                 {/* Ensure each item takes 1/3 of the width */}
                                 <div className="flex items-center p-1 rounded hover:bg-white dark:hover:bg-gray-600">
                                   <input
-                                    id={`checkbox-item-${index}`}
+                                    id={`checkbox-item-${item._id}`}
                                     type="checkbox"
                                     value={JSON.stringify({
                                       id: item._id,
@@ -1030,7 +992,7 @@ const PropertyListPage = (params) => {
                                     className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                                   />
                                   <label
-                                    htmlFor={`checkbox-item-${index}`}
+                                    htmlFor={`checkbox-item-${item._id}`}
                                     className="text-sm font-medium text-gray-900 rounded dark:text-gray-300 sm:w-full  ml-3"
                                   >
                                     {item.Feature}
@@ -1093,7 +1055,7 @@ const PropertyListPage = (params) => {
                                 {/* Ensure each item takes 1/3 of the width */}
                                 <div className="flex items-center p-1 rounded hover:bg-white dark:hover:bg-gray-600">
                                   <input
-                                    id={`checkbox-item-${index}`}
+                                    id={`checkbox-item-${item._id}`}
                                     type="checkbox"
                                     value={JSON.stringify({
                                       id: item.value,
@@ -1107,7 +1069,7 @@ const PropertyListPage = (params) => {
                                     className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                                   />
                                   <label
-                                    htmlFor={`checkbox-item-${index}`}
+                                    htmlFor={`checkbox-item-${item._id}`}
                                     className="text-sm font-medium text-gray-900 rounded dark:text-gray-300 sm:w-full  ml-3"
                                   >
                                     {item.label}
@@ -1289,7 +1251,7 @@ const PropertyListPage = (params) => {
               )}
             </div>
           </div>
-          {listData.length > 2 &&
+          {listData.length > 4 &&
           listData.length != numToShow &&
           listData.length != listDataForShow.length ? (
             <div className="flex justify-center">
@@ -1303,7 +1265,7 @@ const PropertyListPage = (params) => {
                 </button>
               </div>
             </div>
-          ) : listDataForShow.length > 2 ||
+          ) : listDataForShow.length > 4 ||
             (numToShow != listData.length &&
               listData.length > 0 &&
               listData.length != listDataForShow.length) ? (

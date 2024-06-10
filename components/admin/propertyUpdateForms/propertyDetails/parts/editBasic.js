@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER ,ZoneTypeArray,suitableArray,LocationhubArrayforOffice,LocationhubArrayforall} from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
@@ -34,10 +34,7 @@ export default function BasicPage({
   );
   // console.log("propertyStatusData", propertyStatusData);
 
-  // fetching Data for propertyTypeData
-  const { data: propertyTypeData } = useFetch(
-    `${API_BASE_URL_FOR_MASTER}/propertyWithSubTypes`
-  );
+ 
   // console.log("propertyTypeData", propertyTypeData);
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("EditPropertyData")
@@ -46,7 +43,6 @@ export default function BasicPage({
     sessionStoragePropertyData?.PropertySubtype.Name || "";
   const propertTypeValue = sessionStoragePropertyData?.ProeprtyType || "";
   const PropertyForValue = sessionStoragePropertyData?.ProeprtyFor || "";
-console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
   const [builderData, setBuilderData] = useState("");
   const [builderName, setBuilderName] = useState("");
   const [ownershipType, setOwnershipType] = useState("");
@@ -59,36 +55,10 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
   const [customLocationHub, setCustomLocationHub] = useState("");
   const [customSuitable, setCustomSuitable] = useState("");
   const [customZoneType, setCustomZoneType] = useState("");
+  const [ageofPropertyData, setAgeOfPropertyData] = useState("");
   const defaultOption = [{ value: "", label: "no data found" }];
 
-  const ZoneTypeArray = [
-    "Industrial",
-    "Commercial",
-    "Special economic Zone",
-    "Open Spaces",
-    "Agricultural zone",
-    "Others",
-  ];
-  const suitableArray = [
-    "Jewellery",
-    "Gym",
-    "Grocery",
-    "Clinic",
-    "Footwear",
-    "Electronics",
-    "Clothing",
-    "Others",
-  ];
-  const LocationhubArrayforOffice = ["IT park", "Business Park", "Others"];
-  //Below array do not apply for plot subtype
-  const LocationhubArrayforall = [
-    "Mall",
-    "Commercial Project",
-    "Residential Project",
-    "Retail Complex/Building",
-    "Market/High Street",
-    "Others",
-  ];
+ 
   useEffect(() => {
     getAllBuilder();
   }, []);
@@ -123,6 +93,8 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
       setCustomZoneType(sessionStoragePropertyData?.CustomZoneType || "");
       setCustomLocationHub(sessionStoragePropertyData?.CustomLocationHub || "");
       setCustomSuitable(sessionStoragePropertyData?.CustomSuitable || "");
+      setAgeOfPropertyData(sessionStoragePropertyData?.AgeofProperty || "");
+     
 
       if (roles.includes("Admin")) {
         setBuilderName(sessionStoragePropertyData?.Builder || "");
@@ -181,7 +153,7 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
         ownerName,
       ];
     }
-    
+   
 
     // Check if any required field is empty
     const isEmpty = requiredFields.some(
@@ -236,6 +208,12 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
         if (locationHub == "Others") {
           firstPropertyData.CustomLocationHub = customLocationHub;
         }
+        if (zoneType !== "Others" && customZoneType) {
+          firstPropertyData.CustomZoneType = "";
+        }
+        if (locationHub !== "Others" && customLocationHub) {
+          firstPropertyData.CustomLocationHub = "";
+        }
       }
       if (propertTypeValue=="Commercial" &&
         (propertTypWithSubTypeValue == "Retail Shop" ||
@@ -251,8 +229,16 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
         if (locationHub == "Others") {
           firstPropertyData.CustomLocationHub = customLocationHub;
         }
+        if (suitableFor !== "Others" && customSuitable) {
+          firstPropertyData.CustomSuitable = "";
+        }
+        if (locationHub !== "Others" && customLocationHub) {
+          firstPropertyData.CustomLocationHub = "";
+        }
       }
-      
+      if (propertyStatus.Status === "Under Contruction" && (ageofPropertyData || ageofPropertyData==="" )) {
+        firstPropertyData.AgeofProperty = ""; 
+      }
       
       if (roles.includes("Admin") && propertTypWithSubTypeValue != "Plot") {
         firstPropertyData.Builder = builderName;
@@ -275,9 +261,7 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
  
   return (
     <>
-      <div className={`flex justify-end `}>
-        <ContinueButton modalSubmit={SubmitForm} />
-      </div>
+     
 
       <div className="grid gap-4 mb-4 sm:grid-cols-1">
         {/* BuilderData */}
@@ -437,6 +421,17 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
             labelName={"Property Condition"}
             ValueName={"Status"}
             changeState={setPropertyStatus}
+          />
+        )}
+        {propertTypWithSubTypeValue != "Plot" ? (
+          <ContinueButton
+            modalSubmit={SubmitForm}
+            butonSubName={"add Room Details"}
+          />
+        ) : (
+          <ContinueButton
+            modalSubmit={SubmitForm}
+            butonSubName={"add Area Details"}
           />
         )}
       </div>

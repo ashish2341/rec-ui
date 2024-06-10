@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import Styles from "../featurepage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
 import ArrayButtons from "@/components/common/admin/arrayButtons/arrayButtons";
+import NextButton from "@/components/common/admin/nextButton/nextButton";
 
 export default function FeaturePage({
   valueForNextfromSix,
@@ -48,30 +49,39 @@ export default function FeaturePage({
   };
   const SubmitForm = () => {
     if (selectedFeatures.length == 0) {
-      toast.error("Please select a Amenity.");
+      toast.error("Please select a Feature.");
       return false;
     }
     const featureData = {
       Features: selectedFeatures,
     };
     console.log("featureData", featureData);
-    const localStorageData = JSON.parse(sessionStorage.getItem("EditPropertyData"));
+    const localStorageData = JSON.parse(
+      sessionStorage.getItem("EditPropertyData")
+    );
     const newProjectData = { ...localStorageData, ...featureData };
     sessionStorage.setItem("EditPropertyData", JSON.stringify(newProjectData));
     valueForNextfromSix(valueForNextPagefromSix + 1);
   };
   return (
     <>
-      <div className={`flex justify-end ${Styles.continueBtn}`}>
-        <ContinueButton modalSubmit={SubmitForm} />
-      </div>
-      <ArrayButtons
+      {featuresData && selectedFeatures && ( 
+        <> <ArrayButtons
         itemArray={featuresData}
         selectItems={selectedFeatures}
         labelName={"Feature"}
         buttonName={"Feature"}
         setValueinState={setSelectedFeatures}
       />
+      <NextButton
+        onSubmit={SubmitForm}
+        butonSubName={"add Images & Video Details"}
+      />
+      </>
+       
+      )}
+
+      
     </>
   );
 }

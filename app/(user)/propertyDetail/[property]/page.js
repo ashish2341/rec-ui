@@ -29,8 +29,12 @@ import Spinner from "@/components/common/loading";
 import SkeletonLoader from "@/components/common/loader";
 import LoadingText from "@/components/common/textloader";
 import LoadingImg from "@/components/common/loadingImg";
+import LoadingBigImg from "@/components/common/loadingBigImg";
 import PersonalLoanCalculator from "@/components/common/emiCalculator";
 import { Carousel } from "flowbite-react";
+import ReadMore from "@/components/common/readMore";
+
+
 const PropertyDetail = ({ params }) => {
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -228,18 +232,42 @@ const PropertyDetail = ({ params }) => {
                 {item.Title}
               </h2>
               <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
-                <div className="flex">
-                  <i className="fa fa-bed"></i>
-                  <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-                    {item.Bedrooms} Bed Room
-                  </p>
-                </div>
-                <div className="flex">
-                  <i className="fa fa-bath"></i>
-                  <p className={` ${styles.populerPropertiesBoxText} ml-1 `}>
-                    {item.Bathrooms} Baths
-                  </p>
-                </div>
+              { item?.ProeprtyType == "Commercial" ?
+              <div className="flex">
+              <i className="fa fa-solid fa-car"></i>
+                <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
+                {item.PrivateParking}  Parking
+                </p>
+              </div>
+               :
+               <div className="flex">
+               <i className="fa fa-bed"></i>
+                 <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
+                 {item.Bedrooms} Bed Room
+                 </p>
+               </div>
+              }
+              { item?.ProeprtyType == "Commercial" ?
+               item.CellingHeight ?
+              <div className="flex">
+                <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
+                <span className="ml-1">&#xf548;</span>{" "}{item.CellingHeight} Height
+                </p>
+              </div> :
+              <div className="flex">
+                <i className="fa fa-building" aria-hidden="true"></i>
+                <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
+                {item.CarpetArea} Carpet Area
+                </p>
+              </div>
+               :
+               <div className="flex">
+                 <i className="fa fa-bath"></i>
+                 <p className={` ${styles.populerPropertiesBoxText} ml-1 `}>
+                 {item.Bathrooms} Baths
+                 </p>
+               </div>
+              }
                 <div className="flex">
                   <i className="fa fa-area-chart"></i>
 
@@ -458,7 +486,9 @@ const PropertyDetail = ({ params }) => {
                     />
                   ))}
                 </Carousel>
-              ) : null}
+              ) :
+              <LoadingBigImg />
+          }
             </div>
           </div>
           <div className={`${styles.heroSectionLeftImgMain}`}>
@@ -481,6 +511,7 @@ const PropertyDetail = ({ params }) => {
                 >
                   <video
                     controls
+                    autoPlay
                     className="h-48 w-64 border border-black rounded-lg"
                   >
                     <source src={videoDatas.URL} type="video/mp4" />
@@ -600,6 +631,7 @@ const PropertyDetail = ({ params }) => {
 
       <div className={` ${styles.divideDetailPage} divideDetailPage`}>
         <div className={` ${styles.divideDetailPageLeft}`}>
+        { listPropertiesData ?
         <div
           id="general"
           className={`${styles.generalDetails} GeneralDetails page`}
@@ -615,6 +647,7 @@ const PropertyDetail = ({ params }) => {
               {listPropertiesData.Address}
             </p>
           </div>
+          {listPropertiesData.Builder ?
           <div className="flex">
             <div>
               <img
@@ -627,7 +660,7 @@ const PropertyDetail = ({ params }) => {
           <h2 className={`${styles.heroSectionBottomBoxHead} text-2xl mt-1`}>
             {listPropertiesData.Builder ? listPropertiesData?.Builder.Name : null}
           </h2>
-          </div>
+          </div> : null }
         </div>
         <div className={`${styles.heroSectionBottomMain}`}>
           <div className={`${styles.heroSectionBottomBox}`}>
@@ -669,6 +702,7 @@ const PropertyDetail = ({ params }) => {
           </div>
         </div>
         </div>
+        : <LoadingText />}
           {/* GeneralDetail */}
           <div
             id="general"
@@ -676,7 +710,7 @@ const PropertyDetail = ({ params }) => {
           >
             <div className="GeneralDetailsMain">
               <h2 className={`${styles.GeneralDetailsMainHead}`}>
-                GENERAL DETAILS
+                {listPropertiesData.Title} General Details
               </h2>
               <div className={`${styles.GeneralDetailsBox}`}>
                 <div className="flex flex-wrap justify-between">
@@ -716,13 +750,13 @@ const PropertyDetail = ({ params }) => {
                       Modern building in the hear of tribeca!
                     </h2>
                     <p className={`${styles.GeneralDetailsBoxBottomText}`}>
-                      {listPropertiesData.Description}
+                        <ReadMore text={listPropertiesData.Description} maxLength={300}/>
                     </p>
                   </div>
                 ) : (
                   <LoadingText />
                 )}
-
+{/*
                 {expanded && (
                   <div className={`${styles.GeneralDetailsBoxMoreContent}`}>
                     <p>{listPropertiesData?.Area?.AreaDescription}</p>
@@ -734,6 +768,7 @@ const PropertyDetail = ({ params }) => {
                 >
                   {expanded ? "- See less" : "+ See more"}
                 </div>
+                */}
               </div>
             </div>
           </div>
@@ -742,7 +777,7 @@ const PropertyDetail = ({ params }) => {
           <div id="configure" className={`${styles.configure} configure page`}>
             <div className="configureMain">
               <h2 className={`${styles.configureMainHead}`}>
-                CONFIGURATION AND FLOOR PLAN
+                {listPropertiesData.Title} Configuration And Floor Plan
               </h2>
               <div className={`${styles.configureBox}`}>
                 <div className="mb-4 border-b border-gray-200 dark:border-gray-700">
@@ -804,6 +839,7 @@ const PropertyDetail = ({ params }) => {
                     aria-labelledby="profile-tab"
                   >
                    <p className={`${styles.configureLiHead}`}>Legend</p>
+                   {listPropertiesData ?
                     <div className="flex">
                     { listPropertiesData?.ProeprtyType == "Commercial" ?
                     (
@@ -827,6 +863,7 @@ const PropertyDetail = ({ params }) => {
                         <img src="/img/Map.jpeg" alt="" />
                       </div>
                     </div>
+                    : <LoadingText /> }
                   </div>
                   <div
                     className="hidden p-4 rounded-lg dark:bg-gray-800"
@@ -878,7 +915,7 @@ const PropertyDetail = ({ params }) => {
           {/* overview */}
           <div id="overview" className={`${styles.overview} overview page`}>
             <div className="overviewMain">
-              <h2 className={`${styles.overviewMainHead}`}>OVERVIEW</h2>
+              <h2 className={`${styles.overviewMainHead}`}>{listPropertiesData.Title} Overview</h2>
               <div className={`${styles.overviewBox}`}>
                 {listPropertiesData ? (
                   <div className={`${styles.overviewBoxMain}`}>
@@ -887,7 +924,7 @@ const PropertyDetail = ({ params }) => {
                         Project Area
                       </h2>
                       <p className={`${styles.overviewBoxMainContentText}`}>
-                        {listPropertiesData.LandArea} Acres
+                        {listPropertiesData.LandArea} {listPropertiesData.LandAreaUnit}
                       </p>
                     </div>
                     {/*
@@ -1041,7 +1078,7 @@ const PropertyDetail = ({ params }) => {
           <div id="amenities" className={`${styles.amenities} amenities page`}>
             <div className="amenitiesMain">
               <h2 className={`${styles.amenitiesMainHead}`}>
-                AMENITIES & FEATURES
+                {listPropertiesData.Title} Amenities & Features
               </h2>
               <div className={`${styles.amenitiesBox}`}>
                 <Accordion className="border-none">
@@ -1064,7 +1101,9 @@ const PropertyDetail = ({ params }) => {
                         ))}
                       </AccordionContent>
                     ) : (
-                      <LoadingText />
+                       <div className={`${styles.loaderSize}`}>
+                         <LoadingText className={`${styles.loaderSize}`} />
+                      </div>
                     )}
                   </AccordionPanel>
                   <AccordionPanel>
@@ -1106,11 +1145,12 @@ const PropertyDetail = ({ params }) => {
           */}
 
           {/* Specifications */}
-          { listPropertiesData?.ProeprtyType == "Commercial" ?
-          null :
+          { listPropertiesData?.ProeprtyType == "Residential" ?
+           listPropertiesData?.Fitting?.Electrical == "" && listPropertiesData?.Fitting?.Toilets == "" && listPropertiesData?.Fitting?.Kitchen == "" && listPropertiesData?.Fitting?.Doors == "" && listPropertiesData?.Fitting?.Windows == "" ?
+           null :
           <div id="specifications" className={` ${styles.faq} faq mt-16 page`}>
             <div className={` ${styles.faqMain}`}>
-              <h2 className={`${styles.amenitiesMainHead}`}>SPECIFICATIONS</h2>
+              <h2 className={`${styles.amenitiesMainHead}`}>{listPropertiesData.Title} Specifications</h2>
             </div>
             <div className={`${styles.amenitiesBox}`}>
               <div className={` ${styles.faqLeft}`}>
@@ -1182,39 +1222,27 @@ const PropertyDetail = ({ params }) => {
                       >
                        {listPropertiesData?.Fitting?.Electrical ?
                         <div className="mr-6 p-4">
-                          <div className="flex mb-2 text-gray-500 dark:text-gray-400 justify-center text-sm">
-                            <img
-                                height="22"
-                                width="22"
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtjD2HikxPtTLMjHJr3VNfMeaiciwxiAmuAw&s"
-                             />
-                          </div>
+                        <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">
+                          Electrical
+                        </span>
                           <p className="">
                             {listPropertiesData?.Fitting?.Electrical}
                           </p>
                         </div> : null }
                         {listPropertiesData?.Fitting?.Toilets ?
                         <div className="mr-6 p-4">
-                        <div className="flex mb-2 text-gray-500 dark:text-gray-400 justify-center text-sm">
-                          <img
-                              height="22"
-                              width="22"
-                              src="https://static.thenounproject.com/png/3121-200.png"
-                           />
-                        </div>
+                        <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">
+                            Toilets
+                          </span>
                           <p className="">
                             {listPropertiesData?.Fitting?.Toilets}
                           </p>
                         </div> : null }
                         {listPropertiesData?.Fitting?.Kitchen ?
                         <div className="mr-6 p-4">
-                        <div className="flex mb-2 text-gray-500 dark:text-gray-400 justify-center text-sm">
-                          <img
-                              height="22"
-                              width="22"
-                              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQumKkG8e5rs6BShE68NTO2WGEKecI6J7rytQ&s"
-                           />
-                        </div>
+                        <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">
+                            Kitchen
+                          </span>
                           <p className="">
                             {listPropertiesData?.Fitting?.Kitchen}
                           </p>
@@ -1222,13 +1250,9 @@ const PropertyDetail = ({ params }) => {
                         }
                         {listPropertiesData?.Fitting?.Doors ?
                         <div className="mr-6 p-4">
-                        <div className="flex mb-2 text-gray-500 dark:text-gray-400 justify-center text-sm">
-                          <img
-                              height="22"
-                              width="22"
-                              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA-MCzqU6Wu3Bub9RTn9jr4yf3wlM4Lrd8iw&s"
-                           />
-                        </div>
+                        <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">
+                            Doors
+                          </span>
                           <p className="">
                             {listPropertiesData?.Fitting?.Doors}
                           </p>
@@ -1236,13 +1260,9 @@ const PropertyDetail = ({ params }) => {
                         }
                         {listPropertiesData?.Fitting?.Windows ?
                         <div className="mr-6 p-4">
-                        <div className="flex mb-2 text-gray-500 dark:text-gray-400 justify-center text-sm">
-                          <img
-                              height="22"
-                              width="22"
-                              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfV4D5yA3-gy_sfi8iDEm3ehCVFuJ79JYCnw&s"
-                           />
-                        </div>
+                        <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">
+                            Windows
+                          </span>
                           <p className="">
                             {listPropertiesData?.Fitting?.Windows}
                           </p>
@@ -1298,7 +1318,7 @@ const PropertyDetail = ({ params }) => {
                 </Accordion>
               </div>
             </div>
-          </div>
+          </div> : null
         }
           {/* location
           <div id="location" className={`${styles.location} location page`}>
@@ -1328,10 +1348,11 @@ const PropertyDetail = ({ params }) => {
             <div className={` ${styles.faq} faq`}>
               <div className={` ${styles.faqMain}`}>
                 <h2 className={`${styles.amenitiesMainHead}`}>
-                  Frequently Asked Question
+                  {listPropertiesData.Title} Frequently Asked Question
                 </h2>
               </div>
               <div className={`${styles.amenitiesBox}`}>
+              {listPropertiesData?.Faq ?
                 <div className={` ${styles.faqLeft}`}>
                   <Accordion collapseAll className="border-none">
                     {listPropertiesData?.Faq?.map((item, index) => (
@@ -1351,6 +1372,9 @@ const PropertyDetail = ({ params }) => {
                     ))}
                   </Accordion>
                 </div>
+                : <div className={`${styles.loaderfaqSize}`}>
+                  <LoadingText className={`${styles.loaderfaqSize}`} />
+               </div> }
               </div>
             </div>
           </div>
@@ -1456,7 +1480,7 @@ const PropertyDetail = ({ params }) => {
       <PersonalLoanCalculator/>
       </div> */}
       <Footer />
-      <Modal dismissible className={`bg-transparent/[.5] `} show={openModal} onClose={() => setOpenModal(false)}>
+      <Modal dismissible className={`bg-transparent/[.5] `} size="lg" show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Header>Ask For Detail</Modal.Header>
         <Modal.Body >
         <div className={`${styles.contactLeftFormData}`}>

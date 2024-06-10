@@ -71,6 +71,13 @@
     place-items: center;
 }
 
+.loaderSize{
+    margin-left: 1rem;
+}
+
+.loaderfaqSize{
+    padding: 2rem;
+}
 /* detailSectionBar */
 .detailSectionBar{
    /* margin-top: 6rem; */

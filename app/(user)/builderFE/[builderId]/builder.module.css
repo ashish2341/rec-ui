@@ -115,6 +115,14 @@
     justify-content: center;
 }
 
+.builderRightBox{
+    width: 60%;
+}
+
+.loaderImg{
+    margin-bottom: 1rem;
+}
+
 @media screen and (max-width: 1000px) {
     .builderDetailPage{
         display: block;
@@ -143,6 +151,7 @@
         display: flex;
     }
 }
+
 
 @media screen and (max-width: 600px) {
     .builderInputField{

@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
 import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
+import NextButton from "@/components/common/admin/nextButton/nextButton";
 
 export default function PropertyFaqForm({
   valueForNextPage,
@@ -89,17 +90,7 @@ export default function PropertyFaqForm({
   return (
     <>
       <div>
-      {mainBackPageValue == 0 || btnShowonInputChange == false ? (
-          <div className="flex justify-end w-full mb-4">
-            <button
-              onClick={SubmitForm}
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
-            >
-              Save
-            </button>
-          </div>
-        ) : null}
+      
       
         <form>
           {faqFields.length != 0
@@ -165,6 +156,9 @@ export default function PropertyFaqForm({
             Add More
           </button>
         </form>
+        {mainBackPageValue == 0 || btnShowonInputChange == false ? (
+         <NextButton onSubmit={SubmitForm} butonSubName={"save"}/>
+        ) : null}
       </div>
     </>
   );

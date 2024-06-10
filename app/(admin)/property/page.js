@@ -257,7 +257,7 @@ export default function Property() {
                             {roles.includes("Admin") && (
                               <Link
                                 href={`/property/${item._id}`}
-                                className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                className="font-bold text-lg text-blue-600 dark:text-blue-500 hover:underline"
                               >
                                 <i className="bi bi-pencil-square"></i>
                               </Link>
@@ -272,7 +272,7 @@ export default function Property() {
                             {roles.includes("Admin") && (
                               <Link
                                 href="#"
-                                className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                className="font-medium text-lg text-red-600 dark:text-red-500 hover:underline"
                               >
                                 <i
                                   onClick={() => deletePropertyModal(item._id)}

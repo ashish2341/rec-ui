@@ -50,29 +50,14 @@
 .column2 {
   flex: 0 0 70%;
   height: 75vh;
-  /* margin-top: -1rem; */
+  overflow-x: hidden;
+overflow-y: auto;
+padding-top: 1rem;
+padding-left: 1rem;
+padding-right: 1rem;
   
  
 }
-.insidecolumn2{
-overflow-y: auto;
-height: 100%;
-padding-left: 1rem;
-padding-right: 1rem;
 
-}
-
-.propertyContainer {
-    display: flex;
-    gap: 1rem; /* Adjust the gap as needed */
-  }
   
-  .column1 {
-    flex: 0 0 30%;
-    margin-top: 2rem;
-  }
-  
-  .column2 {
-    flex: 0 0 70%;
-  }
-  
+ 

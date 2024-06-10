@@ -5,9 +5,10 @@ import { ToastContainer, toast } from "react-toastify";
 import Styles from "../../propertyAddForms/propertyAdd.module.css";
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
 import ApiButtons from "@/components/common/admin/propertyapiButtons/ApiButtons";
-import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER ,conditionalArray, lookingToArray ,propertyTypeArray } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import Cookies from "js-cookie";
+import NextButton from "@/components/common/admin/nextButton/nextButton";
 export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
@@ -35,10 +36,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
   const [isFeatured, setIsFeatured] = useState(true);
   const [propertTypWithSubTypeValue, setPropertTypWithSubTypeValue] = useState("");
 
-  const propertyTypeArray = ["Residential", "Commercial"];
-  const lookingToArray = ["Sell"];
-  const IsEnabledArray = [true, false];
-  const IsFeaturedArray = [true, false];
+
   let propertySubTypeArray ={data:""};
 
   
@@ -189,15 +187,6 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
   return (
     <>
       <div>
-        <div className="flex justify-end w-full">
-          <button
-            onClick={SubmitForm}
-            type="button"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
-          >
-            Next
-          </button>
-        </div>
         <form>
           <div className="grid gap-4 mb-4 sm:grid-cols-1">
             <div className="grid gap-4 sm:grid-cols-2">
@@ -261,7 +250,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
               {roles.includes("Admin") && (
                 <PropertyBigButtons
                   labelName={"Is Enabled"}
-                  itemArray={IsEnabledArray}
+                  itemArray={conditionalArray}
                   activeBtnvalue={isEnabled}
                   changeState={setIsEnabled}
                 />
@@ -271,7 +260,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
               {roles.includes("Admin") && (
                 <PropertyBigButtons
                   labelName={"Is Featured"}
-                  itemArray={IsFeaturedArray}
+                  itemArray={conditionalArray}
                   activeBtnvalue={isFeatured}
                   changeState={setIsFeatured}
                 />
@@ -297,6 +286,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
             </div>
           </div>
         </form>
+        <NextButton onSubmit={SubmitForm} butonSubName={"add Location Details"}/>
       </div>
     </>
   );

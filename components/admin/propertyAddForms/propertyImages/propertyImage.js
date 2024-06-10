@@ -3,24 +3,22 @@ import { useState, useRef, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { ImageString } from "@/api-functions/auth/authAction";
 import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
+import NextButton from "@/components/common/admin/nextButton/nextButton"
 
 export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
   const [image, setImage] = useState([]);
   const [video, setVideo] = useState([]);
   const imageInputRef = useRef(null);
   const VideoInputRef = useRef(null);
-  const [mediaShowValue, setMediaShowValue] = useState(false);
-  const [mediaLoading, setMediaLoading] = useState(false);
+  const [imageLoader, setImageLoader] = useState(false);
+  const [videoLoader, setVideoLoader] = useState(false);
 
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("propertyData")
     );
-    console.log(
-      "localStorageData from localstorage",
-      sessionStoragePropertyData
-    );
+  
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
       setImage(sessionStoragePropertyData?.Images || "");
@@ -38,21 +36,19 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
       Images: image,
       Videos: video,
     };
-    console.log("mediaData before set localstorge", mediaData);
 
     if (mediaData) {
       const localStorageData = JSON.parse(
         sessionStorage.getItem("propertyData")
       );
       const newProjectData = { ...localStorageData, ...mediaData };
-      console.log("newProjectData before set localStorage", newProjectData);
       sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
       valueForNext(valueForNextPage + 1);
     }
   };
 
   const handleImageInputChange = async (event) => {
-    setMediaLoading(true);
+   
     const acceptedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
 
     const files = Array.from(event.target.files);
@@ -70,19 +66,18 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
         imageInputRef.current.value = "";
       }
     } else {
+      setImageLoader(true);
       const imageString = [];
 
       // Map each file to its corresponding image string asynchronously
       await Promise.all(
         files.map(async (item) => {
-          console.log("image File inside map", item);
           const formData = new FormData();
           formData.append("profilePic", item);
 
           try {
             const res = await ImageString(formData);
             if (res.successMessage) {
-              console.log("Image Response", res.successMessage.imageUrl);
               imageString.push(res.successMessage.imageUrl);
             } else {
               toast.error(res.errMessage);
@@ -96,22 +91,18 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
         })
       );
 
-      console.log("image files data after convert string", imageString);
-
       // Filter unique files based on filename
       const uniqueFiles = imageString.filter((url) => {
         const filename = url.substring(
           url.lastIndexOf("-") + 1,
           url.lastIndexOf(".")
         );
-        console.log("imageString filename", filename);
         if (image.length > 0) {
           return !image.some((existingFile) => {
             const existingFilename = existingFile.substring(
               url.lastIndexOf("-") + 1,
               existingFile.lastIndexOf(".")
             );
-            console.log("image existingFilename", existingFilename);
 
             return filename === existingFilename;
           });
@@ -120,13 +111,10 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
         }
       });
 
-      console.log("uniqueFiles data after convert string", uniqueFiles);
-
       // Update the image state
       if (uniqueFiles) {
-
         setImage([...image, ...uniqueFiles]);
-        setMediaLoading(false)
+        setImageLoader(false);
       }
 
       if (imageInputRef.current) {
@@ -136,7 +124,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
   };
 
   const handleVideoInputChange = async (event) => {
-    setMediaLoading(true);
+
     const acceptedFileTypes = [
       "video/mp4",
       "video/webm",
@@ -145,7 +133,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
     ];
 
     const files = Array.from(event.target.files);
-    console.log("Video Files", files);
+  
 
     // Check file types
     const invalidFiles = files.filter(
@@ -160,33 +148,30 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
         VideoInputRef.current.value = "";
       }
     } else {
+      setVideoLoader(true);
       const videoString = [];
 
       // Map each file to its corresponding image string asynchronously
       await Promise.all(
         files.map(async (item) => {
-          console.log("image File inside map", item);
+         
           const formData = new FormData();
           formData.append("profilePic", item);
 
           try {
             const res = await ImageString(formData);
             if (res.successMessage) {
-              console.log("Image Response", res.successMessage.imageUrl);
               videoString.push(res.successMessage.imageUrl);
             } else {
               toast.error(res.errMessage);
               return false;
             }
           } catch (error) {
-            console.error("Error occurred while converting image:", error);
             toast.error("Error occurred while converting image.");
             return false;
           }
         })
       );
-
-      console.log("videoString files data after convert string", videoString);
 
       // Filter unique files based on filename
       const uniqueFiles = videoString.filter((url) => {
@@ -194,14 +179,12 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
           url.lastIndexOf("-") + 1,
           url.lastIndexOf(".")
         );
-        console.log("video filename", filename);
         if (video.length > 0) {
           return !video.some((existingFile) => {
             const existingFilename = existingFile.substring(
               existingFile.lastIndexOf("-") + 1,
               existingFile.lastIndexOf(".")
             );
-            console.log("video existingFilename", existingFilename);
             return existingFilename === filename;
           });
         } else {
@@ -209,12 +192,10 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
         }
       });
 
-      console.log("uniqueFiles data after convert string", uniqueFiles);
-
       // Update the video state
       if (uniqueFiles) {
         setVideo([...video, ...uniqueFiles]);
-        setMediaLoading(false);
+        setVideoLoader(false);
       }
 
       if (VideoInputRef.current) {
@@ -229,20 +210,20 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
     // Step 1: Retrieve the object from local storage
 
     const storedData = JSON.parse(sessionStorage.getItem("propertyData"));
-    const videoArray = storedData?.Videos;
-    console.log("videoArray", videoArray);
-    if (video.length == videoArray.length) {
-      if (videoArray.length > 0) {
-        // // Step 2: Modify the array by removing the desired item
-        videoArray.splice(index, 1);
-        console.log("videoArray after splicce", videoArray);
-
-        // // Step 3: Update the object in local storage with the modified array
-        const updatedData = { ...storedData, Videos: videoArray };
-        console.log("updatedData", updatedData);
-        sessionStorage.setItem("propertyData", JSON.stringify(updatedData));
+    if(storedData?.Videos){
+      const videoArray = storedData?.Videos;
+      if (video.length == videoArray.length) {
+        if (videoArray.length > 0) {
+          // // Step 2: Modify the array by removing the desired item
+          videoArray.splice(index, 1);
+  
+          // // Step 3: Update the object in local storage with the modified array
+          const updatedData = { ...storedData, Videos: videoArray };
+          sessionStorage.setItem("propertyData", JSON.stringify(updatedData));
+        }
       }
     }
+   
     setVideo(newArray);
 
     if (newArray.length == 0) {
@@ -257,25 +238,23 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
   const removeImage = (index) => {
     const newArray = [...image];
     newArray.splice(index, 1);
-    console.log("newArray", newArray);
 
     // Step 1: Retrieve the object from local storage
 
     const storedData = JSON.parse(sessionStorage.getItem("propertyData"));
-    const imageArray = storedData?.Images;
-    console.log("imageArray", imageArray);
-    if (image.length == imageArray.length) {
-      console.log("Image session if called");
-      if (imageArray.length > 0) {
-        // // Step 2: Modify the array by removing the desired item
-        imageArray.splice(index, 1);
-        console.log("imageArray after splicce", imageArray);
-        // // Step 3: Update the object in local storage with the modified array
-        const updatedData = { ...storedData, Images: imageArray };
-        console.log("updatedData", updatedData);
-        sessionStorage.setItem("propertyData", JSON.stringify(updatedData));
+    if(storedData?.Images){
+      const imageArray = storedData?.Images;
+      if (image.length == imageArray.length) {
+        if (imageArray.length > 0) {
+          // // Step 2: Modify the array by removing the desired item
+          imageArray.splice(index, 1);
+          // // Step 3: Update the object in local storage with the modified array
+          const updatedData = { ...storedData, Images: imageArray };
+          sessionStorage.setItem("propertyData", JSON.stringify(updatedData));
+        }
       }
     }
+   
 
     setImage(newArray);
     if (newArray.length == 0) {
@@ -291,15 +270,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
   return (
     <>
       <div>
-        <div className="flex justify-end w-full mb-4">
-          <button
-            onClick={SubmitForm}
-            type="button"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
-          >
-            Next
-          </button>
-        </div>
+       
         <form>
           <div className="grid gap-4 mb-4 sm:grid-cols-1">
             <div className="border border-gray-300 p-3 rounded-lg">
@@ -323,7 +294,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
                 onChange={handleImageInputChange}
                 required
               />
-              {mediaLoading && <LoaderForMedia />}
+              {imageLoader && <LoaderForMedia />}
               {image.length > 0 ? (
                 <div>
                   <div className="ml-2 mt-3 underline font-bold">
@@ -378,7 +349,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
                 onChange={handleVideoInputChange}
                 required
               />
-              {mediaLoading && <LoaderForMedia />}
+              {videoLoader && <LoaderForMedia />}
               {video.length > 0 ? (
                 <div>
                   <div className="ml-2 mt-3 underline font-bold">
@@ -410,6 +381,10 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
             </div>
           </div>
         </form>
+        {imageLoader === false && videoLoader === false && (
+         <NextButton onSubmit={SubmitForm} butonSubName={"add Faq Details"}/>
+        )}
+
       </div>
     </>
   );

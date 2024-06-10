@@ -75,6 +75,10 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
     if (allFieldsFilled) {
+      if(parseInt(totalFloors) < parseInt(floorNumber)){
+        toast.error("Total Floor Should greater then Floor Number.");
+        return false;
+      }
       const secondPropertyData = {
         FloorNumber: parseInt(floorNumber),
         TotalFloors: parseInt(totalFloors),
@@ -97,9 +101,7 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
   };
   return (
     <>
-      <div className={`flex justify-end ${Styles.continueBtn}`}>
-        <ContinueButton modalSubmit={SubmitForm} />
-      </div>
+     
       <div className="grid gap-4 mb-4 sm:grid-cols-2">
         {/* FloorNumber */}
         <div>
@@ -172,7 +174,10 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
           </>
         )}
       </div>
-     
+      <ContinueButton
+            modalSubmit={SubmitForm}
+            butonSubName={"add Area Details"}
+          />
     </>
   );
 }

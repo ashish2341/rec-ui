@@ -5,6 +5,7 @@ import Select from "react-select";
 import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import Styles from "../propertyDetails/propertypage.module.css"
+import NextButton from "@/components/common/admin/nextButton/nextButton";
 export default function LocationDetailsForm({
   valueForNext,
   valueForNextPage,
@@ -120,15 +121,7 @@ export default function LocationDetailsForm({
   return (
     <>
       <div>
-      <div className="flex justify-end  mb-4  mr-4 ml-[25rem]">
-            <button
-              onClick={SubmitForm}
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
-            >
-              Next
-            </button>
-          </div>
+      
         <form>
           <div className="grid gap-4 mb-4 sm:grid-cols-1">
             <div>
@@ -286,7 +279,8 @@ export default function LocationDetailsForm({
           </div>
          
         </form>
-        
+        <NextButton onSubmit={SubmitForm} butonSubName={"add Property Details"}/>
+
       </div>
       
     </>

@@ -19,7 +19,7 @@ export default function AmenityPage({
   const { data: aminitiesData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/aminities`
   );
-  console.log("aminitiesData", aminitiesData);
+ 
 
   const [selectedAmenities, setSelectedAmenities] = useState([]);
 
@@ -57,17 +57,23 @@ export default function AmenityPage({
   };
   return (
     <>
-      <div className={`flex justify-end `}>
-        <ContinueButton modalSubmit={SubmitForm} />
-      </div>
-      <ArrayButtons
-        itemArray={aminitiesData}
-        selectItems={selectedAmenities}
-        labelName={"Amenity"}
-        buttonName={"Aminity"}
-        setValueinState={setSelectedAmenities}
+      {aminitiesData && (<>
+        <ArrayButtons
+          itemArray={aminitiesData}
+          selectItems={selectedAmenities}
+          labelName={"Amenity"}
+          buttonName={"Aminity"}
+          setValueinState={setSelectedAmenities}
+        />
+         <ContinueButton
+        modalSubmit={SubmitForm}
+        butonSubName={"add Feature Details"}
       />
-      
+      </>
+       
+      )}
+
+     
     </>
   );
 }

@@ -245,14 +245,20 @@ const FeaturedProperty = (params) => {
 
   const handleRemoveBadge = (id) => {
     setPayload((prevFilters) => {
+      // Modify the state based on the previous state
       const updatedFilters = { ...prevFilters };
       for (const key in updatedFilters) {
         if (Array.isArray(updatedFilters[key])) {
-          updatedFilters[key] = updatedFilters[key].filter(
-            (item) => item.id !== id
-          );
+          updatedFilters[key] = updatedFilters[key].filter((item) => {
+            if (Array.isArray(item.id) && Array.isArray(id)) {
+              return JSON.stringify(item.id) !== JSON.stringify(id);
+            } else {
+              return item.id !== id;
+            }
+          });
         }
       }
+      console.log("updatedFilters", updatedFilters);
       return updatedFilters;
     });
   };
@@ -331,7 +337,7 @@ const FeaturedProperty = (params) => {
                         <li key={index}>
                           <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
-                              id={`checkbox-item-${index}`}
+                              id={`checkbox-item-${item._id}`}
                               type="checkbox"
                               value={JSON.stringify({
                                 id: item._id,
@@ -345,7 +351,7 @@ const FeaturedProperty = (params) => {
                               className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
-                              htmlFor={`checkbox-item-${index}`}
+                              htmlFor={`checkbox-item-${item._id}`}
                               className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
                               {item.Facing}
@@ -405,7 +411,7 @@ const FeaturedProperty = (params) => {
                         <li key={index}>
                           <div className="flex text-left p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
-                              id={`checkbox-item-${index}`}
+                              id={`checkbox-item-${item._id}`}
                               type="checkbox"
                               name="propertyType"
                               value={JSON.stringify({
@@ -419,7 +425,7 @@ const FeaturedProperty = (params) => {
                               className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
-                              htmlFor={`checkbox-item-${index}`}
+                              htmlFor={`checkbox-item-${item._id}`}
                               className="w-full text-nowrap ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
                               {item.Name}
@@ -479,7 +485,7 @@ const FeaturedProperty = (params) => {
                         <li key={index}>
                           <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
-                              id={`checkbox-item-${index}`}
+                              id={`checkbox-item-${item._id}`}
                               type="checkbox"
                               name="areaType"
                               value={JSON.stringify({
@@ -493,7 +499,7 @@ const FeaturedProperty = (params) => {
                               className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
-                              htmlFor={`checkbox-item-${index}`}
+                              htmlFor={`checkbox-item-${item._id}`}
                               className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
                               {item.Area}
@@ -554,14 +560,15 @@ const FeaturedProperty = (params) => {
                           <input
                             id={`checkbox-item-${index}`}
                             type="checkbox"
-                            // value={JSON.stringify({
-                            //   id: `[${item.value1} ,${item.value2}]`,
-                            //   label:`[${item.value1} ,${item.value2}]`,
-                            // })}
                             value={`[${item.value1} ,${item.value2}]`}
                             onChange={handleRangeCheckBoxChange}
                             name="budget"
                             className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                            checked={payload.budget.some(
+                              (obj) =>
+                                obj.id[0] === item.value1 &&
+                                obj.id[1] === item.value2
+                            )}
                           />
                           <label
                             htmlFor={`checkbox-item-${index}`}
@@ -616,7 +623,7 @@ const FeaturedProperty = (params) => {
                         <li key={index}>
                           <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
-                              id={`checkbox-item-${index}`}
+                              id={`checkbox-item-${item._id}`}
                               type="checkbox"
                               value={JSON.stringify({
                                 id: item._id,
@@ -630,7 +637,7 @@ const FeaturedProperty = (params) => {
                               className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
-                              htmlFor={`checkbox-item-${index}`}
+                              htmlFor={`checkbox-item-${item._id}`}
                               className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
                               {item.Type}
@@ -690,7 +697,7 @@ const FeaturedProperty = (params) => {
                         <li key={index}>
                           <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
-                              id={`checkbox-item-${index}`}
+                              id={`checkbox-item-${item._id}`}
                               type="checkbox"
                               value={JSON.stringify({
                                 id: item._id,
@@ -704,7 +711,7 @@ const FeaturedProperty = (params) => {
                               className="w-4  h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
-                              htmlFor={`checkbox-item-${index}`}
+                              htmlFor={`checkbox-item-${item._id}`}
                               className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
                               {item.Status}
@@ -764,7 +771,7 @@ const FeaturedProperty = (params) => {
                         <li key={index}>
                           <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
-                              id={`checkbox-item-${index}`}
+                              id={`checkbox-item-${item._id}`}
                               type="checkbox"
                               value={JSON.stringify({
                                 id: item._id,
@@ -778,7 +785,7 @@ const FeaturedProperty = (params) => {
                               className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
-                              htmlFor={`checkbox-item-${index}`}
+                              htmlFor={`checkbox-item-${item._id}`}
                               className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
                               {item.Possession}
@@ -875,7 +882,7 @@ const FeaturedProperty = (params) => {
                                 {/* Ensure each item takes 1/3 of the width */}
                                 <div className="flex items-center p-1 rounded hover:bg-white dark:hover:bg-gray-600">
                                   <input
-                                    id={`checkbox-item-${index}`}
+                                    id={`checkbox-item-${item._id}`}
                                     type="checkbox"
                                     value={JSON.stringify({
                                       id: item._id,
@@ -889,7 +896,7 @@ const FeaturedProperty = (params) => {
                                     className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                                   />
                                   <label
-                                    htmlFor={`checkbox-item-${index}`}
+                                    htmlFor={`checkbox-item-${item._id}`}
                                     className="text-sm font-medium text-gray-900 rounded dark:text-gray-300 sm:w-full  ml-3"
                                   >
                                     {item.Feature}
@@ -952,7 +959,7 @@ const FeaturedProperty = (params) => {
                                 {/* Ensure each item takes 1/3 of the width */}
                                 <div className="flex items-center p-1 rounded hover:bg-white dark:hover:bg-gray-600">
                                   <input
-                                    id={`checkbox-item-${index}`}
+                                    id={`checkbox-item-${item._id}`}
                                     type="checkbox"
                                     value={JSON.stringify({
                                       id: item.value,
@@ -966,7 +973,7 @@ const FeaturedProperty = (params) => {
                                     className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                                   />
                                   <label
-                                    htmlFor={`checkbox-item-${index}`}
+                                    htmlFor={`checkbox-item-${item._id}`}
                                     className="text-sm font-medium text-gray-900 rounded dark:text-gray-300 sm:w-full  ml-3"
                                   >
                                     {item.label}

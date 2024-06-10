@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import { FormatNumber } from "@/utils/commonHelperFn";
 import Styles from "../propertypage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
+import NextButton from "@/components/common/admin/nextButton/nextButton";
 
 export default function FacilitiesPage({
   valueForNextfromSix,
@@ -114,9 +115,7 @@ export default function FacilitiesPage({
   };
   return (
     <>
-      <div className={`flex justify-end ${Styles.continueBtn}`}>
-        <ContinueButton modalSubmit={SubmitForm} />
-      </div>
+      
 
       {propertTypWithSubTypeValue == "Office" && (
         <>
@@ -273,6 +272,8 @@ export default function FacilitiesPage({
             )}
           </>
         )}
+                <NextButton onSubmit={SubmitForm} butonSubName={"add Amenity Details"}/>
+
     </>
   );
 }

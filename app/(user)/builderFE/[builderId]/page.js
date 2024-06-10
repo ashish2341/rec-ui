@@ -11,6 +11,7 @@ import Link from "next/link";
 import ReadMore from "@/components/common/readMore";
 import LoadingSideImg from "@/components/common/sideImgLoader";
 import { addEnquiry } from "@/api-functions/enquiry/addEnquiry";
+import SkeletonLoader from "@/components/common/loader";
 import { toast } from "react-toastify";
 
 const BuilderHomePage = (params) => {
@@ -96,6 +97,7 @@ const BuilderHomePage = (params) => {
             </div>
             <div className={` ${styles.builderDetailPage}`}>
                 <div className={` ${styles.builderDetailPageLeft}`}>
+                {developData ?
                     <div className={` ${styles.builderBox} mb-4`} >
                         <div className={` ${styles.builderInputField}`}>
                             <div >
@@ -123,6 +125,11 @@ const BuilderHomePage = (params) => {
                             </div>
                         </div>
                     </div>
+                    :
+                    <div className={` ${styles.loaderImg}`}>
+                        <SkeletonLoader  />
+                    </div>
+                    }
                     <div className={` ${styles.builderBox} mb-4`} >
                         <h1 className="ml-6 mt-4 font-semibold">Contact Builder</h1>
                         <div className={` ${styles.builderHunter} p-4`}>
@@ -191,12 +198,12 @@ const BuilderHomePage = (params) => {
                     {developData ?
                     developData?.data?.properties.map((item,index) => (
                     <Link  key={index} href={`/propertyDetail/${item._id}`}>
-                    <div className={` ${styles.builderRightMainBox} flex mb-6 p-4`}>
+                    <div className={` ${styles.builderRightMainBox} flex mb-6 p-4 `}>
                         <img
                             src={item.Images[0].URL}
                             className={` ${styles.builderRightImg} mr-3`}
                         />
-                        <div>
+                        <div className={` ${styles.builderRightBox}`} >
                             <div className={` ${styles.cardImgBottom}`}>
                                 <div className={` ${styles.populerPropertiesLocationMain} flex text-md pt-4`}>
                                 <i className="bi bi-geo-alt-fill"></i>
@@ -225,10 +232,16 @@ const BuilderHomePage = (params) => {
                                  </div>
                                 }
                                 { item?.ProeprtyType == "Commercial" ?
+                                 item.CellingHeight ?
                                 <div className="flex">
-                                <i className="fa fa-solid fa-ruler-vertical"></i>
                                   <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-                                  {item.CellingHeight} Height
+                                  <span className="ml-1">&#xf548;</span>{" "}{item.CellingHeight} Height
+                                  </p>
+                                </div> :
+                                <div className="flex">
+                                  <i className="fa fa-building" aria-hidden="true"></i>
+                                  <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
+                                  {item.CarpetArea} Carpet Area
                                   </p>
                                 </div>
                                  :

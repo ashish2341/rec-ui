@@ -184,11 +184,11 @@ console.log("propertyByapartmentType",propertyByapartmentType);
             item.CellingHeight ?
            <div className="flex">
              <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-             <span className="">&#xf548;</span>{item.CellingHeight} Height
+             <span className="ml-1">&#xf548;</span>{" "}{item.CellingHeight} Height
              </p>
            </div> :
            <div className="flex">
-             <i class="fa fa-solid fa-receipt">‌</i>
+             <i className="fa fa-building" aria-hidden="true"></i>
              <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
              {item.CarpetArea} Carpet Area
              </p>
@@ -521,15 +521,16 @@ console.log("propertyByapartmentType",propertyByapartmentType);
               </div>
               <div className={`${styles.crousalItemRightMain} overflow-hidden  `}>
                 {bannerData ?
-                  <img
-                  src={bannerData?.data[0].Url}
-                  className={`${styles.crousalItemLeftImage} block`}
-                  alt="...a"
-                /> : (
-                  <div className="mt-70">
-                    <Spinner />
+                <img
+                    src={bannerData?.data[0].Url}
+                    className={`${styles.crousalItemLeftImage} block`}
+                    alt="...a"
+                  /> :
+                  (
+                  <div className={`${styles.LoaderHeight}  `}>
+                    <Spinner className="mt-70" />
                   </div>
-                )
+              )
                 }
               </div>
             </div>
@@ -686,7 +687,7 @@ console.log("propertyByapartmentType",propertyByapartmentType);
             </p>
           </div>
         </div>
-        <div className={`flex`} >
+        <div className={`flex mt-2`} >
           {
            propertyByapartmentType?.data?.length>0 ? <MultiCarousel UI={ShowApartmentProperties} /> : <SkeletonLoader />
           }

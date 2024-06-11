@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import Styles from "../admin.common.module.css";
-
+import Popup from "@/components/common/popup";
 function RenderButtons({
   newid,
   apiId,
@@ -8,14 +8,32 @@ function RenderButtons({
   apiValue,
   storeNameforValue,
   setStateByDynamic,
+  dataStoreState
 }) {
+const [isPopupOpen, setIsPopupOpen] = useState(false);
   const handleClick = () => {
-    setStateByDynamic({
-      [storeNameforId]: apiId,
-      [storeNameforValue]: apiValue,
-    });
+ 
+    if(dataStoreState?.Name){
+      setIsPopupOpen(true)
+    }else{
+      setStateByDynamic({
+        [storeNameforId]: apiId,
+        [storeNameforValue]: apiValue,
+      });
+    }
+   
   };
+const storeData=()=>{
+  setStateByDynamic({
+    [storeNameforId]: apiId,
+    [storeNameforValue]: apiValue,
+  });
+  setIsPopupOpen(false)
+}
 
+const handleCancel=()=>{
+  setIsPopupOpen(false)
+}
   return (
     <>
       <button
@@ -29,6 +47,14 @@ function RenderButtons({
       >
         {apiValue}
       </button>
+      <Popup
+        isOpen={isPopupOpen}
+        title="Are you sure  want to change the PropertySubType ?"
+        confirmLabel="Yes, I'm sure"
+        cancelLabel="No, cancel"
+        onConfirm={storeData}
+        onCancel={handleCancel}
+      />
     </>
   );
 }
@@ -49,7 +75,7 @@ export default function ApiButtons({
         {itemArray?.data?.length > 0 ? (
           <div className={`flex flex-wrap space-x-2 mt-4`}>
             {/* <div className={`grid grid-cols-5 gap-2 `}> */}
-            {itemArray?.data?.map((item , index) => (
+            {itemArray?.data?.map((item, index) => (
               <div key={index}>
                 <RenderButtons
                   newid={stateItem?._id}
@@ -58,6 +84,7 @@ export default function ApiButtons({
                   apiValue={item?.[ValueName]}
                   storeNameforValue={ValueName}
                   setStateByDynamic={changeState}
+                  dataStoreState={stateItem}
                 />
               </div>
             ))}

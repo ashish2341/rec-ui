@@ -119,17 +119,126 @@ function countNonNullProperties(obj) {
     "CompletePercentage",
     "LeasedOrRented",
   ];
-  if (obj?.ProeprtyType === "Residential") {
-    skipKeyNames.push("DgUpsCharge", "LeasedOrRented", "TaxCharge");
+  if (
+    obj?.ProeprtyType === "Residential" &&
+    obj?.PropertySubtype?.Name !== "Plot"
+  ) {
+    skipKeyNames.push(
+      "OwnerName",
+      "DgUpsCharge",
+      "TaxCharge",
+      "PlotArea",
+      "PlotLength",
+      "Plotwidth",
+      "WallType",
+      "AreaUnits",
+      "ZoneType",
+      "CustomZoneType",
+      "LocationHub",
+      "CustomLocationHub",
+      "SuitableFor",
+      "CustomSuitable",
+      "CustomWallType",
+      "ServiceLifts",
+      "passengerLifts",
+      "Staircase",
+      "PublicParking",
+      "PrivateParking",
+      "PublicWashroom",
+      "PrivateWashroom",
+      "CurentRent",
+      "LeaseYears",
+      "ExpectedReturn",
+    );
     if (obj?.Fencing === "Other") {
       skipKeyNames.push("Fencing");
     }
     if (obj?.Flooring === "Other") {
       skipKeyNames.push("Flooring");
     }
+    if (obj?.Fencing !== "Other" && obj?.CustomFencing) {
+      skipKeyNames.push("CustomFencing");
+    }
+    if (obj?.Flooring !== "Other"&& obj?.CustomFlooring) {
+      skipKeyNames.push("CustomFlooring");
+    }
+    if (obj?.PropertyStatus?.Status === "Under Contruction"&& obj?.AgeofProperty) {
+      skipKeyNames.push("AgeofProperty");
+    }
     countProperties(obj);
   }
-  if (obj?.PropertySubtype?.Name === "Office") {
+  if (
+    obj?.ProeprtyType === "Residential" &&
+    obj?.PropertySubtype?.Name === "Plot"
+  ) {
+    skipKeyNames.push(
+      "DgUpsCharge",
+      "TaxCharge",
+      "WallType",
+      "ZoneType",
+      "CustomZoneType",
+      "LocationHub",
+      "CustomLocationHub",
+      "SuitableFor",
+      "CustomSuitable",
+      "CustomWallType",
+      "ServiceLifts",
+      "passengerLifts",
+      "Staircase",
+      "PublicParking",
+      "PrivateParking",
+      "PublicWashroom",
+      "PrivateWashroom",
+      "Builder",
+      "Fitting",
+      "PropertyStatus",
+      "FloorNumber",
+      "TotalFloors",
+      "CarpetArea",
+      "LandArea",
+      "Furnished",
+      "Flooring",
+      "Fencing",
+      "Bathrooms",
+      "Bedrooms",
+      "BhkType",
+      "BuiltUpArea",
+      "CellingHeight",
+      "EntranceWidth",
+     "CurentRent",
+      "LeaseYears",
+      "ExpectedReturn",
+      "AgeofProperty",
+      "LandAreaUnit",
+      "CustomFencing",
+      "CustomFlooring",
+    );
+    countProperties(obj);
+  }
+  if (obj?.ProeprtyType === "Commercial" && obj?.PropertySubtype?.Name === "Office") {
+   
+    skipKeyNames.push(
+      "OwnerName",
+      "SuitableFor",
+      "CustomSuitable",
+      "PublicWashroom",
+      "PrivateWashroom",
+      "Fitting",
+      "Bathrooms",
+      "Bedrooms",
+      "BhkType",
+      "PlotArea",
+      "PlotLength",
+      "Plotwidth",
+      "AreaUnits",
+    );
+    if(obj?.LeasedOrRented===true &&obj?.ExpectedReturn){
+      skipKeyNames.push("ExpectedReturn");
+    }
+    if(obj?.LeasedOrRented===false &&(obj?.CurentRent && obj?.LeaseYears )){
+      skipKeyNames.push("CurentRent","LeaseYears");
+    }
+
     if (obj?.Fencing === "Other") {
       skipKeyNames.push("Fencing");
     }
@@ -145,14 +254,58 @@ function countNonNullProperties(obj) {
     if (obj?.LocationHub === "Others") {
       skipKeyNames.push("LocationHub");
     }
+    if (obj?.Fencing !== "Other" && obj?.CustomFencing) {
+      skipKeyNames.push("CustomFencing");
+    }
+    if (obj?.Flooring !== "Other"&& obj?.CustomFlooring) {
+      skipKeyNames.push("CustomFlooring");
+    }
+    if (obj?.ZoneType !== "Others"&& obj?.CustomZoneType) {
+      skipKeyNames.push("CustomZoneType");
+    }
+    if (obj?.WallType !== "Other"&& obj?.CustomWallType) {
+      skipKeyNames.push("CustomWallType");
+    }
+    if (obj?.LocationHub !== "Others"&& obj?.CustomLocationHub) {
+      skipKeyNames.push("CustomLocationHub");
+    }
+    if (obj?.PropertyStatus?.Status === "Under Contruction"&& obj?.AgeofProperty) {
+      skipKeyNames.push("AgeofProperty");
+    }
     countProperties(obj);
   }
   if (
     obj?.ProeprtyType === "Commercial" &&
     obj?.PropertySubtype?.Name !== "Office"
   ) {
-    skipKeyNames.push("DgUpsCharge");
+    skipKeyNames.push(
+      "WallType",
+      "CustomWallType",
+      "DgUpsCharge",
+    "ServiceLifts",
+      "passengerLifts",
+      "Staircase",
+      "Fitting",
+      "Bathrooms",
+      "Bedrooms",
+      "BhkType",
+      "PlotArea",
+      "PlotLength",
+      "Plotwidth",
+      "AreaUnits",
+    );
+    if(obj?.LeasedOrRented===true &&obj?.ExpectedReturn){
+      skipKeyNames.push("ExpectedReturn");
+    }
+    if(obj?.LeasedOrRented===false &&(obj?.CurentRent && obj?.LeaseYears )){
+      skipKeyNames.push("CurentRent","LeaseYears");
+    }
     if (obj?.PropertySubtype?.Name === "Warehouse") {
+      skipKeyNames.push(
+       "SuitableFor",
+      "CustomSuitable",
+      );
+
       if (obj?.ZoneType === "Others") {
         skipKeyNames.push("ZoneType");
       }
@@ -165,8 +318,27 @@ function countNonNullProperties(obj) {
       if (obj?.Flooring === "Other") {
         skipKeyNames.push("Flooring");
       }
+      if (obj?.LocationHub !== "Others"&& obj?.CustomLocationHub) {
+        skipKeyNames.push("LocationHub");
+      }
+      if (obj?.ZoneType !== "Others" && obj?.CustomZoneType) {
+        skipKeyNames.push("CustomZoneType");
+      }
+      if (obj?.Fencing !== "Other" && obj?.CustomFencing) {
+        skipKeyNames.push("CustomFencing");
+      }
+      if (obj?.Flooring !== "Other"&& obj?.CustomFlooring) {
+        skipKeyNames.push("CustomFlooring");
+      }
+      if (obj?.PropertyStatus?.Status === "Under Contruction"&& obj?.AgeofProperty) {
+        skipKeyNames.push("AgeofProperty");
+      }
     }
     if (obj?.PropertySubtype?.Name !== "Warehouse") {
+      skipKeyNames.push(
+        "ZoneType",
+      "CustomZoneType",
+       );
       if (obj?.SuitableFor === "Others") {
         skipKeyNames.push("SuitableFor");
       }
@@ -178,6 +350,21 @@ function countNonNullProperties(obj) {
       }
       if (obj?.Flooring === "Other") {
         skipKeyNames.push("Flooring");
+      }
+      if (obj?.LocationHub !== "Others"&& obj?.CustomLocationHub) {
+        skipKeyNames.push("LocationHub");
+      }
+      if (obj?.SuitableFor !== "Others"&& obj?.CustomSuitable) {
+        skipKeyNames.push("CustomSuitable");
+      }
+      if (obj?.Fencing !== "Other" && obj?.CustomFencing) {
+        skipKeyNames.push("CustomFencing");
+      }
+      if (obj?.Flooring !== "Other"&& obj?.CustomFlooring) {
+        skipKeyNames.push("CustomFlooring");
+      }
+      if (obj?.PropertyStatus?.Status === "Under Contruction"&& obj?.AgeofProperty) {
+        skipKeyNames.push("AgeofProperty");
       }
     }
     countProperties(obj);
@@ -200,7 +387,12 @@ function countNonNullProperties(obj) {
             countedKeys.push(key);
           }
         } else if (typeof obj[key] !== "object" || obj[key] === null) {
-          if (obj[key] !== undefined && obj[key] !== null && obj[key] !== "") {
+          if (
+            obj[key] !== undefined &&
+            obj[key] !== null &&
+            obj[key] !== "" &&
+            obj[key] !== 0
+          ) {
             count++;
             countedKeys.push(key);
           }
@@ -222,7 +414,7 @@ function countNonNullProperties(obj) {
       }
     }
   }
-
+  console.log("countedKeys", countedKeys);
   return count;
 }
 
@@ -262,7 +454,7 @@ export const GetPropertyScore = (obj, type) => {
       fields: obj?.PropertyStatus?.Status !== "Under Contruction" ? 48 : 47,
     },
   ];
-
+  console.log("GetPropertyScore types", types);
   const allFields = types.find((f) => f.type == type)?.fields;
   const fieldValue = countNonNullProperties(obj);
   console.log("GetPropertyScore fieldValue", fieldValue);

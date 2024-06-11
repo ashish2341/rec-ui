@@ -33,7 +33,9 @@ export default function AmenityPage({
         "sessionStoragePropertyData Aminities ",
         sessionStoragePropertyData?.Aminities
       );
-      setSelectedAmenities(sessionStoragePropertyData?.Aminities || []);
+      setSelectedAmenities(sessionStoragePropertyData?.Aminities?.map((item) => {
+        return item._id ? item._id :item ;
+      }) || []);
     }
   }, []);
 

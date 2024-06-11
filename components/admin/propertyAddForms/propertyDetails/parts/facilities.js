@@ -48,7 +48,7 @@ export default function FacilitiesPage({
       setPrivateWashroom(sessionStoragePropertyData?.PrivateWashroom || "");
       setPublicParking(sessionStoragePropertyData?.PublicParking || "");
       setServiceLifts(sessionStoragePropertyData?.ServiceLifts || "");
-      setStairCase(sessionStoragePropertyData?.StairCase || "");
+      setStairCase(sessionStoragePropertyData?.Staircase || "");
       setPublicWashroom(sessionStoragePropertyData?.PublicWashroom || "");
     }
   }, []);
@@ -82,7 +82,7 @@ export default function FacilitiesPage({
       if (propertTypWithSubTypeValue == "Office") {
         (sixthPropertyData.PublicWashroom = ""),
           (sixthPropertyData.PrivateWashroom = ""),
-          (sixthPropertyData.StairCase = stairCase),
+          (sixthPropertyData.Staircase = stairCase),
           (sixthPropertyData.ServiceLifts = serviceLifts),
           (sixthPropertyData.passengerLifts = passengerLifts);
       }

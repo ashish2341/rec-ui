@@ -71,7 +71,7 @@ export default function PossessionDetailsPage({
     if (sessionStoragePropertyData) {
       setPosessionStatus(sessionStoragePropertyData?.PosessionStatus || "");
       setPosessionDate(
-        sessionStoragePropertyData?.PosessionDate.slice(0, 10) || ""
+        sessionStoragePropertyData?.PosessionDate?.slice(0, 10) || ""
       );
       setBrochure(sessionStoragePropertyData?.Brochure || "");
       setAgeOfProperty(sessionStoragePropertyData?.AgeofProperty || "");

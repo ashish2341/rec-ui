@@ -31,22 +31,12 @@ export default function FeaturePage({
     );
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
-      setSelectedFeatures(sessionStoragePropertyData?.Features || []);
+      setSelectedFeatures(sessionStoragePropertyData?.Features?.map((item) => {
+        return item._id ? item._id :item ;
+      }) || []);
     }
   }, []);
 
-  const handlefeatureChange = (itemId) => {
-    setSelectedFeatures((prev) => {
-      const isSelected = prev.some(
-        (selectedItemId) => selectedItemId === itemId
-      );
-      if (isSelected) {
-        return prev.filter((selectedItemId) => selectedItemId !== itemId);
-      } else {
-        return [...prev, itemId];
-      }
-    });
-  };
   const SubmitForm = () => {
     if (selectedFeatures.length == 0) {
       toast.error("Please select a Feature.");

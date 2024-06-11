@@ -140,7 +140,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
       );
     }
   }, []);
-
+console.log("preleased button value ",preReleasedBtn)
   const checkRequiredFields = () => {
     if (propertTypeValue == "Residential") {
       var requiredFields = [startPrice, endPrice];
@@ -166,32 +166,35 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
     if (allFieldsFilled) {
+     const  minValue=startPrice *(priceUnit?.minPriceUnit?.value == "Lacs" ? 100000 : 10000000);
+      const maxValue= endPrice *(priceUnit?.maxPriceUnit?.value == "Lacs" ? 100000 : 10000000);
+   
+      if(minValue>maxValue){
+        toast.error("End Price Should be Greater then Start Price.")
+        return false
+      }
       const fourthPropertyData = {
         TotalPrice: {
           DisplayValue: `${startPrice} ${priceUnit?.minPriceUnit?.value} - ${endPrice} ${priceUnit?.maxPriceUnit?.value}`,
-          MinValue:
-            startPrice *
-            (priceUnit?.minPriceUnit?.value == "Lacs" ? 100000 : 10000000),
-          MaxValue:
-            endPrice *
-            (priceUnit?.maxPriceUnit?.value == "Lacs" ? 100000 : 10000000),
+          MinValue:minValue, 
+          MaxValue:maxValue, 
           MinPriceUnit: priceUnit?.minPriceUnit?.value,
           MaxPriceUnit: priceUnit?.maxPriceUnit?.value,
         },
 
-        IsNegotiable: isNegotiable ? isNegotiable : undefined,
+        IsNegotiable: isNegotiable ? isNegotiable : false,
       };
       if (propertTypeValue == "Commercial") {
-        fourthPropertyData.TaxCharge = taxCharge ? taxCharge : undefined;
+        fourthPropertyData.TaxCharge = taxCharge ? taxCharge : false;
         fourthPropertyData.LeasedOrRented = preReleasedBtn;
-        if (preReleasedBtn == false) {
+        if (preReleasedBtn === false) {
           fourthPropertyData.ExpectedReturn = expectedReturn;
           if (curentRent && leaseYears) {
             fourthPropertyData.CurentRent = "";
             fourthPropertyData.LeaseYears = "";
           }
         }
-        if (preReleasedBtn == true) {
+        if (preReleasedBtn === true) {
           fourthPropertyData.CurentRent = curentRent;
           fourthPropertyData.LeaseYears = leaseYears;
           console.log("expectedReturn",expectedReturn)
@@ -202,7 +205,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
         if (propertTypWithSubTypeValue == "Office") {
           fourthPropertyData.DgUpsCharge = dgUpsCharge
             ? dgUpsCharge
-            : undefined;
+            : false;
         }
       }
       console.log("fourthPropertyData", fourthPropertyData);
@@ -309,7 +312,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
         {/* is negotiable */}
         <PropertyBigButtons
           forRequired={false}
-          labelName={"Is Negotiable"}
+          labelName={"Is Negotiable?"}
           itemArray={conditionalArray}
           activeBtnvalue={isNegotiable}
           changeState={setIsNegotiable}
@@ -347,7 +350,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
             changeState={setPreReleasedBtn}
           />
 
-          {preReleasedBtn == true && (
+          {preReleasedBtn === true && (
             <div className="grid gap-4 mb-4 sm:grid-cols-2">
               <NumberInput
                 labelName={" Current Rent per Month"}
@@ -361,7 +364,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
               />
             </div>
           )}
-          {preReleasedBtn == false && (
+          {preReleasedBtn === false && (
             <div className="grid gap-4 mb-4 sm:grid-cols-2">
               <NumberInput
                 labelName={"Expected Return on Investment"}

@@ -148,7 +148,7 @@ export default function AddProject() {
         ExpectedReturn: propertyData?.ExpectedReturn,
         DgUpsCharge: propertyData?.DgUpsCharge,
         AgeofProperty: propertyData?.AgeofProperty,
-        Staircase: propertyData?.StairCase,
+        Staircase: propertyData?.Staircase,
         passengerLifts: propertyData?.passengerLifts,
         ServiceLifts: propertyData?.ServiceLifts,
         PublicParking: propertyData?.PublicParking,

@@ -1,5 +1,31 @@
 .dashboardContainer{
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+    
+    
+}
+.showCard1{
+    background-color: #fff4d4 !important;
+    color: #e8af09 !important;
+    /* text-shadow: 2px 2px 4px #d1c6a4; */
+}
+.showCard2{ 
+    background-color:  #e4f4fc !important;
+    color: #0aa0ed !important
+}
+.showCard3{
+    background-color:  #dbf3e3 !important;
+    color: #049936 !important;
+    /* text-shadow:   2px 2px 4px rgba(4, 153, 54, 0.5)  !important; */
+   
+}
+
+.showCard4{
+    background-color:    #e4ecf4 !important;
+    color: #2270be !important
+}
+.dataSection1{
+  
 }

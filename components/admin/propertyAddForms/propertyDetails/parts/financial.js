@@ -170,22 +170,26 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
     const allFieldsFilled = checkRequiredFields();
 
     if (allFieldsFilled) {
+
+      const  minValue=startPrice *(priceUnit?.minPriceUnit?.value == "Lacs" ? 100000 : 10000000);
+      const maxValue= endPrice *(priceUnit?.maxPriceUnit?.value == "Lacs" ? 100000 : 10000000);
+   
+      if(minValue>maxValue){
+        toast.error("End Price Should be Greater then Start Price.")
+        return false
+      }
       const fourthPropertyData = {
         TotalPrice: {
           DisplayValue: `${startPrice} ${priceUnit?.minPriceUnit?.value} - ${endPrice} ${priceUnit?.maxPriceUnit?.value}`,
-          MinValue:
-            startPrice *
-            (priceUnit?.minPriceUnit?.value == "Lacs" ? 100000 : 10000000),
-          MaxValue:
-            endPrice *
-            (priceUnit?.maxPriceUnit?.value == "Lacs" ? 100000 : 10000000),
+          MinValue:minValue,
+          MaxValue:maxValue,
           MinPriceUnit: priceUnit?.minPriceUnit?.value,
           MaxPriceUnit: priceUnit?.maxPriceUnit?.value,
         },
-        IsNegotiable: isNegotiable ? isNegotiable : undefined,
+        IsNegotiable: isNegotiable ? isNegotiable : false,
       };
       if (propertTypeValue == "Commercial") {
-        (fourthPropertyData.TaxCharge = taxCharge ? taxCharge : undefined),
+        (fourthPropertyData.TaxCharge = taxCharge ? taxCharge : false),
           (fourthPropertyData.LeasedOrRented = preReleasedBtn);
         if (preReleasedBtn == false) {
           fourthPropertyData.ExpectedReturn = expectedReturn;
@@ -204,7 +208,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
         if (propertTypWithSubTypeValue == "Office") {
           fourthPropertyData.DgUpsCharge = dgUpsCharge
             ? dgUpsCharge
-            : undefined;
+            : false;
         }
       }
       const localStorageData = JSON.parse(
@@ -310,7 +314,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
         {/* is negotiable */}
         <PropertyBigButtons
           forRequired={false}
-          labelName={"Is Negotiable"}
+          labelName={"Is Negotiable?"}
           itemArray={conditionalArray}
           activeBtnvalue={isNegotiable}
           changeState={setIsNegotiable}

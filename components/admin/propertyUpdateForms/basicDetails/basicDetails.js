@@ -5,7 +5,12 @@ import { ToastContainer, toast } from "react-toastify";
 import Styles from "../../propertyAddForms/propertyAdd.module.css";
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
 import ApiButtons from "@/components/common/admin/propertyapiButtons/ApiButtons";
-import { API_BASE_URL_FOR_MASTER ,conditionalArray, lookingToArray ,propertyTypeArray } from "@/utils/constants";
+import {
+  API_BASE_URL_FOR_MASTER,
+  conditionalArray,
+  lookingToArray,
+  propertyTypeArray,
+} from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import Cookies from "js-cookie";
 import NextButton from "@/components/common/admin/nextButton/nextButton";
@@ -24,8 +29,6 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
     `${API_BASE_URL_FOR_MASTER}/propertyWithSubTypes`
   );
 
-
- 
   const [propertyTypeWithSubtype, setPropertyTypeWithSubtype] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -34,50 +37,57 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
   const [facing, setFacing] = useState("");
   const [isEnabled, setIsEnabled] = useState(true);
   const [isFeatured, setIsFeatured] = useState(true);
-  const [propertTypWithSubTypeValue, setPropertTypWithSubTypeValue] = useState("");
+  const [propertTypWithSubTypeValue, setPropertTypWithSubTypeValue] =
+    useState("");
+  const [propertyId, setPropertyId] = useState("");
 
+  let propertySubTypeArray = { data: "" };
 
-  let propertySubTypeArray ={data:""};
-
-  
-  if (propertySubTypeData &&
+  if (
+    propertySubTypeData &&
     Propertyfor &&
     propertyType &&
     Propertyfor == "Sell" &&
     propertyType == "Residential"
   ) {
-    propertySubTypeArray.data=propertySubTypeData?.data?.filter(item=>item.Type=="Residential")
-   
+    propertySubTypeArray.data = propertySubTypeData?.data?.filter(
+      (item) => item.Type == "Residential"
+    );
   }
-  if (propertySubTypeData &&
+  if (
+    propertySubTypeData &&
     Propertyfor.length > 0 &&
     propertyType.length > 0 &&
     (Propertyfor == "Rent" || Propertyfor == "Sell") &&
     propertyType == "Commercial"
   ) {
-    propertySubTypeArray.data=propertySubTypeData?.data?.filter(item=>item.Type=="Commercial")
-    
+    propertySubTypeArray.data = propertySubTypeData?.data?.filter(
+      (item) => item.Type == "Commercial"
+    );
   }
 
-  // useEffect(()=>{
-   
-  //   if(propertyTypeWithSubtype.Name != propertTypWithSubTypeValue ){
-  //     setTitle("");
-  //     setDescription("");
-  //     setFacing("");
-  //     if (roles.includes("Admin")) {
-  //       setIsEnabled(true)
-  //       setIsFeatured(true)
-  //     }
-  //   }
-  // },[propertyTypeWithSubtype])
+  useEffect(() => {
+    if (
+      (propertyTypeWithSubtype !== undefined &&
+      propertTypWithSubTypeValue !== "") &&
+      propertyTypeWithSubtype.Name != propertTypWithSubTypeValue
+    ) {
+      console.log("entered");
+      setTitle("");
+      setDescription("");
+      setFacing("");
+      if (roles.includes("Admin")) {
+        setIsEnabled(true);
+        setIsFeatured(true);
+      }
+    }
+  }, [propertyTypeWithSubtype]);
   useEffect(() => {
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("EditPropertyData")
     );
 
     if (sessionStoragePropertyData) {
-   
       setPropertyTypeWithSubtype(
         sessionStoragePropertyData?.PropertySubtype || ""
       );
@@ -88,6 +98,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
       setPropertTypWithSubTypeValue(
         sessionStoragePropertyData?.PropertySubtype?.Name || ""
       );
+      setPropertyId(sessionStoragePropertyData?._id || "");
       setFacing(sessionStoragePropertyData?.Facing[0] || "");
       if (roles.includes("Admin")) {
         setIsEnabled(
@@ -159,10 +170,16 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
         IsFeatured: isFeatured,
         PropertySubtype: propertyTypeWithSubtype,
       };
-      // if((propertTypWithSubTypeValue )&& (propertTypWithSubTypeValue != propertyTypeWithSubtype?.Name)){
-      //       sessionStorage.removeItem("EditPropertyData")
-      // }
-      
+      if (
+        propertTypWithSubTypeValue &&
+        propertTypWithSubTypeValue != propertyTypeWithSubtype?.Name
+      ) {
+        if (propertyId) {
+          basicDetailsData._id = propertyId;
+        }
+        sessionStorage.removeItem("EditPropertyData");
+      }
+
       const updatedProjectData = {
         ...JSON.parse(sessionStorage.getItem("EditPropertyData")),
         ...basicDetailsData,
@@ -206,14 +223,14 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
             </div>
 
             {propertySubTypeArray?.data?.length > 0 && (
-              
-                <ApiButtons
-                  itemArray={propertySubTypeArray}
-                  stateItem={propertyTypeWithSubtype}
-                  labelName={"Property SubType"}
-                  ValueName={"Name"}
-                  changeState={setPropertyTypeWithSubtype}
-                />
+              <ApiButtons
+                itemArray={propertySubTypeArray}
+                stateItem={propertyTypeWithSubtype}
+                labelName={"Property SubType"}
+                ValueName={"Name"}
+                changeState={setPropertyTypeWithSubtype}
+               
+              />
             )}
             <div>
               <label
@@ -286,7 +303,10 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
             </div>
           </div>
         </form>
-        <NextButton onSubmit={SubmitForm} butonSubName={"add Location Details"}/>
+        <NextButton
+          onSubmit={SubmitForm}
+          butonSubName={"add Location Details"}
+        />
       </div>
     </>
   );

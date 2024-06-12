@@ -26,10 +26,7 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
   );
 
 
-  // fetching Data for areaUnitData
-  const { data: areaUnitData } = useFetch(
-    `${API_BASE_URL_FOR_MASTER}/areaunits`
-  );
+
   // console.log("areaUnitData", areaUnitData);
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("propertyData")
@@ -92,13 +89,16 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
       setCustomFencing(sessionStoragePropertyData?.CustomFencing || "")
       setCustomFlooring(sessionStoragePropertyData?.CustomFlooring || "")
       setCustomWallType(sessionStoragePropertyData?.CustomWallType || "")
-      setAreaUnits(sessionStoragePropertyData?.AreaUnits || "");
+      setAreaUnits({
+        value: sessionStoragePropertyData?.AreaUnits || "Sq-ft",
+        label: sessionStoragePropertyData?.AreaUnits || "Sq-ft",
+      });
       setPlotArea(sessionStoragePropertyData?.PlotArea || "");
       setPlotLength(sessionStoragePropertyData?.PlotLength || "");
       setPlotWidth(sessionStoragePropertyData?.PlotWidth || "");
       setLandAreaUnit({
-        value: sessionStoragePropertyData?.LandAreaUnit|| "",
-        label: sessionStoragePropertyData?.LandAreaUnit|| "",
+        value: sessionStoragePropertyData?.LandAreaUnit || "Sq-ft",
+        label: sessionStoragePropertyData?.LandAreaUnit || "Sq-ft",
       });
     }
   }, []);
@@ -113,7 +113,7 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
       propertTypWithSubTypeValue != "Plot" &&
       (propertTypeValue == "Residential" || propertTypeValue == "Commercial")
     ) {
-      var requiredFields = [fencing, flooring, furnished, builtUpArea];
+      var requiredFields = [fencing, flooring, furnished, builtUpArea,landArea];
       if(fencing==="Other"){
         requiredFields.push(customFencing)
       }
@@ -133,7 +133,7 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
         flooring,
         furnished,
         builtUpArea,
-        wallType,
+        wallType,landArea
       ];
       if(wallType==="Other"){
         requiredFields.push(customWallType)
@@ -155,21 +155,8 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
   };
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
-    console.log("landAreaUnit", landAreaUnit);
-    console.log("landArea", landArea);
-    if (landAreaUnit !== "") {
-      console.log("entered landAreaUnit");
-    }
-    if (propertTypWithSubTypeValue !== "Plot") {
-      if (landArea === "" && landAreaUnit.value) {
-        toast.error("Please fill Land Area field.");
-        return false;
-      }
-      if (landArea && landAreaUnit.value === "") {
-        toast.error("Please fill Land Area Unit field.");
-        return false;
-      }
-    }
+  
+   
     if (allFieldsFilled) {
       const thirdPropertyData = {};
       if (propertTypWithSubTypeValue != "Plot") {
@@ -202,7 +189,7 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
       }
       if (propertTypWithSubTypeValue == "Plot") {
         (thirdPropertyData.PlotArea = plotArea),
-          (thirdPropertyData.AreaUnits = areaUnits),
+          (thirdPropertyData.AreaUnits = areaUnits.value),
           (thirdPropertyData.PlotLength = plotLength),
           (thirdPropertyData.PlotWidth = plotwidth);
       }
@@ -234,33 +221,40 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
         {propertTypWithSubTypeValue && propertTypWithSubTypeValue == "Plot" && (
           <>
             {/* Plot Area */}
-            <div>
-              <label
-                htmlFor="plotArea"
-                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
-              >
-                Plot Area
-              </label>
-              <input
-                type="number"
-                name="plotArea"
-                id="plotArea"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Plot Area"
-                value={plotArea}
-                onChange={(e) => setPlotArea(e.target.value)}
-              />
+            <div class="w-full mx-auto">
+              <div>
+                <label
+                  for="search-dropdown"
+                  className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
+                >
+                  Plot Area
+                </label>
+                <div class="relative w-full">
+                  <input
+                    type="number"
+                    name="plotArea"
+                    id="plotArea"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Plot Area"
+                    value={plotArea}
+                    onChange={(e) => setPlotArea(e.target.value)}
+                  />
+                  <div className="absolute top-0 end-0 text-sm font-medium h-full text-black  rounded-e-lg border-none m-0.5 ">
+                    <Select
+                      options={staticAreaUnitArray.map((element) => ({
+                        value: element.value,
+                        label: element.label,
+                      }))}
+                      value={areaUnits}
+                      onChange={(e) =>
+                        setAreaUnits({ value: e.value, label: e.label })
+                      }
+                      placeholder="Select Unit"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
-            {/*  Area Unit */}
-            {areaUnitData && (
-              <ApiButtons
-                itemArray={areaUnitData}
-                stateItem={areaUnits}
-                labelName={"Area Unit"}
-                ValueName={"Unit"}
-                changeState={setAreaUnits}
-              />
-            )}
 
             {/* Plot Width */}
             <div>
@@ -334,7 +328,7 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
             />
             {fencing === "Other" && (
                 <TextInput
-                  labelName={" Write your Fencing Type"}
+                  labelName={"Fencing Type"}
                   inputValue={customFencing}
                   dynamicState={setCustomFencing}
                 />
@@ -353,7 +347,7 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
             />
             {flooring == "Other" && (
                 <TextInput
-                  labelName={" Write your Flooring Type"}
+                  labelName={"Flooring Type"}
                   inputValue={customFlooring}
                   dynamicState={setCustomFlooring}
                 />
@@ -371,7 +365,44 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
               changeState={setFurnished}
             />
           )}
+
+           
           <div className="grid gap-4 mb-4 mt-5 sm:grid-cols-2">
+            {/* land area and unit */}
+           <div class="w-full mx-auto">
+            <div>
+              <label
+                for="search-dropdown"
+                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
+              >
+                Land Area
+              </label>
+              <div class="relative w-full">
+                <input
+                  type="number"
+                  name="landArea"
+                  id="landArea"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Land Area"
+                  value={landArea}
+                  onChange={(e) => setLandArea(e.target.value)}
+                />
+                <div className="absolute top-0 end-0 text-sm font-medium h-full text-black  rounded-e-lg border-none m-0.5 ">
+                  <Select
+                    options={staticAreaUnitArray.map((element) => ({
+                      value: element.value,
+                      label: element.label,
+                    }))}
+                    value={landAreaUnit}
+                    onChange={(e) =>
+                      setLandAreaUnit({ value: e.value, label: e.label })
+                    }
+                    placeholder="Select Unit"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
             {/* Builtup ARea */}
             <div>
               <label
@@ -408,53 +439,7 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                 onChange={(e) => setCarpetArea(e.target.value)}
               />
             </div>
-            {/* LandArea */}
-            <div>
-              <label
-                htmlFor="landArea"
-                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white "
-              >
-                Land Area
-              </label>
-              <input
-                type="number"
-                name="landArea"
-                id="landArea"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Land Area"
-                value={landArea}
-                onChange={(e) => setLandArea(e.target.value)}
-              />
-            </div>
-            {/*  Land Area Unit */}
-
-            <div>
-              <label
-                htmlFor="landArea"
-                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white "
-              >
-                Land Area Unit
-              </label>
-              <Select
-                options={staticAreaUnitArray.map((element) => ({
-                  value: element.value,
-                  label: element.label,
-                }))}
-                value={landAreaUnit}
-                onChange={(e) =>
-                  setLandAreaUnit({ value: e.value, label: e.label })
-                }
-                placeholder="Select Unit"
-              />
-            </div>
-          </div>
-        </>
-      )}
-
-      {propertTypWithSubTypeValue !== "Plot" && (
-        <>
-          <div className="grid gap-4 mb-4 sm:grid-cols-2">
-            {/* LandArea */}
+            {/* Entrance width in feet */}
             <div>
               <label
                 htmlFor="entranceWidth"
@@ -494,6 +479,8 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
           </div>
         </>
       )}
+
+    
       {propertTypWithSubTypeValue &&
         propertTypeValue &&
         propertTypWithSubTypeValue != "Plot" &&

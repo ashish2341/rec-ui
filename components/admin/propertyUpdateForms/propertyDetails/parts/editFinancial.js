@@ -94,14 +94,9 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
         }
       );
 
-      setCurrentRent(sessionStoragePropertyData?.CurentRent || "");
-      setLeaseYears(sessionStoragePropertyData?.LeaseYears || "");
-      setExpectedReturn(sessionStoragePropertyData?.ExpectedReturn || "");
-
-      setDiscountPercentage(
-        sessionStoragePropertyData?.DiscountPercentage || ""
-      );
-      setDiscountForYears(sessionStoragePropertyData?.DiscountForYears || "");
+      setCurrentRent(sessionStoragePropertyData?.CurentRent || null);
+      setLeaseYears(sessionStoragePropertyData?.LeaseYears || null);
+      setExpectedReturn(sessionStoragePropertyData?.ExpectedReturn || null);
       setPreReleasedBtn(
         sessionStoragePropertyData?.LeasedOrRented === true
           ? true
@@ -188,18 +183,17 @@ console.log("preleased button value ",preReleasedBtn)
         fourthPropertyData.TaxCharge = taxCharge ? taxCharge : false;
         fourthPropertyData.LeasedOrRented = preReleasedBtn;
         if (preReleasedBtn === false) {
-          fourthPropertyData.ExpectedReturn = expectedReturn;
+          fourthPropertyData.ExpectedReturn = expectedReturn ? expectedReturn :null;
           if (curentRent && leaseYears) {
-            fourthPropertyData.CurentRent = "";
-            fourthPropertyData.LeaseYears = "";
+            fourthPropertyData.CurentRent = null;
+            fourthPropertyData.LeaseYears = null;
           }
         }
         if (preReleasedBtn === true) {
-          fourthPropertyData.CurentRent = curentRent;
-          fourthPropertyData.LeaseYears = leaseYears;
-          console.log("expectedReturn",expectedReturn)
-          if (expectedReturn || expectedReturn==="" ) {
-            fourthPropertyData.ExpectedReturn = "";
+          fourthPropertyData.CurentRent = curentRent ? curentRent :null;
+          fourthPropertyData.LeaseYears = leaseYears ? leaseYears :null;
+          if (expectedReturn || expectedReturn==="" || expectedReturn===null ) {
+            fourthPropertyData.ExpectedReturn = null;
           }
         }
         if (propertTypWithSubTypeValue == "Office") {
@@ -208,6 +202,7 @@ console.log("preleased button value ",preReleasedBtn)
             : false;
         }
       }
+    
       console.log("fourthPropertyData", fourthPropertyData);
       const localStorageData = JSON.parse(
         sessionStorage.getItem("EditPropertyData")

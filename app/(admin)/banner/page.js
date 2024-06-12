@@ -82,9 +82,7 @@ export default function Banner() {
               </button>
             </div>
           </Link>
-          <label htmlFor="table-search" className="sr-only">
-            Search
-          </label>
+          {listData && listData.data.length > 0 && (
           <div className="relative">
             <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
               <svg
@@ -109,7 +107,11 @@ export default function Banner() {
             onChange={searchInputChange}
             />
           </div>
+            )}
         </div>
+        {(listData ? (
+          listData?.data?.length > 0 ? (
+        <div>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -148,14 +150,14 @@ export default function Banner() {
                   <div className="flex items-center space-x-2">
                     <Link
                       href={`/banner/${item._id}`}
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                      className="font-bold text-lg text-blue-600 dark:text-blue-500 hover:underline"
                     >
                       <i className="bi bi-pencil-square"></i>
                     </Link>
                     {/* <i className="bi bi-eye-fill"></i> */}
                     <Link
                       href="#"
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                      className="font-medium text-lg text-red-600 dark:text-red-500 hover:underline"
                     >
                       <i
                            onClick={() => deleteBanner(item._id)}
@@ -173,6 +175,11 @@ export default function Banner() {
          pageNo={handlePageChange}
          pageVal={page}
          /> */}
+        </div>
+         ) : (
+          <h1 className={`bigNotFound`}>No Data Found</h1>
+        )
+      ) : null)}
       </div>
 
       <Popup

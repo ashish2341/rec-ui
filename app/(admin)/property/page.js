@@ -316,7 +316,7 @@ export default function Property() {
 
       <Popup
         isOpen={isPopupOpen}
-        title="Are you sure you want to delete this Testimonial ?"
+        title="Are you sure you want to delete this Property ?"
         confirmLabel="Yes, I'm sure"
         cancelLabel="No, cancel"
         onConfirm={handleDelete}

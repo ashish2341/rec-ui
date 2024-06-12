@@ -1,4 +1,5 @@
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 export const AbbreviatedNumberParser = (str) => {
   const parseSegment = (segment) => {
     const lakhRegex = /(\d+)\s*L/;
@@ -117,7 +118,9 @@ function countNonNullProperties(obj) {
     "__v",
     "_id",
     "CompletePercentage",
-    "LeasedOrRented",
+    "CurentRent",
+    "LeaseYears",
+    "ExpectedReturn",
   ];
   if (
     obj?.ProeprtyType === "Residential" &&
@@ -149,6 +152,7 @@ function countNonNullProperties(obj) {
       "CurentRent",
       "LeaseYears",
       "ExpectedReturn",
+      "LeasedOrRented"
     );
     if (obj?.Fencing === "Other") {
       skipKeyNames.push("Fencing");
@@ -159,10 +163,13 @@ function countNonNullProperties(obj) {
     if (obj?.Fencing !== "Other" && obj?.CustomFencing) {
       skipKeyNames.push("CustomFencing");
     }
-    if (obj?.Flooring !== "Other"&& obj?.CustomFlooring) {
+    if (obj?.Flooring !== "Other" && obj?.CustomFlooring) {
       skipKeyNames.push("CustomFlooring");
     }
-    if (obj?.PropertyStatus?.Status === "Under Contruction"&& obj?.AgeofProperty) {
+    if (
+      obj?.PropertyStatus?.Status === "Under Contruction" &&
+      obj?.AgeofProperty
+    ) {
       skipKeyNames.push("AgeofProperty");
     }
     countProperties(obj);
@@ -171,6 +178,7 @@ function countNonNullProperties(obj) {
     obj?.ProeprtyType === "Residential" &&
     obj?.PropertySubtype?.Name === "Plot"
   ) {
+    console.log("Residential and Plot if worked");
     skipKeyNames.push(
       "DgUpsCharge",
       "TaxCharge",
@@ -205,18 +213,21 @@ function countNonNullProperties(obj) {
       "BuiltUpArea",
       "CellingHeight",
       "EntranceWidth",
-     "CurentRent",
+      "CurentRent",
       "LeaseYears",
       "ExpectedReturn",
       "AgeofProperty",
       "LandAreaUnit",
       "CustomFencing",
       "CustomFlooring",
+      "LeasedOrRented"
     );
     countProperties(obj);
   }
-  if (obj?.ProeprtyType === "Commercial" && obj?.PropertySubtype?.Name === "Office") {
-   
+  if (
+    obj?.ProeprtyType === "Commercial" &&
+    obj?.PropertySubtype?.Name === "Office"
+  ) {
     skipKeyNames.push(
       "OwnerName",
       "SuitableFor",
@@ -230,13 +241,13 @@ function countNonNullProperties(obj) {
       "PlotArea",
       "PlotLength",
       "Plotwidth",
-      "AreaUnits",
+      "AreaUnits"
     );
-    if(obj?.LeasedOrRented===true &&obj?.ExpectedReturn){
+    if (obj?.LeasedOrRented === true && obj?.ExpectedReturn) {
       skipKeyNames.push("ExpectedReturn");
     }
-    if(obj?.LeasedOrRented===false &&(obj?.CurentRent && obj?.LeaseYears )){
-      skipKeyNames.push("CurentRent","LeaseYears");
+    if (obj?.LeasedOrRented === false && obj?.CurentRent && obj?.LeaseYears) {
+      skipKeyNames.push("CurentRent", "LeaseYears");
     }
 
     if (obj?.Fencing === "Other") {
@@ -257,19 +268,22 @@ function countNonNullProperties(obj) {
     if (obj?.Fencing !== "Other" && obj?.CustomFencing) {
       skipKeyNames.push("CustomFencing");
     }
-    if (obj?.Flooring !== "Other"&& obj?.CustomFlooring) {
+    if (obj?.Flooring !== "Other" && obj?.CustomFlooring) {
       skipKeyNames.push("CustomFlooring");
     }
-    if (obj?.ZoneType !== "Others"&& obj?.CustomZoneType) {
+    if (obj?.ZoneType !== "Others" && obj?.CustomZoneType) {
       skipKeyNames.push("CustomZoneType");
     }
-    if (obj?.WallType !== "Other"&& obj?.CustomWallType) {
+    if (obj?.WallType !== "Other" && obj?.CustomWallType) {
       skipKeyNames.push("CustomWallType");
     }
-    if (obj?.LocationHub !== "Others"&& obj?.CustomLocationHub) {
+    if (obj?.LocationHub !== "Others" && obj?.CustomLocationHub) {
       skipKeyNames.push("CustomLocationHub");
     }
-    if (obj?.PropertyStatus?.Status === "Under Contruction"&& obj?.AgeofProperty) {
+    if (
+      obj?.PropertyStatus?.Status === "Under Contruction" &&
+      obj?.AgeofProperty
+    ) {
       skipKeyNames.push("AgeofProperty");
     }
     countProperties(obj);
@@ -282,7 +296,7 @@ function countNonNullProperties(obj) {
       "WallType",
       "CustomWallType",
       "DgUpsCharge",
-    "ServiceLifts",
+      "ServiceLifts",
       "passengerLifts",
       "Staircase",
       "Fitting",
@@ -292,19 +306,16 @@ function countNonNullProperties(obj) {
       "PlotArea",
       "PlotLength",
       "Plotwidth",
-      "AreaUnits",
+      "AreaUnits"
     );
-    if(obj?.LeasedOrRented===true &&obj?.ExpectedReturn){
+    if (obj?.LeasedOrRented === true && obj?.ExpectedReturn) {
       skipKeyNames.push("ExpectedReturn");
     }
-    if(obj?.LeasedOrRented===false &&(obj?.CurentRent && obj?.LeaseYears )){
-      skipKeyNames.push("CurentRent","LeaseYears");
+    if (obj?.LeasedOrRented === false && obj?.CurentRent && obj?.LeaseYears) {
+      skipKeyNames.push("CurentRent", "LeaseYears");
     }
     if (obj?.PropertySubtype?.Name === "Warehouse") {
-      skipKeyNames.push(
-       "SuitableFor",
-      "CustomSuitable",
-      );
+      skipKeyNames.push("SuitableFor", "CustomSuitable");
 
       if (obj?.ZoneType === "Others") {
         skipKeyNames.push("ZoneType");
@@ -318,7 +329,7 @@ function countNonNullProperties(obj) {
       if (obj?.Flooring === "Other") {
         skipKeyNames.push("Flooring");
       }
-      if (obj?.LocationHub !== "Others"&& obj?.CustomLocationHub) {
+      if (obj?.LocationHub !== "Others" && obj?.CustomLocationHub) {
         skipKeyNames.push("LocationHub");
       }
       if (obj?.ZoneType !== "Others" && obj?.CustomZoneType) {
@@ -327,18 +338,19 @@ function countNonNullProperties(obj) {
       if (obj?.Fencing !== "Other" && obj?.CustomFencing) {
         skipKeyNames.push("CustomFencing");
       }
-      if (obj?.Flooring !== "Other"&& obj?.CustomFlooring) {
+      if (obj?.Flooring !== "Other" && obj?.CustomFlooring) {
         skipKeyNames.push("CustomFlooring");
       }
-      if (obj?.PropertyStatus?.Status === "Under Contruction"&& obj?.AgeofProperty) {
+      if (
+        obj?.PropertyStatus?.Status === "Under Contruction" &&
+        obj?.AgeofProperty
+      ) {
         skipKeyNames.push("AgeofProperty");
       }
     }
     if (obj?.PropertySubtype?.Name !== "Warehouse") {
-      skipKeyNames.push(
-        "ZoneType",
-      "CustomZoneType",
-       );
+      skipKeyNames.push("ZoneType", "CustomZoneType");
+
       if (obj?.SuitableFor === "Others") {
         skipKeyNames.push("SuitableFor");
       }
@@ -351,19 +363,22 @@ function countNonNullProperties(obj) {
       if (obj?.Flooring === "Other") {
         skipKeyNames.push("Flooring");
       }
-      if (obj?.LocationHub !== "Others"&& obj?.CustomLocationHub) {
+      if (obj?.LocationHub !== "Others" && obj?.CustomLocationHub) {
         skipKeyNames.push("LocationHub");
       }
-      if (obj?.SuitableFor !== "Others"&& obj?.CustomSuitable) {
+      if (obj?.SuitableFor !== "Others" && obj?.CustomSuitable) {
         skipKeyNames.push("CustomSuitable");
       }
       if (obj?.Fencing !== "Other" && obj?.CustomFencing) {
         skipKeyNames.push("CustomFencing");
       }
-      if (obj?.Flooring !== "Other"&& obj?.CustomFlooring) {
+      if (obj?.Flooring !== "Other" && obj?.CustomFlooring) {
         skipKeyNames.push("CustomFlooring");
       }
-      if (obj?.PropertyStatus?.Status === "Under Contruction"&& obj?.AgeofProperty) {
+      if (
+        obj?.PropertyStatus?.Status === "Under Contruction" &&
+        obj?.AgeofProperty
+      ) {
         skipKeyNames.push("AgeofProperty");
       }
     }
@@ -414,47 +429,116 @@ function countNonNullProperties(obj) {
       }
     }
   }
-  console.log("countedKeys", countedKeys);
+  // console.log("countedKeys", countedKeys);
   return count;
 }
 
 export const GetPropertyScore = (obj, type) => {
+  const roleData = Cookies.get("roles") ?? "";
+  const name = Cookies.get("name");
+  const roles = roleData && JSON.parse(roleData);
+  const userId = Cookies.get("userId");
+  // console.log("GetPropertyScore roles", roles);
   const types = [
     {
       type: "Apartment",
-      fields: obj?.PropertyStatus?.Status !== "Under Contruction" ? 46 : 45,
+      fields: roles.includes("Admin")
+        ? obj?.PropertyStatus?.Status &&
+          obj?.PropertyStatus?.Status !== "Under Contruction"
+          ? 46
+          : 45
+        : obj?.PropertyStatus?.Status &&
+          obj?.PropertyStatus?.Status !== "Under Contruction"
+        ? 45
+        : 44,
     },
     {
       type: "Independent House",
-      fields: obj?.PropertyStatus?.Status !== "Under Contruction" ? 46 : 45,
+      fields: roles.includes("Admin")
+        ? obj?.PropertyStatus?.Status &&
+          obj?.PropertyStatus?.Status !== "Under Contruction"
+          ? 46
+          : 45
+        : obj?.PropertyStatus?.Status &&
+          obj?.PropertyStatus?.Status !== "Under Contruction"
+        ? 45
+        : 44,
     },
     {
       type: "Independent Floor",
-      fields: obj?.PropertyStatus?.Status !== "Under Contruction" ? 46 : 45,
+      fields: roles.includes("Admin")
+        ? obj?.PropertyStatus?.Status &&
+          obj?.PropertyStatus?.Status !== "Under Contruction"
+          ? 46
+          : 45
+        : obj?.PropertyStatus?.Status &&
+          obj?.PropertyStatus?.Status !== "Under Contruction"
+        ? 45
+        : 44,
     },
     {
       type: "Villa",
-      fields: obj?.PropertyStatus?.Status !== "Under Contruction" ? 46 : 45,
+      fields: roles.includes("Admin")
+        ? obj?.PropertyStatus?.Status &&
+          obj?.PropertyStatus?.Status !== "Under Contruction"
+          ? 46
+          : 45
+        : obj?.PropertyStatus?.Status &&
+          obj?.PropertyStatus?.Status !== "Under Contruction"
+        ? 45
+        : 44,
     },
     { type: "Plot", fields: 29 },
     {
       type: "Office",
-      fields: obj?.PropertyStatus?.Status !== "Under Contruction" ? 50 : 49,
+      fields: roles.includes("Admin")
+        ? obj?.PropertyStatus?.Status &&
+          obj?.PropertyStatus?.Status !== "Under Contruction"
+          ? 49
+          : 48
+        : obj?.PropertyStatus?.Status &&
+          obj?.PropertyStatus?.Status !== "Under Contruction"
+        ? 48
+        : 47,
     },
     {
       type: "Retail Shop",
-      fields: obj?.PropertyStatus?.Status !== "Under Contruction" ? 48 : 47,
+      fields: roles.includes("Admin")
+        ? obj?.PropertyStatus?.Status &&
+          obj?.PropertyStatus?.Status !== "Under Contruction"
+          ? 47
+          : 46
+        : obj?.PropertyStatus?.Status &&
+          obj?.PropertyStatus?.Status !== "Under Contruction"
+        ? 46
+        : 45,
     },
     {
       type: "Showroom",
-      fields: obj?.PropertyStatus?.Status !== "Under Contruction" ? 48 : 47,
+      fields: roles.includes("Admin")
+        ? obj?.PropertyStatus?.Status &&
+          obj?.PropertyStatus?.Status !== "Under Contruction"
+          ? 47
+          : 46
+        : obj?.PropertyStatus?.Status &&
+          obj?.PropertyStatus?.Status !== "Under Contruction"
+        ? 46
+        : 45,
     },
     {
       type: "Warehouse",
-      fields: obj?.PropertyStatus?.Status !== "Under Contruction" ? 48 : 47,
+      fields: roles.includes("Admin")
+        ? obj?.PropertyStatus?.Status &&
+          obj?.PropertyStatus?.Status !== "Under Contruction"
+          ? 47
+          : 46
+        : obj?.PropertyStatus?.Status &&
+          obj?.PropertyStatus?.Status !== "Under Contruction"
+        ? 46
+        : 45,
     },
   ];
-  console.log("GetPropertyScore types", types);
+  // console.log("GetPropertyScore types", types);
   const allFields = types.find((f) => f.type == type)?.fields;
   const fieldValue = countNonNullProperties(obj);
   console.log("GetPropertyScore fieldValue", fieldValue);

@@ -39,7 +39,12 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
   const [isFeatured, setIsFeatured] = useState(true);
   const [propertTypWithSubTypeValue, setPropertTypWithSubTypeValue] =
     useState("");
+  const [publicParking, setPublicParking] = useState("");
+  const [privateParking, setPrivateParking] = useState("");
+  const [publicWashroom, setPublicWashroom] = useState("");
+  const [privateWashroom, setPrivateWashroom] = useState("");
   const [propertyId, setPropertyId] = useState("");
+  const [landArea, setLandArea] = useState("");
 
   let propertySubTypeArray = { data: "" };
 
@@ -68,8 +73,8 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
 
   useEffect(() => {
     if (
-      (propertyTypeWithSubtype !== undefined &&
-      propertTypWithSubTypeValue !== "") &&
+      propertyTypeWithSubtype !== undefined &&
+      propertTypWithSubTypeValue !== "" &&
       propertyTypeWithSubtype.Name != propertTypWithSubTypeValue
     ) {
       console.log("entered");
@@ -91,6 +96,10 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
       setPropertyTypeWithSubtype(
         sessionStoragePropertyData?.PropertySubtype || ""
       );
+      setPrivateParking(sessionStoragePropertyData?.PrivateParking || "");
+      setPrivateWashroom(sessionStoragePropertyData?.PrivateWashroom || "");
+      setPublicParking(sessionStoragePropertyData?.PublicParking || "");
+      setPublicWashroom(sessionStoragePropertyData?.PublicWashroom || "");
       setTitle(sessionStoragePropertyData?.Title || "");
       setDescription(sessionStoragePropertyData?.Description || "");
       setPropertyType(sessionStoragePropertyData?.ProeprtyType || "");
@@ -98,6 +107,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
       setPropertTypWithSubTypeValue(
         sessionStoragePropertyData?.PropertySubtype?.Name || ""
       );
+      setLandArea(sessionStoragePropertyData?.LandArea || "");
       setPropertyId(sessionStoragePropertyData?._id || "");
       setFacing(sessionStoragePropertyData?.Facing[0] || "");
       if (roles.includes("Admin")) {
@@ -170,6 +180,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
         IsFeatured: isFeatured,
         PropertySubtype: propertyTypeWithSubtype,
       };
+
       if (
         propertTypWithSubTypeValue &&
         propertTypWithSubTypeValue != propertyTypeWithSubtype?.Name
@@ -179,7 +190,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
         }
         sessionStorage.removeItem("EditPropertyData");
       }
-
+     
       const updatedProjectData = {
         ...JSON.parse(sessionStorage.getItem("EditPropertyData")),
         ...basicDetailsData,
@@ -229,7 +240,6 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
                 labelName={"Property SubType"}
                 ValueName={"Name"}
                 changeState={setPropertyTypeWithSubtype}
-               
               />
             )}
             <div>

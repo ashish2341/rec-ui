@@ -74,7 +74,7 @@ export default function PossessionDetailsPage({
         sessionStoragePropertyData?.PosessionDate?.slice(0, 10) || ""
       );
       setBrochure(sessionStoragePropertyData?.Brochure || "");
-      setAgeOfProperty(sessionStoragePropertyData?.AgeofProperty || "");
+      setAgeOfProperty(sessionStoragePropertyData?.AgeofProperty || null);
       setFloorPlan(sessionStoragePropertyData?.FloorPlan || "");
       setPaymentPlan(sessionStoragePropertyData?.PaymentPlan || "");
     }
@@ -146,10 +146,12 @@ export default function PossessionDetailsPage({
         Brochure: brochure,
         PaymentPlan: paymentPlan,
         FloorPlan: floorPlan,
+      
       };
-      if (PropertyStatusValue.Status != "Under Contruction") {
-        fifthPropertyData.AgeofProperty = ageofProperty;
+      if (PropertyStatusValue.Status != "Under Contruction" && propertTypWithSubTypeValue !=="Plot") {
+        fifthPropertyData.AgeofProperty = ageofProperty ? ageofProperty: null ;
       }
+     
       console.log("fifthPropertyData", fifthPropertyData);
       const localStorageData = JSON.parse(
         sessionStorage.getItem("EditPropertyData")

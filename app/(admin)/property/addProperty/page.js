@@ -121,7 +121,7 @@ export default function AddProject() {
           propertyData?.Videos == ""
             ? []
             : propertyData?.Videos?.map((URL) => ({ URL })),
-        AreaUnits: propertyData?.AreaUnits?._id,
+        AreaUnits: propertyData?.AreaUnits,
         BhkType: propertyData?.BhkType?._id,
         Fitting: propertyData?.Fitting,
         Faq: propertyData?.Faq,
@@ -244,6 +244,8 @@ export default function AddProject() {
               setPageValue={setPageValue}
               setValueForBack={setValueForBack}
               propertyScoreValue={propertyScoreinPercentage}
+              returnPageValue={"/property"}
+              headingValue={0}
             />
           )}
         </div>

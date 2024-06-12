@@ -49,7 +49,7 @@ const handleCancel=()=>{
       </button>
       <Popup
         isOpen={isPopupOpen}
-        title="Are you sure  want to change the PropertySubType ?"
+        title="Are you sure want to change the Property SubType ?"
         confirmLabel="Yes, I'm sure"
         cancelLabel="No, cancel"
         onConfirm={storeData}

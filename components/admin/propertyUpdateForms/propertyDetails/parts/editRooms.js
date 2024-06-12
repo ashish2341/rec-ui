@@ -45,10 +45,10 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
     if (sessionStoragePropertyData) {
     
 
-      setBedrooms(sessionStoragePropertyData?.Bedrooms || "");
-      setBathrooms(sessionStoragePropertyData?.Bathrooms || "");
-      setFloorNumber(sessionStoragePropertyData?.FloorNumber || "");
-      setTotalFloors(sessionStoragePropertyData?.TotalFloors || "");
+      setBedrooms(sessionStoragePropertyData?.Bedrooms || null);
+      setBathrooms(sessionStoragePropertyData?.Bathrooms || null);
+      setFloorNumber(sessionStoragePropertyData?.FloorNumber || null);
+      setTotalFloors(sessionStoragePropertyData?.TotalFloors || null);
       setBhkType(sessionStoragePropertyData?.BhkType || "");
     }
   }, []);
@@ -85,8 +85,8 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
       };
       if (propertTypeValue == "Residential") {
         secondPropertyData.BhkType = bhkType;
-        secondPropertyData.Bedrooms = bedrooms;
-        secondPropertyData.Bathrooms = bathrooms;
+        secondPropertyData.Bedrooms = bedrooms ? bedrooms :null;
+        secondPropertyData.Bathrooms = bathrooms ? bathrooms :null;
       }
       console.log("secondPropertyData", secondPropertyData);
       const localStorageData = JSON.parse(

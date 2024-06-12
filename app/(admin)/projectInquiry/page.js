@@ -451,7 +451,7 @@ export default function ProjectInquiry() {
                             {roles.includes("Admin") && (
                               <Link
                                 href=""
-                                className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                               className="font-medium text-lg text-red-600 dark:text-red-500 hover:underline"
                               >
                                 <i
                                   onClick={() => deleteInquiryModel(item?._id)}
@@ -463,7 +463,7 @@ export default function ProjectInquiry() {
                             {roles.includes("Admin") ? (
                               <Link
                                 href=""
-                                className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                 className="font-bold text-lg text-blue-600 dark:text-blue-500 hover:underline"
                               >
                                 <i
                                   onClick={() =>
@@ -506,7 +506,7 @@ export default function ProjectInquiry() {
       {isPopupOpenforInquiry && (
         <SendInquiryModal
           isOpen={isPopupOpenforInquiry}
-          title="Are you sure you want to delete this Testimonial ?"
+          title="Are you sure you want to delete this Enquiry ?"
           confirmLabel="Yes, I'm sure"
           cancelLabel="No, cancel"
           onConfirm={handleDelete}

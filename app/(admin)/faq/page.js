@@ -21,7 +21,7 @@ export default function Faq() {
   useEffect(() => {
     getAllFaq();
   }, [page, searchData]);
-  
+
   const getAllFaq = async () => {
     let faq = await GetFaqApi(page, searchData);
     if (faq?.resData?.success == true) {
@@ -63,7 +63,6 @@ export default function Faq() {
   const deleteFaqModal = async (id) => {
     setDeleteId(id);
     setIsPopupOpen(true);
-
   };
   return (
     <section>
@@ -83,9 +82,7 @@ export default function Faq() {
               </button>
             </Link>
           </div>
-          <label htmlFor="table-search" className="sr-only">
-            Search
-          </label>
+          {listData && listData.data.length > 0 && (
           <div className="relative">
             <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
               <svg
@@ -110,65 +107,79 @@ export default function Faq() {
               onChange={searchInputChange}
             />
           </div>
+             )}
         </div>
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              <th scope="col" className="px-6 py-3">
-                Question
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Answer
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {listData?.data?.map((item, index) => (
-              <tr
-              key={index} 
-              className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                 {item.Subject}
-                </td>
-                <td className="px-6 py-4">{item.Answer}</td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center space-x-2">
-                    <Link
-                      href={`/faq/${item._id}`}
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+        {listData ? (
+          listData?.data?.length > 0 ? (
+            <div>
+              <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th scope="col" className="px-6 py-3">
+                      Question
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Answer
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {listData?.data?.map((item, index) => (
+                    <tr
+                      key={index}
+                      className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                     >
-                      <i className="bi bi-pencil-square"></i>
-                    </Link>
-                    {/* <Link
+                      <td
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      >
+                        {item.Subject}
+                      </td>
+                      <td className="px-6 py-4">{item.Answer}</td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center space-x-2">
+                          <Link
+                            href={`/faq/${item._id}`}
+                             className="font-bold text-lg text-blue-600 dark:text-blue-500 hover:underline"
+                          >
+                            <i className="bi bi-pencil-square"></i>
+                          </Link>
+                          {/* <Link
                       href="#"
                       className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                     >
                       <i className="bi bi-eye-fill"></i>
                     </Link> */}
-                    <Link
-                      href="#"
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    >
-                      <i
-                       onClick={() => deleteFaqModal(item._id)} 
-                      className="bi bi-trash-fill"></i>
-                    </Link>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          
-          </tbody>
-        </table>
-      
+                          <Link
+                            href="#"
+                            className="font-medium text-lg text-red-600 dark:text-red-500 hover:underline"
+                          >
+                            <i
+                              onClick={() => deleteFaqModal(item._id)}
+                              className="bi bi-trash-fill"
+                            ></i>
+                          </Link>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <Pagination
+                data={listData}
+                pageNo={handlePageChange}
+                pageVal={page}
+              />
+            </div>
+          ) : (
+            <h1 className={`bigNotFound`}>No Data Found</h1>
+          )
+        ) : null}
       </div>
-      <Pagination data={listData} pageNo={handlePageChange} pageVal={page} />
+
       <Popup
         isOpen={isPopupOpen}
         title="Are you sure you want to delete this FAQ ?"

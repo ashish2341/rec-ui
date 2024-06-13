@@ -99,7 +99,7 @@ const Accordion = ({ listData }) => {
                         Fencing Type
                       </h2>
                       <p className={`${styles.heroSectionBottomBoxText}`}>
-                        {item?.Fencing?.Fencing}
+                        {item?.Fencing}
                       </p>
                     </div>
                     {/* <div className={`${styles.heroSectionVL}`}></div> */}
@@ -108,7 +108,7 @@ const Accordion = ({ listData }) => {
                         Flooring Type
                       </h2>
                       <p className={`${styles.heroSectionBottomBoxText}`}>
-                        {item?.Flooring?.Flooring}
+                        {item?.Flooring}
                       </p>
                     </div >
                     {/* <div className={`${styles.heroSectionVL}`}></div> */}

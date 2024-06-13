@@ -13,11 +13,13 @@ import { GetPropertyBybuilderApi } from "@/api-functions/property/getPropertyByb
 import styles from "./builder.module.css";
 import LoadingSideImg from "@/components/common/sideImgLoader";
 import PropertyListCard from "@/components/common/propertyListCard/listCard";
+import { useRouter } from "next/navigation";
+
 export default function Property() {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
   const roles = roleData && JSON.parse(roleData);
-
+  const router = useRouter();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [listData, setListData] = useState(false);
   const [deleteId, setDeleteId] = useState();
@@ -94,6 +96,17 @@ export default function Property() {
     setDeleteId(id);
     setIsPopupOpen(true);
   };
+  const goToAddProperty=()=>{
+    const editPropertyData = JSON.parse(sessionStorage.getItem("EditPropertyData"));
+    if(editPropertyData){
+      sessionStorage.removeItem("EditPropertyData")
+      router.push("/property/addProperty");
+    }else{
+      router.push("/property/addProperty");
+    }
+  }
+  
+
   return (
     <section>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -102,15 +115,15 @@ export default function Property() {
         </h1>
         <div className="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
           <div>
-            <Link href={"/property/addProperty"}>
-              {" "}
+            
               <button
                 className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                 type="button"
+                onClick={goToAddProperty}
               >
                 + Add Property
               </button>
-            </Link>
+           
           </div>
           {listData && listData.data.length > 0 && (
             <div className="relative">
@@ -150,6 +163,9 @@ export default function Property() {
                         Property Title
                       </th>
                       <th scope="col" className="px-6 py-3">
+                        Property SubType
+                      </th>
+                      <th scope="col" className="px-6 py-3">
                         Facing
                       </th>
                       <th scope="col" className="px-6 py-3">
@@ -183,12 +199,18 @@ export default function Property() {
                   <tbody>
                     {listData?.data?.map((item, index) => (
                       <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <th
+                        <td
                           scope="row"
                           className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                         >
                           {item.Title}
-                        </th>
+                        </td>
+                        <td
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          {item.PropertySubtype.Name}
+                        </td>
                         <td className="px-6 py-4">{item?.Facing[0]?.Facing}</td>
                         <td className="px-6 py-4">
                           {item?.TotalPrice?.DisplayValue}
@@ -235,7 +257,7 @@ export default function Property() {
                             {roles.includes("Admin") && (
                               <Link
                                 href={`/property/${item._id}`}
-                                className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                className="font-bold text-lg text-blue-600 dark:text-blue-500 hover:underline"
                               >
                                 <i className="bi bi-pencil-square"></i>
                               </Link>
@@ -250,7 +272,7 @@ export default function Property() {
                             {roles.includes("Admin") && (
                               <Link
                                 href="#"
-                                className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                className="font-medium text-lg text-red-600 dark:text-red-500 hover:underline"
                               >
                                 <i
                                   onClick={() => deletePropertyModal(item._id)}
@@ -294,7 +316,7 @@ export default function Property() {
 
       <Popup
         isOpen={isPopupOpen}
-        title="Are you sure you want to delete this Testimonial ?"
+        title="Are you sure you want to delete this Property ?"
         confirmLabel="Yes, I'm sure"
         cancelLabel="No, cancel"
         onConfirm={handleDelete}

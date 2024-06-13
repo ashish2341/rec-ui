@@ -119,7 +119,7 @@ console.log("propertyByapartmentType",propertyByapartmentType);
   const ShowApartmentProperties = () => {
 
     return propertyByapartmentType?.data?.map((item,index) => (
-      <Link key={index}  href={`/propertyList/property?propertyTypeID=${item._id}&propertyTypeLabel=${item?.areaInfo?.Type}`}  >
+      <Link key={index}  href={`/propertyList/property?propertyTypeID=${item._id}&propertyTypeLabel=${item?.areaInfo?.Name}`}  >
         <div
           className="p-1"
         >
@@ -181,10 +181,16 @@ console.log("propertyByapartmentType",propertyByapartmentType);
             </div>
            }
            { item?.ProeprtyType == "Commercial" ?
+            item.CellingHeight ?
            <div className="flex">
-           <i className="fa fa-solid fa-ruler-vertical"></i>
              <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-             {item.CellingHeight} Height
+             <span className="ml-1">&#xf548;</span>{" "}{item.CellingHeight} Height
+             </p>
+           </div> :
+           <div className="flex">
+             <i className="fa fa-building" aria-hidden="true"></i>
+             <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
+             {item.CarpetArea} Carpet Area
              </p>
            </div>
             :
@@ -515,15 +521,16 @@ console.log("propertyByapartmentType",propertyByapartmentType);
               </div>
               <div className={`${styles.crousalItemRightMain} overflow-hidden  `}>
                 {bannerData ?
-                  <img
-                  src={bannerData?.data[0].Url}
-                  className={`${styles.crousalItemLeftImage} block`}
-                  alt="...a"
-                /> : (
-                  <div className="mt-70">
-                    <Spinner />
+                <img
+                    src={bannerData?.data[0].Url}
+                    className={`${styles.crousalItemLeftImage} block`}
+                    alt="...a"
+                  /> :
+                  (
+                  <div className={`${styles.LoaderHeight}  `}>
+                    <Spinner className="mt-70" />
                   </div>
-                )
+              )
                 }
               </div>
             </div>
@@ -680,7 +687,7 @@ console.log("propertyByapartmentType",propertyByapartmentType);
             </p>
           </div>
         </div>
-        <div className={`flex`} >
+        <div className={`flex mt-2`} >
           {
            propertyByapartmentType?.data?.length>0 ? <MultiCarousel UI={ShowApartmentProperties} /> : <SkeletonLoader />
           }

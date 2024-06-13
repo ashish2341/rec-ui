@@ -1,5 +1,5 @@
 export default function TextInput({labelName,inputValue, dynamicState,}) {
-    console.log("inputValue",inputValue)
+  
   return (
     <>
       <div>

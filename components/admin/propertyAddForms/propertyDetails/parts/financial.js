@@ -9,6 +9,7 @@ import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
 import Cookies from "js-cookie";
 import { FormatNumber } from "@/utils/commonHelperFn";
 import Styles from "../propertypage.module.css";
+import { conditionalArray } from "@/utils/constants";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
 import NumberInput from "@/components/common/admin/numberInput/numberInput";
@@ -17,16 +18,19 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
     sessionStorage.getItem("propertyData")
   );
   const propertTypWithSubTypeValue =
-    sessionStoragePropertyData?.PropertyTypeWithSubtype.Name || "";
-  const propertTypeValue = sessionStoragePropertyData?.PropertyType || "";
-  const PropertyForValue = sessionStoragePropertyData?.PropertyFor || "";
-  const conditionArray = [true, false];
+    sessionStoragePropertyData?.PropertySubtype.Name || "";
+  const propertTypeValue = sessionStoragePropertyData?.ProeprtyType || "";
+  const PropertyForValue = sessionStoragePropertyData?.ProeprtyFor || "";
   const monthArray = ["None", 1, 2, 3, 4, "Custom"];
   const [perUnitPrice, setPerUnitPrice] = useState("");
   const [isDisplayPrice, setIsDisplayPrice] = useState("");
   const [isNegotiable, setIsNegotiable] = useState("");
   const [startPrice, setStartPrice] = useState("");
   const [endPrice, setEndPrice] = useState("");
+  const [priceUnit, setPriceUnit] = useState({
+    minPriceUnit: { value: "Lacs", label: "Lacs" },
+    maxPriceUnit: { value: "Cr", label: "Cr" },
+  });
   const [discountPercentage, setDiscountPercentage] = useState("");
   const [discountForYears, setDiscountForYears] = useState("");
   const [securityDepositMonth, setSecurityDepositMonth] = useState("");
@@ -43,94 +47,118 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
   const [curentRent, setCurrentRent] = useState("");
   const [leaseYears, setLeaseYears] = useState("");
   const [expectedReturn, setExpectedReturn] = useState("");
-  console.log("propertTypWithSubTypeValue", propertTypWithSubTypeValue);
+
+  const priceUnitArray = [
+    { value: "Lacs", label: "Lacs" },
+    { value: "Cr", label: "Cr" },
+  ];
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("propertyData")
     );
-    console.log(
-      "sessionStoragePropertyData?.PreReleasedBtn",
-      sessionStoragePropertyData?.PreReleasedBtn
-    );
+   
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
-      setStartPrice(sessionStoragePropertyData?.TotalPrice?.MinValue || "");
-      setEndPrice(sessionStoragePropertyData?.TotalPrice?.MaxValue || "");
-      setPerUnitPrice(sessionStoragePropertyData?.PerUnitPrice || "");
+      setStartPrice(
+        (
+          sessionStoragePropertyData?.TotalPrice?.MinValue /
+          (sessionStoragePropertyData?.TotalPrice?.MinPriceUnit == "Lacs"
+            ? 100000
+            : 10000000)
+        ).toFixed(2) || ""
+      );
+      setEndPrice(
+        (
+          sessionStoragePropertyData?.TotalPrice?.MaxValue /
+          (sessionStoragePropertyData?.TotalPrice?.MaxPriceUnit == "Lacs"
+            ? 100000
+            : 10000000)
+        ).toFixed(2) || ""
+      );
+      setPriceUnit(
+        {
+          minPriceUnit: {
+            value: sessionStoragePropertyData?.TotalPrice?.MinPriceUnit||"Lacs",
+            label: sessionStoragePropertyData?.TotalPrice?.MinPriceUnit||"Lacs",
+          },
+          maxPriceUnit: {
+            value: sessionStoragePropertyData?.TotalPrice?.MaxPriceUnit||"Cr",
+            label: sessionStoragePropertyData?.TotalPrice?.MaxPriceUnit|| "Cr",
+          },
+        } || {
+          minPriceUnit: { value: "Lacs", label: "Lacs" },
+          maxPriceUnit: { value: "Cr", label: "Cr" },
+        }
+      );
 
-     setCurrentRent(sessionStoragePropertyData?.CurrentRent || "")
-     setLeaseYears(sessionStoragePropertyData?.LeaseYears || "")
-     setExpectedReturn(sessionStoragePropertyData?.ExpectedReturn || "")
+      setCurrentRent(sessionStoragePropertyData?.CurentRent || "");
+      setLeaseYears(sessionStoragePropertyData?.LeaseYears || "");
+      setExpectedReturn(sessionStoragePropertyData?.ExpectedReturn || "");
 
       setDiscountPercentage(
         sessionStoragePropertyData?.DiscountPercentage || ""
       );
       setDiscountForYears(sessionStoragePropertyData?.DiscountForYears || "");
       setPreReleasedBtn(
-        sessionStoragePropertyData?.PreReleasedBtn === true
+        sessionStoragePropertyData?.LeasedOrRented === true
           ? true
-          : sessionStoragePropertyData?.PreReleasedBtn === undefined
-          ? null
-          : sessionStoragePropertyData?.PreReleasedBtn === ""? null:false
+          : sessionStoragePropertyData?.LeasedOrRented === false
+          ? false
+          : sessionStoragePropertyData?.LeasedOrRented === undefined
+          ? ""
+          : ""
       );
       setTaxCharge(
         sessionStoragePropertyData?.TaxCharge === true
           ? true
+          : sessionStoragePropertyData?.TaxCharge === false
+          ? false
           : sessionStoragePropertyData?.TaxCharge === undefined
-          ? null
-          : sessionStoragePropertyData?.TaxCharge === ""? null:false
+          ? ""
+          : sessionStoragePropertyData?.TaxCharge === ""
+          ? ""
+          : false
       );
       setDgUpsCharge(
         sessionStoragePropertyData?.DgUpsCharge === true
-        ? true
-        : sessionStoragePropertyData?.DgUpsCharge === undefined
-        ? null
-        : sessionStoragePropertyData?.DgUpsCharge === ""? null:false
+          ? true
+          : sessionStoragePropertyData?.DgUpsCharge === false
+          ? false
+          : sessionStoragePropertyData?.DgUpsCharge === undefined
+          ? ""
+          : sessionStoragePropertyData?.DgUpsCharge === ""
+          ? ""
+          : false
       );
+
       setIsNegotiable(
         sessionStoragePropertyData?.IsNegotiable === true
-        ? true
-        : sessionStoragePropertyData?.IsNegotiable === undefined
-        ? null
-        : sessionStoragePropertyData?.IsNegotiable === ""? null:false
+          ? true
+          : sessionStoragePropertyData?.IsNegotiable === false
+          ? false
+          : sessionStoragePropertyData?.IsNegotiable === undefined
+          ? ""
+          : ""
       );
     }
   }, []);
- 
 
   const checkRequiredFields = () => {
-    if(propertTypeValue=="Residential"){
-      var requiredFields = [
-        startPrice,
-        endPrice,
-      ];
+    if (propertTypeValue == "Residential") {
+      var requiredFields = [startPrice, endPrice];
     }
-   if(propertTypeValue=="Commercial" ){
-    var requiredFields = [
-      startPrice,
-      endPrice,
-      preReleasedBtn
-     
-    ];
-   }
-   if(propertTypeValue=="Commercial" && preReleasedBtn==false){
-    var requiredFields = [
-      startPrice,
-      endPrice,
-      expectedReturn
-    ];
-   }
-   if(propertTypeValue=="Commercial" && preReleasedBtn==true){
-    var requiredFields = [
-      startPrice,
-      endPrice,
-      curentRent,
-      leaseYears
-    ];
-   }
-    
-    console.log("requiredFields", requiredFields);
+    if (propertTypeValue == "Commercial") {
+      var requiredFields = [startPrice, endPrice, preReleasedBtn];
+    }
+    if (propertTypeValue == "Commercial" && preReleasedBtn == false) {
+      var requiredFields = [startPrice, endPrice, expectedReturn];
+    }
+    if (propertTypeValue == "Commercial" && preReleasedBtn == true) {
+      var requiredFields = [startPrice, endPrice, curentRent, leaseYears];
+    }
+
+
     // Check if any required field is empty
     const isEmpty = requiredFields.some(
       (field) => field === "" || field === null || field === undefined
@@ -140,36 +168,49 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
   };
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
+
     if (allFieldsFilled) {
+
+      const  minValue=startPrice *(priceUnit?.minPriceUnit?.value == "Lacs" ? 100000 : 10000000);
+      const maxValue= endPrice *(priceUnit?.maxPriceUnit?.value == "Lacs" ? 100000 : 10000000);
+   
+      if(minValue>maxValue){
+        toast.error("End Price Should be Greater then Start Price.")
+        return false
+      }
       const fourthPropertyData = {
         TotalPrice: {
-          DisplayValue: `${FormatNumber(parseInt(startPrice))} - ${FormatNumber(
-            parseInt(endPrice)
-          )}`,
-          MinValue: parseInt(startPrice),
-          MaxValue: parseInt(endPrice),
+          DisplayValue: `${startPrice} ${priceUnit?.minPriceUnit?.value} - ${endPrice} ${priceUnit?.maxPriceUnit?.value}`,
+          MinValue:minValue,
+          MaxValue:maxValue,
+          MinPriceUnit: priceUnit?.minPriceUnit?.value,
+          MaxPriceUnit: priceUnit?.maxPriceUnit?.value,
         },
-        IsNegotiable: isNegotiable,
-     
+        IsNegotiable: isNegotiable ? isNegotiable : false,
       };
-     if(propertTypeValue=="Commercial"){
-      
-      fourthPropertyData.TaxCharge=taxCharge;
-      fourthPropertyData.PreReleasedBtn=preReleasedBtn;
-      if(preReleasedBtn==false){
-        fourthPropertyData.ExpectedReturn=expectedReturn;
+      if (propertTypeValue == "Commercial") {
+        (fourthPropertyData.TaxCharge = taxCharge ? taxCharge : false),
+          (fourthPropertyData.LeasedOrRented = preReleasedBtn);
+        if (preReleasedBtn == false) {
+          fourthPropertyData.ExpectedReturn = expectedReturn;
+          if (curentRent && leaseYears) {
+            fourthPropertyData.CurentRent = "";
+            fourthPropertyData.LeaseYears = "";
+          }
+        }
+        if (preReleasedBtn == true) {
+          fourthPropertyData.CurentRent = curentRent;
+          fourthPropertyData.LeaseYears = leaseYears;
+          if (expectedReturn) {
+            fourthPropertyData.ExpectedReturn = "";
+          }
+        }
+        if (propertTypWithSubTypeValue == "Office") {
+          fourthPropertyData.DgUpsCharge = dgUpsCharge
+            ? dgUpsCharge
+            : false;
+        }
       }
-      if(preReleasedBtn==true){
-        fourthPropertyData.CurrentRent=curentRent;
-        fourthPropertyData.LeaseYears=leaseYears;
-
-      }
-      if(propertTypWithSubTypeValue=="Office"){
-        fourthPropertyData.DgUpsCharge=dgUpsCharge;
-      }
-       
-     }
-      console.log("fourthPropertyData", fourthPropertyData);
       const localStorageData = JSON.parse(
         sessionStorage.getItem("propertyData")
       );
@@ -180,54 +221,101 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
       toast.error("Please fill in all required fields!");
     }
   };
-console.log("preleasedBtn",preReleasedBtn)
+
   return (
     <>
-      <div className={`flex justify-end ${Styles.continueBtn}`}>
-        <ContinueButton modalSubmit={SubmitForm} />
-      </div>
+      
       <div className="grid gap-4 mb-4 sm:grid-cols-2">
-        {/* Start Price */}
-        <div>
-          <label
-            htmlFor="startPrice"
-            className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
-          >
-            Start Price
-          </label>
-          <input
-            type="number"
-            name="startPrice"
-            id="startPrice"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Start Price"
-            value={startPrice}
-            onChange={(e) => setStartPrice(e.target.value)}
-          />
+         {/* Start Price */}
+        <div class="w-full mx-auto">
+          <div >
+            <label
+              for="search-dropdown"
+              className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
+            >
+              Start Price
+            </label>
+            <div class="relative w-full">
+            <input
+              type="number"
+              name="startPrice"
+              id="startPrice"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Start Price"
+              value={startPrice}
+              onChange={(e) => setStartPrice(e.target.value)}
+            />
+              <div className="absolute top-0 end-0 text-sm font-medium h-full text-black  rounded-e-lg border-none m-0.5 ">
+                <Select
+                  options={priceUnitArray.map((element) => ({
+                    value: element.value,
+                    label: element.label,
+                  }))}
+                  value={priceUnit.minPriceUnit}
+                  onChange={(e) =>
+                    setPriceUnit((prev) => {
+                      return {
+                        ...prev,
+                        minPriceUnit: e,
+                      };
+                    })
+                  }
+                  placeholder="Select Price Unit"
+                  required={true}
+                />
+              </div>
+            </div>
+          </div>
         </div>
         {/* End Price */}
-        <div>
-          <label
-            htmlFor="endPrice"
-            className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
-          >
-            End Price
-          </label>
-          <input
-            type="number"
-            name="endPrice"
-            id="endPrice"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="End Price"
-            value={endPrice}
-            onChange={(e) => setEndPrice(e.target.value)}
-          />
+        <div class="w-full mx-auto">
+          <div >
+            <label
+              for="search-dropdown"
+              className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
+            >
+              End Price
+            </label>
+            <div class="relative w-full">
+            <input
+              type="number"
+              name="endPrice"
+              id="endPrice"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="End Price"
+              value={endPrice}
+              onChange={(e) => setEndPrice(e.target.value)}
+            />
+              <div className="absolute top-0 end-0 text-sm font-medium h-full text-black  rounded-e-lg border-none m-0.5 ">
+              <Select
+              options={priceUnitArray.map((element) => ({
+                value: element.value,
+                label: element.label,
+              }))}
+              value={priceUnit.maxPriceUnit}
+              onChange={(e) =>
+                setPriceUnit((prev) => {
+                  return {
+                    ...prev,
+                    maxPriceUnit: e,
+                  };
+                })
+              }
+              placeholder="Select Price Unit"
+              required={true}
+            />
+              </div>
+            </div>
+          </div>
         </div>
+       
+      
+
         {/* is negotiable */}
         <PropertyBigButtons
-        forRequired={false}
-          labelName={"Is Negotiable"}
-          itemArray={conditionArray}
+          forRequired={false}
+          labelName={"Is Negotiable?"}
+          itemArray={conditionalArray}
           activeBtnvalue={isNegotiable}
           changeState={setIsNegotiable}
         />
@@ -237,16 +325,16 @@ console.log("preleasedBtn",preReleasedBtn)
             <PropertyBigButtons
               labelName={"DG & UPS Charge included?"}
               forRequired={false}
-              itemArray={conditionArray}
+              itemArray={conditionalArray}
               activeBtnvalue={dgUpsCharge}
               changeState={setDgUpsCharge}
             />
           )}
         {propertTypeValue == "Commercial" && PropertyForValue == "Sell" && (
           <PropertyBigButtons
-          forRequired={false}
+            forRequired={false}
             labelName={"Tax & Govt. charge included?"}
-            itemArray={conditionArray}
+            itemArray={conditionalArray}
             activeBtnvalue={taxCharge}
             changeState={setTaxCharge}
           />
@@ -259,12 +347,12 @@ console.log("preleasedBtn",preReleasedBtn)
           </h3>
           <PropertyBigButtons
             labelName={"Is it pre-leased/pre-rented?"}
-            itemArray={conditionArray}
+            itemArray={conditionalArray}
             activeBtnvalue={preReleasedBtn}
             changeState={setPreReleasedBtn}
           />
 
-          {preReleasedBtn == true && (
+          {preReleasedBtn === true && (
             <div className="grid gap-4 mb-4 sm:grid-cols-2">
               <NumberInput
                 labelName={" Current Rent per Month"}
@@ -278,160 +366,21 @@ console.log("preleasedBtn",preReleasedBtn)
               />
             </div>
           )}
-          {preReleasedBtn == false && (
+          {preReleasedBtn === false && (
             <div className="grid gap-4 mb-4 sm:grid-cols-2">
               <NumberInput
                 labelName={"Expected Return on Investment"}
                 inputValue={expectedReturn}
                 dynamicState={setExpectedReturn}
               />
-             
             </div>
           )}
         </>
       )}
-      {/* PerUnitPrice */}
-      {/* <div>
-          <label
-            htmlFor="perUnitPrice"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-          >
-            Per Unit Price
-          </label>
-          <input
-            type="number"
-            name="perUnitPrice"
-            id="perUnitPrice"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Per Unit Price"
-            value={perUnitPrice}
-            onChange={(e) => setPerUnitPrice(e.target.value)}
-          />
-        </div> */}
-      {/* PricePerSquareFeet */}
-      {/* <div>
-          <label
-            htmlFor="pricePerSquareFeet"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-          >
-            Price Per Square Feet
-          </label>
-          <input
-            type="number"
-            name="pricePerSquareFeet"
-            id="pricePerSquareFeet"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Price Per Square Feet"
-            value={pricePerSquareFeet}
-            onChange={(e) => setPricePerSquareFeet(e.target.value)}
-          />
-        </div> */}
-      {/* is displayprice  */}
-      {/* <div>
-          <label
-            htmlFor="isDisplayPrice"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-          >
-            Is Display Price
-          </label>
-          <input
-            type="radio"
-            name="isDisplayPrice"
-            id="isDisplayPrice"
-            value="true"
-            required=""
-            onChange={handleIsDisplayPrice}
-            checked={isDisplayPrice == true}
-          />
-          <label htmlFor="isDisplayPrice" className="mr-3 ml-2">
-            Yes
-          </label>
-          <input
-            type="radio"
-            name="isDisplayPrice"
-            id="isDisplayPrice"
-            value="false"
-            required=""
-            onChange={handleIsDisplayPrice}
-            checked={isDisplayPrice == false}
-            className="form-radio h-5 w-5 text-red-600"
-          />
-          <label htmlFor="isDisplayPrice" className="ml-2">
-            No
-          </label>
-        </div> */}
-      {/* is negotiable */}
-      {/* <div>
-          <label
-            htmlFor="isNegotiable"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-          >
-            Is Negotiable
-          </label>
-          <input
-            type="radio"
-            name="isNegotiable"
-            id="isNegotiable"
-            value="true"
-            required=""
-            checked={isNegotiable == true}
-            onChange={handleIsNegotiable}
-          />
-          <label htmlFor="isNegotiable" className="mr-3 ml-2">
-            Yes
-          </label>
-          <input
-            type="radio"
-            name="isNegotiable"
-            id="isNegotiable"
-            value="false"
-            required=""
-            checked={isNegotiable == false}
-            onChange={handleIsNegotiable}
-            className="form-radio h-5 w-5 text-red-600"
-          />
-          <label htmlFor="isNegotiable" className="ml-2">
-            No
-          </label>
-        </div> */}
-
-      {/* DiscountPercentage */}
-      {/* <div>
-          <label
-            htmlFor="discountPercentage"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-          >
-            Discount Percentage
-          </label>
-          <input
-            type="number"
-            name="discountPercentage"
-            id="discountPercentage"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Discount Percentage"
-            value={discountPercentage}
-            onChange={(e) => setDiscountPercentage(e.target.value)}
-          />
-        </div> */}
-
-      {/* DiscountForYears */}
-      {/* <div>
-          <label
-            htmlFor="discountForYears"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-          >
-            Discount For Years
-          </label>
-          <input
-            type="number"
-            name="discountForYears"
-            id="discountForYears"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Discount For Years"
-            value={discountForYears}
-            onChange={(e) => setDiscountForYears(e.target.value)}
-          />
-        </div> */}
+     <ContinueButton
+        modalSubmit={SubmitForm}
+        butonSubName={"add Possession Details"}
+      />
     </>
   );
 }

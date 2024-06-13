@@ -14,6 +14,7 @@ import { Accordion, AccordionContent, AccordionPanel, AccordionTitle } from "flo
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
 import Link from "next/link";
 import LoadingSideImg from "@/components/common/sideImgLoader";
+import LoadingSideSmallImg from "@/components/common/sideSmallImgLoader";
 
 const BuilderPage = () => {
     const [search, setSearch] = useState("");
@@ -69,12 +70,13 @@ const BuilderPage = () => {
                                 value={search}
                                 onChange={handleSearch}
                                 id="search-dropdown"
-                                className={` ${styles.crousalItemSearchInput}`}
+                                className={` ${styles.crousalItemSearchInput} rounded`}
                                 placeholder="Search for Builder"
                                 required
                             />
                         </div>
                         <div className={` ${styles.builderline}`}></div>
+                        {/*
                         <Accordion collapseAll className="border-none">
                             <AccordionPanel>
                                 <AccordionTitle>Location</AccordionTitle>
@@ -97,6 +99,7 @@ const BuilderPage = () => {
                                 Search
                             </button>
                         </div>
+                        */}
                     </div>
                     <div className={` ${styles.builderBox}`} >
                         <h1 className="m-4 ml-6 font-semibold">Recent Builder</h1>
@@ -115,7 +118,7 @@ const BuilderPage = () => {
                             </Avatar>
                             </Link>
                             ))
-                        ) : <LoadingSideImg />}
+                        ) : <LoadingSideSmallImg />}
                         </div>
                     </div>
                 </div>

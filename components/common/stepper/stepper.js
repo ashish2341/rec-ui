@@ -5,7 +5,7 @@ import Styles from "./stepper.module.css";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "react-day-picker/dist/style.css";
-const Stepper = ({ steppers, pageNumber, setPageValue ,setValueForBack,propertyScoreValue }) => {
+const Stepper = ({ steppers, pageNumber, setPageValue ,setValueForBack,propertyScoreValue,returnPageValue ,headingValue}) => {
   const [activePage, setActivePage] = useState(pageNumber);
 
   const router = useRouter();
@@ -16,7 +16,7 @@ const Stepper = ({ steppers, pageNumber, setPageValue ,setValueForBack,propertyS
     setValueForBack(0)
   };
   const returnPage = () => {
-    router.push("/property");
+    router.push(`${returnPageValue}`);
   };
   return (
     <>
@@ -31,6 +31,7 @@ const Stepper = ({ steppers, pageNumber, setPageValue ,setValueForBack,propertyS
             <span>
               <i className="bi bi-arrow-left"></i>
             </span>
+            
             <span>Return to Property</span>
           </button>
           {/* <div className="text-sm font-medium leading-tight text-black-600 mb-2 " >
@@ -38,11 +39,11 @@ const Stepper = ({ steppers, pageNumber, setPageValue ,setValueForBack,propertyS
           </div> */}
 
           <span className="text-2xl font-bold leading-tight text-black-600  ">
-            Post Your Property
+          {headingValue===1 ? "Update Your Property" : "Post Your Property"} 
           </span>
-          <div className="w-full bg-blue-400 rounded-full dark:bg-blue-700 mt-2">
+          <div className="w-full bg-blue-200 rounded-full dark:bg-blue-200 mt-2">
             <div
-              className="bg-yellow-400 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
+              className="bg-blue-700 text-xs font-bold text-blue-100 text-center p-0.5 leading-none rounded-full"
               
               style={propertyScoreValue ?{ width: `${propertyScoreValue}%` }:{ width: "0%" }}
             >

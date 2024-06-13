@@ -2,7 +2,13 @@
 import { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import {
+  API_BASE_URL_FOR_MASTER,
+  staticAreaUnitArray,
+  wallTypesArray,
+  fencingArray,
+  flooringArray,
+} from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
@@ -12,39 +18,23 @@ import Styles from "../propertypage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
 import ApiButtons from "@/components/common/admin/propertyapiButtons/ApiButtons";
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
+import TextInput from "@/components/common/admin/textInput/textInput";
 export default function AreaDetailPage({ setPropertyPageValue }) {
-  // fetching Data for fencingsData
-  const { data: fencingsData } = useFetch(
-    `${API_BASE_URL_FOR_MASTER}/fencings`
-  );
-  // console.log("fencingsData", fencingsData);
-
-  // fetching Data for flooringsData
-  const { data: flooringsData } = useFetch(
-    `${API_BASE_URL_FOR_MASTER}/floorings`
-  );
-  // console.log("flooringsData", flooringsData);
-
   // fetching Data for furnishedesData
   const { data: furnishedesData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/furnishedes`
   );
-  console.log("furnishedesData", furnishedesData);
 
- 
 
-  // fetching Data for areaUnitData
-  const { data: areaUnitData } = useFetch(
-    `${API_BASE_URL_FOR_MASTER}/areaunits`
-  );
+
   // console.log("areaUnitData", areaUnitData);
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("propertyData")
   );
   const propertTypWithSubTypeValue =
-    sessionStoragePropertyData?.PropertyTypeWithSubtype.Name || "";
-  const propertTypeValue = sessionStoragePropertyData?.PropertyType || "";
-  const PropertyForValue = sessionStoragePropertyData?.PropertyFor || "";
+    sessionStoragePropertyData?.PropertySubtype.Name || "";
+  const propertTypeValue = sessionStoragePropertyData?.ProeprtyType || "";
+  const PropertyForValue = sessionStoragePropertyData?.ProeprtyFor || "";
   const [fittingValues, setFittingValues] = useState({
     Electrical: "",
     Toilets: "",
@@ -67,22 +57,16 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
   const [wallType, setWallType] = useState("");
   const [cellingHeight, setCellingHeight] = useState("");
   const [entranceWidth, setEntranceWidth] = useState("");
-  const wallTypesArray = [
-    "No walls",
-    "Brick walls",
-    "Cenented walls",
-    "Plastered walls",
-  ];
-  const defaultOption = [{ value: "", label: "no data found" }];
+  const [landAreaUnit, setLandAreaUnit] = useState("");
+  const [customWallType, setCustomWallType] = useState("");
+  const [customFencing, setCustomFencing] = useState("");
+  const [customFlooring, setCustomFlooring] = useState("");
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("propertyData")
     );
-    console.log(
-      "localStorageData from localstorage",
-      sessionStoragePropertyData.Facing
-    );
+
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
       setFittingValues({
@@ -93,9 +77,7 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
         Windows: sessionStoragePropertyData?.Fitting?.Windows || "",
       });
       setEntranceWidth(sessionStoragePropertyData?.EntranceWidth || "");
-      setWallType(
-        sessionStoragePropertyData?.WallType || ""
-      );
+      setWallType(sessionStoragePropertyData?.WallType || "");
       setCellingHeight(sessionStoragePropertyData?.CellingHeight || "");
       setFencing(sessionStoragePropertyData?.Fencing || "");
       setFlooring(sessionStoragePropertyData?.Flooring || "");
@@ -104,11 +86,20 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
       setLandArea(sessionStoragePropertyData?.LandArea || "");
       setCarpetArea(sessionStoragePropertyData?.CarpetArea || "");
       setBuiltUpArea(sessionStoragePropertyData?.BuiltUpArea || "");
-
-      setAreaUnits(sessionStoragePropertyData?.PlotAreaData?.AreaUnits || "");
-      setPlotArea(sessionStoragePropertyData?.PlotAreaData?.PlotArea);
-      setPlotLength(sessionStoragePropertyData?.PlotAreaData?.PlotLength);
-      setPlotWidth(sessionStoragePropertyData?.PlotAreaData?.PlotWidth);
+      setCustomFencing(sessionStoragePropertyData?.CustomFencing || "")
+      setCustomFlooring(sessionStoragePropertyData?.CustomFlooring || "")
+      setCustomWallType(sessionStoragePropertyData?.CustomWallType || "")
+      setAreaUnits({
+        value: sessionStoragePropertyData?.AreaUnits || "Sq-ft",
+        label: sessionStoragePropertyData?.AreaUnits || "Sq-ft",
+      });
+      setPlotArea(sessionStoragePropertyData?.PlotArea || "");
+      setPlotLength(sessionStoragePropertyData?.PlotLength || "");
+      setPlotWidth(sessionStoragePropertyData?.PlotWidth || "");
+      setLandAreaUnit({
+        value: sessionStoragePropertyData?.LandAreaUnit || "Sq-ft",
+        label: sessionStoragePropertyData?.LandAreaUnit || "Sq-ft",
+      });
     }
   }, []);
   const handleFittingChange = (field, value) => {
@@ -118,39 +109,43 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
     }));
   };
   const checkRequiredFields = () => {
-    if (propertTypWithSubTypeValue != "Plot" && (propertTypeValue=="Residential" || propertTypeValue=="Commercial")) {
+    if (
+      propertTypWithSubTypeValue != "Plot" &&
+      (propertTypeValue == "Residential" || propertTypeValue == "Commercial")
+    ) {
+      var requiredFields = [fencing, flooring, furnished, builtUpArea,landArea];
+      if(fencing==="Other"){
+        requiredFields.push(customFencing)
+      }
+      if(flooring==="Other"){
+        requiredFields.push(customFlooring)
+      }
+    }
+    if (propertTypWithSubTypeValue == "Plot") {
+      var requiredFields = [plotArea, plotLength, plotwidth, areaUnits];
+    }
+    if (
+      propertTypeValue == "Commercial" &&
+      propertTypWithSubTypeValue == "Office"
+    ) {
       var requiredFields = [
         fencing,
         flooring,
         furnished,
         builtUpArea,
+        wallType,landArea
       ];
-     
-    } if(propertTypWithSubTypeValue == "Plot") {
-      var requiredFields = [plotArea, plotLength, plotwidth];
+      if(wallType==="Other"){
+        requiredFields.push(customWallType)
+      }
+      if(fencing==="Other"){
+        requiredFields.push(customFencing)
+      }
+      if(flooring==="Other"){
+        requiredFields.push(customFlooring)
+      }
     }
-if(propertTypeValue=="Commercial" && propertTypWithSubTypeValue == "Office" ){
-  var requiredFields = [
-    fencing,
-    flooring,
-    furnished,
-    builtUpArea,
-    wallType
-  ];
-}
-if (
-  propertTypWithSubTypeValue == "Retail Shop" ||
-  propertTypWithSubTypeValue == "Showroom"
-){
-  var requiredFields = [
-    fencing,
-    flooring,
-    furnished,
-    builtUpArea,
-    entranceWidth,
-    cellingHeight
-  ];
-}
+
     // Check if any required field is empty
     const isEmpty = requiredFields.some(
       (field) => field === "" || field === null || field === undefined
@@ -160,35 +155,54 @@ if (
   };
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
-    console.log("fittingValues",fittingValues)
+  
+   
     if (allFieldsFilled) {
-      const thirdPropertyData = {
-        Fencing: fencing,
-        Flooring: flooring,
-        Furnished: furnished,
-        BuiltUpArea: builtUpArea,
-        LandArea:landArea? parseInt(landArea):null,
-        CarpetArea:carpetArea? parseInt(carpetArea):null,
-        Fitting: fittingValues ?fittingValues:null ,
-      };
+      const thirdPropertyData = {};
+      if (propertTypWithSubTypeValue != "Plot") {
+        (thirdPropertyData.Fencing = fencing),
+          (thirdPropertyData.Flooring = flooring),
+          (thirdPropertyData.Furnished = furnished),
+          (thirdPropertyData.BuiltUpArea = builtUpArea),
+          (thirdPropertyData.LandArea = landArea ? parseInt(landArea) : ""),
+          (thirdPropertyData.LandAreaUnit = landAreaUnit ? landAreaUnit.value : ""),
+          (thirdPropertyData.CarpetArea = carpetArea
+            ? parseInt(carpetArea)
+            : ""),
+          (thirdPropertyData.Fitting = fittingValues ? fittingValues : "");
+        thirdPropertyData.CellingHeight = cellingHeight;
+        thirdPropertyData.EntranceWidth = entranceWidth;
+        if(fencing==="Other"){
+          thirdPropertyData.CustomFencing = customFencing;
+        }
+        if(flooring==="Other"){
+          thirdPropertyData.CustomFlooring = customFlooring;
+        }
+        if(fencing!=="Other" && customFencing ){
+          thirdPropertyData.CustomFencing = "";
+        }
+        if(flooring!=="Other" && customFlooring){
+          thirdPropertyData.CustomFlooring = "";
+        }
+
+
+      }
       if (propertTypWithSubTypeValue == "Plot") {
-          (thirdPropertyData.PlotAreaData = {
-            PlotArea: plotArea,
-            AreaUnits: areaUnits,
-            PlotLength: plotLength,
-            PlotWidth: plotwidth,
-          });
+        (thirdPropertyData.PlotArea = plotArea),
+          (thirdPropertyData.AreaUnits = areaUnits.value),
+          (thirdPropertyData.PlotLength = plotLength),
+          (thirdPropertyData.PlotWidth = plotwidth);
       }
       if (propertTypWithSubTypeValue == "Office") {
         thirdPropertyData.WallType = wallType;
+        if(wallType==="Other"){
+          thirdPropertyData.CustomWallType = customWallType;
+        }
+        if(wallType!=="Other" &&customWallType ){
+          thirdPropertyData.CustomWallType = "";
+        }
       }
-      if (
-        propertTypWithSubTypeValue == "Retail Shop" ||
-        propertTypWithSubTypeValue == "Showroom"
-      ) {
-        thirdPropertyData.CellingHeight = cellingHeight;
-        thirdPropertyData.EntranceWidth = entranceWidth;
-      }
+
       console.log("thirdPropertyData", thirdPropertyData);
       const localStorageData = JSON.parse(
         sessionStorage.getItem("propertyData")
@@ -200,42 +214,47 @@ if (
       toast.error("Please fill in all required fields!");
     }
   };
+
   return (
     <>
-      <div className={`flex justify-end ${Styles.continueBtn}`}>
-        <ContinueButton modalSubmit={SubmitForm} />
-      </div>
       <div className="grid gap-4 mb-4 sm:grid-cols-2">
         {propertTypWithSubTypeValue && propertTypWithSubTypeValue == "Plot" && (
           <>
             {/* Plot Area */}
-            <div>
-              <label
-                htmlFor="plotArea"
-                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
-              >
-                Plot Area
-              </label>
-              <input
-                type="number"
-                name="plotArea"
-                id="plotArea"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Plot Area"
-                value={plotArea}
-                onChange={(e) => setPlotArea(e.target.value)}
-              />
+            <div class="w-full mx-auto">
+              <div>
+                <label
+                  for="search-dropdown"
+                  className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
+                >
+                  Plot Area
+                </label>
+                <div class="relative w-full">
+                  <input
+                    type="number"
+                    name="plotArea"
+                    id="plotArea"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Plot Area"
+                    value={plotArea}
+                    onChange={(e) => setPlotArea(e.target.value)}
+                  />
+                  <div className="absolute top-0 end-0 text-sm font-medium h-full text-black  rounded-e-lg border-none m-0.5 ">
+                    <Select
+                      options={staticAreaUnitArray.map((element) => ({
+                        value: element.value,
+                        label: element.label,
+                      }))}
+                      value={areaUnits}
+                      onChange={(e) =>
+                        setAreaUnits({ value: e.value, label: e.label })
+                      }
+                      placeholder="Select Unit"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
-            {/*  Area Unit */}
-            {areaUnitData && (
-              <ApiButtons
-                itemArray={areaUnitData}
-                stateItem={areaUnits}
-                labelName={"Area Unit"}
-                ValueName={"Unit"}
-                changeState={setAreaUnits}
-              />
-            )}
 
             {/* Plot Width */}
             <div>
@@ -275,8 +294,6 @@ if (
             </div>
           </>
         )}
-
-     
       </div>
 
       {propertTypWithSubTypeValue != "Plot" && (
@@ -284,32 +301,59 @@ if (
           {" "}
           {/* Construction walls */}
           {propertTypWithSubTypeValue == "Office" && (
-            <PropertyBigButtons
-              labelName={"Wall Type"}
-              itemArray={wallTypesArray}
-              activeBtnvalue={wallType}
-              changeState={setWallType}
-            />
+            <>
+              <PropertyBigButtons
+                labelName={"Wall Type"}
+                itemArray={wallTypesArray}
+                activeBtnvalue={wallType}
+                changeState={setWallType}
+              />
+              {wallType === "Other" && (
+                <TextInput
+                  labelName={" Write your Wall Type"}
+                  inputValue={customWallType}
+                  dynamicState={setCustomWallType}
+                />
+              )}
+            </>
           )}
           {/* Fencing */}
-          {fencingsData && (
-            <ApiButtons
-              itemArray={fencingsData}
-              stateItem={fencing}
+          {fencingArray && (
+          <>
+           <PropertyBigButtons
               labelName={"Fencing"}
-              ValueName={"Fencing"}
+              itemArray={fencingArray}
+              activeBtnvalue={fencing}
               changeState={setFencing}
             />
+            {fencing === "Other" && (
+                <TextInput
+                  labelName={"Fencing Type"}
+                  inputValue={customFencing}
+                  dynamicState={setCustomFencing}
+                />
+              )}
+          </>
+           
           )}
           {/* Flooring */}
-          {flooringsData && (
-            <ApiButtons
-              itemArray={flooringsData}
-              stateItem={flooring}
+          {flooringArray && (
+            <>
+            <PropertyBigButtons
               labelName={"Flooring"}
-              ValueName={"Flooring"}
+              itemArray={flooringArray}
+              activeBtnvalue={flooring}
               changeState={setFlooring}
             />
+            {flooring == "Other" && (
+                <TextInput
+                  labelName={"Flooring Type"}
+                  inputValue={customFlooring}
+                  dynamicState={setCustomFlooring}
+                />
+              )}
+            </>
+            
           )}
           {/* Furnished */}
           {furnishedesData && (
@@ -321,7 +365,44 @@ if (
               changeState={setFurnished}
             />
           )}
-          <div className="grid gap-4 mb-4 sm:grid-cols-2">
+
+           
+          <div className="grid gap-4 mb-4 mt-5 sm:grid-cols-2">
+            {/* land area and unit */}
+           <div class="w-full mx-auto">
+            <div>
+              <label
+                for="search-dropdown"
+                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
+              >
+                Land Area
+              </label>
+              <div class="relative w-full">
+                <input
+                  type="number"
+                  name="landArea"
+                  id="landArea"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Land Area"
+                  value={landArea}
+                  onChange={(e) => setLandArea(e.target.value)}
+                />
+                <div className="absolute top-0 end-0 text-sm font-medium h-full text-black  rounded-e-lg border-none m-0.5 ">
+                  <Select
+                    options={staticAreaUnitArray.map((element) => ({
+                      value: element.value,
+                      label: element.label,
+                    }))}
+                    value={landAreaUnit}
+                    onChange={(e) =>
+                      setLandAreaUnit({ value: e.value, label: e.label })
+                    }
+                    placeholder="Select Unit"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
             {/* Builtup ARea */}
             <div>
               <label
@@ -340,27 +421,6 @@ if (
                 onChange={(e) => setBuiltUpArea(e.target.value)}
               />
             </div>
-            {/* LandArea */}
-            <div>
-              <label
-                htmlFor="landArea"
-                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white "
-              >
-                Land Area
-              </label>
-              <input
-                type="number"
-                name="landArea"
-                id="landArea"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Land Area"
-                value={landArea}
-                onChange={(e) => setLandArea(e.target.value)}
-              />
-            </div>
-
-           
-
             {/* CarpetArea */}
             <div>
               <label
@@ -379,19 +439,11 @@ if (
                 onChange={(e) => setCarpetArea(e.target.value)}
               />
             </div>
-          </div>
-        </>
-      )}
-
-      {(propertTypWithSubTypeValue == "Retail Shop" ||
-        propertTypWithSubTypeValue == "Showroom") && (
-        <>
-          <div className="grid gap-4 mb-4 sm:grid-cols-2">
-            {/* LandArea */}
+            {/* Entrance width in feet */}
             <div>
               <label
                 htmlFor="entranceWidth"
-                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
+                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
               >
                 Entrance width in feet
               </label>
@@ -410,7 +462,7 @@ if (
             <div>
               <label
                 htmlFor="cellingHeight"
-                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
+                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
               >
                 Celling height in feet
               </label>
@@ -424,116 +476,122 @@ if (
                 onChange={(e) => setCellingHeight(e.target.value)}
               />
             </div>
-           
           </div>
         </>
       )}
-       {(propertTypWithSubTypeValue && propertTypeValue) &&
-              (propertTypWithSubTypeValue != "Plot" && propertTypeValue=="Residential") && (
-                <>
-                  <h2 className="block mb-2 text-xl mt-12 font-lg underline font-bold text-gray-500 dark:text-white">
-                    {" "}
-                    Fitting Details
-                  </h2>
-                  <div className="grid gap-4 mb-4 sm:grid-cols-2">
-                    <div>
-                      <label
-                        htmlFor="Electrical"
-                        className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
-                      >
-                        Electrical
-                      </label>
-                      <input
-                        type="text"
-                        name="Electrical"
-                        id="Electrical"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Electrical"
-                        value={fittingValues.Electrical}
-                        onChange={(e) =>
-                          handleFittingChange("Electrical", e.target.value)
-                        }
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="Toilets"
-                        className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
-                      >
-                        Toilets
-                      </label>
-                      <input
-                        type="text"
-                        name="Toilets"
-                        id="Toilets"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Toilets"
-                        value={fittingValues.Toilets}
-                        onChange={(e) =>
-                          handleFittingChange("Toilets", e.target.value)
-                        }
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="Kitchen"
-                        className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
-                      >
-                        Kitchen
-                      </label>
-                      <input
-                        type="text"
-                        name="Kitchen"
-                        id="Kitchen"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Kitchen"
-                        value={fittingValues.Kitchen}
-                        onChange={(e) =>
-                          handleFittingChange("Kitchen", e.target.value)
-                        }
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="Doors"
-                        className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
-                      >
-                        Doors
-                      </label>
-                      <input
-                        type="text"
-                        name="Doors"
-                        id="Doors"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Doors"
-                        value={fittingValues.Doors}
-                        onChange={(e) =>
-                          handleFittingChange("Doors", e.target.value)
-                        }
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="Windows"
-                        className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
-                      >
-                        Windows
-                      </label>
-                      <input
-                        type="text"
-                        name="Windows"
-                        id="Windows"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Windows"
-                        value={fittingValues.Windows}
-                        onChange={(e) =>
-                          handleFittingChange("Windows", e.target.value)
-                        }
-                      />
-                    </div>
-                  </div>
-                </>
-              )}
+
+    
+      {propertTypWithSubTypeValue &&
+        propertTypeValue &&
+        propertTypWithSubTypeValue != "Plot" &&
+        propertTypeValue == "Residential" && (
+          <>
+            <h2 className="block mb-2 text-xl mt-12 font-lg underline font-bold text-gray-500 dark:text-white">
+              {" "}
+              Fitting Details
+            </h2>
+            <div className="grid gap-4 mb-4 sm:grid-cols-2">
+              <div>
+                <label
+                  htmlFor="Electrical"
+                  className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
+                >
+                  Electrical
+                </label>
+                <input
+                  type="text"
+                  name="Electrical"
+                  id="Electrical"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Electrical"
+                  value={fittingValues.Electrical}
+                  onChange={(e) =>
+                    handleFittingChange("Electrical", e.target.value)
+                  }
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="Toilets"
+                  className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
+                >
+                  Toilets
+                </label>
+                <input
+                  type="text"
+                  name="Toilets"
+                  id="Toilets"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Toilets"
+                  value={fittingValues.Toilets}
+                  onChange={(e) =>
+                    handleFittingChange("Toilets", e.target.value)
+                  }
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="Kitchen"
+                  className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
+                >
+                  Kitchen
+                </label>
+                <input
+                  type="text"
+                  name="Kitchen"
+                  id="Kitchen"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Kitchen"
+                  value={fittingValues.Kitchen}
+                  onChange={(e) =>
+                    handleFittingChange("Kitchen", e.target.value)
+                  }
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="Doors"
+                  className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
+                >
+                  Doors
+                </label>
+                <input
+                  type="text"
+                  name="Doors"
+                  id="Doors"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Doors"
+                  value={fittingValues.Doors}
+                  onChange={(e) => handleFittingChange("Doors", e.target.value)}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="Windows"
+                  className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
+                >
+                  Windows
+                </label>
+                <input
+                  type="text"
+                  name="Windows"
+                  id="Windows"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Windows"
+                  value={fittingValues.Windows}
+                  onChange={(e) =>
+                    handleFittingChange("Windows", e.target.value)
+                  }
+                />
+              </div>
+            </div>
+          </>
+        )}
+
+      <ContinueButton
+        modalSubmit={SubmitForm}
+        butonSubName={"add Financial Details"}
+      />
     </>
   );
 }

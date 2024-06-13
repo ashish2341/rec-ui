@@ -64,7 +64,20 @@
   border-left: 3px solid;
   height: 100%;
 }
+.heroSectionNoLeftVideoMain{
+    border: 1px solid gray;
+    border-radius: 0.75rem;
+    display: grid;
+    place-items: center;
+}
 
+.loaderSize{
+    margin-left: 1rem;
+}
+
+.loaderfaqSize{
+    padding: 2rem;
+}
 /* detailSectionBar */
 .detailSectionBar{
    /* margin-top: 6rem; */

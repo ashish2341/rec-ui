@@ -14,6 +14,7 @@ import { UpdateUserApi } from "@/api-functions/user/updateUser";
 import { Button, Modal } from "flowbite-react";
 import styles from "./user.module.css";
 import { Table, Card } from "flowbite-react";
+import { useRouter } from 'next/navigation';
 
 
 export default function Users() {
@@ -28,6 +29,7 @@ export default function Users() {
   const [searchData, setSearchData] = useState("");
   const [isSubmitClicked,setIsSubmitClicked]=useState(0)
   const [openModal, setOpenModal] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     getAllUser();
@@ -126,6 +128,9 @@ export default function Users() {
   const buttonId = (e) => {
       setOpenModal(true);
       setUserId(e.target.value);
+      setListPropData(null); // Reset property data
+  setListUserData(null); // Reset user data
+  setListEnqData(null);
       console.log("user",userId)
   }
   return (
@@ -146,9 +151,7 @@ export default function Users() {
               </button>
             </Link> */}
           </div>
-          <label htmlFor="table-search" className="sr-only">
-            Search
-          </label>
+          {listData && listData.data.length > 0 && (
           <div className="relative">
             <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
               <svg
@@ -173,7 +176,11 @@ export default function Users() {
               onChange={searchInputChange}
             />
           </div>
+            )}
         </div>
+        {(listData ? (
+          listData?.data?.length > 0 ? (
+        <div>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -241,7 +248,7 @@ export default function Users() {
                   <div className="flex items-center space-x-2">
                     <Link
                       href={`/testiMonials/${item._id}`}
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                      className="font-bold text-lg text-blue-600 dark:text-blue-500 hover:underline"
                     >
                       <i className="bi bi-pencil-square"></i>
                     </Link>
@@ -253,7 +260,7 @@ export default function Users() {
                     </Link> */}
                     <Link
                       href="#"
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                      className="font-medium text-lg text-red-600 dark:text-red-500 hover:underline"
                     >
                       <i
                         onClick={() => deleteUserModal(item._id)}
@@ -266,9 +273,15 @@ export default function Users() {
             ))}
           </tbody>
         </table>
+        <Pagination data={listData} pageNo={handlePageChange} pageVal={page} />
+        </div>
+        ) : (
+          <h1 className={`bigNotFound`}>No Data Found</h1>
+        )
+      ) : null)}
 
       </div>
-      <Pagination data={listData} pageNo={handlePageChange} pageVal={page} />
+     
       <Popup
         isOpen={isPopupOpen}
         title="Are you sure you want to delete this Testimonial ?"
@@ -280,12 +293,13 @@ export default function Users() {
       <Modal dismissible className={`bg-transparent/[.5] ${styles.ModalContent} `} size="7xl" show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Header>User Details</Modal.Header>
         <Modal.Body className={`${styles.ModalContent}`}  >
+        {listUserData ?
           <div className="flex">
           <div>
-           <h1 className="text-md mb-3">User Info : </h1>
-              <Card  className="max-w-sm h-80 mr-6">
-                  <div className="overflow-x-auto">
-                    <Table>
+           <h1 className="text-md mb-3 ml-2">User Info : </h1>
+              <div  className="max-w-sm h-80 mr-6 border rounded-md">
+                  <div className="overflow-x-auto p-4">
+                    <Table className="p-2">
                       <Table.Body className="divide-y">
                         <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                           <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
@@ -316,13 +330,13 @@ export default function Users() {
                       </Table.Body>
                     </Table>
                   </div>
-              </Card>
+              </div>
           </div>
           <div className="mr-6">
-          <h1 className="text-md mb-3">Enquiry Info : </h1>
-              <Card className="max-w-3xl h-80 overflow-y-auto max-h-80">
-              {listEnqData ? <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><span className="font-medium text-gray-900">Total Enquiries : {" "}</span>{listEnqData.length}</p> : null}
-              <div className="overflow-x-auto">
+          <h1 className="text-md mb-3 ml-2">Enquiry Info : </h1>
+              <div className="max-w-3xl h-80 overflow-y-auto max-h-80 rounded-md border">
+              {listEnqData ? <p className="text-base leading-relaxed pt-4 pl-4 text-gray-500 dark:text-gray-400"><span className="font-medium text-gray-900">Total Enquiries : {" "}</span>{listEnqData.length}</p> : null}
+              <div className="overflow-x-auto p-4">
                 <Table>
                 <Table.Head>
                  <Table.HeadCell>S. No.</Table.HeadCell>
@@ -344,13 +358,13 @@ export default function Users() {
                   </Table.Body>
                 </Table>
               </div>
-              </Card>
+              </div>
           </div>
           <div>
-          <h1 className="text-md mb-3">Property Info : </h1>
-              <Card className="max-w-3xl  overflow-y-auto max-h-80">
-              {listPropData ? <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400"><span className="font-medium text-gray-900">Total Properties : {" "}</span>{listPropData.length}</p> : null}
-              <div className="overflow-x-auto">
+          <h1 className="text-md mb-3 ml-2">Property Info : </h1>
+              <div className="max-w-3xl  overflow-y-auto max-h-80 rounded-md border">
+              {listPropData ? <p className="text-base leading-relaxed pt-4 pl-4 text-gray-500 dark:text-gray-400"><span className="font-medium text-gray-900">Total Properties : {" "}</span>{listPropData.length}</p> : null}
+              <div className="overflow-x-auto p-4">
                 <Table>
                 <Table.Head>
                  <Table.HeadCell>S. No.</Table.HeadCell>
@@ -361,17 +375,17 @@ export default function Users() {
                       listPropData.map((item,index) => (
                   <Table.Row key={index} className="bg-white dark:border-gray-700 dark:bg-gray-800">
                      <Table.Cell>{index + 1}</Table.Cell>
-                      <Table.Cell>{item.Titile}</Table.Cell>
+                      <Table.Cell>{item.Title}</Table.Cell>
                     </Table.Row>
                     )) : null}
 
                   </Table.Body>
                 </Table>
               </div>
-              </Card>
+              </div>
           </div>
           </div>
-
+          : <Spinner /> }
 
         </Modal.Body>
       </Modal>

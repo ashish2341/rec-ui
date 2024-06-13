@@ -15,12 +15,12 @@
     padding-right: 10px; /* To avoid content hiding behind scrollbar */
     padding-top: 10px;
   }
-  .continueBtn{
+  /* .continueBtn{
     position: relative;
     top: -56px;
     left: 16rem;
     width: 70%;
-}
+} */
 .noDataHead{
   font-weight: 600;
   margin: 0.5rem;

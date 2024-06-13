@@ -97,7 +97,7 @@ export default function Home() {
     loading: testimonialDataLoading,
     error: testimonialDataError,
 } = useFetch(`${API_BASE_URL}/testimonial/allTestimonial?page=1&pageSize=5`);
-console.log("propertyByapartmentType",propertyByapartmentType);
+console.log("propertyByPopularProperty",propertyByPopularProperty);
   const {
     data: faqData,
     loading: faqLoading,
@@ -165,34 +165,28 @@ console.log("propertyByapartmentType",propertyByapartmentType);
             {item.Title}
           </h2>
           <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
-           { item?.ProeprtyType == "Commercial" ?
+           {item?.ProeprtyType == "Commercial" ?
            <div className="flex">
            <i className="fa fa-solid fa-car"></i>
              <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-             {item.PrivateParking}  Parking
+             {item.PrivateParking ? <p> {item.PrivateParking} Parking</p> : <p>Parking</p>}
              </p>
            </div>
-            :
+           :
             <div className="flex">
             <i className="fa fa-bed"></i>
               <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-              {item.Bedrooms} Bed Room
+              {item.Bedrooms ? <p> {item.Bedrooms} Bedrooms</p> : <p>Bedrooms</p>}
               </p>
             </div>
            }
            { item?.ProeprtyType == "Commercial" ?
-            item.CellingHeight ?
-           <div className="flex">
+           (<div className="flex">
+             <i className="fa fa-arrow-up" aria-hidden="true"></i>
              <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-             <span className="ml-1">&#xf548;</span>{" "}{item.CellingHeight} Height
+             {item.CellingHeight ? <p> {item.CellingHeight} Height</p> : <p>Height</p> }
              </p>
-           </div> :
-           <div className="flex">
-             <i className="fa fa-building" aria-hidden="true"></i>
-             <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-             {item.CarpetArea} Carpet Area
-             </p>
-           </div>
+           </div>) 
             :
             <div className="flex">
               <i className="fa fa-bath"></i>
@@ -205,7 +199,7 @@ console.log("propertyByapartmentType",propertyByapartmentType);
             <div className="flex">
               <i className="fa fa-area-chart"></i>
               <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-                {item.LandArea} Land Area
+             {item.LandArea ? <p> {item.LandArea} Land Area</p> : <p>{item.BuiltUpArea} BuiltUp Area </p> }
               </p>
             </div>
           </div>

@@ -1,31 +1,160 @@
 .dashboardContainer{
-    display: flex;
-    justify-content: center;
-    margin-top: 2rem;
-    margin-bottom: 3rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
     
     
 }
+
+.dashboardContainerCards{
+    display: flex;
+    justify-content: space-between;
+}
 .showCard1{
-    background-color: #fff4d4 !important;
-    color: #e8af09 !important;
+    background-color: #e8af09 !important;
+    color: white !important;
     /* text-shadow: 2px 2px 4px #d1c6a4; */
 }
 .showCard2{ 
-    background-color:  #e4f4fc !important;
-    color: #0aa0ed !important
+    background-color:  #0aa0ed !important;
+    color: white !important
 }
 .showCard3{
-    background-color:  #dbf3e3 !important;
-    color: #049936 !important;
+    background-color:  #049936 !important;
+    color: white !important;
     /* text-shadow:   2px 2px 4px rgba(4, 153, 54, 0.5)  !important; */
    
 }
 
 .showCard4{
-    background-color:    #e4ecf4 !important;
-    color: #2270be !important
+    background-color:    #2270be !important;
+    color: white !important
 }
 .dataSection1{
-  
+    margin-left: 4rem;
+    margin-right: 4rem;
+    text-wrap: nowrap;
+    justify-content: center;
+    display: grid;
+}
+
+.Icon2Outline{
+    border: 1px solid white;
+    border-radius: 50%;
+    background: white;
+    padding: 0.5rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.IconOutline{
+    border: 1px solid white;
+    border-radius: 50%;
+    padding: 1.5rem;
+    background: white;
+}
+
+.IconsColor{
+    color: #e8af09;
+}
+
+.Icons3Color{
+    color: #049936;
+}
+
+.Icon3Outline{
+    border: 1px solid white;
+    border-radius: 50%;
+    padding: 1rem;
+    background: white;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.TodayContainer{
+    display: flex;
+    justify-content: space-around;
+}
+
+.Icons4Color{
+    color: #2270be;
+}
+
+.Icons2Color{
+    color: #0aa0ed;
+}
+
+.TodayBox{
+    border: 1px solid gray;
+    border-radius: 10px;
+    text-wrap: nowrap;
+    padding: 1rem;
+}
+
+.builderColor{
+    background-color: #0aa0ed;
+    color: white;
+    border-radius: 0.5rem;
+    width: 100%;
+    text-wrap: nowrap;
+    padding: 0.2rem !important;
+}
+
+.UserColor{
+    color: white;
+    padding: 0.2rem;
+    border-radius: 0.5rem;
+    background-color:  #e8af09;
+}
+
+.PropColor{
+    color: white;
+    border-radius: 0.5rem;
+    background-color: #049936;
+    width: 100%;
+    text-wrap: nowrap;
+    padding: 0.2rem !important;
+}
+
+.AccordiaonPropColor{
+    width: 100%;
+    padding: 0.2rem !important;
+    margin: 0rem !important;
+}
+
+.EnqColor{
+    color: white;
+    border-radius: 0.5rem;
+    background-color: #2270be;
+    width: 100%;
+    text-wrap: nowrap;
+    padding: 0.2rem !important;
+}
+
+.SecondContainer{
+    margin-top: 0.75rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: .5rem;
+    display: flex;
+    justify-content: center;
+}
+
+
+.graphSize{
+    padding: 1rem;
+    width: 80%;
+    height: 60%;
+}
+
+.AccordiaonBuilderColor{
+    background-color: #0aa0ed;
+    width: 100%;
+    padding: 0.2rem !important;
+    margin: 0rem !important;
+}
+
+.AccordiaonEnqColor{
+    background-color: #2270be;
+    width: 100%;
+    padding: 0.2rem !important;
+    margin: 0rem !important;
 }

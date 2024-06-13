@@ -12,6 +12,7 @@ import { ToastContainer, toast } from "react-toastify";
 import LoadingImg from "@/components/common/loadingImg";
 import { GetAdminGraphApi, GetBuilderGraphApi } from "@/api-functions/dashboard/graphApi";
 import { Accordion } from "flowbite-react";
+import { getPrevious12Months } from "@/utils/commonHelperFn";
 
 
 export default function Dashboard() {
@@ -103,37 +104,31 @@ export default function Dashboard() {
             const propertyBuilderData = builderGraphData.properties || [];
 
             const chartData = {
-                labels: [
-                    "Jan", "Feb", "March", "April", "May", "June"
-                ],
+                labels: getPrevious12Months(),
                 datasets: [{
                     label: 'Builder',
-                    // data: builData.map(item => item.count),
-                    data: [2, 4 , 6, 8, 100],
+                    data: getPrevious12Months().map( prevMonth => builData.find( mObj => mObj.month==prevMonth)?.count ?? 0 ),
                     fill: false,
                     borderColor: 'rgba(10, 160, 237, 1)',
                     tension: 0.1
                 },
                 {
                     label: 'Property',
-                    // data: propertyData.map(item => item.count),
-                    data: [10, 14 , 16, 18],
+                    data:  getPrevious12Months().map( prevMonth => propertyData.find( mObj => mObj.month==prevMonth)?.count ?? 0 ),
                     fill: false,
                     borderColor: 'rgba(4, 153, 54, 1)',
                     tension: 0.1
                 },
                 {
                     label: 'User',
-                    //data: userData.map(item => item.count),
-                    data: [5, 12 , 17, 20],
+                    data:  getPrevious12Months().map( prevMonth => userData.find( mObj => mObj.month==prevMonth)?.count ?? 0 ),
                     fill: false,
                     borderColor: 'rgba(232, 175, 9, 1)',
                     tension: 0.1
                 },
                 {
                     label: 'Enquiry',
-                    // data: EnquiryData.map(item => item.count),
-                    data: [15, 13 , 19, 22, 500],
+                    data:  getPrevious12Months().map( prevMonth => EnquiryData.find( mObj => mObj.month==prevMonth)?.count ?? 0 ),
                     fill: false,
                     borderColor: 'rgba(34, 112, 190, 1)',
                     tension: 0.1

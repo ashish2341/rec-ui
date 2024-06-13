@@ -462,3 +462,16 @@ export const GetPropertyScore = (obj, type) => {
   const compPerc = (fieldValue / allFields) * 100;
   return parseInt(compPerc);
 };
+ export const getPrevious12Months = ()  => {
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  const result = [];
+  
+  for (let i = 0; i < 12; i++) {
+      const previousMonthIndex = (currentMonth - i - 1 + 12) % 12;
+      result.unshift(months[previousMonthIndex]);
+  }
+  
+  return result;
+}

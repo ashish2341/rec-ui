@@ -49,7 +49,7 @@
 
 .column2 {
   flex: 0 0 70%;
-  height: 75vh;
+  height: 550px;
   overflow-x: hidden;
 overflow-y: auto;
 padding-top: 1rem;

@@ -7,7 +7,8 @@
 
 .dashboardContainerCards{
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-content: left;
 }
 .showCard1{
     background-color: #e8af09 !important;
@@ -19,7 +20,7 @@
     color: white !important
 }
 .showCard3{
-    background-color:  #049936 !important;
+    background-color:  #219C90 !important;
     color: white !important;
     /* text-shadow:   2px 2px 4px rgba(4, 153, 54, 0.5)  !important; */
    
@@ -58,7 +59,7 @@
 }
 
 .Icons3Color{
-    color: #049936;
+    color: #219C90;
 }
 
 .Icon3Outline{
@@ -106,10 +107,15 @@
     background-color:  #e8af09;
 }
 
+Link.InvertedUserColor :hover{
+    color: #e8af09;
+    background-color:  white;
+}
+
 .PropColor{
     color: white;
     border-radius: 0.5rem;
-    background-color: #049936;
+    background-color: #219C90;
     width: 100%;
     text-wrap: nowrap;
     padding: 0.2rem !important;

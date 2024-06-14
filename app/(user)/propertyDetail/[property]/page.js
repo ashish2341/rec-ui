@@ -229,62 +229,28 @@ const PropertyDetail = ({ params }) => {
                 <i className="bi bi-geo-alt-fill"></i>
                 <p className={`text-gray-700`}>{item.Address}</p>
               </div>
-              <h2 className={` ${styles.populerPropertiesBoxHead}`}>
-                {item.Title}
-              </h2>
-              <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
-                {item?.ProeprtyType == "Commercial" ?
-                  <div className="flex">
-                    <i className="fa fa-solid fa-car"></i>
-                    <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-                      {item.PrivateParking}  Parking
-                    </p>
-                  </div>
-                  :
-                  <div className="flex">
-                    <i className="fa fa-bed"></i>
-                    <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-                      {item.Bedrooms} Bed Room
-                    </p>
-                  </div>
-                }
-                {item?.ProeprtyType == "Commercial" ?
-                  item.CellingHeight ?
-                    <div className="flex">
-                      <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-                        <span className="ml-1">&#xf548;</span>{" "}{item.CellingHeight} Height
-                      </p>
-                    </div> :
-                    <div className="flex">
-                      <i className="fa fa-building" aria-hidden="true"></i>
-                      <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-                        {item.CarpetArea} Carpet Area
-                      </p>
-                    </div>
-                  :
-                  <div className="flex">
-                    <i className="fa fa-bath"></i>
-                    <p className={` ${styles.populerPropertiesBoxText} ml-1 `}>
-                      {item.Bathrooms} Baths
-                    </p>
-                  </div>
-                }
-                <div className="flex">
-                  <i className="fa fa-area-chart"></i>
-
-                  <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-                    {item.LandArea} Land Area
-                  </p>
-                </div>
+              <div className="flex justify-between">
+                <h2 className={` ${styles.populerPropertiesBoxHead}`}>
+                  {item.Title}
+                </h2>
+                {item.LocationHub ?
+                  <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
+                    {item.LocationHub == "Others" ? item.CustomLocationHub : item.LocationHub}
+                  </div> :
+                  <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
+                    {item.ProeprtyType}
+                  </div>}
               </div>
+
               <div className={`${styles.populerPropertiesBoxPriceMain}`}>
                 <p className={`${styles.populerPropertiesBoxPrice}`}>
                   {item.TotalPrice?.DisplayValue}
                 </p>
-                <Link href={`/propertyDetail/${item._id}`}>
+                <Link href={`/propertyDetail/${item._id}`} >
                   <button
                     className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     type="button"
+
                   >
                     More Details
                   </button>
@@ -748,12 +714,12 @@ const PropertyDetail = ({ params }) => {
                         {listPropertiesData.LeaseYears}
                       </p>
                     </div> :
-                  <div>
-                    <p className={`${styles.GeneralDetailsBoxName}`}>Rooms:</p>
-                    <p className={`${styles.GeneralDetailsBoxValue}`}>
-                      {listPropertiesData.Bedrooms}
-                    </p>
-                  </div>
+                    <div>
+                      <p className={`${styles.GeneralDetailsBoxName}`}>Rooms:</p>
+                      <p className={`${styles.GeneralDetailsBoxValue}`}>
+                        {listPropertiesData.Bedrooms}
+                      </p>
+                    </div>
                   }
 
                   <div>
@@ -889,7 +855,7 @@ const PropertyDetail = ({ params }) => {
                             :
                             (<ol className={`${styles.configureOl}`}>
                               <p className={`${styles.configureLiHead}`}>Legend</p>
-                              {listPropertiesData.CarpetArea ? <li>{listPropertiesData.CarpetArea} Carpet Area</li> : <li>{listPropertiesData.PlotLength} Plot Length</li>}
+                              {listPropertiesData.BhkType ? <li>{listPropertiesData.BhkType.Type}</li> : <li>{listPropertiesData.PlotLength} Plot Length</li>}
                               {listPropertiesData.Bathrooms ? <li>{listPropertiesData.Bathrooms} Bathrooms</li> : <li> {listPropertiesData.Plotwidth} Plot Width</li>}
                               {listPropertiesData.Bedrooms ? <li>{listPropertiesData.Bedrooms} Bedrooms</li> : <li> {listPropertiesData.PlotArea} Plot Area</li>}
                             </ol>)
@@ -1558,7 +1524,7 @@ const PropertyDetail = ({ params }) => {
       <PersonalLoanCalculator/>
       </div> */}
       <Footer />
-      <Modal dismissible className={`bg-transparent/[.5] `} size="lg" show={openModal} onClose={() => setOpenModal(false)}>
+      <Modal dismissible className={`bg-transparent/[.8] `} size="lg" show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Header>Ask For Detail</Modal.Header>
         <Modal.Body >
           <div className={`${styles.contactLeftFormData}`}>

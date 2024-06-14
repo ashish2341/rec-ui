@@ -13,6 +13,8 @@ import LoadingImg from "@/components/common/loadingImg";
 import { GetAdminGraphApi, GetBuilderGraphApi } from "@/api-functions/dashboard/graphApi";
 import { Accordion } from "flowbite-react";
 import { getPrevious12Months } from "@/utils/commonHelperFn";
+import Link from "next/link";
+import { GetEnquiryByBuilderApi } from "@/api-functions/enquiry/getEnquiryByBuilder";
 
 
 export default function Dashboard() {
@@ -23,6 +25,9 @@ export default function Dashboard() {
     const [adminGraphData, setAdminGraphData] = useState("");
     const [builderDashboardData, setBuilderDashboardData] = useState("");
     const [builderGraphData, setBuilderGraphData] = useState("");
+    const [page, setPage] = useState(1);
+    const [searchData, setSearchData] = useState("");
+    const [filterData, setFilterData] = useState("");
 
 
     useEffect(() => {
@@ -89,51 +94,80 @@ export default function Dashboard() {
 
     useEffect(() => {
         const createChart = () => {
-            if (!chartRef.current || !adminGraphData) {
+            if (!chartRef.current) {
                 return null;
             }
 
             const ctx = chartRef.current.getContext('2d');
 
+
             const builData = adminGraphData.builder || [];
             const userData = adminGraphData.user || [];
             const EnquiryData = adminGraphData.enquiry || [];
             const propertyData = adminGraphData.properties || [];
+            // const EnquiryData = adminGraphData ? adminGraphData.enquiry : builderGraphData.enquiry ;
+            // const propertyData = adminGraphData ? adminGraphData.properties : builderGraphData.properties ;
 
             const EnquiryBuilderData = builderGraphData.enquiry || [];
             const propertyBuilderData = builderGraphData.properties || [];
+            let chartData = {}
 
-            const chartData = {
-                labels: getPrevious12Months(),
-                datasets: [{
-                    label: 'Builder',
-                    data: getPrevious12Months().map( prevMonth => builData.find( mObj => mObj.month==prevMonth)?.count ?? 0 ),
-                    fill: false,
-                    borderColor: 'rgba(10, 160, 237, 1)',
-                    tension: 0.1
-                },
-                {
-                    label: 'Property',
-                    data:  getPrevious12Months().map( prevMonth => propertyData.find( mObj => mObj.month==prevMonth)?.count ?? 0 ),
-                    fill: false,
-                    borderColor: 'rgba(4, 153, 54, 1)',
-                    tension: 0.1
-                },
-                {
-                    label: 'User',
-                    data:  getPrevious12Months().map( prevMonth => userData.find( mObj => mObj.month==prevMonth)?.count ?? 0 ),
-                    fill: false,
-                    borderColor: 'rgba(232, 175, 9, 1)',
-                    tension: 0.1
-                },
-                {
-                    label: 'Enquiry',
-                    data:  getPrevious12Months().map( prevMonth => EnquiryData.find( mObj => mObj.month==prevMonth)?.count ?? 0 ),
-                    fill: false,
-                    borderColor: 'rgba(34, 112, 190, 1)',
-                    tension: 0.1
-                }]
-            };
+            console.log("roles", roles);
+
+            if (roles.includes("Admin")) {
+                chartData = {
+                    labels: getPrevious12Months(),
+                    datasets: [{
+                        label: 'Builder',
+                        data: getPrevious12Months().map(prevMonth => builData.find(mObj => mObj.month == prevMonth)?.count ?? 0),
+                        fill: false,
+                        borderColor: 'rgba(10, 160, 237, 1)',
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Property',
+                        data: getPrevious12Months().map(prevMonth => propertyData.find(mObj => mObj.month == prevMonth)?.count ?? 0),
+                        fill: false,
+                        borderColor: 'rgba(33, 156, 144, 1)',
+                        tension: 0.1
+                    },
+                    {
+                        label: 'User',
+                        data: getPrevious12Months().map(prevMonth => userData.find(mObj => mObj.month == prevMonth)?.count ?? 0),
+                        fill: false,
+                        borderColor: 'rgba(232, 175, 9, 1)',
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Enquiry',
+                        data: getPrevious12Months().map(prevMonth => EnquiryData.find(mObj => mObj.month == prevMonth)?.count ?? 0),
+                        fill: false,
+                        borderColor: 'rgba(34, 112, 190, 1)',
+                        tension: 0.1
+                    }]
+                };
+            } else {
+                chartData = {
+                    labels: getPrevious12Months(),
+                    datasets: [
+                        {
+                            label: 'Property',
+                            // data: [1, 2, 3, 4],
+                            data:  getPrevious12Months().map( prevMonth => propertyBuilderData.find( mObj => mObj.month==prevMonth)?.count ?? 0 ),
+                            fill: false,
+                            borderColor: 'rgba(33, 156, 144, 1)',
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Enquiry',
+                            data: getPrevious12Months().map(prevMonth => EnquiryBuilderData.find(mObj => mObj.month == prevMonth)?.count ?? 0),
+                            fill: false,
+                            borderColor: 'rgba(34, 112, 190, 1)',
+                            tension: 0.1
+                        }]
+                };
+            }
+
 
             //   const chartBuilderData = {
             //     labels: builderGraphData.properties.length > 0 ? builderGraphData?.properties.map(item => item.month) : 1,
@@ -156,7 +190,7 @@ export default function Dashboard() {
 
             return new Chart(ctx, {
                 type: 'line',
-                data: roles.includes("Admin") ? chartData : null,
+                data: chartData,
                 options: {
                     scales: {
                         y: {
@@ -176,41 +210,68 @@ export default function Dashboard() {
         };
     }, [adminGraphData]);
 
+    const getAllEnquiryByBuilder = async (filterType) => {
+        let enquiries = await GetEnquiryByBuilderApi(page, searchData, filterType);
+        if (enquiries?.resData?.success == true) {
+            toast.success(enquiries?.resData?.message);
+            return false;
+        } else {
+            toast.error(enquiries?.errMessage);
+            return false;
+        }
+    };
+
     console.log("adminGraphData", adminGraphData);
     console.log("builderGraphData", builderGraphData);
 
     return (
         <>
             <div className={`${styles.dashboardContainer}`}>
-                <div className={`${styles.dashboardContainerCards}`}>
+                <div className={`grid grid-cols-2 gap-4 `}>
                     {roles.includes("Admin") && (
                         <>
                             {/* User card */}
                             {adminDashboardData ? (
                                 <div>
                                     <Card
-                                        href="/users"
-                                        className={`max-w-sm mb-2 mr-2 cursor-pointer ${styles.showCard1}`}
+                                        className={`col-span-2  text-nowrap ${styles.showCard1}`}
                                     >
-                                        <div className="text-center">
-                                            <h2 className={`text-xl font-bold mb-4 tracking-wide ${styles.dataSection1} `}>
-                                                <div className={`${styles.IconOutline}`} >
-                                                    <i className={`bi bi-file-earmark-person text-4xl ${styles.IconsColor}`} aria-hidden="true"></i>
-                                                </div>
+                                        <div className="flex">
+                                            <Link href="/users" className="focus:outline ">
+                                                <div className="text-center">
+                                                    <h2 className={`text-xl font-bold mb-4 tracking-wide ${styles.dataSection1} `}>
+                                                        <div className={`${styles.IconOutline}`} >
+                                                            <i className={`bi bi-file-earmark-person text-4xl ${styles.IconsColor}`} aria-hidden="true"></i>
+                                                        </div>
 
-                                                <p className="text-5xl font-bold mt-2">
-                                                    {adminDashboardData?.totalUser}
-                                                </p>
-                                                <p className="text-sm font-semibold mt-2">Total User</p>
-                                            </h2>
+                                                        <p className="text-5xl font-bold mt-2">
+                                                            {adminDashboardData?.totalUser - 1}
+                                                        </p>
+                                                        <p className="text-sm font-semibold mt-2">Total User</p>
+                                                    </h2>
+                                                </div>
+                                            </Link>
+                                            <div className="text-nowrap" >
+                                                <Link href={`/users?TodayUser=Yes`} className={`${styles.InvertedUserColor}`}>
+                                                    <p className={`text-2xl font-bold mt-4  ${styles.UserColor} `}>
+
+                                                        {adminDashboardData?.todayUsers}{" "}
+                                                        <span className={`font-normal nowrap `}>Today Joined User </span>
+
+                                                    </p>
+                                                </Link>
+                                                <Link href="/users" className={`${styles.InvertedUserColor}`}>
+                                                    <p className={`text-2xl font-bold mt-4  ${styles.UserColor} `}>
+
+                                                        {adminDashboardData?.totalBuilder}{" "}
+                                                        <span className={`font-normal nowrap `}> Builder</span>
+
+                                                    </p>
+                                                </Link>
+                                            </div>
                                         </div>
                                     </Card>
-                                    <p className={`text-2xl font-bold mt-4 ${styles.UserColor} `}>
 
-                                        {adminDashboardData?.todayUsers}{" "}
-                                        <span className={`font-normal `}>Today Joined User </span>
-
-                                    </p>
                                 </div>
                             ) : (
                                 <LoadingImg />
@@ -219,40 +280,40 @@ export default function Dashboard() {
                             {adminDashboardData ? (
                                 <div>
                                     <Card
-                                        href="/builder"
-                                        className={`max-w-sm mb-2 mr-2 cursor-pointer ${styles.showCard2}`}
+                                        className={`col-span-2  text-nowrap ${styles.showCard2}`}
                                     >
-                                        <div className="text-center">
-                                            <h2 className={`text-xl font-bold mb-4 tracking-wide ${styles.dataSection1}  `}>
-                                                <div className={`${styles.Icon2Outline}`} >
-                                                    <i className={`bi bi-file-earmark-person text-4xl ${styles.Icons2Color}`} aria-hidden="true"></i>
+
+                                        <div className="flex">
+                                            <Link href="/builder">
+                                                <div className="text-center">
+                                                    <h2 className={`text-xl font-bold mb-4 tracking-wide ${styles.dataSection1}  `}>
+                                                        <div className={`${styles.Icon2Outline}`} >
+                                                            <i className={`bi bi-file-earmark-person text-4xl ${styles.Icons2Color}`} aria-hidden="true"></i>
+                                                        </div>
+                                                        <p className="text-5xl font-bold mt-2">
+                                                            {adminDashboardData?.totalBuilder}
+                                                        </p>
+                                                        <p className="text-sm font-semibold mt-2">Total Builder</p>
+                                                    </h2>
                                                 </div>
-                                                <p className="text-5xl font-bold mt-2">
-                                                    {adminDashboardData?.totalBuilder}
-                                                </p>
-                                                <p className="text-sm font-semibold mt-2">Total Builder</p>
-                                            </h2>
+                                            </Link>
+                                            <div>
+                                                <Link href="/builder">
+                                                    <p className={`text-2xl font-bold mt-4 ${styles.builderColor} `}>
+                                                        {adminDashboardData?.todayAddBuilder}{" "}
+                                                        <span className={`font-normal `}>Today Joined Builder </span>
+                                                    </p>
+                                                </Link>
+                                                <Link href="/builder">
+                                                    <p className={`text-2xl font-bold mt-4 ${styles.builderColor} `}>
+                                                        {adminDashboardData?.totalBuilderProperty}{" "}
+                                                        <span className={`font-normal `}>Total Builder Property</span>
+
+                                                    </p>
+                                                </Link>
+                                            </div>
                                         </div>
                                     </Card>
-                                    <Accordion collapseAll className="border-none">
-                                        <Accordion.Panel className={`${styles.faqItemMainBox}`}>
-                                            <Accordion.Title
-                                                className={`${styles.AccordiaonBuilderColor} focus:no-outline`}
-                                            >
-                                                <p className={`text-2xl font-bold ${styles.builderColor} `}>
-                                                    {adminDashboardData?.todayAddBuilder}{" "}
-                                                    <span className={`font-normal `}>Today Joined Builder </span>
-                                                </p>
-                                            </Accordion.Title>
-                                            <Accordion.Content className={` ${styles.builderColor}  text-white`}>
-                                                <p className={`text-2xl font-bold ${styles.builderColor} `}>
-                                                    {adminDashboardData?.totalBuilderProperty}{" "}
-                                                    <span className={`font-normal `}>Total Builder Property</span>
-
-                                                </p>
-                                            </Accordion.Content>
-                                        </Accordion.Panel>
-                                    </Accordion>
                                 </div>
                             ) : (
                                 <LoadingImg />
@@ -264,106 +325,67 @@ export default function Dashboard() {
                     {adminDashboardData || builderDashboardData ? (
                         <div>
                             <Card
-                                href="/property"
-                                className={`max-w-sm mb-2 mr-2 cursor-pointer ${styles.showCard3}`}
+                                className={`col-span-2 text-nowrap ${styles.showCard3}`}
                             >
-                                <div className="text-center">
-                                    <h2 className={`text-xl font-bold mb-4 tracking-wide ${styles.dataSection1}  `}>
-                                        <div className={`${styles.Icon3Outline}`} >
-                                            <i className={`bi bi-house text-4xl ${styles.Icons3Color}`} aria-hidden="true"></i>
+                                <div className="flex">
+                                    <Link href="/property">
+                                        <div className="text-center">
+                                            <h2 className={`text-xl font-bold mb-4 tracking-wide ${styles.dataSection1}  `}>
+                                                <div className={`${styles.Icon3Outline}`} >
+                                                    <i className={`bi bi-house text-4xl ${styles.Icons3Color}`} aria-hidden="true"></i>
+                                                </div>
+                                                <p className="text-5xl font-bold mt-2">
+                                                    {roles.includes("Admin")
+                                                        ? adminDashboardData?.totalProperty
+                                                        : builderDashboardData?.totalProperty}
+                                                </p>
+                                                <p className="text-sm font-semibold mt-2">Total Property</p>
+                                            </h2>
                                         </div>
-                                        <p className="text-5xl font-bold mt-2">
-                                            {roles.includes("Admin")
-                                                ? adminDashboardData?.totalProperty
-                                                : builderDashboardData?.totalProperty}
-                                        </p>
-                                        <p className="text-sm font-semibold mt-2">Total Property</p>
-                                    </h2>
+                                    </Link>
+                                    <div>
+                                        <Link href="/property">
+                                            <p className={`text-2xl font-bold ${styles.PropColor} `}>
+
+                                                {roles.includes("Admin")
+                                                    ? adminDashboardData?.todayAddProperty
+                                                    : builderDashboardData?.todayAddProperty}{" "}
+                                                <span className={`font-normal `}>Today Added Property </span>
+
+                                            </p>
+                                        </Link>
+                                        {roles.includes("Admin") ?
+                                            <Link href="/reviewProperty">
+                                                <p className={`text-2xl font-bold ${styles.PropColor} `}>
+
+                                                        {adminDashboardData?.underReviewProperty}{" "}
+                                                    <span className={`font-normal `}>Under Review Property </span>
+
+                                                </p>
+                                            </Link>
+                                            :
+                                            <Link href="/property">
+                                                <p className={`text-2xl font-bold ${styles.PropColor} `}>
+
+                                                    {builderDashboardData?.underReviewProperty}{" "}
+                                                    <span className={`font-normal `}>Under Review Property </span>
+
+                                                </p>
+                                            </Link>
+                                        }
+                                        <Link href="/property">
+                                            <p className={`text-2xl font-bold ${styles.PropColor} `}>
+
+                                                {roles.includes("Admin")
+                                                    ? adminDashboardData?.approvedProperty
+                                                    : builderDashboardData?.approvedProperty}{" "}
+                                                <span className={`font-normal `}>Approved Property </span>
+
+                                            </p>
+                                        </Link>
+                                    </div>
                                 </div>
-                                {/* <div className={`grid gap-2 mb-4 md:grid-cols-2`}>
-                {" "}
-                <div className="flex flex-col items-center mb-2">
-                  <h3 className="text-xl font-bold tracking-wide ">
-                    Total Property
-                  </h3>
-                  <p className="text-3xl font-bold mt-2">
-                    {roles.includes("Admin")
-                      ? adminDashboardData?.totalProperty
-                      : builderDashboardData?.totalProperty}
-                  </p>
-                </div>
-                <div className="flex flex-col  items-center mb-2">
-                  <h3 className="text-xl font-bold tracking-wide ">
-                    Under Review
-                  </h3>
-                  <p className="text-3xl font-bold mt-2">
-                    {roles.includes("Admin")
-                      ? adminDashboardData?.underReviewProperty
-                      : builderDashboardData?.underReviewProperty}
-                  </p>
-                </div>
-                <div className="flex flex-col  items-center mb-2">
-                  <h3 className="text-xl font-bold tracking-wide ">
-                    Today Added
-                  </h3>
-                  <p className="text-3xl font-bold mt-2">
-                    {roles.includes("Admin")
-                      ? adminDashboardData?.todayAddProperty
-                      : builderDashboardData?.todayAddProperty}
-                  </p>
-                </div>
-                <div className="flex flex-col  items-center mb-2">
-                  <h3 className="text-xl font-bold tracking-wide ">Approved</h3>
-                  <p className="text-3xl font-bold mt-2">
-                    {roles.includes("Admin")
-                      ? adminDashboardData?.approvedProperty
-                      : builderDashboardData?.approvedProperty}
-                  </p>
-                </div>
-                <div className="flex flex-col items-center mb-2 opacity-0 pointer-events-none">
-                  <h3 className="text-xl font-bold tracking-wide">not show</h3>
-                  <p className="text-3xl font-bold mt-2"> not show</p>
-                </div>
-              </div> */}
                             </Card>
-                            <Accordion collapseAll className="border-none">
-                                <Accordion.Panel className={`${styles.faqItemMainBox}`}>
-                                    <Accordion.Title
-                                        className={`${styles.AccordiaonPropColor} focus:no-outline`}
-                                    >
-                                        <p className={`text-2xl font-bold ${styles.PropColor} `}>
-
-                                            {roles.includes("Admin")
-                                                ? adminDashboardData?.todayAddProperty
-                                                : builderDashboardData?.todayAddProperty}{" "}
-                                            <span className={`font-normal `}>Today Added Property </span>
-
-                                        </p>
-                                    </Accordion.Title>
-                                    <Accordion.Content className={` ${styles.PropColor} mt-2  text-white`}>
-                                        <p className={`text-2xl font-bold ${styles.PropColor} `}>
-
-                                            {roles.includes("Admin")
-                                                ? adminDashboardData?.underReviewProperty
-                                                : builderDashboardData?.underReviewProperty}{" "}
-                                            <span className={`font-normal `}>Under Review Property </span>
-
-                                        </p>
-                                    </Accordion.Content>
-                                    <Accordion.Content className={` ${styles.PropColor} mt-2  text-white`}>
-                                        <p className={`text-2xl font-bold ${styles.PropColor} `}>
-
-                                            {roles.includes("Admin")
-                                                ? adminDashboardData?.approvedProperty
-                                                : builderDashboardData?.approvedProperty}{" "}
-                                            <span className={`font-normal `}>Approved Property </span>
-
-                                        </p>
-                                    </Accordion.Content>
-                                </Accordion.Panel>
-                            </Accordion>
-
-
 
                         </div>
                     ) : (
@@ -373,114 +395,69 @@ export default function Dashboard() {
                     {adminDashboardData || builderDashboardData ? (
                         <div>
                             <Card
-                                href="/projectInquiry"
-                                className={`max-w-sm mb-2 cursor-pointer ${styles.showCard4}`}
+                                className={`col-span-2  text-nowrap ${styles.showCard4}`}
                             >
-                                <div className="text-center">
-                                    <h2 className={`text-xl font-bold mb-4  tracking-wide ${styles.dataSection1} `}>
-                                        <div className={`${styles.IconOutline}`} >
-                                            <i className={`bi bi-chat-square-text text-4xl ${styles.Icons4Color}`} aria-hidden="true"></i>
+                                <div className="flex">
+                                    <Link href="/projectInquiry">
+
+                                        <div className="text-center">
+                                            <h2 className={`text-xl font-bold mb-4  tracking-wide ${styles.dataSection1} `}>
+                                                <div className={`${styles.IconOutline}`} >
+                                                    <i className={`bi bi-chat-square-text text-4xl ${styles.Icons4Color}`} aria-hidden="true"></i>
+                                                </div>
+                                                <p className="text-5xl font-bold mt-2">
+                                                    {roles.includes("Admin")
+                                                        ? adminDashboardData?.totalEnquiry
+                                                        : builderDashboardData?.totalEnquiry}
+                                                </p>
+                                                <p className="text-sm font-semibold mt-2">Total Enquiry</p>
+                                            </h2>
                                         </div>
-                                        <p className="text-5xl font-bold mt-2">
-                                            {roles.includes("Admin")
-                                                ? adminDashboardData?.totalEnquiry
-                                                : builderDashboardData?.totalEnquiry}
-                                        </p>
-                                        <p className="text-sm font-semibold mt-2">Total Enquiry</p>
-                                    </h2>
+                                    </Link>
+                                    <div>
+                                        <Link href={`/projectInquiry?todayValue=Yes`} >
+
+                                            <p className={`text-2xl font-bold ${styles.EnqColor} `}>
+
+                                                {roles.includes("Admin")
+                                                    ? adminDashboardData?.todayEnquiry
+                                                    : builderDashboardData?.todayEnquiry}{" "}
+                                                <span className={`font-normal `}>Today's Enquiry </span>
+                                            </p>
+                                        </Link>
+                                        <Link href={`/projectInquiry?type=Astrology`}>
+
+                                            <p className={`text-2xl font-bold mt-2 ${styles.EnqColor} `}>
+
+                                                {roles.includes("Admin")
+                                                    ? adminDashboardData?.totalEnquiryAstrology
+                                                    : builderDashboardData?.totalEnquiryAstrology}{" "}
+                                                <span className={`font-normal `}>Astrology Enquiry </span>
+                                            </p>
+                                        </Link>
+                                        <Link href={`/projectInquiry?type=ContactUs`}>
+
+                                            <p className={`text-2xl font-bold mt-2 ${styles.EnqColor} `}>
+
+                                                {roles.includes("Admin")
+                                                    ? adminDashboardData?.totalEnquiryContactUs
+                                                    : builderDashboardData?.totalEnquiryContactUs}{" "}
+                                                <span className={`font-normal `}>Contact Us Enquiry </span>
+                                            </p>
+                                        </Link>
+                                        <Link href={`/projectInquiry?type=Property`}>
+
+                                            <p className={`text-2xl font-bold mt-2 ${styles.EnqColor} `}>
+
+                                                {roles.includes("Admin")
+                                                    ? adminDashboardData?.totalEnquiryProperty
+                                                    : builderDashboardData?.totalEnquiryProperty}{" "}
+                                                <span className={`font-normal `}>Property Enquiry </span>
+                                            </p>
+                                        </Link>
+                                    </div>
                                 </div>
-                                {/* <div className={`grid gap-2 mb-4 md:grid-cols-2`}>
-                {" "}
-                <div className="flex flex-col items-center mb-2">
-                  <h3 className="text-xl font-bold tracking-wide ">
-                    Total Enquiry
-                  </h3>
-                  <p className="text-3xl font-bold mt-2">
-                    {roles.includes("Admin")
-                      ? adminDashboardData?.totalEnquiry
-                      : builderDashboardData?.totalEnquiry}
-                  </p>
-                </div>
-                <div className="flex flex-col  items-center mb-2">
-                  <h3 className="text-xl font-bold tracking-wide ">Today</h3>
-                  <p className="text-3xl font-bold mt-2">
-                    {roles.includes("Admin")
-                      ? adminDashboardData?.todayEnquiry
-                      : builderDashboardData?.todayEnquiry}
-                  </p>
-                </div>
-                <div className="flex flex-col  items-center mb-2">
-                  <h3 className="text-xl font-bold tracking-wide ">Property</h3>
-                  <p className="text-3xl font-bold mt-2">
-                    {roles.includes("Admin")
-                      ? adminDashboardData?.totalEnquiryContactUs
-                      : builderDashboardData?.totalEnquiryContactUs}
-                  </p>
-                </div>
-                <div className="flex flex-col  items-center mb-2">
-                  <h3 className="text-xl font-bold tracking-wide ">
-                    Contactus
-                  </h3>
-                  <p className="text-3xl font-bold mt-2">
-                    {roles.includes("Admin")
-                      ? adminDashboardData?.totalEnquiryProperty
-                      : builderDashboardData?.totalEnquiryProperty}
-                  </p>
-                </div>
-                <div className="flex flex-col  items-center mb-2">
-                  <h3 className="text-xl font-bold tracking-wide ">
-                    Astrology
-                  </h3>
-                  <p className="text-3xl font-bold mt-2">
-                    {roles.includes("Admin")
-                      ? adminDashboardData?.totalEnquiryAstrology
-                      : builderDashboardData?.totalEnquiryAstrology}
-                  </p>
-                </div>
-              </div> */}
                             </Card>
-                            <Accordion collapseAll className="border-none">
-                                <Accordion.Panel className={`${styles.faqItemMainBox}`}>
-                                    <Accordion.Title
-                                        className={`${styles.AccordiaonEnqColor} focus:no-outline`}
-                                    >
-                                        <p className={`text-2xl font-bold ${styles.EnqColor} `}>
-
-                                            {roles.includes("Admin")
-                                                ? adminDashboardData?.todayEnquiry
-                                                : builderDashboardData?.todayEnquiry}{" "}
-                                            <span className={`font-normal `}>Today's Enquiry </span>
-                                        </p>
-                                    </Accordion.Title>
-                                    <Accordion.Content className={` ${styles.EnqColor} mt-2  text-white`}>
-                                        <p className={`text-2xl font-bold mt-2 ${styles.EnqColor} `}>
-
-                                            {roles.includes("Admin")
-                                                ? adminDashboardData?.totalEnquiryAstrology
-                                                : builderDashboardData?.totalEnquiryAstrology}{" "}
-                                            <span className={`font-normal `}>Astrology Enquiry </span>
-                                        </p>
-                                    </Accordion.Content>
-                                    <Accordion.Content className={` ${styles.EnqColor} mt-2  text-white`}>
-                                        <p className={`text-2xl font-bold mt-2 ${styles.EnqColor} `}>
-
-                                            {roles.includes("Admin")
-                                                ? adminDashboardData?.totalEnquiryContactUs
-                                                : builderDashboardData?.totalEnquiryContactUs}{" "}
-                                            <span className={`font-normal `}>Contact Us Enquiry </span>
-                                        </p>
-                                    </Accordion.Content>
-                                    <Accordion.Content className={` ${styles.EnqColor} mt-2  text-white`}>
-                                        <p className={`text-2xl font-bold mt-2 ${styles.EnqColor} `}>
-
-                                            {roles.includes("Admin")
-                                                ? adminDashboardData?.totalEnquiryProperty
-                                                : builderDashboardData?.totalEnquiryProperty}{" "}
-                                            <span className={`font-normal `}>Property Enquiry </span>
-                                        </p>
-                                    </Accordion.Content>
-                                </Accordion.Panel>
-                            </Accordion>
                         </div>
                     ) : (
                         <LoadingImg />

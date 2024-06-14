@@ -18,9 +18,9 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
     sessionStorage.getItem("propertyData")
   );
   const propertTypWithSubTypeValue =
-    sessionStoragePropertyData?.PropertyTypeWithSubtype.Name || "";
-  const propertTypeValue = sessionStoragePropertyData?.PropertyType || "";
-  const PropertyForValue = sessionStoragePropertyData?.PropertyFor || "";
+    sessionStoragePropertyData?.PropertySubtype.Name || "";
+  const propertTypeValue = sessionStoragePropertyData?.ProeprtyType || "";
+  const PropertyForValue = sessionStoragePropertyData?.ProeprtyFor || "";
   // fetching Data for bhkTypeData
   const { data: bhkTypeData } = useFetch(`${API_BASE_URL_FOR_MASTER}/bhkType`);
   // console.log("bhkTypeData", bhkTypeData);
@@ -47,7 +47,7 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
       console.log(
-        "if function called sessionStoragePropertyData.PropertyFor ",
+        "if function called sessionStoragePropertyData.ProeprtyFor ",
         sessionStoragePropertyData.ProeprtyFor
       );
       console.log(
@@ -84,7 +84,14 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
   };
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
+    console.log("parseInt(totalFloors)",parseInt(totalFloors))
+    console.log("parseInt(floorNumber)",parseInt(floorNumber))
+   
     if (allFieldsFilled) {
+      if(parseInt(totalFloors) < parseInt(floorNumber)){
+        toast.error("Total Floor Should greater then Floor Number.");
+        return false;
+      }
       const secondPropertyData = {
         FloorNumber: parseInt(floorNumber),
         TotalFloors: parseInt(totalFloors),
@@ -107,9 +114,7 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
   };
   return (
     <>
-      <div className={`flex justify-end ${Styles.continueBtn}`}>
-        <ContinueButton modalSubmit={SubmitForm} />
-      </div>
+      
       <div className="grid gap-4 mb-4 sm:grid-cols-2">
         {/* FloorNumber */}
         <div>
@@ -182,7 +187,10 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
           </>
         )}
       </div>
-     
+      <ContinueButton
+            modalSubmit={SubmitForm}
+            butonSubName={"add Area Details"}
+          />
     </>
   );
 }

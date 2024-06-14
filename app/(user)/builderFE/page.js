@@ -14,6 +14,7 @@ import { Accordion, AccordionContent, AccordionPanel, AccordionTitle } from "flo
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
 import Link from "next/link";
 import LoadingSideImg from "@/components/common/sideImgLoader";
+import LoadingSideSmallImg from "@/components/common/sideSmallImgLoader";
 
 const BuilderPage = () => {
     const [search, setSearch] = useState("");
@@ -117,7 +118,7 @@ const BuilderPage = () => {
                             </Avatar>
                             </Link>
                             ))
-                        ) : <LoadingSideImg />}
+                        ) : <LoadingSideSmallImg />}
                         </div>
                     </div>
                 </div>

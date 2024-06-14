@@ -2,7 +2,13 @@
 import { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import {
+  API_BASE_URL_FOR_MASTER,
+  ZoneTypeArray,
+  suitableArray,
+  LocationhubArrayforOffice,
+  LocationhubArrayforall,
+} from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
@@ -34,10 +40,6 @@ export default function BasicPage({
   );
   // console.log("propertyStatusData", propertyStatusData);
 
-  // fetching Data for propertyTypeData
-  const { data: propertyTypeData } = useFetch(
-    `${API_BASE_URL_FOR_MASTER}/propertyWithSubTypes`
-  );
   // console.log("propertyTypeData", propertyTypeData);
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("EditPropertyData")
@@ -46,12 +48,10 @@ export default function BasicPage({
     sessionStoragePropertyData?.PropertySubtype.Name || "";
   const propertTypeValue = sessionStoragePropertyData?.ProeprtyType || "";
   const PropertyForValue = sessionStoragePropertyData?.ProeprtyFor || "";
-console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
   const [builderData, setBuilderData] = useState("");
   const [builderName, setBuilderName] = useState("");
   const [ownershipType, setOwnershipType] = useState("");
   const [propertyStatus, setPropertyStatus] = useState("");
-  const [propertySubTypevalue, setPropertySubTypeValue] = useState("");
   const [suitableFor, setSuitableFor] = useState("");
   const [zoneType, setZoneType] = useState("");
   const [locationHub, setLocationHub] = useState("");
@@ -59,36 +59,9 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
   const [customLocationHub, setCustomLocationHub] = useState("");
   const [customSuitable, setCustomSuitable] = useState("");
   const [customZoneType, setCustomZoneType] = useState("");
+  const [ageofPropertyData, setAgeOfPropertyData] = useState("");
   const defaultOption = [{ value: "", label: "no data found" }];
 
-  const ZoneTypeArray = [
-    "Industrial",
-    "Commercial",
-    "Special economic Zone",
-    "Open Spaces",
-    "Agricultural zone",
-    "Others",
-  ];
-  const suitableArray = [
-    "Jewellery",
-    "Gym",
-    "Grocery",
-    "Clinic",
-    "Footwear",
-    "Electronics",
-    "Clothing",
-    "Others",
-  ];
-  const LocationhubArrayforOffice = ["IT park", "Business Park", "Others"];
-  //Below array do not apply for plot subtype
-  const LocationhubArrayforall = [
-    "Mall",
-    "Commercial Project",
-    "Residential Project",
-    "Retail Complex/Building",
-    "Market/High Street",
-    "Others",
-  ];
   useEffect(() => {
     getAllBuilder();
   }, []);
@@ -104,16 +77,15 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
       return false;
     }
   };
-  console.log("builderName",builderName)
+  console.log("builderName", builderName);
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("EditPropertyData")
     );
-   
+
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
-      setPropertySubTypeValue(sessionStoragePropertyData?.ProeprtyType || "");
       setOwnerName(sessionStoragePropertyData?.OwnerName || "");
       setOwnershipType(sessionStoragePropertyData?.OwnershipType || "");
       setPropertyStatus(sessionStoragePropertyData?.PropertyStatus || "");
@@ -123,6 +95,7 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
       setCustomZoneType(sessionStoragePropertyData?.CustomZoneType || "");
       setCustomLocationHub(sessionStoragePropertyData?.CustomLocationHub || "");
       setCustomSuitable(sessionStoragePropertyData?.CustomSuitable || "");
+      setAgeOfPropertyData(sessionStoragePropertyData?.AgeofProperty || "");
 
       if (roles.includes("Admin")) {
         setBuilderName(sessionStoragePropertyData?.Builder || "");
@@ -143,7 +116,7 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
     ) {
       var requiredFields = [ownershipType, ownerName];
     }
-   
+
     if (
       propertTypeValue == "Commercial" &&
       (propertTypWithSubTypeValue == "Office" ||
@@ -158,7 +131,7 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
     }
     if (
       propertTypeValue == "Commercial" &&
-        propertTypWithSubTypeValue == "Warehouse"
+      propertTypWithSubTypeValue == "Warehouse"
     ) {
       var requiredFields = [
         zoneType,
@@ -181,7 +154,6 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
         ownerName,
       ];
     }
-    
 
     // Check if any required field is empty
     const isEmpty = requiredFields.some(
@@ -193,17 +165,17 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
     if (allFieldsFilled) {
-      if(zoneType=="Others" && customZoneType==""){
-       toast.error("Please fill in all required fields!")
-       return false
+      if (zoneType == "Others" && customZoneType == "") {
+        toast.error("Please fill in all required fields!");
+        return false;
       }
-      if(locationHub=="Others" && customLocationHub==""){
-        toast.error("Please fill in all required fields!")
-        return false
+      if (locationHub == "Others" && customLocationHub == "") {
+        toast.error("Please fill in all required fields!");
+        return false;
       }
-      if(suitableFor=="Others" && customSuitable==""){
-        toast.error("Please fill in all required fields!")
-       return false
+      if (suitableFor == "Others" && customSuitable == "") {
+        toast.error("Please fill in all required fields!");
+        return false;
       }
       const firstPropertyData = {
         OwnershipType: ownershipType,
@@ -218,17 +190,18 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
         propertTypeValue == "Residential" &&
         propertTypWithSubTypeValue == "Plot"
       ) {
-        firstPropertyData.OwnerName = ownerName; 
+        firstPropertyData.OwnerName = ownerName;
       }
-      if (propertTypeValue=="Commercial" &&
+      if (
+        propertTypeValue == "Commercial" &&
         (propertTypWithSubTypeValue == "Office" ||
-        propertTypWithSubTypeValue == "Warehouse")
+          propertTypWithSubTypeValue == "Warehouse")
       ) {
         firstPropertyData.ZoneType = zoneType;
         firstPropertyData.LocationHub = locationHub;
         firstPropertyData.PropertyStatus = propertyStatus;
-        if(propertTypWithSubTypeValue == "Warehouse"){
-          firstPropertyData.OwnerName = ownerName; 
+        if (propertTypWithSubTypeValue == "Warehouse") {
+          firstPropertyData.OwnerName = ownerName;
         }
         if (zoneType == "Others") {
           firstPropertyData.CustomZoneType = customZoneType;
@@ -236,10 +209,17 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
         if (locationHub == "Others") {
           firstPropertyData.CustomLocationHub = customLocationHub;
         }
+        if (zoneType !== "Others" && customZoneType) {
+          firstPropertyData.CustomZoneType = "";
+        }
+        if (locationHub !== "Others" && customLocationHub) {
+          firstPropertyData.CustomLocationHub = "";
+        }
       }
-      if (propertTypeValue=="Commercial" &&
+      if (
+        propertTypeValue == "Commercial" &&
         (propertTypWithSubTypeValue == "Retail Shop" ||
-        propertTypWithSubTypeValue == "Showroom")
+          propertTypWithSubTypeValue == "Showroom")
       ) {
         firstPropertyData.OwnerName = ownerName;
         firstPropertyData.PropertyStatus = propertyStatus;
@@ -251,18 +231,33 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
         if (locationHub == "Others") {
           firstPropertyData.CustomLocationHub = customLocationHub;
         }
+        if (suitableFor !== "Others" && customSuitable) {
+          firstPropertyData.CustomSuitable = "";
+        }
+        if (locationHub !== "Others" && customLocationHub) {
+          firstPropertyData.CustomLocationHub = "";
+        }
       }
-      
-      
+      if (
+        propertyStatus.Status === "Under Contruction" &&
+        (ageofPropertyData) &&
+        propertTypWithSubTypeValue !== "Plot"
+      ) {
+        firstPropertyData.AgeofProperty = null;
+      }
+
       if (roles.includes("Admin") && propertTypWithSubTypeValue != "Plot") {
         firstPropertyData.Builder = builderName;
-      } 
+      }
       console.log("firstPropertyData", firstPropertyData);
       const localStorageData = JSON.parse(
         sessionStorage.getItem("EditPropertyData")
       );
       const newProjectData = { ...localStorageData, ...firstPropertyData };
-      sessionStorage.setItem("EditPropertyData", JSON.stringify(newProjectData));
+      sessionStorage.setItem(
+        "EditPropertyData",
+        JSON.stringify(newProjectData)
+      );
 
       setPropertyPageValue((prev) => prev + 1);
 
@@ -272,13 +267,8 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
     }
   };
 
- 
   return (
     <>
-      <div className={`flex justify-end `}>
-        <ContinueButton modalSubmit={SubmitForm} />
-      </div>
-
       <div className="grid gap-4 mb-4 sm:grid-cols-1">
         {/* BuilderData */}
         {roles.includes("Admin") && propertTypWithSubTypeValue != "Plot" ? (
@@ -296,11 +286,14 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
                   label: element.Name,
                 }))}
                 placeholder="Select One"
-                onChange={(e)=>setBuilderName({
-                  _id:e.value,Name:e.label
-                })}
+                onChange={(e) =>
+                  setBuilderName({
+                    _id: e.value,
+                    Name: e.label,
+                  })
+                }
                 required={true}
-                value={{value:builderName._id,label:builderName.Name}}
+                value={{ value: builderName._id, label: builderName.Name }}
               />
             ) : (
               <Select
@@ -437,6 +430,17 @@ console.log("propertTypWithSubTypeValue",propertTypWithSubTypeValue)
             labelName={"Property Condition"}
             ValueName={"Status"}
             changeState={setPropertyStatus}
+          />
+        )}
+        {propertTypWithSubTypeValue != "Plot" ? (
+          <ContinueButton
+            modalSubmit={SubmitForm}
+            butonSubName={"add Room Details"}
+          />
+        ) : (
+          <ContinueButton
+            modalSubmit={SubmitForm}
+            butonSubName={"add Area Details"}
           />
         )}
       </div>

@@ -12,6 +12,8 @@ import Styles from "../propertypage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
 import ApiButtons from "@/components/common/admin/propertyapiButtons/ApiButtons";
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
+import NextButton from "@/components/common/admin/nextButton/nextButton";
+import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
 
 export default function PossessionDetailsPage({
   setPropertyPageValue,
@@ -39,6 +41,13 @@ export default function PossessionDetailsPage({
   const [brochure, setBrochure] = useState("");
   const brochureInputRef = useRef(null);
   const [ageofProperty, setAgeOfProperty] = useState("");
+  const [documentLoader, setDocumentLoader] = useState(false);
+  const [paymentPlan, setPaymentPlan] = useState();
+  const [floorPlan, setFloorPlan] = useState();
+  const paymentPlanInputRef = useRef(null);
+  const floorPlanInputRef = useRef(null);
+  const [paymentPlanLoader, setPaymentPlanLoader] = useState(false);
+  const [floorPlanLoader, setFloorPlanLoader] = useState(false);
 
   let possessionStatusArray = { data: "" };
   if (posessionStatusData && propertTypWithSubTypeValue == "Plot") {
@@ -61,12 +70,17 @@ export default function PossessionDetailsPage({
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
       setPosessionStatus(sessionStoragePropertyData?.PosessionStatus || "");
-      setPosessionDate(sessionStoragePropertyData?.PosessionDate.slice(0,10) || "");
+      setPosessionDate(
+        sessionStoragePropertyData?.PosessionDate?.slice(0, 10) || ""
+      );
       setBrochure(sessionStoragePropertyData?.Brochure || "");
-      setAgeOfProperty(sessionStoragePropertyData?.AgeofProperty || "");
+      setAgeOfProperty(sessionStoragePropertyData?.AgeofProperty || null);
+      setFloorPlan(sessionStoragePropertyData?.FloorPlan || "");
+      setPaymentPlan(sessionStoragePropertyData?.PaymentPlan || "");
     }
   }, []);
   const handleDocumentChange = async (event) => {
+    setDocumentLoader(true);
     const acceptedFileTypes = [
       "application/pdf",
       "application/doc",
@@ -94,6 +108,7 @@ export default function PossessionDetailsPage({
         // router.push("/dashboard");
         console.log("Image Response", res.successMessage.imageUrl);
         setBrochure(res.successMessage.imageUrl);
+        setDocumentLoader(false);
       } else {
         toast.error(res.errMessage);
         return;
@@ -103,7 +118,10 @@ export default function PossessionDetailsPage({
 
   const checkRequiredFields = () => {
     var requiredFields = [posessionStatus, posessionDate, brochure];
-    if (sessionStoragePropertyData?.PropertyStatus && PropertyStatusValue.Status != "Under Contruction") {
+    if (
+      sessionStoragePropertyData?.PropertyStatus &&
+      PropertyStatusValue.Status != "Under Contruction"
+    ) {
       var requiredFields = [
         posessionStatus,
         posessionDate,
@@ -126,16 +144,23 @@ export default function PossessionDetailsPage({
         PosessionStatus: posessionStatus,
         PosessionDate: posessionDate,
         Brochure: brochure,
+        PaymentPlan: paymentPlan,
+        FloorPlan: floorPlan,
+      
       };
-      if (PropertyStatusValue.Status != "Under Contruction") {
-        fifthPropertyData.AgeOfProperty = ageofProperty; 
+      if (PropertyStatusValue.Status != "Under Contruction" && propertTypWithSubTypeValue !=="Plot") {
+        fifthPropertyData.AgeofProperty = ageofProperty ? ageofProperty: null ;
       }
+     
       console.log("fifthPropertyData", fifthPropertyData);
       const localStorageData = JSON.parse(
         sessionStorage.getItem("EditPropertyData")
       );
       const newProjectData = { ...localStorageData, ...fifthPropertyData };
-      sessionStorage.setItem("EditPropertyData", JSON.stringify(newProjectData));
+      sessionStorage.setItem(
+        "EditPropertyData",
+        JSON.stringify(newProjectData)
+      );
       console.log("propertTypeValue", propertTypeValue);
       if (
         propertTypeValue == "Commercial" &&
@@ -150,12 +175,90 @@ export default function PossessionDetailsPage({
       toast.error("Please fill in all required fields!");
     }
   };
+  const handlePaymentPlanChange = async (event) => {
+    const acceptedFileTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "text/plain",
+      "image/jpeg",
+      "image/png",
+      "image/jpg",
+    ];
 
+    const file = event.target.files[0]; // Get the first file only
+    const formData = new FormData();
+    formData.append("profilePic", file);
+    console.log("Selected File", file);
+
+    // Check file type
+    if (!acceptedFileTypes.includes(file.type)) {
+      toast.error(
+        "Invalid file type. Please upload a valid document or image file."
+      );
+      if (paymentPlanInputRef.current) {
+        paymentPlanInputRef.current.value = "";
+      }
+    } else {
+      setPaymentPlanLoader(true);
+
+      // Upload logic (assuming ImageString is a function that handles the upload)
+      let res = await ImageString(formData);
+      console.log("Upload Response Data =>", res);
+      if (res.successMessage) {
+        console.log("Image Response", res.successMessage.imageUrl);
+        setPaymentPlan(res.successMessage.imageUrl); // Assuming the response contains the image URL
+        setPaymentPlanLoader(false);
+      } else {
+        toast.error(res.errMessage);
+        setPaymentPlanLoader(false);
+      }
+    }
+  };
+  const handleFloorPlanChange = async (event) => {
+    const acceptedFileTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "text/plain",
+      "image/jpeg",
+      "image/png",
+      "image/jpg",
+    ];
+
+    const file = event.target.files[0]; // Get the first file only
+    const formData = new FormData();
+    formData.append("profilePic", file);
+    console.log("Selected File", file);
+
+    // Check file type
+    if (!acceptedFileTypes.includes(file.type)) {
+      toast.error(
+        "Invalid file type. Please upload a valid document or image file."
+      );
+      if (floorPlanInputRef.current) {
+        floorPlanInputRef.current.value = "";
+      }
+    } else {
+      setFloorPlanLoader(true);
+      // Upload logic (assuming ImageString is a function that handles the upload)
+      let res = await ImageString(formData);
+      console.log("Upload Response Data =>", res);
+      if (res.successMessage) {
+        console.log("Image Response", res.successMessage.imageUrl);
+        setFloorPlan(res.successMessage.imageUrl); // Assuming the response contains the image URL
+        setFloorPlanLoader(false);
+      } else {
+        toast.error(res.errMessage);
+        setFloorPlanLoader(false);
+      }
+    }
+  };
+  const isImage = (url) => {
+    return url.match(/\.(jpeg|jpg|png)$/);
+  };
   return (
     <>
-      <div className={`flex justify-end ${Styles.continueBtn}`}>
-        <ContinueButton modalSubmit={SubmitForm} />
-      </div>
       <div className="grid gap-4 mb-4 sm:grid-cols-1">
         {/* Posession Status*/}
         {possessionStatusArray &&
@@ -261,6 +364,7 @@ export default function PossessionDetailsPage({
             onChange={handleDocumentChange}
             ref={brochureInputRef}
           />
+          {documentLoader && <LoaderForMedia />}
           <div>
             {brochure ? (
               <div>
@@ -279,7 +383,113 @@ export default function PossessionDetailsPage({
             ) : null}
           </div>
         </div>
+        <div className="grid gap-4 mb-4 sm:grid-cols-2">
+          {/* Payement Plan  */}
+          <div>
+            <label
+              htmlFor="Payement"
+              className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
+            >
+              Payement Plan
+            </label>
+            <input
+              type="file"
+              name="Payement"
+              id="Payement"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              accept=".pdf, .doc, .docx, .txt, .jpg, .jpeg, .png" // Specify accepted file types
+              onChange={handlePaymentPlanChange}
+              ref={paymentPlanInputRef}
+            />
+            {paymentPlanLoader && <LoaderForMedia />}
+            <div>
+              {paymentPlan ? (
+                <div>
+                  <div className="ml-2 mt-3 underline font-bold">
+                    <h3>Selected Pyment Plan</h3>
+                  </div>
+                  <div className="flex flex-wrap relative mt-3">
+                    <div className="mr-4 mb-4 relative">
+                      {isImage(paymentPlan) ? (
+                        <img
+                          src={paymentPlan}
+                          alt="Selected Pyment Plan"
+                          className="h-48 w-64 border border-black rounded-lg"
+                        />
+                      ) : (
+                        <iframe
+                          src={paymentPlan}
+                          className="h-48 w-64 border border-black rounded-lg"
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          </div>
+          {/* Floor plan  */}
+
+          <div>
+            <label
+              htmlFor="floor"
+              className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
+            >
+              Floor Plan
+            </label>
+            <input
+              type="file"
+              name="floor"
+              id="floor"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              accept=".pdf, .doc, .docx, .txt, .jpg, .jpeg, .png" // Specify accepted file types
+              onChange={handleFloorPlanChange}
+              ref={floorPlanInputRef}
+            />
+            {floorPlanLoader && <LoaderForMedia />}
+            <div>
+              {floorPlan ? (
+                <div>
+                  <div className="ml-2 mt-3 underline font-bold">
+                    <h3>Selected Floor Plan</h3>
+                  </div>
+                  <div className="flex flex-wrap relative mt-3">
+                    <div className="mr-4 mb-4 relative">
+                      {isImage(floorPlan) ? (
+                        <img
+                          src={floorPlan}
+                          alt="Selected Floor Plan"
+                          className="h-48 w-64 border border-black rounded-lg"
+                        />
+                      ) : (
+                        <iframe
+                          src={floorPlan}
+                          className="h-48 w-64 border border-black rounded-lg"
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </div>
       </div>
+
+      {(documentLoader == false ||
+        paymentPlanLoader == false ||
+        floorPlanLoader == false) &&
+        (propertTypeValue && propertTypeValue === "Commercial" ? (
+          <ContinueButton
+            modalSubmit={SubmitForm}
+            butonSubName={"add Facilities Details"}
+          />
+        ) : (
+          <NextButton
+            onSubmit={SubmitForm}
+            butonSubName={"add Amenity Details"}
+          />
+        ))}
     </>
   );
 }

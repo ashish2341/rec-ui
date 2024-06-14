@@ -10,16 +10,189 @@
 }
 .GeneralDetailsBox {
   /* border: 1px solid grey; */
-  padding: 1rem 3rem 1rem 3rem;
+  padding: 1rem 1rem 1rem 1rem;
   border-radius: 0.35rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  width: 80%;
+  margin-left: 7.5rem;
 }
 .GeneralDetailsBox {
   padding: 0rem;
   height: 50%;
 }
+.leftCardContent{
+  width: 50% !important;
+  padding: 1rem;
+  margin: 0rem;
+  }
+  .listPropertyImgOuter{
+    height: 16rem;
+    margin-top: 0.5rem;
+}
+.listPropertyImg{
+  aspect-ratio: 3/2;
+  width: 100%;
+}
+.middleCardContent{
+  width: 70%;
+  /* margin-top: 2rem !important; */
+}
+.itemTitle{
+  margin-top: -5px;
+  font-size: 1.2rem;
+  /* color: bl !important; */
+  }
+
+  .GeneralDetailsBoxIcon{
+    font-size:1.3rem !important
+  }
+  .textCapitalized {
+    text-transform: capitalize;
+  }
+
+  .rightCardContent{
+    width: 26%;
+    justify-content: space-evenly;
+    background-color: #dee6f1;
+    padding: 1rem;
+  }
+  .price{
+    font-size: 1.3rem !important;
+    color: grey !important;
+  }
+  .cardStarBtn{
+    background-color: #481c94 !important;
+    color: White !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 4rem !important;
+    width: 4rem !important;
+  }
+
+  .heroSectionBottomBox {
+    height: 5rem;
+    background-color: white;
+    /* margin-left: 14rem; */
+    /* margin-right: 14rem; */
+    border-radius: 0.35rem;
+    /* margin-top: 1rem; */
+    display: flex;
+    padding: 1rem 1rem 1rem 1rem;
+    justify-content: space-around;
+  }
+  .heroSectionBottomBoxHead {
+    font-weight: 600;
+  }
+  .heroSectionBottomBoxText {
+    font-size: 0.85rem;
+  }
+  .heroSectionVL {
+    border-left: 3px solid;
+    height: 100%;
+  }
+  .heroSectionBottomMain{
+    /* border: 1px solid; */
+    border-radius: 7px;
+    margin-right: 1rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+  }
+  .firstcontent{
+    margin-top: -12px;
+  }
+
+  .previewIconContainer {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+  
+  .previewIcon {
+    font-size: 24px; /* Adjust size as needed */
+    color: #000; /* Default icon color */
+  }
+  
+  .hoverText {
+    visibility: hidden;
+    width: 50px;
+    background-color: black;
+    color: #fff;
+    font-size: 0.7rem;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 106%;
+    left: 50%;
+    margin-left: -24px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .previewIconContainer:hover .hoverText {
+    visibility: visible;
+    opacity: 1;
+  }
 @media screen and (max-width: 768px) {
   .GeneralDetailsBox {
     padding: 1.5rem;
+  }
+  .cardContent{
+    flex-direction: column;
+  }
+  .leftCardContent{
+    width: 100% !important;
+
+    }
+    .middleCardContent{
+      padding: 1rem;
+      /* margin-top: 0 !important; */
+    }
+    .firstcontent{
+      flex-direction: column !important;
+    }
+    .GeneralDetailsBoxIcon{
+      font-size:0.9rem !important
+    }
+    .rightCardContent{
+      width: 100%;
+  
+    }
+    .price{
+      font-size: 1rem !important;
+    }
+    .cardStarBtn{
+      width: 6rem;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: 0rem !important;
+    }
+}
+@media screen and (max-width: 700px) {
+
+  .BottomBoxcontenet{
+    margin-bottom: 1rem;
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+
+  }
+  .heroSectionBottomBox {
+    height: 100%;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding: 1rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  .BottomBoxcontenet{
+    margin-bottom: 1rem;
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+
+  }
+  .heroSectionBottomBoxHead,
+  .heroSectionBottomBoxText {
+    text-align: center;
+    font-size: 0.75rem; /* Adjust font sizes */
   }
 }

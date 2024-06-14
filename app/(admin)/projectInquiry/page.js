@@ -15,7 +15,7 @@ import Cookies from "js-cookie";
 import "flowbite/dist/flowbite.min.css";
 import SendInquiryModal from "@/components/common/sendInquiryModal/sendInquiryModal";
 import DateRange from "@/components/common/dateRange/dateRange";
-export default function ProjectInquiry() {
+export default function ProjectInquiry(params) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
   const loginUserId = Cookies.get("userId");
@@ -29,7 +29,10 @@ export default function ProjectInquiry() {
   const [page, setPage] = useState(1);
   const [searchData, setSearchData] = useState("");
   const [filterData, setFilterData] = useState("");
-  const [typeOnButton, setTypeOnButton] = useState("Property");
+  console.log("params",params);
+  const typedash = params?.searchParams?.type;
+  console.log("typedash",typedash);
+  const [typeOnButton, setTypeOnButton] = useState(typedash ? typedash : "Property");
   const [AllowedUserList, setAllowedUserList] = useState([]);
   const [isSubmitClicked, setIsSubmitClicked] = useState(0);
   const [inquiryId, setInquiryId] = useState("");
@@ -49,12 +52,14 @@ export default function ProjectInquiry() {
   }, [page, searchData, isSubmitClicked, isDeleted, toDate]);
 
   const getAllEnquiry = async (filterType) => {
+    const todayValue = params.searchParams.todayValue;
     let enquiries = await GetEnquiryApi(
       page,
       searchData,
       filterType,
       fromDate,
-      toDate
+      toDate,
+      todayValue
     );
     if (enquiries?.resData?.success == true) {
       setListData(enquiries?.resData);
@@ -451,7 +456,7 @@ export default function ProjectInquiry() {
                             {roles.includes("Admin") && (
                               <Link
                                 href=""
-                                className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                               className="font-medium text-lg text-red-600 dark:text-red-500 hover:underline"
                               >
                                 <i
                                   onClick={() => deleteInquiryModel(item?._id)}
@@ -463,7 +468,7 @@ export default function ProjectInquiry() {
                             {roles.includes("Admin") ? (
                               <Link
                                 href=""
-                                className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                 className="font-bold text-lg text-blue-600 dark:text-blue-500 hover:underline"
                               >
                                 <i
                                   onClick={() =>
@@ -506,7 +511,7 @@ export default function ProjectInquiry() {
       {isPopupOpenforInquiry && (
         <SendInquiryModal
           isOpen={isPopupOpenforInquiry}
-          title="Are you sure you want to delete this Testimonial ?"
+          title="Are you sure you want to delete this Enquiry ?"
           confirmLabel="Yes, I'm sure"
           cancelLabel="No, cancel"
           onConfirm={handleDelete}

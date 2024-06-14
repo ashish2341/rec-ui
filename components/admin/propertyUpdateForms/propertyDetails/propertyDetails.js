@@ -79,13 +79,14 @@ export default function PropertyDetailsForm({
       <div className="mb-5 ">
         {stepperArray && (
           <ButtonStepper
+          setPropertyPageValue={setPropertyPageValue}
             forStepper={stepperArray}
             forpageValue={propertyPageValue}
           />
         )}
       </div>
 
-      {propertyPageValue > 1 ? (
+      {/* {propertyPageValue > 1 ? (
         <button
           onClick={handelBack}
           type="button"
@@ -96,7 +97,7 @@ export default function PropertyDetailsForm({
           </span>{" "}
           Back
         </button>
-      ) : null}
+      ) : null} */}
       {propertTypeValue &&
         propertTypeValue == "Residential" &&
         propertTypWithSubTypeValue != "Plot" && (

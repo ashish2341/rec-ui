@@ -71,6 +71,13 @@
     place-items: center;
 }
 
+.loaderSize{
+    margin-left: 1rem;
+}
+
+.loaderfaqSize{
+    padding: 2rem;
+}
 /* detailSectionBar */
 .detailSectionBar{
    /* margin-top: 6rem; */
@@ -178,10 +185,14 @@
 .configureOl li{
   font-size: 0.85rem;
   font-weight: 500;
+  text-wrap: nowrap;
 }
 .configureLiHead{
   font-weight: 700 !important;
   margin-bottom: 1rem;
+}
+.configureImg{
+  width: 50%;
 }
 .configureImg img{
   width: 100%;
@@ -189,7 +200,8 @@
 
 .configureFloorPlanImg{
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* overview */

@@ -22,58 +22,68 @@ export default function EditProperty(params) {
   const [selectedFeatures, setSelectedFeatures] = useState([]);
   const [valueForBack, setValueForBack] = useState(0);
   const [propertyBackvalue, setPropertyBackvalue] = useState(0);
-  const [propertyScoreinPercentage, setPropertyScoreinPercentage] = useState("");
+  const [propertyScoreinPercentage, setPropertyScoreinPercentage] =
+    useState("");
   let [basisPagebuttonvalue, setBasisPagebuttonvalue] = useState("");
-  const [pageValueInsidePropertyForm, setPageValueInsidePropertyForm] =useState();
-    const [loading, setLoading] = useState(false);
+  const [pageValueInsidePropertyForm, setPageValueInsidePropertyForm] =
+    useState();
+  const [loading, setLoading] = useState(false);
   const [isRender, setIsRender] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    const sessionStoragePropertyData = JSON.parse(
-      sessionStorage.getItem("EditPropertyData")
-    );
-    if (sessionStoragePropertyData) {
-      console.log(
-        "EditProperty sessionStoragePropertyData",
-        sessionStoragePropertyData
+    if (isRender) {
+      const sessionStoragePropertyData = JSON.parse(
+        sessionStorage.getItem("EditPropertyData")
       );
-      const PropertyTypeWithSubtypeValue =
-        sessionStoragePropertyData?.PropertySubtype?.Name || "";
-      console.log(
-        "EditProperty PropertyTypeWithSubtypeValue",
-        PropertyTypeWithSubtypeValue
-      );
-      const propertyScore = GetPropertyScore(
-        sessionStoragePropertyData,
-        PropertyTypeWithSubtypeValue
-      );
-      if(propertyScore != NaN){
-        const CompletePercentage={
-          CompletePercentage:propertyScore
+      if (sessionStoragePropertyData) {
+       
+        const PropertyTypeWithSubtypeValue =
+          sessionStoragePropertyData?.PropertySubtype?.Name || "";
+        
+        const propertyScore = GetPropertyScore(
+          sessionStoragePropertyData,
+          PropertyTypeWithSubtypeValue
+        );
+        if (propertyScore != NaN) {
+          const CompletePercentage = {
+            CompletePercentage: propertyScore,
+          };
+          setPropertyScoreinPercentage(propertyScore);
+          const newPropertyData = {
+            ...sessionStoragePropertyData,
+            ...CompletePercentage,
+          };
+          sessionStorage.setItem(
+            "EditPropertyData",
+            JSON.stringify(newPropertyData)
+          );
+         
         }
-        setPropertyScoreinPercentage(propertyScore);
-        const newPropertyData = { ...sessionStoragePropertyData, ...CompletePercentage };
-      sessionStorage.setItem("EditPropertyData", JSON.stringify(newPropertyData));
-        console.log("EditProperty propertyScore", propertyScore);
       }
-      
     }
-  }, [pageValue, pageValueInsidePropertyForm,propertyBackvalue,valueForBack]);
+  }, [
+    pageValue,
+    pageValueInsidePropertyForm,
+    propertyBackvalue,
+    valueForBack,
+    isRender,
+  ]);
 
   useEffect(() => {
     const addPropertyData = JSON.parse(sessionStorage.getItem("propertyData"));
-    if(addPropertyData){
-      sessionStorage.removeItem("propertyData")
-    }
-    const editPropertyData = JSON.parse(sessionStorage.getItem("EditPropertyData"));
-    if(editPropertyData){
-      sessionStorage.removeItem("EditPropertyData")
+    // if(addPropertyData){
+    //   sessionStorage.removeItem("propertyData")
+    // }
+    const editPropertyData = JSON.parse(
+      sessionStorage.getItem("EditPropertyData")
+    );
+    if (editPropertyData) {
+      sessionStorage.removeItem("EditPropertyData");
     }
     const token = Cookies.get("token");
     setLoading(true);
     const fetchData = async () => {
-      console.log("params inside fetch Data",params)
       try {
         const response = await fetch(
           `${API_BASE_URL}/properties/property/${params?.params?.editProperty}`,
@@ -86,18 +96,21 @@ export default function EditProperty(params) {
           }
         );
         const data = await response.json();
-        // console.log("all property Data for Update", data);
-        // console.log("all property Data for Update", data.success);
-        const checkData=JSON.parse(sessionStorage.getItem("EditPropertyData"));
-        console.log("checkData",checkData)
-        if(data.success==true){
-          sessionStorage.setItem("EditPropertyData", JSON.stringify(data?.data));
+
+        const checkData = JSON.parse(
+          sessionStorage.getItem("EditPropertyData")
+        );
+
+        if (data.success == true) {
+          sessionStorage.setItem(
+            "EditPropertyData",
+            JSON.stringify(data?.data)
+          );
           setLoading(false);
           setIsRender(true);
-        }else{
-          toast.error(data.error)
+        } else {
+          toast.error(data.error);
         }
-
       } catch (error) {
         console.error("Error fetching data:", error);
         setLoading(false);
@@ -108,12 +121,10 @@ export default function EditProperty(params) {
   }, [params]);
 
   const handleAmenitiesChange = (amenities) => {
-    console.log("amenities", amenities);
     setSelectedAmenities(amenities);
   };
 
   const handleFeaturesChange = (features) => {
-    console.log("features", features);
     setSelectedFeatures(features);
   };
   const handelNextBtnValue = (value) => {
@@ -136,99 +147,108 @@ export default function EditProperty(params) {
   };
 
   const submitPropertyData = async () => {
-    const EditPropertyData = JSON.parse(sessionStorage.getItem("EditPropertyData"));
+    const EditPropertyData = JSON.parse(
+      sessionStorage.getItem("EditPropertyData")
+    );
 
     if (EditPropertyData) {
       const finalizePropertyData = {
         Title: EditPropertyData?.Title,
-        Description: EditPropertyData?.Description,
-        Facing: EditPropertyData?.Facing?.map((item)=>{
-          return item._id
-        }),
+        Description: EditPropertyData?.Description ,
+        Facing: EditPropertyData?.Facing?.map((item) => {
+          return item._id;
+        }) ,
         IsEnabled: EditPropertyData?.IsEnabled,
         IsFeatured: EditPropertyData?.IsFeatured,
         ProeprtyFor: EditPropertyData?.ProeprtyFor,
         PropertySubtype: EditPropertyData?.PropertySubtype?._id,
         ProeprtyType: EditPropertyData?.ProeprtyType,
-        Bedrooms: EditPropertyData?.Bedrooms,
-        Bathrooms: EditPropertyData?.Bathrooms,
-        Fencing: EditPropertyData?.Fencing?._id,
-        Flooring: EditPropertyData?.Flooring?._id,
-        Furnished: EditPropertyData?.Furnished?._id,
-        LandArea: EditPropertyData?.LandArea,
-        CarpetArea: EditPropertyData?.CarpetArea,
-        TotalPrice: EditPropertyData?.TotalPrice,
+        Bedrooms: EditPropertyData?.Bedrooms ? EditPropertyData?.Bedrooms : null ,
+        Bathrooms: EditPropertyData?.Bathrooms ? EditPropertyData?.Bathrooms : null ,
+        Fencing: EditPropertyData?.Fencing ? EditPropertyData?.Fencing : "" ,
+        Flooring: EditPropertyData?.Flooring ? EditPropertyData?.Flooring : "" ,
+        Furnished: EditPropertyData?.Furnished ? EditPropertyData?.Furnished?._id : null ,
+        LandArea: EditPropertyData?.LandArea ? EditPropertyData?.LandArea : null,
+        CarpetArea: EditPropertyData?.CarpetArea ? EditPropertyData?.CarpetArea : null,
+        TotalPrice: EditPropertyData?.TotalPrice ,
         IsNegotiable: EditPropertyData?.IsNegotiable,
         PosessionStatus: EditPropertyData?.PosessionStatus?._id,
         PosessionDate: EditPropertyData?.PosessionDate,
-        FloorNumber: EditPropertyData?.FloorNumber,
-        TotalFloors: EditPropertyData?.TotalFloors,
+        FloorNumber: EditPropertyData?.FloorNumber ? EditPropertyData?.FloorNumber : null,
+        TotalFloors: EditPropertyData?.TotalFloors ? EditPropertyData?.TotalFloors : null,
         OwnershipType: EditPropertyData?.OwnershipType?._id,
-        PropertyStatus: EditPropertyData?.PropertyStatus?._id,
-        Features: EditPropertyData?.Features.map((item)=>{
-          return item._id
-        }),
-        Aminities: EditPropertyData?.Aminities.map((item)=>{
-          return item._id
-        }),
+        PropertyStatus: EditPropertyData?.PropertyStatus ? EditPropertyData?.PropertyStatus?._id : null,
+        Features: EditPropertyData?.Features|| [],
+        Aminities: EditPropertyData?.Aminities|| [],
         City: EditPropertyData?.City,
         Address: EditPropertyData?.Address,
         Area: EditPropertyData?.Area?._id,
         Location: {
-          Latitude: "",
-          Longitude: "",
+          Latitude: undefined,
+          Longitude: undefined,
         },
-        Images: EditPropertyData?.Images?.map((item) => ({URL:item.URL} )),
-        Videos: EditPropertyData?.Videos?.Videos == ""
-        ? []
-        :EditPropertyData?.Videos?.map((item) => ({URL:item.URL} )),
-        AreaUnits: EditPropertyData?.AreaUnits?._id,
-        BhkType: EditPropertyData?.BhkType?._id,
-        Fitting: EditPropertyData?.Fitting,
-        Faq:EditPropertyData?.Faq.map((item)=>{
-          return {Question:item.Question,
-            Answer:item.Answer}
+        Images: EditPropertyData?.Images?.map((item) => ({ URL: item.URL })),
+        Videos:
+          EditPropertyData?.Videos?.Videos == ""
+            ? []
+            : EditPropertyData?.Videos?.map((item) => ({ URL: item.URL })),
+        AreaUnits: EditPropertyData?.AreaUnits ? EditPropertyData?.AreaUnits:"",
+        BhkType: EditPropertyData?.BhkType ? EditPropertyData?.BhkType?._id :null,
+        Fitting: EditPropertyData?.Fitting|| {
+          Electrical: undefined,
+          Toilets: undefined,
+          Kitchen: undefined,
+          Doors: undefined,
+          Windows: undefined,
+        },
+        Faq: EditPropertyData?.Faq.map((item) => {
+          return { Question: item.Question, Answer: item.Answer };
         }),
         Brochure: EditPropertyData?.Brochure,
-        Builder: EditPropertyData?.Builder?._id,
-        OwnerName: EditPropertyData?.OwnerName,
-        SuitableFor: EditPropertyData?.SuitableFor,
-        ZoneType: EditPropertyData?.ZoneType,
-        LocationHub: EditPropertyData?.LocationHub,
-        CustomLocationHub: EditPropertyData?.CustomLocationHub,
-        CustomSuitable: EditPropertyData?.CustomSuitable,
-        CustomZoneType: EditPropertyData?.CustomZoneType,
-        BuiltUpArea: EditPropertyData?.BuiltUpArea,
-        PlotArea: EditPropertyData?.PlotArea,
-        PlotLength: EditPropertyData?.PlotLength,
-        Plotwidth: EditPropertyData?.Plotwidth,
-        WallType: EditPropertyData?.WallType,
-        CellingHeight: EditPropertyData?.CellingHeight,
-        EntranceWidth: EditPropertyData?.EntranceWidth,
+        Builder: EditPropertyData?.Builder?._id ?EditPropertyData?.Builder?._id :null,
+        OwnerName: EditPropertyData?.OwnerName ?EditPropertyData?.OwnerName :"",
+        SuitableFor: EditPropertyData?.SuitableFor ?EditPropertyData?.SuitableFor :"",
+        ZoneType: EditPropertyData?.ZoneType ?EditPropertyData?.ZoneType :"",
+        LocationHub: EditPropertyData?.LocationHub ?EditPropertyData?.LocationHub :"",
+        CustomLocationHub: EditPropertyData?.CustomLocationHub ?EditPropertyData?.CustomLocationHub :"",
+        CustomSuitable: EditPropertyData?.CustomSuitable ?EditPropertyData?.CustomSuitable :"",
+        CustomZoneType: EditPropertyData?.CustomZoneType ?EditPropertyData?.CustomZoneType :"",
+        BuiltUpArea: EditPropertyData?.BuiltUpArea ?EditPropertyData?.BuiltUpArea :null,
+        PlotArea: EditPropertyData?.PlotArea ?EditPropertyData?.PlotArea :null,
+        PlotLength: EditPropertyData?.PlotLength ?EditPropertyData?.PlotLength :null,
+        Plotwidth: EditPropertyData?.Plotwidth ?EditPropertyData?.Plotwidth :null, 
+        WallType: EditPropertyData?.WallType ?EditPropertyData?.WallType :"",
+        CellingHeight: EditPropertyData?.CellingHeight ?EditPropertyData?.CellingHeight :null,
+        EntranceWidth: EditPropertyData?.EntranceWidth ?EditPropertyData?.EntranceWidth :null,
         TaxCharge: EditPropertyData?.TaxCharge,
         LeasedOrRented: EditPropertyData?.LeasedOrRented,
-        CurentRent: EditPropertyData?.CurentRent,
-        LeaseYears: EditPropertyData?.LeaseYears,
-        ExpectedReturn: EditPropertyData?.ExpectedReturn,
+        CurentRent: EditPropertyData?.CurentRent ?EditPropertyData?.CurentRent :null,
+        LeaseYears: EditPropertyData?.LeaseYears ?EditPropertyData?.LeaseYears :null,
+        ExpectedReturn: EditPropertyData?.ExpectedReturn ?EditPropertyData?.ExpectedReturn :null,
         DgUpsCharge: EditPropertyData?.DgUpsCharge,
-        AgeofProperty: EditPropertyData?.AgeOfProperty,
-        Staircase: EditPropertyData?.StairCase,
-        passengerLifts: EditPropertyData?.PassengerLifts,
-        ServiceLifts: EditPropertyData?.ServiceLifts,
-        PublicParking: EditPropertyData?.PublicParking,
-        PrivateParking: EditPropertyData?.PrivateParking,
-        PublicWashroom: EditPropertyData?.PublicWashroom,
-        PrivateWashroom: EditPropertyData?.PrivateWashroom,
+        AgeofProperty: EditPropertyData?.AgeofProperty ?EditPropertyData?.AgeofProperty :null,
+        Staircase: EditPropertyData?.Staircase ?EditPropertyData?.Staircase :null,
+        passengerLifts: EditPropertyData?.passengerLifts ?EditPropertyData?.passengerLifts :null,
+        ServiceLifts: EditPropertyData?.ServiceLifts ?EditPropertyData?.ServiceLifts :null,
+        PublicParking: EditPropertyData?.PublicParking ?EditPropertyData?.PublicParking :null,
+        PrivateParking: EditPropertyData?.PrivateParking ?EditPropertyData?.PrivateParking :null,
+        PublicWashroom: EditPropertyData?.PublicWashroom ?EditPropertyData?.PublicWashroom :null,
+        PrivateWashroom: EditPropertyData?.PrivateWashroom ?EditPropertyData?.PrivateWashroom :null,
         CompletePercentage: EditPropertyData?.CompletePercentage,
-        LandAreaUnit:EditPropertyData?.LandAreaUnit
+        LandAreaUnit: EditPropertyData?.LandAreaUnit ?EditPropertyData?.LandAreaUnit :"",
+        CustomFencing:EditPropertyData?.CustomFencing ?EditPropertyData?.CustomFencing :"",
+        CustomFlooring:EditPropertyData?.CustomFlooring ?EditPropertyData?.CustomFlooring :"",
+        CustomWallType:EditPropertyData?.CustomWallType ?EditPropertyData?.CustomWallType :"",
+        FloorPlan:EditPropertyData?.FloorPlan ?EditPropertyData?.FloorPlan :"",
+        PaymentPlan:EditPropertyData?.PaymentPlan?EditPropertyData?.PaymentPlan :""
       };
       console.log("finalizePropertyData", finalizePropertyData);
-      const propertyId=params?.params?.editProperty;
-      let res = await UpdatePropertyApi(finalizePropertyData,propertyId);
+      const propertyId = params?.params?.editProperty;
+      let res = await UpdatePropertyApi(finalizePropertyData, propertyId);
       if (res?.resData?.success == true) {
         if (typeof window !== "undefined") {
-           sessionStorage.removeItem("EditPropertyData");
-           router.push("/property");
+          sessionStorage.removeItem("EditPropertyData");
+          router.push("/property");
         }
         toast.success(res?.resData?.message);
       } else {
@@ -254,7 +274,7 @@ export default function EditProperty(params) {
       value: 3,
     },
     {
-      name: "Feature/Amenity",
+      name: "Amenity/Feature",
       value: 4,
     },
 
@@ -268,8 +288,7 @@ export default function EditProperty(params) {
     },
   ];
   // }
-  console.log("propertyBackvalue", propertyBackvalue);
-  console.log("pageValue", pageValue);
+
   return (
     <section>
       {/* <div className="flex">
@@ -304,24 +323,15 @@ export default function EditProperty(params) {
               setPageValue={setPageValue}
               setValueForBack={setValueForBack}
               propertyScoreValue={propertyScoreinPercentage}
+              returnPageValue={"/property"}
+              headingValue={1}
             />
           )}
         </div>
 
         <div className={`${Styles.column2}`}>
-          <div className={`${Styles.insidecolumn2}`}>
-            {valueForBack === 1 && (
-              <div className="flex justify-end w-full mb-4">
-                <button
-                  onClick={submitPropertyData}
-                  type="button"
-                  className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mt-5"
-                >
-                  Finish
-                </button>
-              </div>
-            )}
-            {pageValue === 1 &&  isRender && (
+         
+            {pageValue === 1 && isRender && (
               <BasicDetailsForm
                 valueForNext={handelNextBtnValue}
                 valueForNextPage={pageValue}
@@ -364,8 +374,19 @@ export default function EditProperty(params) {
                 mainBackPageValue={valueForBack}
               />
             )}
+            {valueForBack === 1 && (
+              <div className="grid gap-4 mb-4 sm:grid-cols-1">
+                <button
+                  onClick={submitPropertyData}
+                  type="button"
+                  className=" ml-10 mr-10 mb-5 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-lg px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mt-5"
+                >
+                  Finish
+                </button>
+              </div>
+            )}
           </div>
-        </div>
+
       </div>
     </section>
   );

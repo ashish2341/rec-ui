@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import { FormatNumber } from "@/utils/commonHelperFn";
 import Styles from "../propertypage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
+import NextButton from "@/components/common/admin/nextButton/nextButton";
 
 export default function FacilitiesPage({
   valueForNextfromSix,
@@ -42,13 +43,13 @@ export default function FacilitiesPage({
 
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
-      setPassengerLifts(sessionStoragePropertyData?.passengerLifts || "");
-      setPrivateParking(sessionStoragePropertyData?.PrivateParking || "");
-      setPrivateWashroom(sessionStoragePropertyData?.PrivateWashroom || "");
-      setPublicParking(sessionStoragePropertyData?.PublicParking || "");
-      setServiceLifts(sessionStoragePropertyData?.ServiceLifts || "");
-      setStairCase(sessionStoragePropertyData?.Staircase  || "");
-      setPublicWashroom(sessionStoragePropertyData?.PublicWashroom || "");
+      setPassengerLifts(sessionStoragePropertyData?.passengerLifts || null);
+      setPrivateParking(sessionStoragePropertyData?.PrivateParking || null);
+      setPrivateWashroom(sessionStoragePropertyData?.PrivateWashroom || null);
+      setPublicParking(sessionStoragePropertyData?.PublicParking || null);
+      setServiceLifts(sessionStoragePropertyData?.ServiceLifts || null);
+      setStairCase(sessionStoragePropertyData?.Staircase  || null);
+      setPublicWashroom(sessionStoragePropertyData?.PublicWashroom || null);
     }
   }, []);
 
@@ -71,20 +72,22 @@ export default function FacilitiesPage({
   };
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
+    
     if (allFieldsFilled) {
       const sixthPropertyData = {
-        PublicParking: publicParking,
-        PrivateParking: privateParking,
-        PublicWashroom: publicWashroom,
-        PrivateWashroom: privateWashroom,
+        PublicParking: publicParking ? publicParking :null,
+        PrivateParking: privateParking ? privateParking :null,
+        PublicWashroom: publicWashroom ? publicWashroom :null,
+        PrivateWashroom: privateWashroom ? privateWashroom :null,
       };
       if (propertTypWithSubTypeValue == "Office") {
-        (sixthPropertyData.PublicWashroom = ""),
-          (sixthPropertyData.PrivateWashroom = ""),
-          (sixthPropertyData.Staircase = stairCase),
-          (sixthPropertyData.ServiceLifts = serviceLifts),
-          (sixthPropertyData.passengerLifts = passengerLifts);
+        (sixthPropertyData.PublicWashroom = null),
+          (sixthPropertyData.PrivateWashroom = null),
+          (sixthPropertyData.Staircase = stairCase ? stairCase :null),
+          (sixthPropertyData.ServiceLifts = serviceLifts ? serviceLifts :null),
+          (sixthPropertyData.passengerLifts = passengerLifts ? passengerLifts :null);
       }
+    
       console.log("sixthPropertyData", sixthPropertyData);
       const localStorageData = JSON.parse(
         sessionStorage.getItem("EditPropertyData")
@@ -114,9 +117,7 @@ export default function FacilitiesPage({
   };
   return (
     <>
-      <div className={`flex justify-end ${Styles.continueBtn}`}>
-        <ContinueButton modalSubmit={SubmitForm} />
-      </div>
+      
 
       {propertTypWithSubTypeValue == "Office" && (
         <>
@@ -273,6 +274,8 @@ export default function FacilitiesPage({
             )}
           </>
         )}
+                <NextButton onSubmit={SubmitForm} butonSubName={"add Amenity Details"}/>
+
     </>
   );
 }

@@ -30,7 +30,7 @@ export default function ArrayButtons({
             <div>
               {itemArray?.data?.length > 0 ? (
                 <div
-                  className={`grid grid-cols-6 gap-2`}
+                  className={`grid grid-cols-5 gap-2`}
                 >
                   {itemArray?.data.map((item) => (
                     <button

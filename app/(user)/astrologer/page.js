@@ -34,6 +34,10 @@ const AstrologerPage = () => {
       toast.error("Number is required");
       return false;
     }
+    if (!/^(\+\d{1,3}[- ]?)?\d{10}$/.test(MolileNumber)) {
+      toast.error('Please enter a valid 10-digit mobile number');
+      return false;
+    }
     let payload = { Name, Email, Message, MolileNumber, EnquiryDate:EnquiryData, EnquiryType };
     let res = await addEnquiry(payload)
      if(res?.resData?.success == true){

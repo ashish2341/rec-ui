@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import { FormatNumber } from "@/utils/commonHelperFn";
 import Styles from "../propertypage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
+import NextButton from "@/components/common/admin/nextButton/nextButton";
 
 export default function FacilitiesPage({
   valueForNextfromSix,
@@ -20,9 +21,9 @@ export default function FacilitiesPage({
     sessionStorage.getItem("propertyData")
   );
   const propertTypWithSubTypeValue =
-    sessionStoragePropertyData?.PropertyTypeWithSubtype.Name || "";
-  const propertTypeValue = sessionStoragePropertyData?.PropertyType || "";
-  const PropertyForValue = sessionStoragePropertyData?.PropertyFor || "";
+    sessionStoragePropertyData?.PropertySubtype.Name || "";
+  const propertTypeValue = sessionStoragePropertyData?.ProeprtyType || "";
+  const PropertyForValue = sessionStoragePropertyData?.ProeprtyFor || "";
   // fetching Data for byBank
   const { data: byBankData } = useFetch(`${API_BASE_URL_FOR_MASTER}/banks`);
   const defaultOption = [{ value: "", label: "no data found" }];
@@ -42,12 +43,12 @@ export default function FacilitiesPage({
 
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
-      setPassengerLifts(sessionStoragePropertyData?.PassengerLifts || "");
+      setPassengerLifts(sessionStoragePropertyData?.passengerLifts || "");
       setPrivateParking(sessionStoragePropertyData?.PrivateParking || "");
       setPrivateWashroom(sessionStoragePropertyData?.PrivateWashroom || "");
       setPublicParking(sessionStoragePropertyData?.PublicParking || "");
       setServiceLifts(sessionStoragePropertyData?.ServiceLifts || "");
-      setStairCase(sessionStoragePropertyData?.StairCase || "");
+      setStairCase(sessionStoragePropertyData?.Staircase || "");
       setPublicWashroom(sessionStoragePropertyData?.PublicWashroom || "");
     }
   }, []);
@@ -81,9 +82,9 @@ export default function FacilitiesPage({
       if (propertTypWithSubTypeValue == "Office") {
         (sixthPropertyData.PublicWashroom = ""),
           (sixthPropertyData.PrivateWashroom = ""),
-          (sixthPropertyData.StairCase = stairCase),
+          (sixthPropertyData.Staircase = stairCase),
           (sixthPropertyData.ServiceLifts = serviceLifts),
-          (sixthPropertyData.PassengerLifts = passengerLifts);
+          (sixthPropertyData.passengerLifts = passengerLifts);
       }
       console.log("sixthPropertyData", sixthPropertyData);
       const localStorageData = JSON.parse(
@@ -114,9 +115,7 @@ export default function FacilitiesPage({
   };
   return (
     <>
-      <div className={`flex justify-end ${Styles.continueBtn}`}>
-        <ContinueButton modalSubmit={SubmitForm} />
-      </div>
+    
 
       {propertTypWithSubTypeValue == "Office" && (
         <>
@@ -273,6 +272,7 @@ export default function FacilitiesPage({
             )}
           </>
         )}
+        <NextButton onSubmit={SubmitForm} butonSubName={"add Amenity Details"}/>
     </>
   );
 }

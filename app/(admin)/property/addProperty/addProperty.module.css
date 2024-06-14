@@ -27,20 +27,20 @@
   .column1 {
     flex: 0 0 30%;
     height: 100%;
+    
   }
   
   .column2 {
     flex: 0 0 70%;
-    height: 75vh;
-    /* margin-top: -1rem; */
+    height: 550px;
+    overflow-y: auto;
+  overflow-x: hidden;
+    padding-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
     
    
   }
- .insidecolumn2{
-  overflow-y: auto;
-  height: 100%;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  
- }
+
   

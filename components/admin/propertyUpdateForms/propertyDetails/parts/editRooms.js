@@ -45,10 +45,10 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
     if (sessionStoragePropertyData) {
     
 
-      setBedrooms(sessionStoragePropertyData?.Bedrooms || "");
-      setBathrooms(sessionStoragePropertyData?.Bathrooms || "");
-      setFloorNumber(sessionStoragePropertyData?.FloorNumber || "");
-      setTotalFloors(sessionStoragePropertyData?.TotalFloors || "");
+      setBedrooms(sessionStoragePropertyData?.Bedrooms || null);
+      setBathrooms(sessionStoragePropertyData?.Bathrooms || null);
+      setFloorNumber(sessionStoragePropertyData?.FloorNumber || null);
+      setTotalFloors(sessionStoragePropertyData?.TotalFloors || null);
       setBhkType(sessionStoragePropertyData?.BhkType || "");
     }
   }, []);
@@ -75,14 +75,18 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
     if (allFieldsFilled) {
+      if(parseInt(totalFloors) < parseInt(floorNumber)){
+        toast.error("Total Floor Should greater then Floor Number.");
+        return false;
+      }
       const secondPropertyData = {
         FloorNumber: parseInt(floorNumber),
         TotalFloors: parseInt(totalFloors),
       };
       if (propertTypeValue == "Residential") {
         secondPropertyData.BhkType = bhkType;
-        secondPropertyData.Bedrooms = bedrooms;
-        secondPropertyData.Bathrooms = bathrooms;
+        secondPropertyData.Bedrooms = bedrooms ? bedrooms :null;
+        secondPropertyData.Bathrooms = bathrooms ? bathrooms :null;
       }
       console.log("secondPropertyData", secondPropertyData);
       const localStorageData = JSON.parse(
@@ -97,9 +101,7 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
   };
   return (
     <>
-      <div className={`flex justify-end ${Styles.continueBtn}`}>
-        <ContinueButton modalSubmit={SubmitForm} />
-      </div>
+     
       <div className="grid gap-4 mb-4 sm:grid-cols-2">
         {/* FloorNumber */}
         <div>
@@ -172,7 +174,10 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
           </>
         )}
       </div>
-     
+      <ContinueButton
+            modalSubmit={SubmitForm}
+            butonSubName={"add Area Details"}
+          />
     </>
   );
 }

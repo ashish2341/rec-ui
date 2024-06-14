@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import Styles from "../featurepage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
 import ArrayButtons from "@/components/common/admin/arrayButtons/arrayButtons";
+import NextButton from "@/components/common/admin/nextButton/nextButton";
 
 export default function FeaturePage({
   valueForNextfromSix,
@@ -30,48 +31,47 @@ export default function FeaturePage({
     );
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
-      setSelectedFeatures(sessionStoragePropertyData?.Features || []);
+      setSelectedFeatures(sessionStoragePropertyData?.Features?.map((item) => {
+        return item._id ? item._id :item ;
+      }) || []);
     }
   }, []);
 
-  const handlefeatureChange = (itemId) => {
-    setSelectedFeatures((prev) => {
-      const isSelected = prev.some(
-        (selectedItemId) => selectedItemId === itemId
-      );
-      if (isSelected) {
-        return prev.filter((selectedItemId) => selectedItemId !== itemId);
-      } else {
-        return [...prev, itemId];
-      }
-    });
-  };
   const SubmitForm = () => {
     if (selectedFeatures.length == 0) {
-      toast.error("Please select a Amenity.");
+      toast.error("Please select a Feature.");
       return false;
     }
     const featureData = {
       Features: selectedFeatures,
     };
     console.log("featureData", featureData);
-    const localStorageData = JSON.parse(sessionStorage.getItem("EditPropertyData"));
+    const localStorageData = JSON.parse(
+      sessionStorage.getItem("EditPropertyData")
+    );
     const newProjectData = { ...localStorageData, ...featureData };
     sessionStorage.setItem("EditPropertyData", JSON.stringify(newProjectData));
     valueForNextfromSix(valueForNextPagefromSix + 1);
   };
   return (
     <>
-      <div className={`flex justify-end ${Styles.continueBtn}`}>
-        <ContinueButton modalSubmit={SubmitForm} />
-      </div>
-      <ArrayButtons
+      {featuresData && selectedFeatures && ( 
+        <> <ArrayButtons
         itemArray={featuresData}
         selectItems={selectedFeatures}
         labelName={"Feature"}
         buttonName={"Feature"}
         setValueinState={setSelectedFeatures}
       />
+      <NextButton
+        onSubmit={SubmitForm}
+        butonSubName={"add Images & Video Details"}
+      />
+      </>
+       
+      )}
+
+      
     </>
   );
 }

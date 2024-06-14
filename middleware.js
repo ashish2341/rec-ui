@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import jwt from "@tsndr/cloudflare-worker-jwt";
 import { PROD_URL, UI_URL } from "./utils/constants";
+import {jwtVerify} from 'jose';
 const adminRoute = ['/amenity']
 export const config = {
   matcher: [
@@ -24,6 +25,11 @@ export default async function middleware(req) {
     }
     const cleanedToken = token.value.replace(/"/g, '');
     const isValid = await jwt.verify(cleanedToken, process.env.JWT);
+    const jwtRes = await jwtVerify(cleanedToken, new TextEncoder().encode(process.env.JWT));
+    const isTokenValid = Object.keys(jwtRes)?.length == 0 ? false :true
+    console.log('payload',isTokenValid)
+    console.log('isValid',isValid)
+    
 
 
     if (!isValid) {

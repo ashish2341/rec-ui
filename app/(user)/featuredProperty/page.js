@@ -11,7 +11,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ReadMore from "@/components/common/readMore";
 import Accordion from "@/components/common/accodion";
-import { API_BASE_URL_FOR_MASTER, API_BASE_URL } from "@/utils/constants";
+import {
+  API_BASE_URL_FOR_MASTER,
+  API_BASE_URL,
+  bathroomArray,
+  RangeTypeArray,
+  sortItemArray,
+  propertyCardToShow,
+} from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import DropdownComponent from "@/components/common/listDropdown";
 import { GetPropertyByQueryApi } from "@/api-functions/property/getPropertyByQuery";
@@ -23,6 +30,8 @@ import PropertyListCard from "@/components/common/propertyListCard/listCard";
 import SortByButton from "@/components/common/sortbyButton/sortByButton";
 import TextComponent from "@/components/common/textComponent";
 import PriceRangeSlider from "@/components/common/priceRangeModal/priceRangeModal";
+import InfiniteScroll from "react-infinite-scroll-component";
+import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
 const FeaturedProperty = (params) => {
   // fetching Data for facing
   const {
@@ -88,12 +97,12 @@ const FeaturedProperty = (params) => {
     landArea: [],
     bathroom: [],
     isFeatured: isFeatured ? true : false,
-    sortBy:"",
-    sortOrder:"",
-    IsFeatured:"",
-    IsExclusive:"",
+    sortBy: "",
+    sortOrder: "",
+    IsFeatured: "",
+    IsExclusive: "",
   });
- console.log("Outeside payload", payload);
+  console.log("Outeside payload", payload);
   const pathname = usePathname();
   const [expanded, setExpanded] = useState(false);
   const [activeSection, setActiveSection] = useState("general");
@@ -103,33 +112,8 @@ const FeaturedProperty = (params) => {
   const [listDataForShow, setListDataForShow] = useState("");
   const [resetBtnValue, setResetBtnValue] = useState(false);
   const [rangeModalvalue, setRangeModalValue] = useState(true);
-  const bathroomArray = [
-    { value: 1, label: "One" },
-    { value: 2, label: "Two" },
-    { value: 3, label: "Three" },
-    { value: 4, label: "Four" },
-    { value: 5, label: "Five" },
-  ];
-  const landAreaArray = [
-    { value: 1, label: "One" },
-    { value: 2, label: "Two" },
-    { value: 3, label: "Three" },
-    { value: 4, label: "Four" },
-    { value: 5, label: "Five" },
-  ];
-  const RangeTypeArray = [
-    { value1: 1000000, value2: 3000000, label: "10 L- 30 L" },
-    { value1: 3000000, value2: 6000000, label: " 30 L- 60 L" },
-    { value1: 6000000, value2: 10000000, label: "60 L- 1 Cr" },
-    { value1: 10000000, value2: 20000000, label: "1 Cr- 2 Cr" },
-  ];
-  const sortItemArray = [
-    { itemName: "Low to High", urlItem1:"TotalPrice.MinValue" ,urlItem2:"1"},
-    { itemName: "High to Low", urlItem1:"TotalPrice.MaxValue" ,urlItem2:"-1" },
-    { itemName: "Latest", urlItem1:"CreatedDate" ,urlItem2:"-1" },
-    { itemName: "Featured", urlItem1:true ,urlItem2:"" },
-    { itemName: "Popular" , urlItem1:true ,urlItem2:""},
-  ];
+  const [hasMore, setHasMore] = useState(true);
+
   useEffect(() => {
     if (payload) {
       const payloadWithId = extractIDsAndUpdateData(payload);
@@ -168,24 +152,15 @@ const FeaturedProperty = (params) => {
     let properties = await GetPropertyByQueryApi(payloadData);
     if (properties?.resData?.success == true) {
       setListData(properties?.resData.data);
-      setListDataForShow(properties?.resData?.data.slice(0, 2));
+      setListDataForShow(
+        properties?.resData?.data.slice(0, propertyCardToShow)
+      );
+      setHasMore(true);
       return false;
     } else {
       toast.error(properties?.errMessage);
       return false;
     }
-  };
-
-  const showMoreItems = () => {
-    const newNumToShow = numToShow + 2;
-    setListDataForShow(listData.slice(0, newNumToShow));
-    setNumToShow(newNumToShow);
-  };
-
-  const showLessItems = () => {
-    const newNumToShow = numToShow - 2;
-    setListDataForShow(listData.slice(0, newNumToShow));
-    setNumToShow(newNumToShow);
   };
 
   const handleCheckBoxChange = (event) => {
@@ -200,12 +175,10 @@ const FeaturedProperty = (params) => {
     }));
     if (checked == true) {
       setResetBtnValue(true);
-    } else {
-      setResetBtnValue(false);
     }
   };
   const handleRangeCheckBoxChange = (event) => {
-    const { value,checked } = event.target;
+    const { value, checked } = event.target;
 
     // Parse the value string into an array of numbers
     const [value1, value2] = JSON.parse(value);
@@ -238,21 +211,25 @@ const FeaturedProperty = (params) => {
     }
     if (checked == true) {
       setResetBtnValue(true);
-    } else {
-      setResetBtnValue(false);
     }
   };
 
   const handleRemoveBadge = (id) => {
     setPayload((prevFilters) => {
+      // Modify the state based on the previous state
       const updatedFilters = { ...prevFilters };
       for (const key in updatedFilters) {
         if (Array.isArray(updatedFilters[key])) {
-          updatedFilters[key] = updatedFilters[key].filter(
-            (item) => item.id !== id
-          );
+          updatedFilters[key] = updatedFilters[key].filter((item) => {
+            if (Array.isArray(item.id) && Array.isArray(id)) {
+              return JSON.stringify(item.id) !== JSON.stringify(id);
+            } else {
+              return item.id !== id;
+            }
+          });
         }
       }
+      console.log("updatedFilters", updatedFilters);
       return updatedFilters;
     });
   };
@@ -270,21 +247,36 @@ const FeaturedProperty = (params) => {
       bathroom: [],
       search: "",
       isFeatured: true,
-      sortBy:"",
-      sortOrder:"",
-      IsFeatured:"",
-      IsExclusive:"",
+      sortBy: "",
+      sortOrder: "",
+      IsFeatured: "",
+      IsExclusive: "",
     });
     setResetBtnValue(false);
   };
 
   //here upload payload data which is comes from the child component sortbutton
   const updatePayload = (newPayload) => {
-    console.log("newPayload",newPayload)
+    console.log("newPayload", newPayload);
     setPayload((prevPayload) => ({
       ...prevPayload,
-      ...newPayload // Merge the new payload with the existing state
+      ...newPayload, // Merge the new payload with the existing state
     }));
+  };
+  const fetchMoreData = () => {
+    if (listDataForShow.length >= listData.length) {
+      setHasMore(false);
+      return;
+    }
+    setTimeout(() => {
+      setListDataForShow((prevList) => [
+        ...prevList,
+        ...listData.slice(
+          prevList.length,
+          prevList.length + propertyCardToShow
+        ),
+      ]);
+    }, 1000);
   };
   return (
     <>
@@ -331,7 +323,7 @@ const FeaturedProperty = (params) => {
                         <li key={index}>
                           <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
-                              id={`checkbox-item-${index}`}
+                              id={`checkbox-item-${item._id}`}
                               type="checkbox"
                               value={JSON.stringify({
                                 id: item._id,
@@ -345,7 +337,7 @@ const FeaturedProperty = (params) => {
                               className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
-                              htmlFor={`checkbox-item-${index}`}
+                              htmlFor={`checkbox-item-${item._id}`}
                               className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
                               {item.Facing}
@@ -405,7 +397,7 @@ const FeaturedProperty = (params) => {
                         <li key={index}>
                           <div className="flex text-left p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
-                              id={`checkbox-item-${index}`}
+                              id={`checkbox-item-${item._id}`}
                               type="checkbox"
                               name="propertyType"
                               value={JSON.stringify({
@@ -419,7 +411,7 @@ const FeaturedProperty = (params) => {
                               className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
-                              htmlFor={`checkbox-item-${index}`}
+                              htmlFor={`checkbox-item-${item._id}`}
                               className="w-full text-nowrap ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
                               {item.Name}
@@ -479,7 +471,7 @@ const FeaturedProperty = (params) => {
                         <li key={index}>
                           <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
-                              id={`checkbox-item-${index}`}
+                              id={`checkbox-item-${item._id}`}
                               type="checkbox"
                               name="areaType"
                               value={JSON.stringify({
@@ -493,7 +485,7 @@ const FeaturedProperty = (params) => {
                               className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
-                              htmlFor={`checkbox-item-${index}`}
+                              htmlFor={`checkbox-item-${item._id}`}
                               className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
                               {item.Area}
@@ -554,14 +546,15 @@ const FeaturedProperty = (params) => {
                           <input
                             id={`checkbox-item-${index}`}
                             type="checkbox"
-                            // value={JSON.stringify({
-                            //   id: `[${item.value1} ,${item.value2}]`,
-                            //   label:`[${item.value1} ,${item.value2}]`,
-                            // })}
                             value={`[${item.value1} ,${item.value2}]`}
                             onChange={handleRangeCheckBoxChange}
                             name="budget"
                             className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                            checked={payload.budget.some(
+                              (obj) =>
+                                obj.id[0] === item.value1 &&
+                                obj.id[1] === item.value2
+                            )}
                           />
                           <label
                             htmlFor={`checkbox-item-${index}`}
@@ -616,7 +609,7 @@ const FeaturedProperty = (params) => {
                         <li key={index}>
                           <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
-                              id={`checkbox-item-${index}`}
+                              id={`checkbox-item-${item._id}`}
                               type="checkbox"
                               value={JSON.stringify({
                                 id: item._id,
@@ -630,7 +623,7 @@ const FeaturedProperty = (params) => {
                               className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
-                              htmlFor={`checkbox-item-${index}`}
+                              htmlFor={`checkbox-item-${item._id}`}
                               className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
                               {item.Type}
@@ -690,7 +683,7 @@ const FeaturedProperty = (params) => {
                         <li key={index}>
                           <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
-                              id={`checkbox-item-${index}`}
+                              id={`checkbox-item-${item._id}`}
                               type="checkbox"
                               value={JSON.stringify({
                                 id: item._id,
@@ -704,7 +697,7 @@ const FeaturedProperty = (params) => {
                               className="w-4  h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
-                              htmlFor={`checkbox-item-${index}`}
+                              htmlFor={`checkbox-item-${item._id}`}
                               className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
                               {item.Status}
@@ -764,7 +757,7 @@ const FeaturedProperty = (params) => {
                         <li key={index}>
                           <div className="flex items-center p-2 rounded hover:bg-white dark:hover:bg-gray-600">
                             <input
-                              id={`checkbox-item-${index}`}
+                              id={`checkbox-item-${item._id}`}
                               type="checkbox"
                               value={JSON.stringify({
                                 id: item._id,
@@ -778,7 +771,7 @@ const FeaturedProperty = (params) => {
                               className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                             />
                             <label
-                              htmlFor={`checkbox-item-${index}`}
+                              htmlFor={`checkbox-item-${item._id}`}
                               className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                             >
                               {item.Possession}
@@ -875,7 +868,7 @@ const FeaturedProperty = (params) => {
                                 {/* Ensure each item takes 1/3 of the width */}
                                 <div className="flex items-center p-1 rounded hover:bg-white dark:hover:bg-gray-600">
                                   <input
-                                    id={`checkbox-item-${index}`}
+                                    id={`checkbox-item-${item._id}`}
                                     type="checkbox"
                                     value={JSON.stringify({
                                       id: item._id,
@@ -889,7 +882,7 @@ const FeaturedProperty = (params) => {
                                     className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                                   />
                                   <label
-                                    htmlFor={`checkbox-item-${index}`}
+                                    htmlFor={`checkbox-item-${item._id}`}
                                     className="text-sm font-medium text-gray-900 rounded dark:text-gray-300 sm:w-full  ml-3"
                                   >
                                     {item.Feature}
@@ -952,7 +945,7 @@ const FeaturedProperty = (params) => {
                                 {/* Ensure each item takes 1/3 of the width */}
                                 <div className="flex items-center p-1 rounded hover:bg-white dark:hover:bg-gray-600">
                                   <input
-                                    id={`checkbox-item-${index}`}
+                                    id={`checkbox-item-${item._id}`}
                                     type="checkbox"
                                     value={JSON.stringify({
                                       id: item.value,
@@ -966,7 +959,7 @@ const FeaturedProperty = (params) => {
                                     className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                                   />
                                   <label
-                                    htmlFor={`checkbox-item-${index}`}
+                                    htmlFor={`checkbox-item-${item._id}`}
                                     className="text-sm font-medium text-gray-900 rounded dark:text-gray-300 sm:w-full  ml-3"
                                   >
                                     {item.label}
@@ -1008,7 +1001,8 @@ const FeaturedProperty = (params) => {
                 <div className="flex flex-col md:flex-row">
                   {Object.entries(payload).map(
                     ([key, value]) =>
-                      value.length > 0&& Array.isArray(value) && (
+                      value.length > 0 &&
+                      Array.isArray(value) && (
                         <div className="mb-2 md:mb-0" key={key}>
                           {value.map((item) => (
                             <div
@@ -1044,7 +1038,7 @@ const FeaturedProperty = (params) => {
                         </div>
                       )
                   )}
-                   {resetBtnValue && (
+                  {resetBtnValue && (
                     <button
                       onClick={resetSelectItem}
                       type="button"
@@ -1083,7 +1077,10 @@ const FeaturedProperty = (params) => {
                 </h1>
                 <div className="flex">
                   {payload && (
-                    <SortByButton arrayItem={sortItemArray} updatePayload={updatePayload} />
+                    <SortByButton
+                      arrayItem={sortItemArray}
+                      updatePayload={updatePayload}
+                    />
                   )}
                 </div>
               </div>
@@ -1092,23 +1089,31 @@ const FeaturedProperty = (params) => {
               </div>
               {listDataForShow ? (
                 listDataForShow.length > 0 ? (
-                  listDataForShow.map((cardData,index) => (
-                    <div key={cardData._id}>
-                      <PropertyListCard item={cardData} />
-                      {index==1?(  <PriceRangeSlider
-                        isShow={rangeModalvalue}
-                        setRangeModalValue={setRangeModalValue}
-                        setPayload={setPayload}
-                      />):(null)}
-
-
-                      {/* <PriceRangeSlider
+                  <InfiniteScroll
+                    dataLength={listDataForShow.length}
+                    next={fetchMoreData}
+                    hasMore={hasMore}
+                    loader={<LoaderForMedia />}
+                    endMessage={
+                      <h1 className={`${styles.noDataHead}`}>
+                        {" "}
+                        Now, There is no Property to see.
+                      </h1>
+                    }
+                  >
+                    {listDataForShow.map((cardData, index) => (
+                      <div key={cardData._id}>
+                        <PropertyListCard item={cardData} />
+                        {index == 1 ? (
+                          <PriceRangeSlider
                             isShow={rangeModalvalue}
                             setRangeModalValue={setRangeModalValue}
                             setPayload={setPayload}
-                          /> */}
-                    </div>
-                  ))
+                          />
+                        ) : null}
+                      </div>
+                    ))}
+                  </InfiniteScroll>
                 ) : (
                   <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
                 )
@@ -1119,36 +1124,6 @@ const FeaturedProperty = (params) => {
               )}
             </div>
           </div>
-          {listData.length > 2 &&
-          listData.length != numToShow &&
-          listData.length != listDataForShow.length ? (
-            <div className="flex justify-center">
-              <div>
-                <button
-                  onClick={showMoreItems}
-                  type="button"
-                  className={`mx-auto text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-3 me-2 mb-2`}
-                >
-                  Show More Properties
-                </button>
-              </div>
-            </div>
-          ) : listDataForShow.length > 2 ||
-            (numToShow != listData.length &&
-              listData.length > 0 &&
-              listData.length != listDataForShow.length) ? (
-            <div className="flex justify-center">
-              <div>
-                <button
-                  onClick={showLessItems}
-                  type="button"
-                  className={`mx-auto text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-3 me-2 mb-2`}
-                >
-                  Show Less Properties
-                </button>
-              </div>
-            </div>
-          ) : null}
         </div>
         <div className={` ${styles.divideDetailPageRight}`}></div>
       </div>

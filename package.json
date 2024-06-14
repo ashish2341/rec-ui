@@ -30,6 +30,7 @@
     "react-compound-slider": "^3.4.0",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-multi-carousel": "^2.8.5",
     "react-redux": "^9.1.0",
     "react-scroll": "^1.9.0",

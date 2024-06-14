@@ -11,7 +11,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ReadMore from "@/components/common/readMore";
 import Accordion from "@/components/common/accodion";
-import { API_BASE_URL_FOR_MASTER, API_BASE_URL } from "@/utils/constants";
+import {
+  API_BASE_URL_FOR_MASTER,
+  API_BASE_URL,
+  bathroomArray,
+  RangeTypeArray,
+  sortItemArray,
+  propertyCardToShow,
+} from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import DropdownComponent from "@/components/common/listDropdown";
 import { GetPropertyByQueryApi } from "@/api-functions/property/getPropertyByQuery";
@@ -24,6 +31,8 @@ import { Carousel } from "flowbite-react";
 import PropertyListCard from "@/components/common/propertyListCard/listCard";
 import SortByButton from "@/components/common/sortbyButton/sortByButton";
 import PriceRangeSlider from "@/components/common/priceRangeModal/priceRangeModal";
+import InfiniteScroll from "react-infinite-scroll-component";
+import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
 const PropertyListPage = (params) => {
   // fetching Data for facing
   const {
@@ -42,10 +51,6 @@ const PropertyListPage = (params) => {
   const { data: propertyStatusData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/propertyStatus`
   );
-  // fetching Data for preferencesData
-  const { data: preferencesData } = useFetch(
-    `${API_BASE_URL_FOR_MASTER}/preferences`
-  );
   // fetching Data for Area
   const { data: areaData } = useFetch(`${API_BASE_URL_FOR_MASTER}/areas`);
   // fetching Data for posessionStatusData
@@ -56,7 +61,6 @@ const PropertyListPage = (params) => {
   const { data: featureData } = useFetch(
     `${API_BASE_URL}/feature/allFeature?page=1&pageSize=10&search=`
   );
-
 
   const {
     searchData,
@@ -106,38 +110,8 @@ const PropertyListPage = (params) => {
   const [listDataForShow, setListDataForShow] = useState("");
   const [resetBtnValue, setResetBtnValue] = useState(false);
   const [rangeModalvalue, setRangeModalValue] = useState(true);
+  const [hasMore, setHasMore] = useState(true);
 
-  const bathroomArray = [
-    { value: 1, label: "One" },
-    { value: 2, label: "Two" },
-    { value: 3, label: "Three" },
-    { value: 4, label: "Four" },
-    { value: 5, label: "Five" },
-  ];
-  const landAreaArray = [
-    { value: 1, label: "One" },
-    { value: 2, label: "Two" },
-    { value: 3, label: "Three" },
-    { value: 4, label: "Four" },
-    { value: 5, label: "Five" },
-  ];
-  const RangeTypeArray = [
-    { value1: 1000000, value2: 3000000, label: "10 L- 30 L" },
-    { value1: 3000000, value2: 6000000, label: " 30 L- 60 L" },
-    { value1: 6000000, value2: 10000000, label: "60 L- 1 Cr" },
-    { value1: 10000000, value2: 20000000, label: "1 Cr- 2 Cr" },
-  ];
-  const sortItemArray = [
-    { itemName: "Low to High", urlItem1: "TotalPrice.MinValue", urlItem2: "1" },
-    {
-      itemName: "High to Low",
-      urlItem1: "TotalPrice.MaxValue",
-      urlItem2: "-1",
-    },
-    { itemName: "Latest", urlItem1: "CreatedDate", urlItem2: "-1" },
-    { itemName: "Featured", urlItem1: true, urlItem2: "" },
-    { itemName: "Popular", urlItem1: true, urlItem2: "" },
-  ];
   useEffect(() => {
     setPayload((prevPayload) => ({
       ...prevPayload,
@@ -187,53 +161,19 @@ const PropertyListPage = (params) => {
   const longText =
     "Nestled within the vibrant streets of Jaipur, Rajasthan, lies a hidden gem – an enchanting Haveli that embodies the essence of royal living. This majestic property seamlessly blends traditional Rajasthani architecture with modern comforts, offering a truly unique retreat for those seeking an authentic cultural experience. (As you step through the ornate entrance, you are greeted by a courtyard adorned with intricately carved pillars and lush greenery. The Haveli boasts spacious living areas adorned with handcrafted furniture, vibrant textiles, and exquisite artwork, creating an ambiance of timeless elegance.) Jaipur, also known as the Pink City, is a vibrant city in the Indian state of Rajasthan. It is renowned for its rich cultural heritage, magnificent palaces, and forts. The property market in Jaipur offers a diverse range of options, from traditional havelis to modern apartments. The city's real estate sector has witnessed significant growth in recent years, driven by infrastructure development, economic expansion, and an influx of investors. Areas like Vaishali Nagar, Malviya Nagar, and Jagatpura are popular among homebuyers due to their connectivity and amenities.";
 
-  const toggleExpansion = () => {
-    setExpanded(!expanded);
-  };
   useEffect(() => {
     initFlowbite(); // Call initCarousels() when component mounts
   }, []);
-  var settings = {
-    dots: false,
-    infinite: true,
-    arrows: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
+
   const getAllFilterProperties = async (payloadData) => {
     // console.log("payloadData", payloadData);
     let properties = await GetPropertyByQueryApi(payloadData);
     if (properties?.resData?.success == true) {
       setListData(properties?.resData.data);
-      // console.log("properties?.resData?.data", properties?.resData?.data);
-      setListDataForShow(properties?.resData?.data.slice(0, 4));
+      setListDataForShow(
+        properties?.resData?.data.slice(0, propertyCardToShow)
+      );
+      setHasMore(true);
       return false;
     } else {
       toast.error(properties?.errMessage);
@@ -241,27 +181,14 @@ const PropertyListPage = (params) => {
     }
   };
 
-  const showMoreItems = () => {
-    const newNumToShow = numToShow + 4;
-    setListDataForShow(listData.slice(0, newNumToShow));
-    setNumToShow(newNumToShow);
-  };
-
-  const showLessItems = () => {
-    const newNumToShow = numToShow - 4;
-    setListDataForShow(listData.slice(0, newNumToShow));
-    setNumToShow(newNumToShow);
-  };
-  
   const handleCheckBoxChange = (event) => {
- 
     const { name, checked } = event.target;
-    console.log("handleCheckBoxChange name",name)
-    console.log("handleCheckBoxChange checked",checked)
+    console.log("handleCheckBoxChange name", name);
+    console.log("handleCheckBoxChange checked", checked);
     const valueObject = JSON.parse(event.target.value);
     const { id, label } = valueObject;
-    console.log("handleCheckBoxChange id",id)
-    console.log("handleCheckBoxChange label",label)
+    console.log("handleCheckBoxChange id", id);
+    console.log("handleCheckBoxChange label", label);
     setPayload((prevPayload) => ({
       ...prevPayload,
       [name]: checked
@@ -271,8 +198,6 @@ const PropertyListPage = (params) => {
 
     if (checked == true) {
       setResetBtnValue(true);
-    } else {
-      setResetBtnValue(false);
     }
   };
 
@@ -310,8 +235,6 @@ const PropertyListPage = (params) => {
     }
     if (checked == true) {
       setResetBtnValue(true);
-    } else {
-      setResetBtnValue(false);
     }
   };
 
@@ -385,7 +308,21 @@ const PropertyListPage = (params) => {
       ...newPayload, // Merge the new payload with the existing state
     }));
   };
-
+  const fetchMoreData = () => {
+    if (listDataForShow.length >= listData.length) {
+      setHasMore(false);
+      return;
+    }
+    setTimeout(() => {
+      setListDataForShow((prevList) => [
+        ...prevList,
+        ...listData.slice(
+          prevList.length,
+          prevList.length + propertyCardToShow
+        ),
+      ]);
+    }, 1500);
+  };
   return (
     <>
       <Navbar />
@@ -614,7 +551,6 @@ const PropertyListPage = (params) => {
                   </ul>
                 </div>
               </li>
-            
 
               {/* Range type */}
               <li className="me-2 mt-3">
@@ -667,7 +603,7 @@ const PropertyListPage = (params) => {
                             )}
                           />
                           <label
-                             htmlFor={`checkbox-item-${index}`}
+                            htmlFor={`checkbox-item-${index}`}
                             className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                           >
                             {item.label}
@@ -1224,63 +1160,41 @@ const PropertyListPage = (params) => {
               </div>
               {listDataForShow ? (
                 listDataForShow.length > 0 ? (
-                  listDataForShow.map((cardData,index) => (
-                    <div key={cardData._id}>
-                      <PropertyListCard item={cardData} />
-                      {index==1?(  <PriceRangeSlider
-                        isShow={rangeModalvalue}
-                        setRangeModalValue={setRangeModalValue}
-                        setPayload={setPayload}
-                      />):(null)}
-
-
-                      {/* <PriceRangeSlider
+                  <InfiniteScroll
+                    dataLength={listDataForShow.length}
+                    next={fetchMoreData}
+                    hasMore={hasMore}
+                    loader={<LoaderForMedia />}
+                    endMessage={
+                      <h1 className={`${styles.noDataHead}`}>
+                        {" "}
+                        Now, There is no Property to see.
+                      </h1>
+                    }
+                  >
+                    {listDataForShow.map((cardData, index) => (
+                      <div key={cardData._id}>
+                        <PropertyListCard item={cardData} />
+                        {index == 1 ? (
+                          <PriceRangeSlider
                             isShow={rangeModalvalue}
                             setRangeModalValue={setRangeModalValue}
                             setPayload={setPayload}
-                          /> */}
-                    </div>
-                  ))
+                          />
+                        ) : null}
+                      </div>
+                    ))}
+                  </InfiniteScroll>
                 ) : (
                   <h1 className={`${styles.noDataHead}`}>No Data Found</h1>
                 )
               ) : (
                 <div className={`mb-3 ml-3 ${styles.GeneralDetailsBox}`}>
-                <LoadingSideImg />
-              </div>
+                  <LoadingSideImg />
+                </div>
               )}
             </div>
           </div>
-          {listData.length > 4 &&
-          listData.length != numToShow &&
-          listData.length != listDataForShow.length ? (
-            <div className="flex justify-center">
-              <div>
-                <button
-                  onClick={showMoreItems}
-                  type="button"
-                  className={`mx-auto text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-3 me-2 mb-2`}
-                >
-                  Show More Properties
-                </button>
-              </div>
-            </div>
-          ) : listDataForShow.length > 4 ||
-            (numToShow != listData.length &&
-              listData.length > 0 &&
-              listData.length != listDataForShow.length) ? (
-            <div className="flex justify-center">
-              <div>
-                <button
-                  onClick={showLessItems}
-                  type="button"
-                  className={`mx-auto text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-3 me-2 mb-2`}
-                >
-                  Show Less Properties
-                </button>
-              </div>
-            </div>
-          ) : null}
         </div>
 
         <div className={` ${styles.divideDetailPageRight}`}></div>

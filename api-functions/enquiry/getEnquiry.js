@@ -8,6 +8,7 @@ export const GetEnquiryApi = async (
   filterType,
   fromDate,
   toDate,
+  todayValue,
   setLoading = () => {}
 ) => {
   const token = Cookies.get("token");
@@ -18,7 +19,7 @@ export const GetEnquiryApi = async (
         searchData ? searchData : ""
       }${filterType ? `&filter=${filterType}` : ""}${
         fromDate ? `&startDate=${fromDate}` : ""
-      }${toDate ? `&endDate=${toDate}` : ""}`,
+      }${toDate ? `&endDate=${toDate}` : ""}${todayValue ? `&todayEnquiry=${todayValue}` : ""}`,
       {
         method: "GET",
         headers: {

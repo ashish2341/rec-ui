@@ -3,11 +3,11 @@ import Cookies from "js-cookie";
 import { API_BASE_URL, PAGE_LIMIT } from "@/utils/constants";
 
 
-export const GetPropertyBybuilderApi = async (page,searchData,setLoading=()=>{}) => {
+export const GetPropertyBybuilderApi = async (page,searchData,showValue,setLoading=()=>{}) => {
   const token = Cookies.get("token");
   setLoading(true);
   try {
-    const res = await fetch(`${API_BASE_URL}/properties/propertyByUserId?page=${page ?page:1}&pageSize=${PAGE_LIMIT}&search=${searchData ?searchData:""}`, {
+    const res = await fetch(`${API_BASE_URL}/properties/propertyByUserId?page=${page ?page:1}&pageSize=${PAGE_LIMIT}&search=${searchData ?searchData:""}${showValue ?`&isEnable=${showValue}`:""}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

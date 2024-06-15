@@ -68,3 +68,32 @@ export const apiActions = {
     "Market/High Street",
     "Others",
   ];
+
+  //Statis array for PropertyList and featured property page
+
+  export const bathroomArray = [
+    { value: 1, label: "One" },
+    { value: 2, label: "Two" },
+    { value: 3, label: "Three" },
+    { value: 4, label: "Four" },
+    { value: 5, label: "Five" },
+  ];
+ 
+  export const RangeTypeArray = [
+    { value1: 1000000, value2: 3000000, label: "10 L- 30 L" },
+    { value1: 3000000, value2: 6000000, label: " 30 L- 60 L" },
+    { value1: 6000000, value2: 10000000, label: "60 L- 1 Cr" },
+    { value1: 10000000, value2: 20000000, label: "1 Cr- 2 Cr" },
+  ];
+  export const sortItemArray = [
+    { itemName: "Low to High", urlItem1: "TotalPrice.MinValue", urlItem2: "1" },
+    {
+      itemName: "High to Low",
+      urlItem1: "TotalPrice.MaxValue",
+      urlItem2: "-1",
+    },
+    { itemName: "Latest", urlItem1: "CreatedDate", urlItem2: "-1" },
+    { itemName: "Featured", urlItem1: true, urlItem2: "" },
+    { itemName: "Popular", urlItem1: true, urlItem2: "" },
+  ];
+  export const propertyCardToShow=5;

@@ -32,7 +32,7 @@
   
   .column2 {
     flex: 0 0 70%;
-    height: 75vh;
+    height: 550px;
     overflow-y: auto;
   overflow-x: hidden;
     padding-top: 1rem;

@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import styles from "../common/css/accodion.module.css";
 
 const Accordion = ({ listData }) => {
-
-
   const [activeIndex, setActiveIndex] = useState(null);
 
   const toggleAccordion = (index) => {
@@ -21,45 +19,41 @@ const Accordion = ({ listData }) => {
               >
                 <div className={` ${styles.heroSectionBottomBox}`}>
                   <div className={`${styles.accordionItem}`}>
-                    <h2 className={` ${styles.heroSectionBottomBoxHead}`}>
-                      Property Status
-                    </h2>
-                    <p className={` ${styles.heroSectionBottomBoxText}`}>
-                      {" "}
-                      {item?.PropertyStatus?.Status}
-                    </p>
-                  </div>
-                  {/* <div className={`${styles.heroSectionVL}`}></div> */}
-                  <div className={`${styles.accordionItem}`}>
-                    <h2 className={`${styles.heroSectionBottomBoxHead}`}>
-                      Posession Status
-                    </h2>
-                    <p className={`${styles.heroSectionBottomBoxText}`}>
-                      <span className={`${styles.textCapitalized}`}>
-                        {item?.PosessionStatus?.Possession}
-                      </span>
-                    </p>
-                  </div>
-                  {/* <div className={`${styles.heroSectionVL}`}></div> */}
-                  <div className={`${styles.accordionItem}`}>
-                    <h2 className={`${styles.heroSectionBottomBoxHead}`}>
-                      Posession Date
-                    </h2>
-                    <p className={`${styles.heroSectionBottomBoxText}`}>
-                      {item.PosessionDate.slice(0, 10)}
-                    </p>
-                  </div>
-                  {/* <div className={`${styles.heroSectionVL}`}></div> */}
-                  <div className={`${styles.accordionItem}`}>
                     <h2 className={`${styles.heroSectionBottomBoxHead}`}>
                       Property Type
                     </h2>
                     <p className={`${styles.heroSectionBottomBoxText}`}>
                       {" "}
-                      <i className="bi bi-house-door-fill"></i>
+                      {/* <i className="bi bi-house-door-fill"></i> */}
+                      <span className="ml-1">{item.ProeprtyType}</span>
+                    </p>
+                  </div>
+                  <div className={`${styles.accordionItem}`}>
+                    <h2 className={`${styles.heroSectionBottomBoxHead}`}>
+                      Property SubType
+                    </h2>
+                    <p className={`${styles.heroSectionBottomBoxText}`}>
+                      {" "}
                       <span className="ml-1">{item.PropertySubtype.Name}</span>
                     </p>
                   </div>
+                  <div className={`${styles.accordionItem}`}>
+                    <h2 className={` ${styles.heroSectionBottomBoxHead}`}>
+                      {item.PropertySubtype.Name !== "Plot"
+                        ? "Property Status"
+                        : "OwnerShip Type"}
+                    </h2>
+                    <p className={` ${styles.heroSectionBottomBoxText}`}>
+                      {item.PropertySubtype.Name !== "Plot" ? (
+                        <span>{item?.PropertyStatus?.Status}</span>
+                      ) : (
+                        <span>{item?.OwnershipType.Ownership}</span>
+                      )}
+                    </p>
+                  </div>
+                  {/* <div className={`${styles.heroSectionVL}`}></div> */}
+
+                  {/* <div className={`${styles.heroSectionVL}`}></div> */}
                 </div>
                 <svg
                   className={`w-4 h-full transition-transform transform ${
@@ -85,42 +79,31 @@ const Accordion = ({ listData }) => {
                 >
                   <div className={` ${styles.heroSectionBottomBox}`}>
                     <div className={`${styles.accordionItem}`}>
-                      <h2 className={` ${styles.heroSectionBottomBoxHead}`}>
-                        Built Area
-                      </h2>
-                      <p className={` ${styles.heroSectionBottomBoxText}`}>
-                        {" "}
-                        {item.BuiltUpArea}
-                      </p>
-                    </div>
-                    {/* <div className={`${styles.heroSectionVL}`}></div> */}
-                    <div className={`${styles.accordionItem}`}>
                       <h2 className={`${styles.heroSectionBottomBoxHead}`}>
-                        Fencing Type
+                        Posession Status
                       </h2>
                       <p className={`${styles.heroSectionBottomBoxText}`}>
-                        {item?.Fencing}
-                      </p>
-                    </div>
-                    {/* <div className={`${styles.heroSectionVL}`}></div> */}
-                    <div className={`${styles.accordionItem}`}>
-                      <h2 className={`${styles.heroSectionBottomBoxHead}`}>
-                        Flooring Type
-                      </h2>
-                      <p className={`${styles.heroSectionBottomBoxText}`}>
-                        {item?.Flooring}
-                      </p>
-                    </div >
-                    {/* <div className={`${styles.heroSectionVL}`}></div> */}
-                    <div className={`${styles.accordionItem}`}>
-                      <h2 className={`${styles.heroSectionBottomBoxHead}`}>
-                        Furnished Type
-                      </h2>
-                      <p className={`${styles.heroSectionBottomBoxText}`}>
-                        {" "}
-                        <span className="ml-1">
-                          {item?.Furnished?.Furnished}
+                        <span className={`${styles.textCapitalized}`}>
+                          {item?.PosessionStatus?.Possession}
                         </span>
+                      </p>
+                    </div>
+                    {/* <div className={`${styles.heroSectionVL}`}></div> */}
+                    <div className={`${styles.accordionItem}`}>
+                      <h2 className={`${styles.heroSectionBottomBoxHead}`}>
+                        Posession Date
+                      </h2>
+                      <p className={`${styles.heroSectionBottomBoxText}`}>
+                        {item.PosessionDate.slice(0, 10)}
+                      </p>
+                    </div>
+                    {/* <div className={`${styles.heroSectionVL}`}></div> */}
+                    <div className={`${styles.accordionItem}`}>
+                      <h2 className={`${styles.heroSectionBottomBoxHead}`}>
+                        Is Negotiable
+                      </h2>
+                      <p className={`${styles.heroSectionBottomBoxText}`}>
+                        {item?.IsNegotiable ? "yes" : "No"}
                       </p>
                     </div>
                   </div>

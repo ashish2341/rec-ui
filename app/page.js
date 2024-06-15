@@ -23,6 +23,8 @@ import SearchBar from "./search";
 import AreaMultiCarousel from "../components/common/areapropertyCarousel";
 import { AddZodaic } from "@/api-functions/zodiac/addZodiac";
 import NotifyUserModal from "@/components/common/notifyUserModal";
+// import Skeleton from 'react-loading-skeleton';
+// import 'react-loading-skeleton/dist/skeleton.css'
 
 
 export default function Home() {
@@ -51,14 +53,14 @@ export default function Home() {
     "img/2.png",
   ];
 
-  const facingSubHeading =[
+  const facingSubHeading = [
     "Eastward Bound: Explore Homes Awakened by the Rising Sun",
     "Twilight Haven: Embrace the Glow of Western-Facing Residences",
     "Find Your Haven: Northern Comforts in North-Facing Homes",
     "Southern Serenity: Find Tranquility in Homes Embracing the South"
   ]
 
- // fetching Data for facing
+  // fetching Data for facing
   const {
     data: facingData,
     loading: facingDataLoading,
@@ -96,8 +98,8 @@ export default function Home() {
     data: testimonialData,
     loading: testimonialDataLoading,
     error: testimonialDataError,
-} = useFetch(`${API_BASE_URL}/testimonial/allTestimonial?page=1&pageSize=5`);
-console.log("propertyByapartmentType",propertyByapartmentType);
+  } = useFetch(`${API_BASE_URL}/testimonial/allTestimonial?page=1&pageSize=5`);
+  console.log("propertyByPopularProperty", propertyByPopularProperty);
   const {
     data: faqData,
     loading: faqLoading,
@@ -106,210 +108,175 @@ console.log("propertyByapartmentType",propertyByapartmentType);
 
   const {
     data: blogData,
-    loading:blogDataLoading,
-    error:blogDataError,
+    loading: blogDataLoading,
+    error: blogDataError,
   } = useFetch(`${API_BASE_URL}/blog/allblog?page=1&pageSize=5`);
 
   const {
     data: bannerData,
-    loading:bannerDataLoading,
-    error:bannerDataError,
+    loading: bannerDataLoading,
+    error: bannerDataError,
   } = useFetch(`${API_BASE_URL}/banner/allbanner?page=1&pageSize=5`);
 
   const ShowApartmentProperties = () => {
 
-    return propertyByapartmentType?.data?.map((item,index) => (
-      <Link key={index}  href={`/propertyList/property?propertyTypeID=${item._id}&propertyTypeLabel=${item?.areaInfo?.Name}`}  >
+    return propertyByapartmentType?.data?.map((item, index) => (
+      <Link key={index} href={`/propertyList/property?propertyTypeID=${item._id}&propertyTypeLabel=${item?.areaInfo?.Name}`}  >
         <div
           className="p-1"
         >
           <div className={` ${styles.apartmentTypeBox} border-gray-300 rounded-md`}>
-          <div>
             <div>
-              <img
-                className={` ${styles.apartmentTypeBoxImg}`}
-                src={item?.areaInfo?.PropImage}
-                alt=""
-              />
+              <div>
+                <img
+                  className={` ${styles.apartmentTypeBoxImg}`}
+                  src={item?.areaInfo?.PropImage}
+                  alt=""
+                />
+              </div>
+            </div>
+            <div>
+              <h2 className={` ${styles.apartmentTypeBoxHead}`}>{item?.areaInfo?.Name}</h2>
+              <p className={` ${styles.apartmentTypeBoxText}`}>
+                {item?.propertiesCount} Properties
+              </p>
             </div>
           </div>
-          <div>
-            <h2 className={` ${styles.apartmentTypeBoxHead}`}>{item?.areaInfo?.Name}</h2>
-            <p className={` ${styles.apartmentTypeBoxText}`}>
-              {item?.propertiesCount} Properties
-            </p>
-          </div>
-          </div>
         </div>
-        </Link>
-      ))
+      </Link>
+    ))
 
   }
 
   const ShowPopularProperties = () => {
-    return propertyByPopularProperty?.data?.map((item,index) => (
+    return propertyByPopularProperty?.data?.map((item, index) => (
 
       <div key={index} className={` ${styles.cardBoxPopularTop}`} >
         <img
-              className={` ${styles.cardImgTop}`}
-              src={item.Images[0].URL}
-              alt="Nothing"
-            ></img>
+          className={` ${styles.cardImgTop}`}
+          src={item.Images[0].URL}
+          alt="Nothing"
+        ></img>
         <Link href={`/propertyDetail/${item._id}`}>
-        <div className={` ${styles.cardImgBottom}`}>
-          <div className={` ${styles.populerPropertiesLocationMain} flex`}>
-            <i className="bi bi-geo-alt-fill"></i>
-            <p className={`text-gray-700`}>{item.Address}</p>
-          </div>
-          <h2 className={` ${styles.populerPropertiesBoxHead}`}>
-            {item.Title}
-          </h2>
-          <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
-           { item?.ProeprtyType == "Commercial" ?
-           <div className="flex">
-           <i className="fa fa-solid fa-car"></i>
-             <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-             {item.PrivateParking}  Parking
-             </p>
-           </div>
-            :
-            <div className="flex">
-            <i className="fa fa-bed"></i>
-              <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-              {item.Bedrooms} Bed Room
-              </p>
+          <div className={` ${styles.cardImgBottom}`}>
+            <div className={` ${styles.populerPropertiesLocationMain} flex`}>
+              <i className="bi bi-geo-alt-fill"></i>
+              <p className={`text-gray-700`}>{item.Address}</p>
             </div>
-           }
-           { item?.ProeprtyType == "Commercial" ?
-            item.CellingHeight ?
-           <div className="flex">
-             <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-             <span className="ml-1">&#xf548;</span>{" "}{item.CellingHeight} Height
-             </p>
-           </div> :
-           <div className="flex">
-             <i className="fa fa-building" aria-hidden="true"></i>
-             <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-             {item.CarpetArea} Carpet Area
-             </p>
-           </div>
-            :
-            <div className="flex">
-              <i className="fa fa-bath"></i>
-              <p className={` ${styles.populerPropertiesBoxText} ml-1 `}>
-              {item.Bathrooms} Baths
-              </p>
+            <div className="flex justify-between">
+              <h2 className={` ${styles.populerPropertiesBoxHead}`}>
+                {item.Title}
+              </h2>
+              {item.LocationHub ?
+                <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
+                  {item.LocationHub == "Others" ? item.CustomLocationHub : item.LocationHub}
+                </div> :
+                <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
+                  {item.ProeprtyType}
+                </div>}
             </div>
-           }
 
-            <div className="flex">
-              <i className="fa fa-area-chart"></i>
-              <p className={` ${styles.populerPropertiesBoxText} ml-1`}>
-                {item.LandArea} Land Area
+            <div className={`${styles.populerPropertiesBoxPriceMain}`}>
+              <p className={`${styles.populerPropertiesBoxPrice}`}>
+                {item.TotalPrice?.DisplayValue}
               </p>
+              <Link href={`/propertyDetail/${item._id}`} >
+                <button
+                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  type="button"
+
+                >
+                  More Details
+                </button>
+              </Link>
             </div>
           </div>
-          <div className={`${styles.populerPropertiesBoxPriceMain}`}>
-            <p className={`${styles.populerPropertiesBoxPrice}`}>
-            {item.TotalPrice?.DisplayValue}
-            </p>
-            <Link href={`/propertyDetail/${item._id}`} >
-              <button
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                type="button"
-
-              >
-                More Details
-              </button>
-            </Link>
-          </div>
-        </div>
         </Link>
       </div>
-      ))
+    ))
   }
 
   const Testimonial = () => {
-      return (
-            testimonialData?.data?.map((item, index) => (
-              <div key={index} className={`${styles.testimonialcontent} flex justify-center`}>
-                <div className={`${styles.testimonialLeft}`}>
-                  <div className={`${styles.testimonialLeftBoxDetails} text-center`}>
-                    <img
-                      className={` ${styles.testimonialImg}  mb-3`}
-                      src={item.Image}
-                      alt="test"
-                    />
-                    <h2 className={`${styles.testimonialLeftHead} justify-center`}>
-                      {item.MemberName}
-                    </h2>
-                    <div className="flex justify-center">
-                    <p className={`${styles.testimonialLeftText}`}>
-                      {item.Description}
-                    </p>
-                    </div>
-                    <div>
-                      <div className={`${styles.testimonialStars} flex justify-center`}>
-                        <svg
-                          className="w-4 h-4 text-yellow-300 ms-1"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor"
-                          viewBox="0 0 22 20"
-                        >
-                          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                        </svg>
-                        <svg
-                          className="w-4 h-4 text-yellow-300 ms-1"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor"
-                          viewBox="0 0 22 20"
-                        >
-                          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                        </svg>
-                        <svg
-                          className="w-4 h-4 text-yellow-300 ms-1"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor"
-                          viewBox="0 0 22 20"
-                        >
-                          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                        </svg>
-                        <svg
-                          className="w-4 h-4 text-yellow-300 ms-1"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor"
-                          viewBox="0 0 22 20"
-                        >
-                          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                        </svg>
-                        <svg
-                          className="w-4 h-4 ms-1 text-gray-300 dark:text-gray-500"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="currentColor"
-                          viewBox="0 0 22 20"
-                        >
-                          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
+    return (
+      testimonialData?.data?.map((item, index) => (
+        <div key={index} className={`${styles.testimonialcontent} flex justify-center`}>
+          <div className={`${styles.testimonialLeft}`}>
+            <div className={`${styles.testimonialLeftBoxDetails} text-center`}>
+              <img
+                className={` ${styles.testimonialImg}  mb-3`}
+                src={item.Image}
+                alt="test"
+              />
+              <h2 className={`${styles.testimonialLeftHead} justify-center`}>
+                {item.MemberName}
+              </h2>
+              <div className="flex justify-center">
+                <p className={`${styles.testimonialLeftText}`}>
+                  {item.Description}
+                </p>
+              </div>
+              <div>
+                <div className={`${styles.testimonialStars} flex justify-center`}>
+                  <svg
+                    className="w-4 h-4 text-yellow-300 ms-1"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 22 20"
+                  >
+                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                  </svg>
+                  <svg
+                    className="w-4 h-4 text-yellow-300 ms-1"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 22 20"
+                  >
+                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                  </svg>
+                  <svg
+                    className="w-4 h-4 text-yellow-300 ms-1"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 22 20"
+                  >
+                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                  </svg>
+                  <svg
+                    className="w-4 h-4 text-yellow-300 ms-1"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 22 20"
+                  >
+                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                  </svg>
+                  <svg
+                    className="w-4 h-4 ms-1 text-gray-300 dark:text-gray-500"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 22 20"
+                  >
+                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                  </svg>
                 </div>
               </div>
-            ))
-      )
+            </div>
+          </div>
+        </div>
+      ))
+    )
   }
 
   const showAreaType = () => {
-    return  propertyByAreaData?.data?.map((item,index) => (
-        <div key={index}
-          className={` ${styles.propertiesByAreaBox} border border-gray-300 rounded-md`}
-        >
-          <Link href={`/propertyList/property?areaId=${item?._id}&areaLabel=${item?.areaInfo?.Area}`}>
+    return propertyByAreaData?.data?.map((item, index) => (
+      <div key={index}
+        className={` ${styles.propertiesByAreaBox} border border-gray-300 rounded-md`}
+      >
+        <Link href={`/propertyList/property?areaId=${item?._id}&areaLabel=${item?.areaInfo?.Area}`}>
           <div>
             <div>
               <img
@@ -325,8 +292,8 @@ console.log("propertyByapartmentType",propertyByapartmentType);
             </div>
             <p className={`${styles.smallText}text-gray-900`}>{item?.propertiesCount} Properties</p>
           </div>
-          </Link>
-        </div>
+        </Link>
+      </div>
     ))
   }
 
@@ -344,22 +311,22 @@ console.log("propertyByapartmentType",propertyByapartmentType);
       toast.error("Message is required");
       return false;
     }
-    if (MolileNumber === ""){
+    if (MolileNumber === "") {
       toast.error("Number is required");
       return false;
     }
-    let payload = { Name, Email, Message, MolileNumber, EnquiryDate :EnquiryData, EnquiryType };
+    let payload = { Name, Email, Message, MolileNumber, EnquiryDate: EnquiryData, EnquiryType };
     let res = await addEnquiry(payload)
-     if(res?.resData?.success == true){
-       toast.success("Your Query Is being Generated");
-       setName("");
-       setPhone("");
-       setMessage("");
-       setEmail("");
-      }else{
-        toast.error(res.errMessage);
-        return false;
-      }
+    if (res?.resData?.success == true) {
+      toast.success("Your Query Is being Generated");
+      setName("");
+      setPhone("");
+      setMessage("");
+      setEmail("");
+    } else {
+      toast.error(res.errMessage);
+      return false;
+    }
   }
   const toggleExpansion = () => {
     setExpanded(!expanded);
@@ -391,8 +358,8 @@ console.log("propertyByapartmentType",propertyByapartmentType);
   }
 
 
-  const resetValue = async() => {
-    if(Dob=="" || ZodiacName=="" || ZodaicMolileNumber == ""){
+  const resetValue = async () => {
+    if (Dob == "" || ZodiacName == "" || ZodaicMolileNumber == "") {
       toast.warn("Please fill D.O.B. & Name Field.")
       return false
     }
@@ -401,21 +368,21 @@ console.log("propertyByapartmentType",propertyByapartmentType);
       return false;
     }
     setOpenModal(true);
-    let ZodiacData = { Name : ZodiacName, MobileNumber : ZodaicMolileNumber, DateOfBirth: Dob};
+    let ZodiacData = { Name: ZodiacName, MobileNumber: ZodaicMolileNumber, DateOfBirth: Dob };
     let res = await AddZodaic(ZodiacData);
-    if(res?.resData?.success == true){
-      console.log("res",res);
+    if (res?.resData?.success == true) {
+      console.log("res", res);
       setName("");
       setPhone("");
       setMessage("");
       setEmail("");
-     }else{
-       toast.error(res.errMessage);
-       return false;
-     }
+    } else {
+      toast.error(res.errMessage);
+      return false;
+    }
   }
 
-  const onResetValue =() => {
+  const onResetValue = () => {
     setOpenModal(false);
     setZodaicName("")
     setDob("")
@@ -486,65 +453,65 @@ console.log("propertyByapartmentType",propertyByapartmentType);
             data-carousel-item="active"
           >
             <div className={`${styles.crousalItemContentMain}`}>
-              <div className={`${styles.crousalItemLeftMain}`}>
-                <div className={`${styles.crousalItemLeftContent}`}>
-                  <h2 className={`${styles.crousalItemLeftMainHeading}`}>
-                    Looking for a home is always easier
-                  </h2>
-                  <p className={`${styles.crousalItemLeftMainPara}`}>
-                  Welcome to REC.in, your trusted partner in the journey of
-                  finding the perfect home. At REC.in,
-                  we understand that finding the right home is more than just a
-                  transaction - it's about finding a place where memories are made,
-                  dreams are realized, and futures are built.
-                  </p>
-                  <div className={`${styles.crousalItemAdvMain} flex`}>
-                    <div className={`${styles.crousalItemAdvContent}`}>
-                      <h2 className={`${styles.crousalItemAdvNumber}`}>
-                        1500+
-                      </h2>
-                      <p className={`${styles.crousalItemAdvText}`}>
-                        Premium Product
-                      </p>
+                <div className={`${styles.crousalItemLeftMain}`}>
+                  <div className={`${styles.crousalItemLeftContent}`}>
+                    <h2 className={`${styles.crousalItemLeftMainHeading}`}>
+                      Looking for a home is always easier
+                    </h2>
+                    <p className={`${styles.crousalItemLeftMainPara}`}>
+                      Welcome to REC.in, your trusted partner in the journey of
+                      finding the perfect home. At REC.in,
+                      we understand that finding the right home is more than just a
+                      transaction - it's about finding a place where memories are made,
+                      dreams are realized, and futures are built.
+                    </p>
+                    <div className={`${styles.crousalItemAdvMain} flex`}>
+                      <div className={`${styles.crousalItemAdvContent}`}>
+                        <h2 className={`${styles.crousalItemAdvNumber}`}>
+                          1500+
+                        </h2>
+                        <p className={`${styles.crousalItemAdvText}`}>
+                          Premium Product
+                        </p>
+                      </div>
+                      <div className={`${styles.crousalItemAdvContent}`}>
+                        <h2 className={`${styles.crousalItemAdvNumber}`}>
+                          5500+
+                        </h2>
+                        <p className={`${styles.crousalItemAdvText}`}>
+                          Happy Customer
+                        </p>
+                      </div>
                     </div>
-                    <div className={`${styles.crousalItemAdvContent}`}>
-                      <h2 className={`${styles.crousalItemAdvNumber}`}>
-                        5500+
-                      </h2>
-                      <p className={`${styles.crousalItemAdvText}`}>
-                        Happy Customer
-                      </p>
-                    </div>
+                    <SearchBar />
                   </div>
-                  <SearchBar/>
                 </div>
-              </div>
               <div className={`${styles.crousalItemRightMain} overflow-hidden  `}>
                 {bannerData ?
-                <img
+                  <img
                     src={bannerData?.data[0].Url}
                     className={`${styles.crousalItemLeftImage} block`}
                     alt="...a"
                   /> :
                   (
-                  <div className={`${styles.LoaderHeight}  `}>
-                    <Spinner className="mt-70" />
-                  </div>
-              )
+                    <div className={`${styles.LoaderHeight}  `}>
+                      <Spinner className="mt-70" />
+                    </div>
+                  )
                 }
               </div>
             </div>
           </div>
           <div className="overflow-hidden duration-700 ease-in-out" data-carousel-item>
-          {/* <SearchBar id="2" /> */}
+            {/* <SearchBar id="2" /> */}
 
             <img
               src={bannerData?.data[1].Url}
-              className= {`${styles.crousalItemLeftImageS} absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
+              className={`${styles.crousalItemLeftImageS} absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
               alt="...a"
             />
           </div>
-           {/*
+          {/*
                {bannerData?.data.map(item => (
                <div className="overflow-hidden duration-700 ease-in-out" data-carousel-item>
             <img
@@ -624,34 +591,34 @@ console.log("propertyByapartmentType",propertyByapartmentType);
             </p>
           </div>
           <div className={`${styles.campassRightBoxMain} flex flex-wrap`}>
-             {facingData
-              ? facingData?.data?.slice(0, 4).map((item,index) => (
+            {facingData
+              ? facingData?.data?.slice(0, 4).map((item, index) => (
 
-                <Link key={index}  href={`/propertyList/property?facingId=${item?._id}&facingLabel=${item?.Facing}`}>
+                <Link key={index} href={`/propertyList/property?facingId=${item?._id}&facingLabel=${item?.Facing}`}>
                   <div
                     className={` ${styles.campassRightBox} border-gray-300 rounded-md`}
                   >
+                    <div>
                       <div>
-                        <div>
-                          <img
-                            className={` ${styles.campassRightBoxImg}`}
-                            src={facingImage[index]}
-                            alt=""
-                          />
-                        </div>
+                        <img
+                          className={` ${styles.campassRightBoxImg}`}
+                          src={facingImage[index]}
+                          alt=""
+                        />
                       </div>
-                      <div>
-                        <h2 className={` ${styles.campassRightBoxHead}`}>
-                          {item.Facing}
-                        </h2>
-                        <p className={` ${styles.campassRightBoxText}`}>
-                          {facingSubHeading[index]}
-                        </p>
-                      </div>
+                    </div>
+                    <div>
+                      <h2 className={` ${styles.campassRightBoxHead}`}>
+                        {item.Facing}
+                      </h2>
+                      <p className={` ${styles.campassRightBoxText}`}>
+                        {facingSubHeading[index]}
+                      </p>
+                    </div>
 
                   </div>
-                  </Link>
-                ))
+                </Link>
+              ))
               : <SkeletonLoader />}
           </div>
         </div>
@@ -669,9 +636,9 @@ console.log("propertyByapartmentType",propertyByapartmentType);
           </div>
         </div>
         <div className={` ${styles.propertiesByAreaBoxMain} flex flex-wrap `}>
-        {
-          propertyByAreaData?.data?.length>0 ? <AreaMultiCarousel UI={showAreaType} /> : <SkeletonLoader />
-        }
+          {
+            propertyByAreaData?.data?.length > 0 ? <AreaMultiCarousel UI={showAreaType} /> : <SkeletonLoader />
+          }
         </div>
 
       </div>
@@ -689,7 +656,7 @@ console.log("propertyByapartmentType",propertyByapartmentType);
         </div>
         <div className={`flex mt-2`} >
           {
-           propertyByapartmentType?.data?.length>0 ? <MultiCarousel UI={ShowApartmentProperties} /> : <SkeletonLoader />
+            propertyByapartmentType?.data?.length > 0 ? <MultiCarousel UI={ShowApartmentProperties} /> : <SkeletonLoader />
           }
         </div>
       </div>
@@ -705,9 +672,9 @@ console.log("propertyByapartmentType",propertyByapartmentType);
                 <span className="blueText">Zodiac</span>
               </h2>
               <p className={`${styles.buyingZodicText}`}>
-              Unlock the door to your dream home with Zodiac.
-              Let's embark on this journey together and discover your perfect home.
-              Welcome to Zodiac, where dreams come true.
+                Unlock the door to your dream home with Zodiac.
+                Let's embark on this journey together and discover your perfect home.
+                Welcome to Zodiac, where dreams come true.
               </p>
               <p className={`${styles.buyingZodicText} font-semibold`}>
                 ** Please note that this prediction is based on your D.O.B. rather than your name **
@@ -820,7 +787,7 @@ console.log("propertyByapartmentType",propertyByapartmentType);
         </div>
         <div className={` ${styles.populerPropertiesBoxMain} flex flex-wrap mt-4 `}>
           {
-           propertyByPopularProperty?.data?.length>0 ? <MultiCarousel UI={ShowPopularProperties} /> : <SkeletonLoader />
+            propertyByPopularProperty?.data?.length > 0 ? <MultiCarousel UI={ShowPopularProperties} /> : <SkeletonLoader />
           }
         </div>
       </div>
@@ -839,7 +806,7 @@ console.log("propertyByapartmentType",propertyByapartmentType);
               Trusted By Best Exclusive <span className="blueText">Astrologer</span>
             </h2>
             <p className={`${styles.agentRightMainText}`}>
-            Unlocking Cosmic Wisdom: How Astrology Enhances Your Property Investment Journey
+              Unlocking Cosmic Wisdom: How Astrology Enhances Your Property Investment Journey
             </p>
           </div>
           <div className={`${styles.agentRightMainContentMain}`}>
@@ -847,7 +814,7 @@ console.log("propertyByapartmentType",propertyByapartmentType);
               <i className="bi bi-geo-alt-fill"></i>
               <div className={`${styles.agentRightMainContent}`}>
                 <h2 className={`${styles.agentRightMainContentHead} font-semibold`}>
-                Auspicious Timing :
+                  Auspicious Timing :
                 </h2>
                 <p className={`${styles.agentRightMainContentText}`}>
                   Astrology can help determine the most auspicious time (Muhurat) for buying a house.
@@ -858,7 +825,7 @@ console.log("propertyByapartmentType",propertyByapartmentType);
               <i className="bi bi-geo-alt-fill"></i>
               <div className={`${styles.agentRightMainContent}`}>
                 <h2 className={`${styles.agentRightMainContentHead} font-semibold`}>
-                Financial Stability :
+                  Financial Stability :
                 </h2>
                 <p className={`${styles.agentRightMainContentText}`}>
                   Astrological analysis can provide insights into an individual's financial prospects and potential hurdles.
@@ -872,7 +839,7 @@ console.log("propertyByapartmentType",propertyByapartmentType);
                   Family Harmony :
                 </h2>
                 <p className={`${styles.agentRightMainContentText}`}>
-                Astrology considers the influence of planetary positions on family dynamics and relationships.
+                  Astrology considers the influence of planetary positions on family dynamics and relationships.
                 </p>
               </div>
             </div>
@@ -916,7 +883,7 @@ console.log("propertyByapartmentType",propertyByapartmentType);
           <div className={` ${styles.faqLeft}`}>
             <Accordion collapseAll className="border-none">
               {faqData?.data?.map((item, index) => (
-                <Accordion.Panel className= {`${styles.faqItemMainBox}`} key={index}>
+                <Accordion.Panel className={`${styles.faqItemMainBox}`} key={index}>
                   <Accordion.Title
                     className={` ${styles.faqItemMain} rounded-t-md text-white bg-blue-700 hover:bg-blue-700
                       focus:border-none focus:ring-grey-0 focus:ring-0`}
@@ -938,61 +905,61 @@ console.log("propertyByapartmentType",propertyByapartmentType);
                 Ask a different question
               </h2>
               <div className={`${styles.agentRightMainFormContext}`}>
-              <div className="mb-6">
-                    <input
-                      type="text"
-                      value={Name}
-                      onChange={handleNameChange}
-                      id="Name"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Name"
-                      required
-                    />
-                  </div>
-                  <div className="mb-6">
-                    <input
-                      type="email"
-                      value={Email}
-                      onChange={handleEmailChange}
-                      id="email"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Email"
-                      required
-                    />
-                  </div>
-                  <div className="mb-6">
-                    <input
-                      type="text"
-                      value={MolileNumber}
-                      onChange={handlePhoneChange}
-                      id="Phone"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Phone"
-                      required
-                    />
-                  </div>
-                  <div className="mb-6">
-                    <textarea
-                      type="text"
-                      value={Message}
-                      onChange={handleMessageChange}
-                      id="Message"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Message"
-                      required
-                    />
-                  </div>
-                  <div className="w-full flex justify-center">
+                <div className="mb-6">
+                  <input
+                    type="text"
+                    value={Name}
+                    onChange={handleNameChange}
+                    id="Name"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Name"
+                    required
+                  />
+                </div>
+                <div className="mb-6">
+                  <input
+                    type="email"
+                    value={Email}
+                    onChange={handleEmailChange}
+                    id="email"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Email"
+                    required
+                  />
+                </div>
+                <div className="mb-6">
+                  <input
+                    type="text"
+                    value={MolileNumber}
+                    onChange={handlePhoneChange}
+                    id="Phone"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Phone"
+                    required
+                  />
+                </div>
+                <div className="mb-6">
+                  <textarea
+                    type="text"
+                    value={Message}
+                    onChange={handleMessageChange}
+                    id="Message"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Message"
+                    required
+                  />
+                </div>
+                <div className="w-full flex justify-center">
                   <button
                     className={` ${styles.agentRightMainContenBtn} text-white bg-blue-700 h-12 w-50 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-50 sm:w-50 px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
                     type="button"
                     onClick={addEnquiryData}
-                    >
+                  >
                     Send
 
                   </button>
-                  </div>
                 </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1105,7 +1072,7 @@ console.log("propertyByapartmentType",propertyByapartmentType);
           ))}
         </Slider> */}
         {
-            testimonialData?.data?.length>0 ? <MultiCarousel UI={Testimonial} /> : null
+          testimonialData?.data?.length > 0 ? <MultiCarousel UI={Testimonial} /> : null
         }
       </div>
 
@@ -1147,34 +1114,34 @@ console.log("propertyByapartmentType",propertyByapartmentType);
 
         {blogData ? (
           <div className="flex flex-wrap">
-          {blogData?.data?.map((item, index) => (
-            <div
-             key={index}
-              className={` ${styles.populerPropertiesBox} border border-gray-300 rounded-md`}
-            >
-              <div>
+            {blogData?.data?.map((item, index) => (
+              <div
+                key={index}
+                className={` ${styles.populerPropertiesBox} border border-gray-300 rounded-md`}
+              >
                 <div>
-                  <img
-                    className={` ${styles.populerPropertiesBoxImg} rounded-md`}
-                    src="/img/black-wallpaper-1.jpg"
-                    alt=""
-                  />
+                  <div>
+                    <img
+                      className={` ${styles.populerPropertiesBoxImg} rounded-md`}
+                      src="/img/black-wallpaper-1.jpg"
+                      alt=""
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="p-4">
-                <div className={` ${styles.populerPropertiesLocationMain} flex`}>
-                  <p className={`text-gray-700`}>{item?.BlogType?.Type}</p>
-                </div>
-                <h2 className={` ${styles.populerPropertiesBoxHead}`}>
-                  {item.Title}
-                </h2>
+                <div className="p-4">
+                  <div className={` ${styles.populerPropertiesLocationMain} flex`}>
+                    <p className={`text-gray-700`}>{item?.BlogType?.Type}</p>
+                  </div>
+                  <h2 className={` ${styles.populerPropertiesBoxHead}`}>
+                    {item.Title}
+                  </h2>
 
-                <p className={` ${styles.blogContentText}`}>
-                 {item.Description}
-                </p>
+                  <p className={` ${styles.blogContentText}`}>
+                    {item.Description}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
           </div>
         ) : <SkeletonLoader />}
       </div>
@@ -1184,7 +1151,7 @@ console.log("propertyByapartmentType",propertyByapartmentType);
           <div className={`${styles.blogContentMain}`}>
             <h2 className={`${styles.blogContentHead}`}>Get Your Dream Home</h2>
             <p className={`${styles.blogContentText}`}>
-            Your Dream Home Journey Begins Now: Dive Into Our Wealth of Options and Turn Your Dreams into Reality
+              Your Dream Home Journey Begins Now: Dive Into Our Wealth of Options and Turn Your Dreams into Reality
             </p>
             <button
               className={` ${styles.blogMainContenBtn} text-blue bg-white-700 h-12 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
@@ -1220,7 +1187,7 @@ console.log("propertyByapartmentType",propertyByapartmentType);
         </div>
       </div>
       <Footer />
-       <Modal dismissible className="bg-transparent/[.5]" show={openModal} onClose={onResetValue}>
+      <Modal dismissible className="bg-transparent/[.8]" show={openModal} onClose={onResetValue}>
         <Modal.Header>Properties by <span className="blueText">Zodiac</span></Modal.Header>
         <Modal.Body>
           <div className={`${styles.ModalContent}`}>

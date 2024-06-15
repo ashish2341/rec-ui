@@ -290,7 +290,7 @@ export default function Users() {
         onConfirm={handleDelete}
         onCancel={handleCancel}
       />
-      <Modal dismissible className={`bg-transparent/[.5] ${styles.ModalContent} `} size="7xl" show={openModal} onClose={() => setOpenModal(false)}>
+      <Modal dismissible className={`bg-transparent/[.8] ${styles.ModalContent} `} size="7xl" show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Header>User Details</Modal.Header>
         <Modal.Body className={`${styles.ModalContent}`}  >
         {listUserData ?

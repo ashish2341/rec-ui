@@ -1130,19 +1130,22 @@ const PropertyDetail = ({ params }) => {
                     <AccordionTitle>Amenities</AccordionTitle>
                     {listPropertiesData ? (
                       <AccordionContent
-                        className={`${styles.AccordionContent}`}
+                        className={` ${styles.AccordionContent}`}
                       >
+                        <div className="grid grid-cols-5 gap-2">
                         {listPropertiesData?.Aminities?.map((item, index) => (
-                          <div key={index} className="p-4">
+                          <div key={index} className=" p-4">
                             <img
                               className={`${styles.amenitiesIconBox}`}
                               src={item.Icon}
                               width="22"
                               height="22"
                             />
-                            <p className="wrap text-center">{item.Aminity}</p>
+                            <p className="wrap text-center text-sm pt-2">{item.Aminity}</p>
                           </div>
                         ))}
+                        </div>
+                        
                       </AccordionContent>
                     ) : (
                       <div className={`${styles.loaderSize}`}>
@@ -1153,6 +1156,7 @@ const PropertyDetail = ({ params }) => {
                   <AccordionPanel>
                     <AccordionTitle>Features</AccordionTitle>
                     <AccordionContent className={`${styles.AccordionContent}`}>
+                      <div className="grid grid-cols-5 gap-2">
                       {listPropertiesData?.Features?.map((item, index) => (
                         <div key={index} className="p-4 justify-between">
                           <img
@@ -1161,9 +1165,11 @@ const PropertyDetail = ({ params }) => {
                             width="22"
                             height="22"
                           />
-                          <p className="wrap text-center">{item.Feature}</p>
+                          <p className="wrap text-center text-sm pt-2">{item.Feature}</p>
                         </div>
                       ))}
+                      </div>
+                      
                     </AccordionContent>
                   </AccordionPanel>
                 </Accordion>
@@ -1264,6 +1270,7 @@ const PropertyDetail = ({ params }) => {
                           <AccordionContent
                             className={`${styles.AccordionContent}`}
                           >
+                            {listPropertiesData?.Fitting ? ( <div>
                             {listPropertiesData?.Fitting?.Electrical ?
                               <div className="mr-6 p-4">
                                 <span className="mb-2 text-gray-500 dark:text-gray-400 text-sm">
@@ -1311,6 +1318,9 @@ const PropertyDetail = ({ params }) => {
                                   {listPropertiesData?.Fitting?.Windows}
                                 </p>
                               </div> : null}
+                            </div>):(  <h1 className={` ${styles.noDataHead}`}>No Data Found</h1>)}
+                           
+                           
                           </AccordionContent>
                         ) : (
                           <LoadingText />

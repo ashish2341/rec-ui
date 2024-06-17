@@ -252,7 +252,7 @@ export default function Dashboard() {
                                                 </div>
                                             </Link>
                                             <div className="text-nowrap" >
-                                                <Link href={`/users?TodayUser=Yes`} className={`${styles.InvertedUserColor}`}>
+                                                <Link href={`/users?todayUser=yes`} className={`${styles.InvertedUserColor} hover:underline`}>
                                                     <p className={`text-2xl font-bold mt-4  ${styles.UserColor} `}>
 
                                                         {adminDashboardData?.todayUsers}{" "}
@@ -260,7 +260,7 @@ export default function Dashboard() {
 
                                                     </p>
                                                 </Link>
-                                                <Link href="/users" className={`${styles.InvertedUserColor}`}>
+                                                <Link href={`/users?type=builder`} className={`${styles.InvertedUserColor} hover:underline`}>
                                                     <p className={`text-2xl font-bold mt-4  ${styles.UserColor} `}>
 
                                                         {adminDashboardData?.totalBuilder}{" "}
@@ -298,14 +298,14 @@ export default function Dashboard() {
                                                 </div>
                                             </Link>
                                             <div>
-                                                <Link href="/builder">
-                                                    <p className={`text-2xl font-bold mt-4 ${styles.builderColor} `}>
+                                                <Link href={`/builder?todayBuilder=yes`}>
+                                                    <p className={`text-2xl font-bold mt-4 ${styles.builderColor} hover:underline`}>
                                                         {adminDashboardData?.todayAddBuilder}{" "}
                                                         <span className={`font-normal `}>Today Joined Builder </span>
                                                     </p>
                                                 </Link>
-                                                <Link href="/builder">
-                                                    <p className={`text-2xl font-bold mt-4 ${styles.builderColor} `}>
+                                                <Link href={`/property?type=builder`}>
+                                                    <p className={`text-2xl font-bold mt-4 ${styles.builderColor} hover:underline`}>
                                                         {adminDashboardData?.totalBuilderProperty}{" "}
                                                         <span className={`font-normal `}>Total Builder Property</span>
 
@@ -344,8 +344,8 @@ export default function Dashboard() {
                                         </div>
                                     </Link>
                                     <div>
-                                        <Link href="/property">
-                                            <p className={`text-2xl font-bold ${styles.PropColor} `}>
+                                        <Link href={`/property?todayProperty=yes`}>
+                                            <p className={`text-2xl font-bold ${styles.PropColor} hover:underline`}>
 
                                                 {roles.includes("Admin")
                                                     ? adminDashboardData?.todayAddProperty
@@ -356,7 +356,7 @@ export default function Dashboard() {
                                         </Link>
                                         {roles.includes("Admin") ?
                                             <Link href="/reviewProperty">
-                                                <p className={`text-2xl font-bold ${styles.PropColor} `}>
+                                                <p className={`text-2xl font-bold ${styles.PropColor} hover:underline`}>
 
                                                         {adminDashboardData?.underReviewProperty}{" "}
                                                     <span className={`font-normal `}>Under Review Property </span>
@@ -364,8 +364,8 @@ export default function Dashboard() {
                                                 </p>
                                             </Link>
                                             :
-                                            <Link href="/property">
-                                                <p className={`text-2xl font-bold ${styles.PropColor} `}>
+                                            <Link href="/property?showValue=false">
+                                                <p className={`text-2xl font-bold ${styles.PropColor} hover:underline`}>
 
                                                     {builderDashboardData?.underReviewProperty}{" "}
                                                     <span className={`font-normal `}>Under Review Property </span>
@@ -373,16 +373,26 @@ export default function Dashboard() {
                                                 </p>
                                             </Link>
                                         }
-                                        <Link href="/property">
-                                            <p className={`text-2xl font-bold ${styles.PropColor} `}>
+                                        {roles.includes("Admin") ?
+                                            <Link href="/property">
+                                            <p className={`text-2xl font-bold ${styles.PropColor} hover:underline`}>
 
-                                                {roles.includes("Admin")
-                                                    ? adminDashboardData?.approvedProperty
-                                                    : builderDashboardData?.approvedProperty}{" "}
+                                                {adminDashboardData?.approvedProperty}
                                                 <span className={`font-normal `}>Approved Property </span>
 
                                             </p>
                                         </Link>
+                                            :
+                                            <Link href="/property?showValue=true">
+                                                <p className={`text-2xl font-bold ${styles.PropColor} hover:underline`}>
+
+                                                    {builderDashboardData?.approvedProperty}{" "}
+                                                    <span className={`font-normal `}>Approved Property </span>
+
+                                                </p>
+                                            </Link>
+                                        }
+                                        
                                     </div>
                                 </div>
                             </Card>
@@ -415,9 +425,9 @@ export default function Dashboard() {
                                         </div>
                                     </Link>
                                     <div>
-                                        <Link href={`/projectInquiry?todayValue=Yes`} >
+                                        <Link href={`/projectInquiry?todayEnquiry=yes`} >
 
-                                            <p className={`text-2xl font-bold ${styles.EnqColor} `}>
+                                            <p className={`text-2xl font-bold ${styles.EnqColor} hover:underline `}>
 
                                                 {roles.includes("Admin")
                                                     ? adminDashboardData?.todayEnquiry
@@ -427,7 +437,7 @@ export default function Dashboard() {
                                         </Link>
                                         <Link href={`/projectInquiry?type=Astrology`}>
 
-                                            <p className={`text-2xl font-bold mt-2 ${styles.EnqColor} `}>
+                                            <p className={`text-2xl font-bold mt-2 ${styles.EnqColor} hover:underline `}>
 
                                                 {roles.includes("Admin")
                                                     ? adminDashboardData?.totalEnquiryAstrology
@@ -437,7 +447,7 @@ export default function Dashboard() {
                                         </Link>
                                         <Link href={`/projectInquiry?type=ContactUs`}>
 
-                                            <p className={`text-2xl font-bold mt-2 ${styles.EnqColor} `}>
+                                            <p className={`text-2xl font-bold mt-2 ${styles.EnqColor} hover:underline`}>
 
                                                 {roles.includes("Admin")
                                                     ? adminDashboardData?.totalEnquiryContactUs
@@ -447,7 +457,7 @@ export default function Dashboard() {
                                         </Link>
                                         <Link href={`/projectInquiry?type=Property`}>
 
-                                            <p className={`text-2xl font-bold mt-2 ${styles.EnqColor} `}>
+                                            <p className={`text-2xl font-bold mt-2 ${styles.EnqColor} hover:underline`}>
 
                                                 {roles.includes("Admin")
                                                     ? adminDashboardData?.totalEnquiryProperty

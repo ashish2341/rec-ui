@@ -8,6 +8,7 @@ export const GetEnquiryByBuilderApi = async (
   page,
   searchData,
   filterType,
+  todayEnquiry,
   setLoading = () => {}
 ) => {
   const token = Cookies.get("token");
@@ -17,7 +18,8 @@ export const GetEnquiryByBuilderApi = async (
     const res = await fetch(
       `${API_BASE_URL}/enquiry/enquiryGetByDeveloperId?page=${page}&pageSize=${PAGE_LIMIT}&search=${
         searchData ? searchData : ""
-      }${filterType ? `&filter=${filterType}` : ""}`,
+      }${filterType ? `&type=${filterType}` : ""}
+      ${todayEnquiry ? `&todayEnquiryString=${todayEnquiry}` : ""}`,
       {
         method: "GET",
         headers: {

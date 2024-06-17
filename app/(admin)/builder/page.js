@@ -7,19 +7,20 @@ import { ToastContainer, toast } from "react-toastify";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
 import { DeleteBuilderApi } from "@/api-functions/builder/deleteBuilder";
 
-export default function Builder() {
+export default function Builder(params) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [listData, setListData] = useState(false);
   const [deleteId, setDeleteId] = useState();
   const [page, setPage] = useState(1);
   const [searchData, setSearchData] = useState("");
+  const todayBuilder = params.searchParams.todayBuilder;
 
   useEffect(() => {
     getAllBuilder();
   }, [page, searchData]);
   
   const getAllBuilder = async () => {
-    let builder = await GetBuilderApi(page, searchData);
+    let builder = await GetBuilderApi(page, searchData, todayBuilder);
     if (builder?.resData?.success == true) {
       setListData(builder?.resData);
       toast.success(builder?.resData?.message);

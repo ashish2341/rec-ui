@@ -17,7 +17,7 @@ import { Table, Card } from "flowbite-react";
 import { useRouter } from 'next/navigation';
 
 
-export default function Users() {
+export default function Users(params) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [listData, setListData] = useState(false);
   const [listPropData, setListPropData] = useState();
@@ -30,14 +30,16 @@ export default function Users() {
   const [isSubmitClicked,setIsSubmitClicked]=useState(0)
   const [openModal, setOpenModal] = useState(false);
   const router = useRouter();
+  const todayUser = params.searchParams.todayUser;
 
   useEffect(() => {
     getAllUser();
     getUserDetails();
 }, [page, searchData ,isSubmitClicked, userId]);
 
+console.log("todayValue",todayUser)
   const getAllUser = async () => {
-    let users = await GetUserApi(page, searchData);
+    let users = await GetUserApi(page, searchData, todayUser);
     if (users?.resData?.success == true) {
       setListData(users?.resData);
       toast.success(users?.resData?.message);

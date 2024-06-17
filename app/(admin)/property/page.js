@@ -18,7 +18,7 @@ import ReadMore from "@/components/common/readMore";
 import Accordion from "@/components/common/accodion";
 import { Carousel } from "flowbite-react";
 
-export default function Property() {
+export default function Property(params) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
   const roles = roleData && JSON.parse(roleData);
@@ -47,8 +47,20 @@ export default function Property() {
     }
     // getAllProperties();
   }, [page, searchData]);
+
+  console.log("params",params);
+  let todayProperty = "";
+  let type = "";
+  if(params?.searchParams?.type){
+    console.log("todayProperty",todayProperty)
+   type = params?.searchParams?.type;
+  }else {
+    todayProperty=  params?.searchParams?.todayProperty;
+  }
+  
+
   const getAllProperties = async () => {
-    let properties = await GetPropertyApi(page, searchData);
+    let properties = await GetPropertyApi(page, searchData, type, todayProperty);
     if (properties?.resData?.success == true) {
       setListData(properties?.resData);
       toast.success(properties?.resData?.message);
@@ -58,8 +70,9 @@ export default function Property() {
       return false;
     }
   };
+  const showValue1 = params?.searchParams?.showValue;
   const getAllPropertiesByBuilder = async (showValue) => {
-    let properties = await GetPropertyBybuilderApi(page, searchData, showValue);
+    let properties = await GetPropertyBybuilderApi(page, searchData,showValue ?  showValue : showValue1, type, todayProperty);
     if (properties?.resData?.success == true) {
       setListData(properties?.resData);
       toast.success(properties?.resData?.message);

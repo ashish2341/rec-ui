@@ -47,19 +47,19 @@ export default function ProjectInquiry(params) {
     if (roles.includes("Admin")) {
       getAllEnquiry(typeOnButton);
     } else {
-      getAllEnquiryByBuilder(filterData);
+      getAllEnquiryByBuilder(typeOnButton);
     }
   }, [page, searchData, isSubmitClicked, isDeleted, toDate]);
 
   const getAllEnquiry = async (filterType) => {
-    const todayValue = params.searchParams.todayValue;
+    const todayEnquiry = params.searchParams.todayEnquiry;
     let enquiries = await GetEnquiryApi(
       page,
       searchData,
       filterType,
       fromDate,
       toDate,
-      todayValue
+      todayEnquiry
     );
     if (enquiries?.resData?.success == true) {
       setListData(enquiries?.resData);
@@ -71,7 +71,8 @@ export default function ProjectInquiry(params) {
     }
   };
   const getAllEnquiryByBuilder = async (filterType) => {
-    let enquiries = await GetEnquiryByBuilderApi(page, searchData, filterType);
+    const todayEnquiry = params.searchParams.todayEnquiry;
+    let enquiries = await GetEnquiryByBuilderApi(page, searchData, filterType, todayEnquiry);
     if (enquiries?.resData?.success == true) {
       setListData(enquiries?.resData);
       toast.success(enquiries?.resData?.message);
@@ -182,7 +183,7 @@ export default function ProjectInquiry(params) {
                     fileName={"AlertAttendanceData"}
                   />
                 ) : null}
-                {roles.includes("Admin") && (
+                {listData ? (
                    <li className="me-2 list-none relative"> {/* Ensure relative positioning */}
                    <button
                      id="dropdownPossessionButton"
@@ -229,7 +230,7 @@ export default function ProjectInquiry(params) {
                      </ul>
                    </div>
                  </li>
-                )}
+                ) : null}
               </div>
 
               <div className="relative">

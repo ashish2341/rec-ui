@@ -146,12 +146,14 @@ export default function PossessionDetailsPage({
         Brochure: brochure,
         PaymentPlan: paymentPlan,
         FloorPlan: floorPlan,
-      
       };
-      if (PropertyStatusValue.Status != "Under Contruction" && propertTypWithSubTypeValue !=="Plot") {
-        fifthPropertyData.AgeofProperty = ageofProperty ? ageofProperty: null ;
+      if (
+        PropertyStatusValue.Status != "Under Contruction" &&
+        propertTypWithSubTypeValue !== "Plot"
+      ) {
+        fifthPropertyData.AgeofProperty = ageofProperty ? ageofProperty : null;
       }
-     
+
       console.log("fifthPropertyData", fifthPropertyData);
       const localStorageData = JSON.parse(
         sessionStorage.getItem("EditPropertyData")
@@ -257,6 +259,19 @@ export default function PossessionDetailsPage({
   const isImage = (url) => {
     return url.match(/\.(jpeg|jpg|png)$/);
   };
+  const removeFloorPlan = () => {
+    setFloorPlan("")
+    if (floorPlanInputRef.current) {
+      floorPlanInputRef.current.value = "";
+    }
+  }
+  const removePaymentPlan = () => {
+    setPaymentPlan("")
+    if (paymentPlanInputRef.current) {
+      paymentPlanInputRef.current.value = "";
+    }
+  }
+ 
   return (
     <>
       <div className="grid gap-4 mb-4 sm:grid-cols-1">
@@ -273,24 +288,7 @@ export default function PossessionDetailsPage({
               changeState={setPosessionStatus}
             />
           )}
-        {/* {posessionStatus == "Infuture" && (
-          <div>
-            <label
-              htmlFor="posessionDate"
-              className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
-            >
-              Posession Date
-            </label>
-            <input
-              type="date"
-              name="posessionDate"
-              id="posessionDate"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              value={posessionDate}
-              onChange={(e) => setPosessionDate(e.target.value)}
-            />
-          </div>
-        )} */}
+      
         {possessionStatusArray &&
           posessionStatusData &&
           propertTypWithSubTypeValue != "Plot" && (
@@ -411,16 +409,38 @@ export default function PossessionDetailsPage({
                   <div className="flex flex-wrap relative mt-3">
                     <div className="mr-4 mb-4 relative">
                       {isImage(paymentPlan) ? (
-                        <img
-                          src={paymentPlan}
-                          alt="Selected Pyment Plan"
-                          className="h-48 w-64 border border-black rounded-lg"
-                        />
+                        <>
+                          <img
+                            src={paymentPlan}
+                            alt="Selected Pyment Plan"
+                            className="h-48 w-64 border border-black rounded-lg"
+                          />
+                          <button
+                            className="absolute top-0 right-0 p-1"
+                            onClick={() => removePaymentPlan()}
+                          >
+                            <i
+                              className="bi bi-x-circle-fill"
+                              style={{ color: "red" }}
+                            ></i>
+                          </button>
+                        </>
                       ) : (
-                        <iframe
-                          src={paymentPlan}
-                          className="h-48 w-64 border border-black rounded-lg"
-                        />
+                        <>
+                          <iframe
+                            src={paymentPlan}
+                            className="h-48 w-64 border border-black rounded-lg"
+                          />
+                          <button
+                            className="absolute top-0 right-5 p-1"
+                            onClick={() => removePaymentPlan()}
+                          >
+                            <i
+                              className="bi bi-x-circle-fill"
+                              style={{ color: "red" }}
+                            ></i>
+                          </button>
+                        </>
                       )}
                     </div>
                   </div>
@@ -456,16 +476,38 @@ export default function PossessionDetailsPage({
                   <div className="flex flex-wrap relative mt-3">
                     <div className="mr-4 mb-4 relative">
                       {isImage(floorPlan) ? (
-                        <img
-                          src={floorPlan}
-                          alt="Selected Floor Plan"
-                          className="h-48 w-64 border border-black rounded-lg"
-                        />
+                        <>
+                          <img
+                            src={floorPlan}
+                            alt="Selected Floor Plan"
+                            className="h-48 w-64 border border-black rounded-lg"
+                          />
+                          <button
+                            className="absolute top-0 right-0 p-1"
+                            onClick={() => removeFloorPlan()}
+                          >
+                            <i
+                              className="bi bi-x-circle-fill"
+                              style={{ color: "red" }}
+                            ></i>
+                          </button>
+                        </>
                       ) : (
-                        <iframe
-                          src={floorPlan}
-                          className="h-48 w-64 border border-black rounded-lg"
-                        />
+                        <>
+                          <iframe
+                            src={floorPlan}
+                            className="h-48 w-64 border border-black rounded-lg"
+                          />
+                          <button
+                            className="absolute top-0 right-5 p-1"
+                            onClick={() => removeFloorPlan()}
+                          >
+                            <i
+                              className="bi bi-x-circle-fill"
+                              style={{ color: "red" }}
+                            ></i>
+                          </button>
+                        </>
                       )}
                     </div>
                   </div>

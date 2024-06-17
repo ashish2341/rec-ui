@@ -26,7 +26,7 @@ export default function FeaturesDetailsForm({
     valueForNext(value);
   };
   const stepperArray = [
-    { name: "Aminities", number: 1 },
+    { name: "Amenities", number: 1 },
     { name: "Features", number: 2 },
   ];
   return (

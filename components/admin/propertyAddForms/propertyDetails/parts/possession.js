@@ -253,7 +253,18 @@ export default function PossessionDetailsPage({
   const isImage = (url) => {
     return url.match(/\.(jpeg|jpg|png)$/);
   };
-  
+  const removeFloorPlan = () => {
+    setFloorPlan("")
+    if (floorPlanInputRef.current) {
+      floorPlanInputRef.current.value = "";
+    }
+  }
+  const removePaymentPlan = () => {
+    setPaymentPlan("")
+    if (paymentPlanInputRef.current) {
+      paymentPlanInputRef.current.value = "";
+    }
+  }
   return (
     <>
       <div className="grid gap-4 mb-4 sm:grid-cols-1">
@@ -383,7 +394,7 @@ export default function PossessionDetailsPage({
             />
             {paymentPlanLoader && <LoaderForMedia />}
             <div>
-              {paymentPlan ? (
+            {paymentPlan ? (
                 <div>
                   <div className="ml-2 mt-3 underline font-bold">
                     <h3>Selected Pyment Plan</h3>
@@ -391,16 +402,38 @@ export default function PossessionDetailsPage({
                   <div className="flex flex-wrap relative mt-3">
                     <div className="mr-4 mb-4 relative">
                       {isImage(paymentPlan) ? (
-                        <img
-                          src={paymentPlan}
-                          alt="Selected Pyment Plan"
-                          className="h-48 w-64 border border-black rounded-lg"
-                        />
+                        <>
+                          <img
+                            src={paymentPlan}
+                            alt="Selected Pyment Plan"
+                            className="h-48 w-64 border border-black rounded-lg"
+                          />
+                          <button
+                            className="absolute top-0 right-0 p-1"
+                            onClick={() => removePaymentPlan()}
+                          >
+                            <i
+                              className="bi bi-x-circle-fill"
+                              style={{ color: "red" }}
+                            ></i>
+                          </button>
+                        </>
                       ) : (
-                        <iframe
-                          src={paymentPlan}
-                          className="h-48 w-64 border border-black rounded-lg"
-                        />
+                        <>
+                          <iframe
+                            src={paymentPlan}
+                            className="h-48 w-64 border border-black rounded-lg"
+                          />
+                          <button
+                            className="absolute top-0 right-5 p-1"
+                            onClick={() => removePaymentPlan()}
+                          >
+                            <i
+                              className="bi bi-x-circle-fill"
+                              style={{ color: "red" }}
+                            ></i>
+                          </button>
+                        </>
                       )}
                     </div>
                   </div>
@@ -428,7 +461,7 @@ export default function PossessionDetailsPage({
             />
             {floorPlanLoader && <LoaderForMedia />}
             <div>
-              {floorPlan ? (
+            {floorPlan ? (
                 <div>
                   <div className="ml-2 mt-3 underline font-bold">
                     <h3>Selected Floor Plan</h3>
@@ -436,16 +469,38 @@ export default function PossessionDetailsPage({
                   <div className="flex flex-wrap relative mt-3">
                     <div className="mr-4 mb-4 relative">
                       {isImage(floorPlan) ? (
-                        <img
-                          src={floorPlan}
-                          alt="Selected Floor Plan"
-                          className="h-48 w-64 border border-black rounded-lg"
-                        />
+                        <>
+                          <img
+                            src={floorPlan}
+                            alt="Selected Floor Plan"
+                            className="h-48 w-64 border border-black rounded-lg"
+                          />
+                          <button
+                            className="absolute top-0 right-0 p-1"
+                            onClick={() => removeFloorPlan()}
+                          >
+                            <i
+                              className="bi bi-x-circle-fill"
+                              style={{ color: "red" }}
+                            ></i>
+                          </button>
+                        </>
                       ) : (
-                        <iframe
-                          src={floorPlan}
-                          className="h-48 w-64 border border-black rounded-lg"
-                        />
+                        <>
+                          <iframe
+                            src={floorPlan}
+                            className="h-48 w-64 border border-black rounded-lg"
+                          />
+                          <button
+                            className="absolute top-0 right-5 p-1"
+                            onClick={() => removeFloorPlan()}
+                          >
+                            <i
+                              className="bi bi-x-circle-fill"
+                              style={{ color: "red" }}
+                            ></i>
+                          </button>
+                        </>
                       )}
                     </div>
                   </div>

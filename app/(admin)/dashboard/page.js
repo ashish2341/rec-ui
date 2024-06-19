@@ -128,21 +128,21 @@ export default function Dashboard() {
                         label: 'Property',
                         data: getPrevious12Months().map(prevMonth => propertyData.find(mObj => mObj.month == prevMonth)?.count ?? 0),
                         fill: false,
-                        borderColor: 'rgba(33, 156, 144, 1)',
+                        borderColor: '#7526ec',
                         tension: 0.1
                     },
                     {
                         label: 'User',
                         data: getPrevious12Months().map(prevMonth => userData.find(mObj => mObj.month == prevMonth)?.count ?? 0),
                         fill: false,
-                        borderColor: 'rgba(232, 175, 9, 1)',
+                         borderColor: '#e8af09',
                         tension: 0.1
                     },
                     {
                         label: 'Enquiry',
                         data: getPrevious12Months().map(prevMonth => EnquiryData.find(mObj => mObj.month == prevMonth)?.count ?? 0),
                         fill: false,
-                        borderColor: 'rgba(34, 112, 190, 1)',
+                        borderColor: '#f07b27',
                         tension: 0.1
                     }]
                 };
@@ -155,14 +155,14 @@ export default function Dashboard() {
                             // data: [1, 2, 3, 4],
                             data:  getPrevious12Months().map( prevMonth => propertyBuilderData.find( mObj => mObj.month==prevMonth)?.count ?? 0 ),
                             fill: false,
-                            borderColor: 'rgba(33, 156, 144, 1)',
+                            borderColor: '#7526ec',
                             tension: 0.1
                         },
                         {
                             label: 'Enquiry',
                             data: getPrevious12Months().map(prevMonth => EnquiryBuilderData.find(mObj => mObj.month == prevMonth)?.count ?? 0),
                             fill: false,
-                            borderColor: 'rgba(34, 112, 190, 1)',
+                            borderColor: '#f07b27',
                             tension: 0.1
                         }]
                 };
@@ -243,17 +243,19 @@ export default function Dashboard() {
                                                         <div className={`${styles.IconOutline}`} >
                                                             <i className={`bi bi-file-earmark-person text-4xl ${styles.IconsColor}`} aria-hidden="true"></i>
                                                         </div>
-
+                                                        <div className={`${styles.firstCard}`}>
                                                         <p className="text-5xl font-bold mt-2">
                                                             {adminDashboardData?.totalUser - 1}
                                                         </p>
                                                         <p className="text-sm font-semibold mt-2">Total User</p>
+                                                        </div>
+                                                     
                                                     </h2>
                                                 </div>
                                             </Link>
                                             <div className="text-nowrap" >
-                                                <Link href={`/users?todayUser=yes`} className={`${styles.InvertedUserColor} hover:underline`}>
-                                                    <p className={`text-2xl font-bold mt-4  ${styles.UserColor} `}>
+                                                <Link href={`/users?todayUser=yes`} className={`${styles.InvertedUserColor} `}>
+                                                    <p className={`text-2xl font-bold mt-4  ${styles.UserColor} hover:underline `}>
 
                                                         {adminDashboardData?.todayUsers}{" "}
                                                         <span className={`font-normal nowrap `}>Today Joined User </span>
@@ -261,7 +263,7 @@ export default function Dashboard() {
                                                     </p>
                                                 </Link>
                                                 <Link href={`/users?type=builder`} className={`${styles.InvertedUserColor} hover:underline`}>
-                                                    <p className={`text-2xl font-bold mt-4  ${styles.UserColor} `}>
+                                                    <p className={`text-2xl font-bold mt-4  ${styles.UserColor} hover:underline`}>
 
                                                         {adminDashboardData?.totalBuilder}{" "}
                                                         <span className={`font-normal nowrap `}> Builder</span>
@@ -290,10 +292,13 @@ export default function Dashboard() {
                                                         <div className={`${styles.Icon2Outline}`} >
                                                             <i className={`bi bi-file-earmark-person text-4xl ${styles.Icons2Color}`} aria-hidden="true"></i>
                                                         </div>
+                                                        <div className={`${styles.secondCard}`}>
                                                         <p className="text-5xl font-bold mt-2">
                                                             {adminDashboardData?.totalBuilder}
                                                         </p>
                                                         <p className="text-sm font-semibold mt-2">Total Builder</p>
+                                                        </div>
+                                                     
                                                     </h2>
                                                 </div>
                                             </Link>
@@ -334,12 +339,15 @@ export default function Dashboard() {
                                                 <div className={`${styles.Icon3Outline}`} >
                                                     <i className={`bi bi-house text-4xl ${styles.Icons3Color}`} aria-hidden="true"></i>
                                                 </div>
+                                                <div className={`${styles.propertyCard}`}>
                                                 <p className="text-5xl font-bold mt-2">
                                                     {roles.includes("Admin")
                                                         ? adminDashboardData?.totalProperty
                                                         : builderDashboardData?.totalProperty}
                                                 </p>
                                                 <p className="text-sm font-semibold mt-2">Total Property</p>
+                                                </div >
+                                               
                                             </h2>
                                         </div>
                                     </Link>
@@ -378,7 +386,7 @@ export default function Dashboard() {
                                             <p className={`text-2xl font-bold ${styles.PropColor} hover:underline`}>
 
                                                 {adminDashboardData?.approvedProperty}
-                                                <span className={`font-normal `}>Approved Property </span>
+                                                <span className={`font-normal `}> Approved Property </span>
 
                                             </p>
                                         </Link>
@@ -387,7 +395,7 @@ export default function Dashboard() {
                                                 <p className={`text-2xl font-bold ${styles.PropColor} hover:underline`}>
 
                                                     {builderDashboardData?.approvedProperty}{" "}
-                                                    <span className={`font-normal `}>Approved Property </span>
+                                                    <span className={`font-normal `}> Approved Property </span>
 
                                                 </p>
                                             </Link>
@@ -415,12 +423,15 @@ export default function Dashboard() {
                                                 <div className={`${styles.IconOutline}`} >
                                                     <i className={`bi bi-chat-square-text text-4xl ${styles.Icons4Color}`} aria-hidden="true"></i>
                                                 </div>
+                                                <div className={`${styles.enquiryCard}`}>
                                                 <p className="text-5xl font-bold mt-2">
                                                     {roles.includes("Admin")
                                                         ? adminDashboardData?.totalEnquiry
                                                         : builderDashboardData?.totalEnquiry}
                                                 </p>
                                                 <p className="text-sm font-semibold mt-2">Total Enquiry</p>
+                                                </div >
+                                                
                                             </h2>
                                         </div>
                                     </Link>

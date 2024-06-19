@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER ,currentPage} from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
@@ -13,7 +13,9 @@ import ContinueButton from "@/components/common/propertyContinueButton/continueB
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
 import NumberInput from "@/components/common/admin/numberInput/numberInput";
 import { conditionalArray } from "@/utils/constants";
-export default function FinancialDetailsPage({ setPropertyPageValue }) {
+import EditedTag from "@/components/common/admin/editedTag/editedTag";
+export default function FinancialDetailsPage({ setPropertyPageValue,editedKeysfromMain,
+  pageNamefromMain, }) {
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("EditPropertyData")
   );
@@ -170,7 +172,7 @@ console.log("preleased button value ",preReleasedBtn)
       }
       const fourthPropertyData = {
         TotalPrice: {
-          DisplayValue: `${startPrice} ${priceUnit?.minPriceUnit?.value} - ${endPrice} ${priceUnit?.maxPriceUnit?.value}`,
+          DisplayValue: `${parseFloat(startPrice).toFixed(2)} ${priceUnit?.minPriceUnit?.value} - ${parseFloat(endPrice).toFixed(2)} ${priceUnit?.maxPriceUnit?.value}`,
           MinValue:minValue, 
           MaxValue:maxValue, 
           MinPriceUnit: priceUnit?.minPriceUnit?.value,
@@ -223,15 +225,17 @@ console.log("preleased button value ",preReleasedBtn)
     
       <div className="grid gap-4 mb-4 sm:grid-cols-2">
         {/* Start Price */}
-        <div class="w-full mx-auto">
+        <div className="w-full mx-auto">
           <div>
             <label
               for="search-dropdown"
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
             >
               Start Price
+              { (editedKeysfromMain?.includes("TotalPrice.MinValue") || editedKeysfromMain?.includes("TotalPrice.MinPriceUnit") ) && pageNamefromMain===currentPage && (<EditedTag/>) } 
+
             </label>
-            <div class="relative w-full">
+            <div className="relative w-full">
               <input
                 type="number"
                 name="startPrice"
@@ -264,15 +268,17 @@ console.log("preleased button value ",preReleasedBtn)
           </div>
         </div>
         {/* End Price */}
-        <div class="w-full mx-auto">
+        <div className="w-full mx-auto">
           <div>
             <label
               for="search-dropdown"
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
             >
               End Price
+              { (editedKeysfromMain?.includes("TotalPrice.MaxValue") || editedKeysfromMain?.includes("TotalPrice.MaxPriceUnit") ) && pageNamefromMain===currentPage && (<EditedTag/>) } 
+
             </label>
-            <div class="relative w-full">
+            <div className="relative w-full">
               <input
                 type="number"
                 name="endPrice"
@@ -311,6 +317,10 @@ console.log("preleased button value ",preReleasedBtn)
           itemArray={conditionalArray}
           activeBtnvalue={isNegotiable}
           changeState={setIsNegotiable}
+          changedKeyArray={editedKeysfromMain}
+              showPageName={pageNamefromMain}
+              currentPageName={currentPage}
+              specifiedKey={"IsNegotiable"}
         />
         {propertTypeValue == "Commercial" &&
           propertTypWithSubTypeValue == "Office" && (
@@ -321,6 +331,10 @@ console.log("preleased button value ",preReleasedBtn)
               itemArray={conditionalArray}
               activeBtnvalue={dgUpsCharge}
               changeState={setDgUpsCharge}
+              changedKeyArray={editedKeysfromMain}
+              showPageName={pageNamefromMain}
+              currentPageName={currentPage}
+              specifiedKey={"DgUpsCharge"}
             />
           )}
         {propertTypeValue == "Commercial" && PropertyForValue == "Sell" && (
@@ -330,6 +344,10 @@ console.log("preleased button value ",preReleasedBtn)
             itemArray={conditionalArray}
             activeBtnvalue={taxCharge}
             changeState={setTaxCharge}
+            changedKeyArray={editedKeysfromMain}
+              showPageName={pageNamefromMain}
+              currentPageName={currentPage}
+              specifiedKey={"TaxCharge"}
           />
         )}
       </div>
@@ -343,6 +361,10 @@ console.log("preleased button value ",preReleasedBtn)
             itemArray={conditionalArray}
             activeBtnvalue={preReleasedBtn}
             changeState={setPreReleasedBtn}
+            changedKeyArray={editedKeysfromMain}
+              showPageName={pageNamefromMain}
+              currentPageName={currentPage}
+              specifiedKey={"LeasedOrRented"}
           />
 
           {preReleasedBtn === true && (
@@ -351,11 +373,19 @@ console.log("preleased button value ",preReleasedBtn)
                 labelName={" Current Rent per Month"}
                 inputValue={curentRent}
                 dynamicState={setCurrentRent}
+                changedKeyArray={editedKeysfromMain}
+                showPageName={pageNamefromMain}
+                currentPageName={currentPage}
+                specifiedKey={"CurentRent"}
               />
               <NumberInput
                 labelName={" Lease Years"}
                 inputValue={leaseYears}
                 dynamicState={setLeaseYears}
+                changedKeyArray={editedKeysfromMain}
+                showPageName={pageNamefromMain}
+                currentPageName={currentPage}
+                specifiedKey={"LeaseYears"}
               />
             </div>
           )}
@@ -365,6 +395,10 @@ console.log("preleased button value ",preReleasedBtn)
                 labelName={"Expected Return on Investment"}
                 inputValue={expectedReturn}
                 dynamicState={setExpectedReturn}
+                changedKeyArray={editedKeysfromMain}
+                showPageName={pageNamefromMain}
+                currentPageName={currentPage}
+                specifiedKey={"ExpectedReturn"}
               />
             </div>
           )}

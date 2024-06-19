@@ -6,6 +6,7 @@ import Accordion from "@/components/common/accodion";
 import { Carousel } from "flowbite-react";
 import { SharePopUp } from "../sharePopUp/sharePopUp";
 import ContactModal from "../contactModel/contactModal";
+import { API_BASE_URL,imgApiUrl } from "@/utils/constants";
 
 const PropertyListCard = ({ item }) => {
   const [isPopoverOpenforShare, setIsPopoverOpenforShare] = useState(false);
@@ -51,7 +52,7 @@ const PropertyListCard = ({ item }) => {
                       <img
                         className={`${styles.listPropertyImg}`}
                         key={index}
-                        src={itemurl?.URL}
+                        src={`${imgApiUrl}/${itemurl?.URL}`}
                         alt="..."
                       />
                     </Link>
@@ -178,7 +179,8 @@ const PropertyListCard = ({ item }) => {
                 <div className="flex items-center mt-5 mb-2 md:mb-0">
                   <img
                     className={`${styles.cardImage} w-10 h-10 md:w-auto md:h-auto rounded-full`}
-                    src={item?.Builder?.Logo}
+                 
+                    src={`${imgApiUrl}/${item?.Builder?.Logo}`}
                     alt=""
                   />
 

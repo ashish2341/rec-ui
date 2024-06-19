@@ -1,14 +1,15 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER,currentPage } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import Cookies from "js-cookie";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
 import ArrayButtons from "@/components/common/admin/arrayButtons/arrayButtons";
 export default function AmenityPage({
   setPropertyPageValue,
-  setPropertyBackvalue,
+  setPropertyBackvalue,editedKeysfromMain,
+  pageNamefromMain,
 }) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
@@ -68,6 +69,10 @@ export default function AmenityPage({
             labelName={"Amenity"}
             buttonName={"Aminity"}
             setValueinState={setSelectedAmenities}
+            changedKeyArray={editedKeysfromMain}
+                showPageName={pageNamefromMain}
+                currentPageName={currentPage}
+                specifiedKey={"Aminities"}
           />
           <ContinueButton
             modalSubmit={SubmitForm}

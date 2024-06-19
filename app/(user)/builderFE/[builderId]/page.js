@@ -5,7 +5,7 @@ import Navbar from "@/components/common/navbar";
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./builder.module.css"
 import { Dropdown } from "flowbite-react";
-import { API_BASE_URL, API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL, API_BASE_URL_FOR_MASTER,imgApiUrl } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import Link from "next/link";
 import ReadMore from "@/components/common/readMore";
@@ -105,7 +105,8 @@ const BuilderHomePage = (params) => {
                                         width="180"
                                         height="180"
                                         className={` ${styles.builderLogoImg}`}
-                                        src={developData?.data?.Logo}
+                                        src={`${imgApiUrl}/${developData?.data?.Logo}`}
+                                        
                                     />
                                 </div>
                                 <div className={` ${styles.builderAfterImg}`}>
@@ -200,7 +201,7 @@ const BuilderHomePage = (params) => {
                             <Link key={index} href={`/propertyDetail/${item._id}`}>
                                 <div className={` ${styles.builderRightMainBox} flex mb-6 p-4 `}>
                                     <img
-                                        src={item.Images[0].URL}
+                                    src={`${imgApiUrl}/${item.Images[0].URL}`}
                                         className={` ${styles.builderRightImg} mr-3`}
                                     />
                                     <div className={` ${styles.builderRightBox}`} >

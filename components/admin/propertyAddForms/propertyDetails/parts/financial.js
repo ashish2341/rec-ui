@@ -180,7 +180,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
       }
       const fourthPropertyData = {
         TotalPrice: {
-          DisplayValue: `${startPrice} ${priceUnit?.minPriceUnit?.value} - ${endPrice} ${priceUnit?.maxPriceUnit?.value}`,
+          DisplayValue: `${parseFloat(startPrice).toFixed(2)} ${priceUnit?.minPriceUnit?.value} - ${parseFloat(endPrice).toFixed(2)} ${priceUnit?.maxPriceUnit?.value}`,
           MinValue:minValue,
           MaxValue:maxValue,
           MinPriceUnit: priceUnit?.minPriceUnit?.value,
@@ -227,7 +227,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
       
       <div className="grid gap-4 mb-4 sm:grid-cols-2">
          {/* Start Price */}
-        <div class="w-full mx-auto">
+        <div className="w-full mx-auto">
           <div >
             <label
               for="search-dropdown"
@@ -235,7 +235,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
             >
               Start Price
             </label>
-            <div class="relative w-full">
+            <div className="relative w-full">
             <input
               type="number"
               name="startPrice"
@@ -268,7 +268,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
           </div>
         </div>
         {/* End Price */}
-        <div class="w-full mx-auto">
+        <div className="w-full mx-auto">
           <div >
             <label
               for="search-dropdown"
@@ -276,7 +276,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
             >
               End Price
             </label>
-            <div class="relative w-full">
+            <div className="relative w-full">
             <input
               type="number"
               name="endPrice"

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER,currentPage } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import Cookies from "js-cookie";
 import Styles from "../featurepage.module.css";
@@ -11,7 +11,8 @@ import NextButton from "@/components/common/admin/nextButton/nextButton";
 
 export default function FeaturePage({
   valueForNextfromSix,
-  valueForNextPagefromSix,
+  valueForNextPagefromSix,editedKeysfromMain,
+  pageNamefromMain,
 }) {
   // fetching Data for Features
   const { data: featuresData } = useFetch(
@@ -62,6 +63,10 @@ export default function FeaturePage({
         labelName={"Feature"}
         buttonName={"Feature"}
         setValueinState={setSelectedFeatures}
+        changedKeyArray={editedKeysfromMain}
+        showPageName={pageNamefromMain}
+        currentPageName={currentPage}
+        specifiedKey={"Features"}
       />
       <NextButton
         onSubmit={SubmitForm}

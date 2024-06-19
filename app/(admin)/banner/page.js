@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { GetAllBannerApi } from "@/api-functions/banner/getAllBanner";
 import { DeleteBannerApi } from "@/api-functions/banner/deleteBanner";
+import { imgApiUrl } from "@/utils/constants";
 
 export default function Banner() {
  
@@ -82,7 +83,7 @@ export default function Banner() {
               </button>
             </div>
           </Link>
-          {listData && listData.data.length > 0 && (
+          
           <div className="relative">
             <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
               <svg
@@ -107,7 +108,7 @@ export default function Banner() {
             onChange={searchInputChange}
             />
           </div>
-            )}
+          
         </div>
         {(listData ? (
           listData?.data?.length > 0 ? (
@@ -141,7 +142,7 @@ export default function Banner() {
                 <td className="px-6 py-4 text-blue-600 dark:text-blue-500">
                   <img
                     // className="imageCircle"
-                    src={item.Url}
+                    src={`${imgApiUrl}/${item.Url}`}
                     width={100}
                     height={100}
                   />

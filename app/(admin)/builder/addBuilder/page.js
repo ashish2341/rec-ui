@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { addAmenity } from "@/api-functions/amenity/addAmenity";
 import { ImageString } from "@/api-functions/auth/authAction";
-import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER,imgApiUrl } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import Select from "react-select";
 import { AddBuilderApi } from "@/api-functions/builder/addBuilder";
@@ -327,9 +327,8 @@ export default function AddBuilder() {
 
           try {
             const res = await ImageString(formData);
-            if (res.successMessage) {
-              console.log("Image Response", res.successMessage.imageUrl);
-              documentString.push(res.successMessage.imageUrl);
+            if (res?.successMessage) {
+              documentString.push(res?.successMessage?.imageUrl);
             } else {
               toast.error(res.errMessage);
               return false;
@@ -407,11 +406,11 @@ export default function AddBuilder() {
 
           try {
             const res = await ImageString(formData);
-            if (res.successMessage) {
-              console.log("Image Response", res.successMessage.imageUrl);
-              imageString.push(res.successMessage.imageUrl);
+            if (res?.successMessage) {
+              console.log("Image Response", res?.successMessage?.imageUrl);
+              imageString.push(res?.successMessage?.imageUrl);
             } else {
-              toast.error(res.errMessage);
+              toast.error(res?.errMessage);
               return false;
             }
           } catch (error) {
@@ -535,11 +534,11 @@ export default function AddBuilder() {
     } else {
       let res = await ImageString(formData);
       console.log("image resPonse Data=>", res);
-      if (res.successMessage) {
-        console.log("Image Response", res.successMessage.imageUrl);
-        setBuilderLogo(res.successMessage.imageUrl);
+      if (res?.successMessage) {
+        console.log("Image Response", res?.successMessage.imageUrl);
+        setBuilderLogo(res?.successMessage?.imageUrl);
       } else {
-        toast.error(res.errMessage);
+        toast.error(res?.errMessage);
         return;
       }
     }
@@ -738,7 +737,7 @@ export default function AddBuilder() {
                     <h3>Selected Logo</h3>
                   </div>
                   <img
-                    src={builderLogo}
+                  src={`${imgApiUrl}/${builderLogo}`}
                     alt=""
                     className=" object-cover m-2 mt-5 border border-black rounded-lg "
                     width={100}
@@ -775,7 +774,7 @@ export default function AddBuilder() {
                   {image.map((imageUrl, index) => (
                     <div key={index} className="mr-4 mb-4 relative ">
                       <img
-                        src={imageUrl}
+                      src={`${imgApiUrl}/${imageUrl}`}
                         alt=""
                         className="h-20 w-20 object-cover m-2 mt-5 border border-black rounded-lg "
                       />
@@ -823,7 +822,7 @@ export default function AddBuilder() {
                     <div key={index} className="mr-4 mb-4 relative">
                       <iframe
                         title={`Document ${index}`}
-                        src={itemUrl}
+                        src={`${imgApiUrl}/${itemUrl}`}
                         className="h-48 w-64 border border-black rounded-lg"
                       />
                       <button

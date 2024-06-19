@@ -23,8 +23,17 @@
 
 .sidebarMain{
     background-color: #2b4ac7 !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-x: hidden;
 }
 .logobox{
     background-color: #0a1c2ab3;
     border-radius: 10px;
+}
+.sidebarBottomImgdiv{
+    margin-right: -1rem;
+    margin-left: -1rem;
+
 }

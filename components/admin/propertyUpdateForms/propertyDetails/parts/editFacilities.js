@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER,currentPage } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
@@ -11,11 +11,13 @@ import { FormatNumber } from "@/utils/commonHelperFn";
 import Styles from "../propertypage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
 import NextButton from "@/components/common/admin/nextButton/nextButton";
+import EditedTag from "@/components/common/admin/editedTag/editedTag";
 
 export default function FacilitiesPage({
   valueForNextfromSix,
   valueForNextPagefromSix,
-  setPropertyBackvalue,
+  setPropertyBackvalue,editedKeysfromMain,
+  pageNamefromMain,
 }) {
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("EditPropertyData")
@@ -132,6 +134,8 @@ export default function FacilitiesPage({
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
               >
                 No. of StairCase
+                { (editedKeysfromMain?.includes("Staircase") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
               </label>
               <input
                 type="number"
@@ -150,6 +154,8 @@ export default function FacilitiesPage({
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
               >
                 Passengers Lifts
+                { (editedKeysfromMain?.includes("passengerLifts") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
               </label>
               <input
                 type="number"
@@ -168,6 +174,8 @@ export default function FacilitiesPage({
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
               >
                 Service Lifts
+                { (editedKeysfromMain?.includes("ServiceLifts") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
               </label>
               <input
                 type="number"
@@ -197,6 +205,8 @@ export default function FacilitiesPage({
                   className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
                 >
                   Public Parking
+                  { (editedKeysfromMain?.includes("PublicParking") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
                 </label>
                 <input
                   type="number"
@@ -215,6 +225,8 @@ export default function FacilitiesPage({
                   className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
                 >
                   Private Parking
+                  { (editedKeysfromMain?.includes("PrivateParking") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
                 </label>
                 <input
                   type="number"
@@ -240,6 +252,8 @@ export default function FacilitiesPage({
                       className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
                     >
                       Public Washroom
+                      { (editedKeysfromMain?.includes("PublicWashroom") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
                     </label>
                     <input
                       type="number"
@@ -258,6 +272,8 @@ export default function FacilitiesPage({
                       className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
                     >
                       Private Washroom
+                      { (editedKeysfromMain?.includes("PrivateWashroom") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
                     </label>
                     <input
                       type="number"

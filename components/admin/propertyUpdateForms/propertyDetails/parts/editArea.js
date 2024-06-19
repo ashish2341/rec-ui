@@ -7,7 +7,7 @@ import {
   staticAreaUnitArray,
   wallTypesArray,
   fencingArray,
-  flooringArray,
+  flooringArray,currentPage
 } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
@@ -19,7 +19,9 @@ import ContinueButton from "@/components/common/propertyContinueButton/continueB
 import ApiButtons from "@/components/common/admin/propertyapiButtons/ApiButtons";
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
 import TextInput from "@/components/common/admin/textInput/textInput";
-export default function AreaDetailPage({ setPropertyPageValue }) {
+import EditedTag from "@/components/common/admin/editedTag/editedTag";
+export default function AreaDetailPage({ setPropertyPageValue,editedKeysfromMain,
+  pageNamefromMain, }) {
   // fetching Data for furnishedesData
   const { data: furnishedesData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/furnishedes`
@@ -232,15 +234,17 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
         {propertTypWithSubTypeValue && propertTypWithSubTypeValue == "Plot" && (
           <>
             {/* Plot Area */}
-            <div class="w-full mx-auto">
+            <div className="w-full mx-auto">
               <div>
                 <label
                   for="search-dropdown"
                   className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
                 >
                   Plot Area
+                  { (editedKeysfromMain?.includes("PlotArea") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
                 </label>
-                <div class="relative w-full">
+                <div className="relative w-full">
                   <input
                     type="number"
                     name="plotArea"
@@ -275,6 +279,8 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
               >
                 Width
+                { (editedKeysfromMain?.includes("Plotwidth") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
               </label>
               <input
                 type="number"
@@ -293,6 +299,8 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
               >
                 Length
+                { (editedKeysfromMain?.includes("PlotLength") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
               </label>
               <input
                 type="number"
@@ -319,12 +327,20 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                 itemArray={wallTypesArray}
                 activeBtnvalue={wallType}
                 changeState={setWallType}
+                changedKeyArray={editedKeysfromMain}
+                showPageName={pageNamefromMain}
+                currentPageName={currentPage}
+                specifiedKey={"WallType"}
               />
               {wallType === "Other" && (
                 <TextInput
                   labelName={" Write your Wall Type"}
                   inputValue={customWallType}
                   dynamicState={setCustomWallType}
+                  changedKeyArray={editedKeysfromMain}
+                  showPageName={pageNamefromMain}
+                  currentPageName={currentPage}
+                  specifiedKey={"CustomWallType"}
                 />
               )}
             </>
@@ -337,12 +353,20 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                 itemArray={fencingArray}
                 activeBtnvalue={fencing}
                 changeState={setFencing}
+                changedKeyArray={editedKeysfromMain}
+                showPageName={pageNamefromMain}
+                currentPageName={currentPage}
+                specifiedKey={"Fencing"}
               />
               {fencing === "Other" && (
                 <TextInput
                   labelName={"Fencing Type"}
                   inputValue={customFencing}
                   dynamicState={setCustomFencing}
+                  changedKeyArray={editedKeysfromMain}
+                  showPageName={pageNamefromMain}
+                  currentPageName={currentPage}
+                  specifiedKey={"CustomFencing"}
                 />
               )}
             </>
@@ -355,12 +379,20 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                 itemArray={flooringArray}
                 activeBtnvalue={flooring}
                 changeState={setFlooring}
+                changedKeyArray={editedKeysfromMain}
+                showPageName={pageNamefromMain}
+                currentPageName={currentPage}
+                specifiedKey={"Flooring"}
               />
               {flooring == "Other" && (
                 <TextInput
                   labelName={"Flooring Type"}
                   inputValue={customFlooring}
                   dynamicState={setCustomFlooring}
+                  changedKeyArray={editedKeysfromMain}
+                  showPageName={pageNamefromMain}
+                  currentPageName={currentPage}
+                  specifiedKey={"CustomFlooring"}
                 />
               )}
             </>
@@ -373,20 +405,26 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
               labelName={"Furnished"}
               ValueName={"Furnished"}
               changeState={setFurnished}
+              changedKeyArray={editedKeysfromMain}
+              showPageName={pageNamefromMain}
+              currentPageName={currentPage}
+              specifiedKey={"Furnished"}
             />
           )}
           
           <div className="grid gap-4 mb-4 sm:grid-cols-2">
             {/* land area and unit */}
-          <div class="w-full mx-auto">
+          <div className="w-full mx-auto">
             <div>
               <label
                 for="search-dropdown"
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
               >
                 Land Area
+                { (editedKeysfromMain?.includes("LandArea") || editedKeysfromMain?.includes("LandAreaUnit") ) && pageNamefromMain===currentPage && (<EditedTag/>) } 
+
               </label>
-              <div class="relative w-full">
+              <div className="relative w-full">
                 <input
                   type="number"
                   name="landArea"
@@ -419,6 +457,8 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
               >
                 Built Up Area
+                { (editedKeysfromMain?.includes("BuiltUpArea") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
               </label>
               <input
                 type="number"
@@ -437,6 +477,8 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white "
               >
                 Carpet Area
+                { (editedKeysfromMain?.includes("CarpetArea") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
               </label>
               <input
                 type="number"
@@ -455,6 +497,8 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white "
               >
                 Entrance width in feet
+                { (editedKeysfromMain?.includes("EntranceWidth") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
               </label>
               <input
                 type="number"
@@ -474,6 +518,8 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white "
               >
                 Celling height in feet
+                { (editedKeysfromMain?.includes("CellingHeight") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
               </label>
               <input
                 type="number"
@@ -506,6 +552,8 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                   className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
                 >
                   Electrical
+                  { (editedKeysfromMain?.includes("Fitting.Electrical") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
                 </label>
                 <input
                   type="text"
@@ -525,6 +573,8 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                   className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
                 >
                   Toilets
+                  { (editedKeysfromMain?.includes("Fitting.Toilets") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
                 </label>
                 <input
                   type="text"
@@ -544,6 +594,8 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                   className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
                 >
                   Kitchen
+                  { (editedKeysfromMain?.includes("Fitting.Kitchen") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
                 </label>
                 <input
                   type="text"
@@ -563,6 +615,8 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                   className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
                 >
                   Doors
+                  { (editedKeysfromMain?.includes("Fitting.Doors") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
                 </label>
                 <input
                   type="text"
@@ -580,6 +634,8 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                   className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
                 >
                   Windows
+                  { (editedKeysfromMain?.includes("Fitting.Windows") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
                 </label>
                 <input
                   type="text"

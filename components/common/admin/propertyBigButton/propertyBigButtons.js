@@ -1,4 +1,5 @@
 import Styles from "../admin.common.module.css";
+import EditedTag from "../editedTag/editedTag";
 
 function RenderBigButtons({ buttonArray, activeButtonvalue, setStateDynamic }) {
   const handelChangeValue = (value) => {
@@ -36,6 +37,10 @@ export default function PropertyBigButtons({
   changeState,
   labelName,
   forRequired,
+  changedKeyArray,
+  showPageName,
+  currentPageName,
+  specifiedKey,
 }) {
   return (
     <>
@@ -46,7 +51,10 @@ export default function PropertyBigButtons({
             forRequired == false ? "" : "required"
           } `}
         >
+         
           {labelName}
+          {changedKeyArray?.includes(specifiedKey) &&
+            showPageName === currentPageName && <EditedTag />}
         </label>
         <RenderBigButtons
           buttonArray={itemArray}

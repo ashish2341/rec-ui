@@ -27,7 +27,7 @@ export const UpdateBuilderApi = async (builderDetails,id,setLoading=()=>{}) => {
     } else {
       //toast.error(resData.message);
       setLoading(false);
-      return {errMessage:resData.message};
+      return {errMessage:resData.error};
     }
   } catch (error) {
     setLoading(false);

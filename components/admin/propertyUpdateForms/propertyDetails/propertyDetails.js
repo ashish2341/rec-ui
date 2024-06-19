@@ -12,7 +12,7 @@ export default function PropertyDetailsForm({
   setPropertyBackvalue,
   valueForNext,
   valueForNextPage,
-  setPageValueInsidePropertyForm,
+  setPageValueInsidePropertyForm,editedKeys, pageName
 }) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
@@ -106,17 +106,22 @@ export default function PropertyDetailsForm({
               <BasicPage
                 setPropertyPageValue={setPropertyPageValue}
                 setPropertyBackvalue={setPropertyBackvalue}
+                editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName}
               />
             )}
             {propertyPageValue == 2 ? (
-              <RoomDetailPage setPropertyPageValue={setPropertyPageValue} />
+              <RoomDetailPage setPropertyPageValue={setPropertyPageValue}editedKeysfromMain={editedKeys}
+              pageNamefromMain={pageName} />
             ) : null}
             {propertyPageValue == 3 ? (
-              <AreaDetailPage setPropertyPageValue={setPropertyPageValue} />
+              <AreaDetailPage setPropertyPageValue={setPropertyPageValue}editedKeysfromMain={editedKeys}
+              pageNamefromMain={pageName} />
             ) : null}
             {propertyPageValue == 4 && (
               <FinancialDetailsPage
-                setPropertyPageValue={setPropertyPageValue}
+                setPropertyPageValue={setPropertyPageValue}editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName}
               />
             )}
             {propertyPageValue == 5 && (
@@ -124,6 +129,8 @@ export default function PropertyDetailsForm({
                 valueForNextfromSix={handelvalueForNextfromSix}
                 valueForNextPagefromSix={valueForNextPage}
                 setPropertyBackvalue={setPropertyBackvalue}
+                editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName}
               />
             )}
             {/* {propertyPageValue == 6 && (
@@ -143,17 +150,25 @@ export default function PropertyDetailsForm({
               <BasicPage
                 setPropertyPageValue={setPropertyPageValue}
                 setPropertyBackvalue={setPropertyBackvalue}
+                editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName}
               />
             )}
             {propertyPageValue == 2 ? (
-              <RoomDetailPage setPropertyPageValue={setPropertyPageValue} />
+              <RoomDetailPage setPropertyPageValue={setPropertyPageValue} 
+              editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName} />
             ) : null}
             {propertyPageValue == 3 ? (
-              <AreaDetailPage setPropertyPageValue={setPropertyPageValue} />
+              <AreaDetailPage setPropertyPageValue={setPropertyPageValue}
+              editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName} />
             ) : null}
             {propertyPageValue == 4 && (
               <FinancialDetailsPage
                 setPropertyPageValue={setPropertyPageValue}
+                editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName}
               />
             )}
             {propertyPageValue == 5 && (
@@ -162,6 +177,8 @@ export default function PropertyDetailsForm({
                 valueForNextfromSix={handelvalueForNextfromSix}
                 valueForNextPagefromSix={valueForNextPage}
                 setPropertyBackvalue={setPropertyBackvalue}
+                editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName}
               />
             )}
             {propertyPageValue == 6 && (
@@ -169,6 +186,8 @@ export default function PropertyDetailsForm({
                 valueForNextfromSix={handelvalueForNextfromSix}
                 valueForNextPagefromSix={valueForNextPage}
                 setPropertyBackvalue={setPropertyBackvalue}
+                editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName}
               />
             )}
           </>
@@ -179,20 +198,28 @@ export default function PropertyDetailsForm({
             <BasicPage
               setPropertyPageValue={setPropertyPageValue}
               setPropertyBackvalue={setPropertyBackvalue}
+              editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName}
             />
           )}
 
           {propertyPageValue == 2 ? (
-            <AreaDetailPage setPropertyPageValue={setPropertyPageValue} />
+            <AreaDetailPage setPropertyPageValue={setPropertyPageValue}
+            editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName} />
           ) : null}
           {propertyPageValue == 3 && (
-            <FinancialDetailsPage setPropertyPageValue={setPropertyPageValue} />
+            <FinancialDetailsPage setPropertyPageValue={setPropertyPageValue}
+            editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName} />
           )}
           {propertyPageValue == 4 && (
             <PossessionDetailsPage
               valueForNextfromSix={handelvalueForNextfromSix}
               valueForNextPagefromSix={valueForNextPage}
               setPropertyBackvalue={setPropertyBackvalue}
+              editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName}
             />
           )}
           {/* {propertyPageValue == 5 && (

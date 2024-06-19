@@ -221,7 +221,7 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
         {propertTypWithSubTypeValue && propertTypWithSubTypeValue == "Plot" && (
           <>
             {/* Plot Area */}
-            <div class="w-full mx-auto">
+            <div className="w-full mx-auto">
               <div>
                 <label
                   for="search-dropdown"
@@ -229,7 +229,7 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                 >
                   Plot Area
                 </label>
-                <div class="relative w-full">
+                <div className="relative w-full">
                   <input
                     type="number"
                     name="plotArea"
@@ -369,7 +369,7 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
            
           <div className="grid gap-4 mb-4 mt-5 sm:grid-cols-2">
             {/* land area and unit */}
-           <div class="w-full mx-auto">
+           <div className="w-full mx-auto">
             <div>
               <label
                 for="search-dropdown"
@@ -377,7 +377,7 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
               >
                 Land Area
               </label>
-              <div class="relative w-full">
+              <div className="relative w-full">
                 <input
                   type="number"
                   name="landArea"

@@ -10,11 +10,13 @@ import {
   conditionalArray,
   lookingToArray,
   propertyTypeArray,
+  currentPage
 } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import Cookies from "js-cookie";
 import NextButton from "@/components/common/admin/nextButton/nextButton";
-export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
+import EditedTag from "@/components/common/admin/editedTag/editedTag";
+export default function BasicDetailsForm({ valueForNext, valueForNextPage,  editedKeys, pageName}) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
   const roles = roleData && JSON.parse(roleData);
@@ -223,6 +225,10 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
                 itemArray={propertyTypeArray}
                 activeBtnvalue={propertyType}
                 changeState={setPropertyType}
+                changedKeyArray={editedKeys}
+                showPageName={pageName}
+                currentPageName={currentPage}
+                specifiedKey={"ProeprtyType"}
               />
 
               <PropertyBigButtons
@@ -230,6 +236,10 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
                 itemArray={lookingToArray}
                 activeBtnvalue={Propertyfor}
                 changeState={setPropertyfor}
+                changedKeyArray={editedKeys}
+                showPageName={pageName}
+                currentPageName={currentPage}
+                specifiedKey={"ProeprtyFor"}
               />
             </div>
 
@@ -240,6 +250,11 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
                 labelName={"Property SubType"}
                 ValueName={"Name"}
                 changeState={setPropertyTypeWithSubtype}
+                changedKeyArray={editedKeys}
+                showPageName={pageName}
+                currentPageName={currentPage}
+                specifiedKey={"PropertySubtype"}
+                
               />
             )}
             <div>
@@ -248,6 +263,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
               >
                 Property Name
+               { (editedKeys?.includes("Title") && pageName===currentPage) && (<EditedTag/>) } 
               </label>
               <input
                 type="text"
@@ -268,6 +284,10 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
                 labelName={"Facing"}
                 ValueName={"Facing"}
                 changeState={setFacing}
+                changedKeyArray={editedKeys}
+                showPageName={pageName}
+                currentPageName={currentPage}
+                specifiedKey={"Facing"}
               />
             )}
 
@@ -280,6 +300,10 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
                   itemArray={conditionalArray}
                   activeBtnvalue={isEnabled}
                   changeState={setIsEnabled}
+                  changedKeyArray={editedKeys}
+                  showPageName={pageName}
+                  currentPageName={currentPage}
+                  specifiedKey={"IsEnabled"}
                 />
               )}
 
@@ -290,6 +314,10 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
                   itemArray={conditionalArray}
                   activeBtnvalue={isFeatured}
                   changeState={setIsFeatured}
+                  changedKeyArray={editedKeys}
+                  showPageName={pageName}
+                  currentPageName={currentPage}
+                  specifiedKey={"IsFeatured"}
                 />
               )}
             </div>
@@ -299,6 +327,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
               >
                 Description
+                { (editedKeys?.includes("Description") && pageName===currentPage) && (<EditedTag/>) } 
               </label>
               <textarea
                 type="text"

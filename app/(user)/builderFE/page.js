@@ -139,7 +139,7 @@ const BuilderPage = () => {
                         <div key={index} className={` ${styles.builderDetailBuilderRight} `}>
                             <img
                             src={`${imgApiUrl}/${item.Logo}`}
-                                className={` ${styles.builderImgBuilder} mr-4`}
+                                className={` ${styles.builderImgBuilder} mr-5`}
                             />
                             <div>
                                 <h5 className="text-lg font-bold  text-gray-900 dark:text-white blueText">
@@ -152,15 +152,16 @@ const BuilderPage = () => {
                             </div>
                         </div>
                         </Link>
-
+                        
                         <div className={` ${styles.builderDetailPageDown}`}>
                             <div className={` ${styles.builderSocialLine}`} >
+                            {item.SocialMediaProfileLinks ?
                                 <div className={` ${styles.builderSocialIcon} text-gray-700`}>
                                     <Link href={item.SocialMediaProfileLinks.Facebook} target="_blank" rel="noopener noreferrer"><i className="bi bi-facebook"></i></Link>
                                     <Link href={item.SocialMediaProfileLinks.Instagram} target="_blank" rel="noopener noreferrer"><i className="bi bi-instagram ml-3"></i></Link>
                                     <Link href={item.SocialMediaProfileLinks.LinkedIn} target="_blank" rel="noopener noreferrer"><i className="bi bi-linkedin ml-3"></i></Link>
                                     <Link href={item.SocialMediaProfileLinks.Twitter} target="_blank" rel="noopener noreferrer"><i className="bi bi-twitter ml-3"></i></Link>
-                                </div>
+                                </div> : <p>{" "}</p> }
                                 <div>
                                     <p>{item.PropertiesLength} properties listed</p>
                                 </div>

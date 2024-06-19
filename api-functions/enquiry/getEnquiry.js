@@ -11,13 +11,14 @@ export const GetEnquiryApi = async (
   todayEnquiry,
   setLoading = () => {}
 ) => {
+  console.log("filterType",typeof(filterType))
   const token = Cookies.get("token");
   setLoading(true);
   try {
     const res = await fetch(
       `${API_BASE_URL}/enquiry/allProjectEnquiry?page=${page}&pageSize=${PAGE_LIMIT}&search=${
         searchData ? searchData : ""
-      }${filterType ? `&filter=${filterType}` : ""}${
+      }${filterType ?  `&filter=${filterType}` : ""}${
         fromDate ? `&startDate=${fromDate}` : ""
       }${toDate ? `&endDate=${toDate}` : ""}${todayEnquiry ? `&todayEnquiry=${todayEnquiry}` : ""}`,
       {

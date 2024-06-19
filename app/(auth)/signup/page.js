@@ -61,14 +61,6 @@ export default function Signup() {
       toast.error("Please enter your first name");
       return false;
     }
-
-    // Validate Last Name
-    if (LastName === "") {
-      toast.error("Please enter your last name");
-      return false;
-    }
-
-   
     // Check if the field is empty
     if (Mobile === "") {
       toast.error("Phone number cannot be empty");
@@ -85,43 +77,43 @@ export default function Signup() {
     if (!/^[789]/.test(Mobile)) {
       toast.error("Phone number must start with 9, 8, or 7");
       return false;
-    }
+     }
 
 
-    // Area
-    if (Area === "") {
-      toast.error("Please enter your area");
-      return false;
-    }
+    // // Area
+    // if (Area === "") {
+    //   toast.error("Please enter your area");
+    //   return false;
+    // }
 
-    // City
-    if (City === "") {
-      toast.error("Please enter your city");
-      return false;
-    }
+    // // City
+    // if (City === "") {
+    //   toast.error("Please enter your city");
+    //   return false;
+    // }
 
-    // State
-    if (State === "") {
-      toast.error("Please enter your state");
-      return false;
-    }
+    // // State
+    // if (State === "") {
+    //   toast.error("Please enter your state");
+    //   return false;
+    // }
 
-    // Country
-    if (Country === "") {
-      toast.error("Please enter your country");
-      return false;
-    }
+    // // Country
+    // if (Country === "") {
+    //   toast.error("Please enter your country");
+    //   return false;
+    // }
 
-    // Pincode
-    if (Pincode === "") {
-      toast.error("Please enter your pincode");
-      return false;
-    }
-    // Check if the number has exactly 6 digits
-    if (!/^\d{6}$/.test(Pincode)) {
-      toast.error("Pincode number must be 6 digits long");
-      return false;
-    }
+    // // Pincode
+    // if (Pincode === "") {
+    //   toast.error("Please enter your pincode");
+    //   return false;
+    // }
+    // // Check if the number has exactly 6 digits
+    // if (!/^\d{6}$/.test(Pincode)) {
+    //   toast.error("Pincode number must be 6 digits long");
+    //   return false;
+    // }
 
     //Validate Image 
     if(image==""){
@@ -151,16 +143,15 @@ export default function Signup() {
       LastName:LastName,
       Mobile:Mobile,
       Password:Password,
-      Area:Area,
-      City:City,
-      State:State,
-      Country:Country,
-      PinCode:Pincode,
+      // Area:Area,
+       City:"Jaipur",
+      State:"Rajasthan",
+      Country:"India",
+      // PinCode:Pincode,
       EmailId:Email,
-      Role:"Client",
+      Role:"Developer",
       ProfilePhoto:image
     };
-    console.log("signupData",signupData);
     let res = await SignUpUser(signupData)
     console.log("resdata inside page ",res)
     if(res.successMessage){
@@ -180,7 +171,7 @@ export default function Signup() {
     const file = event.target.files[0]; // Get the first file only
     const formData= new FormData()
     formData.append("profilePic",file)
-    console.log("image File", file);
+   
 
     // Check file type
     if (!acceptedFileTypes.includes(file.type)) {
@@ -191,12 +182,11 @@ export default function Signup() {
     } else{
       let res = await ImageString(formData)
       console.log("image resPonse Data=>",res)
-      if(res.successMessage){
+      if(res?.successMessage){
        // router.push("/dashboard");
-       console.log("Image Response",res.successMessage.imageUrl)
-        setImage(res.successMessage.imageUrl);
+        setImage(res?.successMessage?.imageUrl);
       }else{
-        toast.error(res.errMessage);
+        toast.error(res?.errMessage);
         return;
       }
     }
@@ -206,7 +196,7 @@ export default function Signup() {
   };
   return (
     <section
-      className={` ${Styles.loginMain} bg-gray-50 dark:bg-gray-900 h-100`}
+      className={` ${Styles.loginMain} bg-gray-50 dark:bg-gray-900 h-full`}
     >
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-2">
         <a
@@ -233,7 +223,7 @@ export default function Signup() {
                 <div>
                   <label
                     htmlFor="first_name"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
                   >
                     First name
                   </label>
@@ -250,7 +240,7 @@ export default function Signup() {
                 <div>
                   <label
                     htmlFor="last_name"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
                   >
                     Last name
                   </label>
@@ -268,7 +258,7 @@ export default function Signup() {
                 <div>
                   <label
                     htmlFor="phone"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
                   >
                     Phone number
                   </label>
@@ -279,14 +269,15 @@ export default function Signup() {
                     id="phone"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+                    placeholder="Phone number"
                     required
                   />
                 </div>
                
-                <div>
+                {/* <div>
                   <label
                     htmlFor="area"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
                   >
                     Area
                   </label>
@@ -298,8 +289,8 @@ export default function Signup() {
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
                   />
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <label
                     htmlFor="city"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -314,8 +305,8 @@ export default function Signup() {
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
                   />
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <label
                     htmlFor="state"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -362,7 +353,7 @@ export default function Signup() {
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
                   />
-                </div>
+                </div> */}
               </div>
               <div className="mb-6">
               <label
@@ -387,7 +378,7 @@ export default function Signup() {
               <div className="mb-6">
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
                 >
                   Email address
                 </label>
@@ -404,7 +395,7 @@ export default function Signup() {
               <div className="mb-6">
                 <label
                   htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
                 >
                   Password
                 </label>
@@ -414,7 +405,7 @@ export default function Signup() {
                   onChange={handlePassword}
                   id="password"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="•••••••••"
+                  placeholder="Password"
                   required
                 />
               </div>

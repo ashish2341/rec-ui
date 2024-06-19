@@ -1,4 +1,6 @@
+import { imgApiUrl } from "@/utils/constants";
 import Styles from "../admin.common.module.css";
+import EditedTag from "../editedTag/editedTag";
 
 export default function ArrayButtons({
   itemArray,
@@ -6,15 +8,24 @@ export default function ArrayButtons({
   labelName,
   buttonName,
   setValueinState,
+  changedKeyArray,
+  showPageName,
+  currentPageName,
+  specifiedKey,
 }) {
-
   const handleValueChange = (itemId) => {
     setValueinState((prev) => {
-      const isSelected = prev.some(
-        (selectedItemId) => selectedItemId._id ? selectedItemId._id === itemId : selectedItemId=== itemId
+      const isSelected = prev.some((selectedItemId) =>
+        selectedItemId._id
+          ? selectedItemId._id === itemId
+          : selectedItemId === itemId
       );
       if (isSelected) {
-        return prev.filter((selectedItemId) => selectedItemId._id ? selectedItemId._id !== itemId : selectedItemId !== itemId);
+        return prev.filter((selectedItemId) =>
+          selectedItemId._id
+            ? selectedItemId._id !== itemId
+            : selectedItemId !== itemId
+        );
       } else {
         return [...prev, itemId];
       }
@@ -25,13 +36,15 @@ export default function ArrayButtons({
       <div className="container mx-auto px-4 py-8">
         {/* Amenity Box */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="block mb-2 text-xl font-lg underline font-bold text-gray-500 dark:text-white">{labelName}</h2>
+          <h2 className="block mb-2 text-xl font-lg underline font-bold text-gray-500 dark:text-white">
+            {labelName}{" "}
+            {changedKeyArray?.includes(specifiedKey) &&
+              showPageName === currentPageName && <EditedTag />}
+          </h2>
           {itemArray && selectItems ? (
             <div>
               {itemArray?.data?.length > 0 ? (
-                <div
-                  className={`grid grid-cols-5 gap-2`}
-                >
+                <div className={`grid grid-cols-5 gap-2`}>
                   {itemArray?.data.map((item) => (
                     <button
                       key={item?._id}
@@ -41,16 +54,23 @@ export default function ArrayButtons({
                         Styles.bigInactiveButton
                       }
                        ${
-                         selectItems?.some(
-                           (selectedItemId) => selectedItemId._id ? selectedItemId._id === item?._id : selectedItemId=== item?._id
+                         selectItems?.some((selectedItemId) =>
+                           selectedItemId._id
+                             ? selectedItemId._id === item?._id
+                             : selectedItemId === item?._id
                          ) && Styles.bigactiveButton
                        }`}
-                    ><img
-                    className={`${Styles.arrayButtonIconBox}`}
-                    src={item.Icon}
-                    width="22"
-                    height="22"
-                  />
+                    >
+                      <img
+                        className={`${Styles.arrayButtonIconBox}`}
+                        src={
+                          !item.Icon.includes("https")
+                            ? `${imgApiUrl}/${item.Icon}`
+                            : item.Icon
+                        }
+                        width="22"
+                        height="22"
+                      />
                       {item?.[buttonName]}
                     </button>
                   ))}

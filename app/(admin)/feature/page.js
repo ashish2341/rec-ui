@@ -9,6 +9,8 @@ import useFetch from "@/customHooks/useFetch";
 import { API_BASE_URL } from "@/utils/constants";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import { imgApiUrl } from "@/utils/constants";
+
 
 export default function Feature() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -79,7 +81,7 @@ export default function Feature() {
               </button>
             </Link>
           </div>
-          {listData?.data?.length > 0 ? (  <div className="relative">
+           <div className="relative">
             <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
               <svg
                 className="w-5 h-5 text-gray-500 dark:text-gray-400"
@@ -102,7 +104,7 @@ export default function Feature() {
               placeholder="Search users"
               onChange={searchInputChange}
             />
-          </div>):(null)}
+          </div>
         
         </div>
         {listData ? (
@@ -152,7 +154,7 @@ export default function Feature() {
                         {" "}
                         <img
                           className="imageCircle"
-                          src={item.Icon}
+                          src={!item.Icon.includes('https')  ?`${imgApiUrl}/${item.Icon}`:item.Icon}
                           width={100}
                           height={100}
                         />

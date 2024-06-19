@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState, useRef,useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { addAmenity } from "@/api-functions/amenity/addAmenity";
@@ -9,23 +9,26 @@ import { addBannerAPi } from "@/api-functions/banner/addBanner";
 import { UpdateBannerApi } from "@/api-functions/banner/updateBanner";
 import useFetch from "@/customHooks/useFetch";
 import { API_BASE_URL } from "@/utils/constants";
+import { imgApiUrl } from "@/utils/constants";
+import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
+
 export default function UpdateBanner(params) {
   const {
     data: listEditData,
     loading,
     error,
-  } = useFetch(
-    `${API_BASE_URL}/banner/banner/${params?.params?.editBanner}`
-  );
+  } = useFetch(`${API_BASE_URL}/banner/banner/${params?.params?.editBanner}`);
   const [image, setImage] = useState("");
   const [bannerName, setBannerName] = useState("");
   const imageInputRef = useRef(null);
+  const [imageLoader, setImageLoader] = useState(false);
+
 
   const router = useRouter();
-useEffect(()=>{
-  setBannerName(listEditData?.data?.BannerName);
-  setImage(listEditData?.data?.Url);
-},[listEditData])
+  useEffect(() => {
+    setBannerName(listEditData?.data?.BannerName);
+    setImage(listEditData?.data?.Url);
+  }, [listEditData]);
 
   const submitForm = async () => {
     if (bannerName === "") {
@@ -38,14 +41,14 @@ useEffect(()=>{
     }
 
     let bannerpayload = { BannerName: bannerName, Url: image };
-    let res = await UpdateBannerApi(bannerpayload,params?.params?.editBanner)
-     if(res?.resData?.success == true){
-       router.push("/banner");
-       toast.success(res?.resData?.message);
-      }else{
-        toast.error(res?.errMessage);
-        return false;
-      }
+    let res = await UpdateBannerApi(bannerpayload, params?.params?.editBanner);
+    if (res?.resData?.success == true) {
+      router.push("/banner");
+      toast.success(res?.resData?.message);
+    } else {
+      toast.error(res?.errMessage);
+      return false;
+    }
   };
 
   const handleImageInputChange = async (event) => {
@@ -56,7 +59,7 @@ useEffect(()=>{
     formData.append("profilePic", file);
 
     // Check file type
-    if (!acceptedFileTypes.includes(file.type)) {
+    if (!acceptedFileTypes.includes(file?.type)) {
       toast.error(
         "Invalid image type. Please upload only JPEG or PNG or JPG files."
       );
@@ -64,11 +67,13 @@ useEffect(()=>{
         imageInputRef.current.value = "";
       }
     } else {
+      setImageLoader(true);
       let res = await ImageString(formData);
-      if (res.successMessage.success) {
-        setImage(res.successMessage.imageUrl);
+      if (res?.successMessage?.success) {
+        setImage(res?.successMessage?.imageUrl);
+        setImageLoader(false);
       } else {
-        toast.error(res.errMessage);
+        toast.error(res?.errMessage);
         return;
       }
     }
@@ -76,7 +81,7 @@ useEffect(()=>{
 
   return (
     <section>
-   <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
+      <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
         Update Your Banner Details
       </h1>
       <Link href="/banner">
@@ -121,19 +126,19 @@ useEffect(()=>{
               name="imageInput"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               ref={imageInputRef}
-              multiple
               accept=".jpg, .jpeg, .png"
               onChange={handleImageInputChange}
               required
             />
+             {imageLoader && <LoaderForMedia />}
             {image ? (
               <div className="flex flex-wrap ">
                 <div className="mr-4 mb-4  ">
-                <div className="ml-2 mt-3 underline font-bold">
+                  <div className="ml-2 mt-3 underline font-bold">
                     <h3>Selected Image</h3>
                   </div>
                   <img
-                    src={image}
+                    src={`${imgApiUrl}/${image}`}
                     alt=""
                     className=" object-cover m-2 mt-5 border border-black rounded-lg "
                     width={200}
@@ -172,16 +177,17 @@ useEffect(()=>{
           </div>
         </div>
       </form>
-
-      <div>
-        <button
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          type="button"
-          onClick={submitForm}
-        >
-          Submit
-        </button>
-      </div>
+      {imageLoader === false && (
+        <div>
+          <button
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            type="button"
+            onClick={submitForm}
+          >
+            Submit
+          </button>
+        </div>
+      )}
     </section>
   );
 }

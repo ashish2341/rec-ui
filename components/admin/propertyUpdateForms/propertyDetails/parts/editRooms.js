@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER ,currentPage} from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
@@ -12,8 +12,10 @@ import Styles from "../propertypage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
 import ApiButtons from "@/components/common/admin/propertyapiButtons/ApiButtons";
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
+import EditedTag from "@/components/common/admin/editedTag/editedTag";
 
-export default function RoomDetailPage({ setPropertyPageValue }) {
+export default function RoomDetailPage({ setPropertyPageValue,editedKeysfromMain,
+  pageNamefromMain, }) {
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("EditPropertyData")
   );
@@ -110,6 +112,8 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
             className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
           >
             Floor Number
+            { (editedKeysfromMain?.includes("FloorNumber") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
           </label>
           <input
             type="number"
@@ -129,6 +133,8 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
             className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
           >
             Total Floors
+            { (editedKeysfromMain?.includes("TotalFloors") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
           </label>
           <input
             type="number"
@@ -152,6 +158,10 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
                 labelName={"Bhk Type"}
                 ValueName={"Type"}
                 changeState={setBhkType}
+                changedKeyArray={editedKeysfromMain}
+                showPageName={pageNamefromMain}
+                currentPageName={currentPage}
+                specifiedKey={"BhkType"}
               />
             )}
 
@@ -162,6 +172,10 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
               itemArray={bedRoomarray}
               activeBtnvalue={bedrooms}
               changeState={setBedrooms}
+              changedKeyArray={editedKeysfromMain}
+              showPageName={pageNamefromMain}
+              currentPageName={currentPage}
+              specifiedKey={"Bedrooms"}
             />
 
             {/* Bathrooms */}
@@ -170,6 +184,10 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
               itemArray={bathroomarray}
               activeBtnvalue={bathrooms}
               changeState={setBathrooms}
+              changedKeyArray={editedKeysfromMain}
+              showPageName={pageNamefromMain}
+              currentPageName={currentPage}
+              specifiedKey={"Bathrooms"}
             />
           </>
         )}

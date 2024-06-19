@@ -4,8 +4,10 @@ import { ToastContainer, toast } from "react-toastify";
 import { ImageString } from "@/api-functions/auth/authAction";
 import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
 import NextButton from "@/components/common/admin/nextButton/nextButton";
+import { imgApiUrl,currentPage } from "@/utils/constants";
+import EditedTag from "@/components/common/admin/editedTag/editedTag";
 
-export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
+export default function PropertyImagesForm({ valueForNext, valueForNextPage,  editedKeys, pageName }) {
   const [image, setImage] = useState([]);
   const [video, setVideo] = useState([]);
   const imageInputRef = useRef(null);
@@ -62,7 +64,6 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
   };
 
   const handleImageInputChange = async (event) => {
-    
     const acceptedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
 
     const files = Array.from(event.target.files);
@@ -136,7 +137,6 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
   };
 
   const handleVideoInputChange = async (event) => {
-  
     const acceptedFileTypes = [
       "video/mp4",
       "video/webm",
@@ -221,7 +221,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
 
     const storedData = JSON.parse(sessionStorage.getItem("EditPropertyData"));
     const videoArray = storedData?.Videos;
-    if (video.length == videoArray.length) {
+    if (video?.length == videoArray?.length) {
       if (videoArray.length > 0) {
         // // Step 2: Modify the array by removing the desired item
         videoArray.splice(index, 1);
@@ -250,7 +250,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
 
     const storedData = JSON.parse(sessionStorage.getItem("EditPropertyData"));
     const imageArray = storedData?.Images;
-    if (image.length == imageArray.length) {
+    if (image?.length == imageArray?.length) {
       if (imageArray.length > 0) {
         // // Step 2: Modify the array by removing the desired item
         imageArray.splice(index, 1);
@@ -274,7 +274,6 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
   return (
     <>
       <div>
-        
         <form>
           <div className="grid gap-4 mb-4 sm:grid-cols-1">
             <div className="border border-gray-300 p-3 rounded-lg">
@@ -286,6 +285,8 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
               >
                 Upload Image
+                { (editedKeys?.includes("Images") && pageName===currentPage) && (<EditedTag/>) } 
+
               </label>
               <input
                 type="file"
@@ -308,7 +309,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
                     {image.map((imageUrl, index) => (
                       <div key={index} className="mr-4 mb-4 relative ">
                         <img
-                          src={imageUrl}
+                          src={`${imgApiUrl}/${imageUrl}`}
                           alt=""
                           className="h-20 w-20 object-cover m-2 mt-5 border border-black rounded-lg "
                         />
@@ -341,6 +342,8 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
                 <span className="text-xs font-bold ml-1 pb-2 text-red-600">
                   (Optional)
                 </span>
+                { (editedKeys?.includes("Videos") && pageName===currentPage) && (<EditedTag/>) } 
+
               </label>
               <input
                 type="file"
@@ -366,7 +369,10 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
                           controls
                           className="h-48 w-64 border border-black rounded-lg"
                         >
-                          <source src={video} type="video/mp4" />
+                          <source
+                            src={`${imgApiUrl}/${video}`}
+                            type="video/mp4"
+                          />
                         </video>
                         <button
                           className="absolute top-0 right-0 p-1"
@@ -386,7 +392,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
           </div>
         </form>
         {imageLoader === false && videoLoader === false && (
-         <NextButton onSubmit={SubmitForm} butonSubName={"add Faq Details"}/>
+          <NextButton onSubmit={SubmitForm} butonSubName={"add Faq Details"} />
         )}
       </div>
     </>

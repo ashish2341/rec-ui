@@ -5,7 +5,7 @@ import Navbar from "@/components/common/navbar";
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./byilderFE.module.css"
 import { Dropdown } from "flowbite-react";
-import { API_BASE_URL, API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL, API_BASE_URL_FOR_MASTER,imgApiUrl } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { Avatar } from "flowbite-react";
 import { Card } from "flowbite-react";
@@ -110,7 +110,7 @@ const BuilderPage = () => {
                                 .slice(0, 4)
                                 .map((item, index) => (
                             <Link href={`/builderFE/${item._id}`}>
-                            <Avatar key={index} img={item.Logo} size="md" className="mr-2 ml-1 justify-start p-4" rounded>
+                            <Avatar key={index} img={`${imgApiUrl}/${item.Logo}`} size="md" className="mr-2 ml-1 justify-start p-4" rounded>
                                 <div className="dark:text-white">
                                     <div className="text-xs font-semibold blueText text-nowrap">{item.Name}</div>
                                     <div className="text-xs text-gray-500 dark:text-gray-400">Joined in {(item.EstablishDate ? String(item.EstablishDate).substring(0, 4) : 'N/A')}</div>
@@ -138,7 +138,7 @@ const BuilderPage = () => {
                         <Link href={`/builderFE/${item._id}`}>
                         <div key={index} className={` ${styles.builderDetailBuilderRight} `}>
                             <img
-                                src={item.Logo}
+                            src={`${imgApiUrl}/${item.Logo}`}
                                 className={` ${styles.builderImgBuilder} mr-4`}
                             />
                             <div>

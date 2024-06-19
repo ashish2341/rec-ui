@@ -6,7 +6,10 @@ import { useRouter } from "next/navigation";
 import useFetch from "@/customHooks/useFetch";
 import { API_BASE_URL } from "@/utils/constants";
 import { updateFeatures } from "@/api-functions/feature/updateFeature";
-import { ImageString  } from "@/api-functions/auth/authAction";
+import { ImageString } from "@/api-functions/auth/authAction";
+import { imgApiUrl } from "@/utils/constants";
+import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
+
 export default function EditFeature({ params }) {
   const [Feature, setFeature] = useState("");
   const [Icon, setIcon] = useState();
@@ -14,9 +17,15 @@ export default function EditFeature({ params }) {
   const [IsForProject, setIsForProject] = useState();
   const [IsForProperty, setIsForProperty] = useState();
   const imageInputRef = useRef(null);
+  const [imageLoader, setImageLoader] = useState(false);
+
   const router = useRouter();
-  const { data: listEditData, loading, error } = useFetch(`${API_BASE_URL}/feature/feature/${params?.editFeature}`);
- 
+  const {
+    data: listEditData,
+    loading,
+    error,
+  } = useFetch(`${API_BASE_URL}/feature/feature/${params?.editFeature}`);
+
   const handleFeatureChange = (e) => {
     setFeature(e.target.value);
   };
@@ -24,18 +33,18 @@ export default function EditFeature({ params }) {
     setIcon(e.target.value);
   };
   const handleEnabledChange = (e) => {
-    setIsEnabled(e.target.value == 'true');
+    setIsEnabled(e.target.value == "true");
   };
   const handleForProjectChange = (e) => {
-    setIsForProject(e.target.value == 'true');
+    setIsForProject(e.target.value == "true");
   };
   const handleForPropertyChange = (e) => {
-    setIsForProperty(e.target.value == 'true');
+    setIsForProperty(e.target.value == "true");
   };
 
   useEffect(() => {
     setFeature(listEditData?.data?.Feature);
-    setIcon(listEditData?.data?.Icon ? listEditData?.data?.Icon : '' );
+    setIcon(listEditData?.data?.Icon ? listEditData?.data?.Icon : "");
     setIsEnabled(listEditData?.data?.IsEnabled);
     setIsForProject(listEditData?.data?.IsForProject);
     setIsForProperty(listEditData?.data?.IsForProperty);
@@ -55,40 +64,42 @@ export default function EditFeature({ params }) {
       return false;
     }
 
-    let payload = {Feature,Icon,IsEnabled}
-    let res = await updateFeatures(payload , params?.editFeature)
-     if(res?.resData?.success == true){
-
-       toast.success(res?.resData?.message);
-       router.push("/feature");
-      }else{
-        toast.error(res.errMessage);
-        return false;
-      }
+    let payload = { Feature, Icon, IsEnabled };
+    let res = await updateFeatures(payload, params?.editFeature);
+    if (res?.resData?.success == true) {
+      toast.success(res?.resData?.message);
+      router.push("/feature");
+    } else {
+      toast.error(res.errMessage);
+      return false;
+    }
   };
-  const  handleImageInputChange = async (event) => {
+  const handleImageInputChange = async (event) => {
     const acceptedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
 
     const file = event.target.files[0]; // Get the first file only
-    const formData= new FormData()
-    formData.append("profilePic",file)
+    const formData = new FormData();
+    formData.append("profilePic", file);
 
     // Check file type
-    if (!acceptedFileTypes.includes(file.type)) {
-        toast.error("Invalid image type. Please upload only JPEG or PNG or JPG files.");
-        if (imageInputRef.current) {
-            imageInputRef.current.value = "";
-        }
-    } else{
-      let res = await ImageString(formData)
-      if(res.successMessage){
-       setIcon(res.successMessage.imageUrl);
-      }else{
-        toast.error(res.errMessage);
+    if (!acceptedFileTypes.includes(file?.type)) {
+      toast.error(
+        "Invalid image type. Please upload only JPEG or PNG or JPG files."
+      );
+      if (imageInputRef.current) {
+        imageInputRef.current.value = "";
+      }
+    } else {
+      setImageLoader(true);
+      let res = await ImageString(formData);
+      if (res?.successMessage) {
+        setIcon(res?.successMessage?.imageUrl);
+        setImageLoader(false);
+      } else {
+        toast.error(res?.errMessage);
         return;
       }
-     
-    } 
+    }
   };
   return (
     <section>
@@ -143,7 +154,7 @@ export default function EditFeature({ params }) {
                 htmlFor="enabled"
                 className="text-sm text-gray-900 dark:text-white"
               >
-               True
+                True
               </label>
               <input
                 type="radio"
@@ -163,32 +174,37 @@ export default function EditFeature({ params }) {
             </div>
           </div>
           <div className="mb-6">
-              <label
-                htmlFor="imageInput"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Upload Icon
-              </label>
-              <input
-                type="file"
-                id="imageInput"
-                name="imageInput"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                ref={imageInputRef}
-                multiple
-                accept=".jpg, .jpeg, .png"
-                onChange={handleImageInputChange}
-                required
-              />
-              </div>
+            <label
+              htmlFor="imageInput"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+            >
+              Upload Icon
+            </label>
+            <input
+              type="file"
+              id="imageInput"
+              name="imageInput"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              ref={imageInputRef}
+              multiple
+              accept=".jpg, .jpeg, .png"
+              onChange={handleImageInputChange}
+              required
+            />
+          </div>
+          {imageLoader && <LoaderForMedia />}
           {Icon ? (
             <div className="flex flex-wrap ">
               <div className="mr-4 mb-4  ">
-              <div className="ml-2  underline">
-              <h3>Selected Icon</h3>
-              </div>
+                <div className="ml-2  underline">
+                  <h3>Selected Icon</h3>
+                </div>
                 <img
-                  src={Icon}
+                  src={
+                    !Icon.includes("https")
+                      ? `${imgApiUrl}/${Icon}`
+                      : Icon
+                  }
                   alt=""
                   className=" object-cover m-2 mt-5 border border-black rounded-lg "
                   width={200}
@@ -279,15 +295,17 @@ export default function EditFeature({ params }) {
           </div> */}
         </div>
       </form>
-      <div>
-        <button
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          type="button"
-          onClick={updateFeature}
-        >
-          Submit
-        </button>
-      </div>
+      {imageLoader === false && (
+        <div>
+          <button
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            type="button"
+            onClick={updateFeature}
+          >
+            Submit
+          </button>
+        </div>
+      )}
     </section>
   );
 }

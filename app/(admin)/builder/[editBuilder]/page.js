@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { addAmenity } from "@/api-functions/amenity/addAmenity";
 import { ImageString } from "@/api-functions/auth/authAction";
-import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER, imgApiUrl } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import Select from "react-select";
 import { GetBuilderById } from "@/api-functions/builder/getBuilderById";
@@ -58,46 +58,57 @@ export default function UpdateBuilder(params) {
   const logoInputRef = useRef(null);
   const router = useRouter();
 
-  useEffect(()=>{
-if(params){
-  const getAllBuilders = async () => {
-    let builderData = await GetBuilderById(params?.params?.editBuilder);
-    if (builderData?.resData?.success == true) {
-      console.log("builderData",builderData.resData?.data)
-      console.log("builderData?.resData?.data?.SocialMediaProfileLinks",builderData?.resData?.data?.SocialMediaProfileLinks)
-      setBuilderName(builderData?.resData?.data?.Name || "");
-      setDetailNote(builderData?.resData?.data?.DetailNote || "");
-      setBuilderMobile(builderData?.resData?.data?.Mobile || "");
-      setBuilderEmail(builderData?.resData?.data?.EmailId || "");
-      setBuilderWhatsapp(builderData?.resData?.data?.WhatsApp || "");
-      setEstablishDate(builderData?.resData?.data?.EstablishDate.slice(0,10) || "");
-      setDescription(builderData?.resData?.data?.Description || "");
-      setBuilderLogo(builderData?.resData?.data?.Logo || "");
-      setBuilderArea(builderData?.resData?.data?.Area || "");
+  useEffect(() => {
+    if (params) {
+      const getAllBuilders = async () => {
+        let builderData = await GetBuilderById(params?.params?.editBuilder);
+        if (builderData?.resData?.success == true) {
+          console.log("builderData", builderData.resData?.data);
+          console.log(
+            "builderData?.resData?.data?.SocialMediaProfileLinks",
+            builderData?.resData?.data?.SocialMediaProfileLinks
+          );
+          setBuilderName(builderData?.resData?.data?.Name || "");
+          setDetailNote(builderData?.resData?.data?.DetailNote || "");
+          setBuilderMobile(builderData?.resData?.data?.Mobile || "");
+          setBuilderEmail(builderData?.resData?.data?.EmailId || "");
+          setBuilderWhatsapp(builderData?.resData?.data?.WhatsApp || "");
+          setEstablishDate(
+            builderData?.resData?.data?.EstablishDate.slice(0, 10) || ""
+          );
+          setDescription(builderData?.resData?.data?.Description || "");
+          setBuilderLogo(builderData?.resData?.data?.Logo || "");
+          setBuilderArea(builderData?.resData?.data?.Area || "");
 
-      setImage(builderData?.resData?.data?.Images.map((item) => {
-        return item;
-      }) || []
-    );
-      setDocuments(builderData?.resData?.data?.Documents.map((item) => {
-        return item.URL;
-      }) || []
-    );
-      setBranchesData(builderData?.resData?.data?.BranchOffices.length!=0 ? builderData?.resData?.data?.BranchOffices : [initialBranchState]
-    );
-      setSocialMediaProfileLinks(builderData?.resData?.data?.SocialMediaProfileLinks || []);
-   
-      return false;
-    } else {
-      toast.error(builderData?.errMessage);
-      return false;
+          setImage(
+            builderData?.resData?.data?.Images.map((item) => {
+              return item;
+            }) || []
+          );
+          setDocuments(
+            builderData?.resData?.data?.Documents.map((item) => {
+              return item.URL;
+            }) || []
+          );
+          setBranchesData(
+            builderData?.resData?.data?.BranchOffices.length != 0
+              ? builderData?.resData?.data?.BranchOffices
+              : [initialBranchState]
+          );
+          setSocialMediaProfileLinks(
+            builderData?.resData?.data?.SocialMediaProfileLinks || []
+          );
+
+          return false;
+        } else {
+          toast.error(builderData?.errMessage);
+          return false;
+        }
+      };
+      getAllBuilders();
     }
-  };
-  getAllBuilders()
-}
-    
-  },[params])
-  
+  }, [params]);
+
   const handleNameChange = (e) => {
     setBuilderName(e.target.value);
   };
@@ -113,24 +124,21 @@ if(params){
   //For branchOffice
 
   const addMore = () => {
-    
-   
-        setBranchesData([...BranchesData, initialBranchState]);
- 
-   };
+    setBranchesData([...BranchesData, initialBranchState]);
+  };
 
   const addMoreContactPerson = (index) => {
     // const branchValidateforAdd = validateFields();
     // if (branchValidateforAdd) {
-      const updatedFormData = [...BranchesData];
-      updatedFormData[index].ContactPerson.push({
-        Name: "",
-        Mobile: "",
-        EmailId: "",
-        Phone: "",
-        Designation: "",
-      });
-      setBranchesData(updatedFormData);
+    const updatedFormData = [...BranchesData];
+    updatedFormData[index].ContactPerson.push({
+      Name: "",
+      Mobile: "",
+      EmailId: "",
+      Phone: "",
+      Designation: "",
+    });
+    setBranchesData(updatedFormData);
     // }
   };
 
@@ -200,15 +208,13 @@ if(params){
 
           try {
             const res = await ImageString(formData);
-            if (res.successMessage) {
-              console.log("Image Response", res.successMessage.imageUrl);
-              documentString.push(res.successMessage.imageUrl);
+            if (res?.successMessage) {
+              documentString.push(res?.successMessage?.imageUrl);
             } else {
-              toast.error(res.errMessage);
+              toast.error(res?.errMessage);
               return false;
             }
           } catch (error) {
-            console.error("Error occurred while converting image:", error);
             toast.error("Error occurred while converting image.");
             return false;
           }
@@ -280,11 +286,11 @@ if(params){
 
           try {
             const res = await ImageString(formData);
-            if (res.successMessage) {
-              console.log("Image Response", res.successMessage.imageUrl);
-              imageString.push(res.successMessage.imageUrl);
+            if (res?.successMessage) {
+              console.log("Image Response", res?.successMessage?.imageUrl);
+              imageString.push(res?.successMessage?.imageUrl);
             } else {
-              toast.error(res.errMessage);
+              toast.error(res?.errMessage);
               return false;
             }
           } catch (error) {
@@ -331,26 +337,29 @@ if(params){
   const submitForm = async () => {
     // const branchValidate = validateFields();
     // if (branchValidate) {
-      const builderDetails = {
-        Name: builderName,
-        SocialMediaProfileLinks: socialMediaProfileLinks,
-        DetailNote: detailNote,
-        Logo: builderLogo,
-        Area: builderArea?._id,
-        Mobile: builderMobile,
-        EmailId: builderEmail,
-        WhatsApp: builderWhatsapp,
-        Description: description,
-        EstablishDate: establishDate,
-        Images: image,
-        Documents: documents.map((URL) => ({ URL })),
-        BranchOffices: BranchesData,
-      };
-      console.log("builderDetails", builderDetails);
-      let updatebuilderData = await UpdateBuilderApi(builderDetails,params?.params?.editBuilder);
+    const builderDetails = {
+      Name: builderName,
+      SocialMediaProfileLinks: socialMediaProfileLinks,
+      DetailNote: detailNote,
+      Logo: builderLogo,
+      Area: builderArea?._id,
+      Mobile: builderMobile,
+      EmailId: builderEmail,
+      WhatsApp: builderWhatsapp,
+      Description: description,
+      EstablishDate: establishDate,
+      Images: image,
+      Documents: documents.map((URL) => ({ URL })),
+      BranchOffices: BranchesData,
+    };
+    console.log("builderDetails", builderDetails);
+    let updatebuilderData = await UpdateBuilderApi(
+      builderDetails,
+      params?.params?.editBuilder
+    );
     if (updatebuilderData?.resData?.success == true) {
-      console.log("builderData",updatebuilderData.resData?.data)
-      router.push("/builder")
+      console.log("builderData", updatebuilderData.resData?.data);
+      router.push("/builder");
       toast.success(updatebuilderData?.resData?.message);
       return false;
     } else {
@@ -409,11 +418,10 @@ if(params){
     } else {
       let res = await ImageString(formData);
       console.log("image resPonse Data=>", res);
-      if (res.successMessage) {
-        console.log("Image Response", res.successMessage.imageUrl);
-        setBuilderLogo(res.successMessage.imageUrl);
+      if (res?.successMessage) {
+        setBuilderLogo(res?.successMessage?.imageUrl);
       } else {
-        toast.error(res.errMessage);
+        toast.error(res?.errMessage);
         return;
       }
     }
@@ -421,7 +429,7 @@ if(params){
   return (
     <section>
       <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
-       Update Your Builder Details
+        Update Your Builder Details
       </h1>
       <Link href="/builder">
         <div className="mb-5 mt-5">
@@ -467,10 +475,11 @@ if(params){
                   label: element.Area,
                 }))}
                 placeholder="Select One"
-                onChange={(e)=>setBuilderArea({_id:e.value,Area:e.label})}
+                onChange={(e) =>
+                  setBuilderArea({ _id: e.value, Area: e.label })
+                }
                 required={true}
-                value={{value:builderArea?._id,
-                        label:builderArea?.Area}}
+                value={{ value: builderArea?._id, label: builderArea?.Area }}
               />
             ) : (
               <Select
@@ -609,11 +618,11 @@ if(params){
             {builderLogo ? (
               <div className="flex flex-wrap ">
                 <div className="mr-4 mb-1  ">
-                <div className="ml-2 mt-3 underline font-bold">
-                  <h3>Selected Logo</h3>
-                </div>
+                  <div className="ml-2 mt-3 underline font-bold">
+                    <h3>Selected Logo</h3>
+                  </div>
                   <img
-                    src={builderLogo}
+                    src={`${imgApiUrl}/${builderLogo}`}
                     alt=""
                     className=" object-cover m-2 mt-5 border border-black rounded-lg "
                     width={100}
@@ -650,12 +659,12 @@ if(params){
                   {image.map((imageUrl, index) => (
                     <div key={index} className="mr-4 mb-4 relative ">
                       <img
-                        src={imageUrl}
+                      src={`${imgApiUrl}/${imageUrl}`}
                         alt=""
                         className="h-20 w-20 object-cover m-2 mt-5 border border-black rounded-lg "
                       />
                       <button
-                      type="button"
+                        type="button"
                         className="absolute top-0 right-0 p-1  "
                         onClick={() => removeImage(index)}
                       >
@@ -698,7 +707,7 @@ if(params){
                     <div key={index} className="mr-4 mb-4 relative">
                       <iframe
                         title={`Document ${index}`}
-                        src={itemUrl}
+                        src={`${imgApiUrl}/${itemUrl}`}
                         className="h-48 w-64 border border-black rounded-lg"
                       />
                       <button
@@ -797,301 +806,318 @@ if(params){
           </div>
         </div>
         <div>
-          {BranchesData.length>0?( BranchesData.map((data, index) => (
-            <div key={index}>
-              {/* Main BranchOffices fields */}
-              <h2 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white underline mt-10">
-                Office Branch Details{" "}
-                <span>{index > 0 ? <span>{index + 1}</span> : null}</span>
-              </h2>
-              <div className="grid gap-4 mb-2 sm:grid-cols-3">
-                <div>
-                  <label
-                    htmlFor={`Phone-${index}`}
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                  >
-                    Phone
-                  </label>
-                  <input
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="text"
-                    id={`Phone-${index}`}
-                    value={data.Phone}
-                    onChange={(e) => handleOfficeChange(e, index, "Phone")}
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor={`Mobile-${index}`}
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                  >
-                    Mobile
-                  </label>
-                  <input
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="text"
-                    id={`Mobile-${index}`}
-                    value={data.Mobile}
-                    onChange={(e) => handleOfficeChange(e, index, "Mobile")}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor={`EmailId-${index}`}
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                  >
-                    Email ID
-                  </label>
-                  <input
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="email"
-                    id={`EmailId-${index}`}
-                    value={data.EmailId}
-                    onChange={(e) => handleOfficeChange(e, index, "EmailId")}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor={`WhatsApp-${index}`}
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                  >
-                    WhatsApp
-                  </label>
-                  <input
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="text"
-                    id={`WhatsApp-${index}`}
-                    value={data.WhatsApp}
-                    onChange={(e) => handleOfficeChange(e, index, "WhatsApp")}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor={`Area-${index}`}
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                  >
-                    Area
-                  </label>
-                  <input
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="text"
-                    id={`Area-${index}`}
-                    value={data.Area}
-                    onChange={(e) => handleOfficeChange(e, index, "Area")}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor={`City-${index}`}
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                  >
-                    City
-                  </label>
-                  <input
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="text"
-                    id={`City-${index}`}
-                    value={data.City}
-                    onChange={(e) => handleOfficeChange(e, index, "City")}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor={`State-${index}`}
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                  >
-                    State
-                  </label>
-                  <input
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="text"
-                    id={`State-${index}`}
-                    value={data.State}
-                    onChange={(e) => handleOfficeChange(e, index, "State")}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor={`Country-${index}`}
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                  >
-                    Country
-                  </label>
-                  <input
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="text"
-                    id={`Country-${index}`}
-                    value={data.Country}
-                    onChange={(e) => handleOfficeChange(e, index, "Country")}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor={`PinCode-${index}`}
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                  >
-                    Pin Code
-                  </label>
-                  <input
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    type="text"
-                    id={`PinCode-${index}`}
-                    value={data.PinCode}
-                    onChange={(e) => handleOfficeChange(e, index, "PinCode")}
-                  />
-                </div>
-                <div></div>
-              </div>
-              <div className="grid gap-4 mb-2 sm:grid-cols-3">
-                {data.ContactPerson.map((person, subIndex) => (
-                  <div key={subIndex}>
+          {BranchesData.length > 0
+            ? BranchesData.map((data, index) => (
+                <div key={index}>
+                  {/* Main BranchOffices fields */}
+                  <h2 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white underline mt-10">
+                    Office Branch Details{" "}
+                    <span>{index > 0 ? <span>{index + 1}</span> : null}</span>
+                  </h2>
+                  <div className="grid gap-4 mb-2 sm:grid-cols-3">
                     <div>
-                      <h2 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white underline mt-10">
-                        Contact Person Details{" "}
-                        <span>
-                          {subIndex > 0 ? <span>{subIndex + 1}</span> : null}
-                        </span>
-                      </h2>
+                      <label
+                        htmlFor={`Phone-${index}`}
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                      >
+                        Phone
+                      </label>
+                      <input
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        type="text"
+                        id={`Phone-${index}`}
+                        value={data.Phone}
+                        onChange={(e) => handleOfficeChange(e, index, "Phone")}
+                      />
                     </div>
 
-                    <div
-                      className="grid gap-4 mb-2 sm:grid-cols-2"
-                      key={`${index}-${subIndex}`}
-                    >
-                      <div>
-                        <label
-                          htmlFor={`Name-${index}-${subIndex}`}
-                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                        >
-                          Person Name
-                        </label>
-                        <input
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          type="text"
-                          id={`Name-${index}-${subIndex}`}
-                          value={person.Name}
-                          onChange={(e) =>
-                            handleOfficeChange(e, index, "Name", subIndex)
-                          }
-                        />
-                      </div>
-
-                      <div>
-                        <label
-                          htmlFor={`Mobile-${index}-${subIndex}`}
-                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                        >
-                          Mobile
-                        </label>
-                        <input
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          type="text"
-                          id={`Mobile-${index}-${subIndex}`}
-                          value={person.Mobile}
-                          onChange={(e) =>
-                            handleOfficeChange(e, index, "Mobile", subIndex)
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor={`EmailId-${index}-${subIndex}`}
-                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                        >
-                          Email
-                        </label>
-                        <input
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          type="email"
-                          id={`EmailId-${index}-${subIndex}`}
-                          value={person.EmailId}
-                          onChange={(e) =>
-                            handleOfficeChange(e, index, "EmailId", subIndex)
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor={`Phone-${index}-${subIndex}`}
-                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                        >
-                          Phone
-                        </label>
-                        <input
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          type="text"
-                          id={`Phone-${index}-${subIndex}`}
-                          value={person.Phone}
-                          onChange={(e) =>
-                            handleOfficeChange(e, index, "Phone", subIndex)
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor={`Designation-${index}-${subIndex}`}
-                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                        >
-                          Designation
-                        </label>
-                        <input
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          type="text"
-                          id={`Designation-${index}-${subIndex}`}
-                          value={person.Designation}
-                          onChange={(e) =>
-                            handleOfficeChange(
-                              e,
-                              index,
-                              "Designation",
-                              subIndex
-                            )
-                          }
-                        />
-                      </div>
-
-                      <div>
-                        {subIndex == 0 ? (
-                          <button
-                            type="button"
-                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
-                            onClick={() => addMoreContactPerson(index)}
-                          >
-                            Add More Contact 
-                          </button>
-                        ) : (
-                          <button
-                            type="button"
-                            className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mt-5"
-                            onClick={() =>
-                              handleDeleteContactPerson(index, subIndex)
-                            }
-                          >
-                            Delete Contact
-                          </button>
-                        )}
-                      </div>
+                    <div>
+                      <label
+                        htmlFor={`Mobile-${index}`}
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                      >
+                        Mobile
+                      </label>
+                      <input
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        type="text"
+                        id={`Mobile-${index}`}
+                        value={data.Mobile}
+                        onChange={(e) => handleOfficeChange(e, index, "Mobile")}
+                      />
                     </div>
+                    <div>
+                      <label
+                        htmlFor={`EmailId-${index}`}
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                      >
+                        Email ID
+                      </label>
+                      <input
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        type="email"
+                        id={`EmailId-${index}`}
+                        value={data.EmailId}
+                        onChange={(e) =>
+                          handleOfficeChange(e, index, "EmailId")
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor={`WhatsApp-${index}`}
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                      >
+                        WhatsApp
+                      </label>
+                      <input
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        type="text"
+                        id={`WhatsApp-${index}`}
+                        value={data.WhatsApp}
+                        onChange={(e) =>
+                          handleOfficeChange(e, index, "WhatsApp")
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor={`Area-${index}`}
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                      >
+                        Area
+                      </label>
+                      <input
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        type="text"
+                        id={`Area-${index}`}
+                        value={data.Area}
+                        onChange={(e) => handleOfficeChange(e, index, "Area")}
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor={`City-${index}`}
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                      >
+                        City
+                      </label>
+                      <input
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        type="text"
+                        id={`City-${index}`}
+                        value={data.City}
+                        onChange={(e) => handleOfficeChange(e, index, "City")}
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor={`State-${index}`}
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                      >
+                        State
+                      </label>
+                      <input
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        type="text"
+                        id={`State-${index}`}
+                        value={data.State}
+                        onChange={(e) => handleOfficeChange(e, index, "State")}
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor={`Country-${index}`}
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                      >
+                        Country
+                      </label>
+                      <input
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        type="text"
+                        id={`Country-${index}`}
+                        value={data.Country}
+                        onChange={(e) =>
+                          handleOfficeChange(e, index, "Country")
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor={`PinCode-${index}`}
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                      >
+                        Pin Code
+                      </label>
+                      <input
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        type="text"
+                        id={`PinCode-${index}`}
+                        value={data.PinCode}
+                        onChange={(e) =>
+                          handleOfficeChange(e, index, "PinCode")
+                        }
+                      />
+                    </div>
+                    <div></div>
                   </div>
-                ))}
-              </div>
-              {/* ContactPerson fields */}
+                  <div className="grid gap-4 mb-2 sm:grid-cols-3">
+                    {data.ContactPerson.map((person, subIndex) => (
+                      <div key={subIndex}>
+                        <div>
+                          <h2 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white underline mt-10">
+                            Contact Person Details{" "}
+                            <span>
+                              {subIndex > 0 ? (
+                                <span>{subIndex + 1}</span>
+                              ) : null}
+                            </span>
+                          </h2>
+                        </div>
 
-              <div>
-                {index > 0 && (
-                  <button
-                    type="button"
-                    className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mt-5"
-                    onClick={() => handleDeleteBranch(index)}
-                  >
-                    Delete Branch
-                  </button>
-                )}
-              </div>
-            </div>
-          ))):null}
-         
+                        <div
+                          className="grid gap-4 mb-2 sm:grid-cols-2"
+                          key={`${index}-${subIndex}`}
+                        >
+                          <div>
+                            <label
+                              htmlFor={`Name-${index}-${subIndex}`}
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                            >
+                              Person Name
+                            </label>
+                            <input
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                              type="text"
+                              id={`Name-${index}-${subIndex}`}
+                              value={person.Name}
+                              onChange={(e) =>
+                                handleOfficeChange(e, index, "Name", subIndex)
+                              }
+                            />
+                          </div>
+
+                          <div>
+                            <label
+                              htmlFor={`Mobile-${index}-${subIndex}`}
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                            >
+                              Mobile
+                            </label>
+                            <input
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                              type="text"
+                              id={`Mobile-${index}-${subIndex}`}
+                              value={person.Mobile}
+                              onChange={(e) =>
+                                handleOfficeChange(e, index, "Mobile", subIndex)
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label
+                              htmlFor={`EmailId-${index}-${subIndex}`}
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                            >
+                              Email
+                            </label>
+                            <input
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                              type="email"
+                              id={`EmailId-${index}-${subIndex}`}
+                              value={person.EmailId}
+                              onChange={(e) =>
+                                handleOfficeChange(
+                                  e,
+                                  index,
+                                  "EmailId",
+                                  subIndex
+                                )
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label
+                              htmlFor={`Phone-${index}-${subIndex}`}
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                            >
+                              Phone
+                            </label>
+                            <input
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                              type="text"
+                              id={`Phone-${index}-${subIndex}`}
+                              value={person.Phone}
+                              onChange={(e) =>
+                                handleOfficeChange(e, index, "Phone", subIndex)
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label
+                              htmlFor={`Designation-${index}-${subIndex}`}
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                            >
+                              Designation
+                            </label>
+                            <input
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                              type="text"
+                              id={`Designation-${index}-${subIndex}`}
+                              value={person.Designation}
+                              onChange={(e) =>
+                                handleOfficeChange(
+                                  e,
+                                  index,
+                                  "Designation",
+                                  subIndex
+                                )
+                              }
+                            />
+                          </div>
+
+                          <div>
+                            {subIndex == 0 ? (
+                              <button
+                                type="button"
+                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
+                                onClick={() => addMoreContactPerson(index)}
+                              >
+                                Add More Contact
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mt-5"
+                                onClick={() =>
+                                  handleDeleteContactPerson(index, subIndex)
+                                }
+                              >
+                                Delete Contact
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {/* ContactPerson fields */}
+
+                  <div>
+                    {index > 0 && (
+                      <button
+                        type="button"
+                        className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mt-5"
+                        onClick={() => handleDeleteBranch(index)}
+                      >
+                        Delete Branch
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))
+            : null}
+
           <button
             type="button"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"

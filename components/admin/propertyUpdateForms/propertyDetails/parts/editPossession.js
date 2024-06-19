@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER,imgApiUrl,currentPage } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
@@ -14,12 +14,15 @@ import ApiButtons from "@/components/common/admin/propertyapiButtons/ApiButtons"
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
 import NextButton from "@/components/common/admin/nextButton/nextButton";
 import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
+import EditedTag from "@/components/common/admin/editedTag/editedTag";
 
 export default function PossessionDetailsPage({
   setPropertyPageValue,
   valueForNextfromSix,
   valueForNextPagefromSix,
   setPropertyBackvalue,
+  editedKeysfromMain,
+  pageNamefromMain,
 }) {
   // fetching Data for posessionStatusData
   const { data: posessionStatusData } = useFetch(
@@ -103,14 +106,11 @@ export default function PossessionDetailsPage({
       }
     } else {
       let res = await ImageString(formData);
-      console.log("image resPonse Data=>", res);
-      if (res.successMessage) {
-        // router.push("/dashboard");
-        console.log("Image Response", res.successMessage.imageUrl);
-        setBrochure(res.successMessage.imageUrl);
+      if (res?.successMessage) {
+        setBrochure(res?.successMessage?.imageUrl);
         setDocumentLoader(false);
       } else {
-        toast.error(res.errMessage);
+        toast.error(res?.errMessage);
         return;
       }
     }
@@ -206,13 +206,11 @@ export default function PossessionDetailsPage({
 
       // Upload logic (assuming ImageString is a function that handles the upload)
       let res = await ImageString(formData);
-      console.log("Upload Response Data =>", res);
-      if (res.successMessage) {
-        console.log("Image Response", res.successMessage.imageUrl);
-        setPaymentPlan(res.successMessage.imageUrl); // Assuming the response contains the image URL
+      if (res?.successMessage) {
+        setPaymentPlan(res?.successMessage?.imageUrl); // Assuming the response contains the image URL
         setPaymentPlanLoader(false);
       } else {
-        toast.error(res.errMessage);
+        toast.error(res?.errMessage);
         setPaymentPlanLoader(false);
       }
     }
@@ -245,13 +243,11 @@ export default function PossessionDetailsPage({
       setFloorPlanLoader(true);
       // Upload logic (assuming ImageString is a function that handles the upload)
       let res = await ImageString(formData);
-      console.log("Upload Response Data =>", res);
-      if (res.successMessage) {
-        console.log("Image Response", res.successMessage.imageUrl);
-        setFloorPlan(res.successMessage.imageUrl); // Assuming the response contains the image URL
+      if (res?.successMessage) {
+        setFloorPlan(res?.successMessage?.imageUrl); // Assuming the response contains the image URL
         setFloorPlanLoader(false);
       } else {
-        toast.error(res.errMessage);
+        toast.error(res?.errMessage);
         setFloorPlanLoader(false);
       }
     }
@@ -286,6 +282,10 @@ export default function PossessionDetailsPage({
               labelName={"Possession Status"}
               ValueName={"Possession"}
               changeState={setPosessionStatus}
+              changedKeyArray={editedKeysfromMain}
+              showPageName={pageNamefromMain}
+              currentPageName={currentPage}
+              specifiedKey={"PosessionStatus"}
             />
           )}
       
@@ -298,6 +298,10 @@ export default function PossessionDetailsPage({
               labelName={"Possession Status"}
               ValueName={"Possession"}
               changeState={setPosessionStatus}
+              changedKeyArray={editedKeysfromMain}
+              showPageName={pageNamefromMain}
+              currentPageName={currentPage}
+              specifiedKey={"PosessionStatus"}
             />
           )}
 
@@ -310,6 +314,8 @@ export default function PossessionDetailsPage({
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
             >
               Available From
+              { (editedKeysfromMain?.includes("PosessionDate") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
             </label>
             <input
               type="date"
@@ -330,6 +336,8 @@ export default function PossessionDetailsPage({
                   className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
                 >
                   Age of Property
+                  { (editedKeysfromMain?.includes("AgeofProperty") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
                 </label>
                 <input
                   type="number"
@@ -351,6 +359,8 @@ export default function PossessionDetailsPage({
             className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
           >
             Brochure
+            { (editedKeysfromMain?.includes("Brochure") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
           </label>
           <input
             type="file"
@@ -372,7 +382,7 @@ export default function PossessionDetailsPage({
                 <div className="flex flex-wrap relative mt-3">
                   <div className="mr-4 mb-4 relative">
                     <iframe
-                      src={brochure}
+                      src={`${imgApiUrl}/${brochure}`}
                       className="h-48 w-64 border border-black rounded-lg"
                     />
                   </div>
@@ -389,6 +399,8 @@ export default function PossessionDetailsPage({
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
             >
               Payement Plan
+              { (editedKeysfromMain?.includes("PaymentPlan") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
             </label>
             <input
               type="file"
@@ -411,7 +423,7 @@ export default function PossessionDetailsPage({
                       {isImage(paymentPlan) ? (
                         <>
                           <img
-                            src={paymentPlan}
+                            src={`${imgApiUrl}/${paymentPlan}`}
                             alt="Selected Pyment Plan"
                             className="h-48 w-64 border border-black rounded-lg"
                           />
@@ -428,7 +440,7 @@ export default function PossessionDetailsPage({
                       ) : (
                         <>
                           <iframe
-                            src={paymentPlan}
+                            src={`${imgApiUrl}/${paymentPlan}`}
                             className="h-48 w-64 border border-black rounded-lg"
                           />
                           <button
@@ -456,6 +468,8 @@ export default function PossessionDetailsPage({
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
             >
               Floor Plan
+              { (editedKeysfromMain?.includes("FloorPlan") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
+
             </label>
             <input
               type="file"
@@ -478,7 +492,7 @@ export default function PossessionDetailsPage({
                       {isImage(floorPlan) ? (
                         <>
                           <img
-                            src={floorPlan}
+                            src={`${imgApiUrl}/${floorPlan}`}
                             alt="Selected Floor Plan"
                             className="h-48 w-64 border border-black rounded-lg"
                           />
@@ -495,7 +509,7 @@ export default function PossessionDetailsPage({
                       ) : (
                         <>
                           <iframe
-                            src={floorPlan}
+                            src={`${imgApiUrl}/${floorPlan}`}
                             className="h-48 w-64 border border-black rounded-lg"
                           />
                           <button
@@ -518,10 +532,10 @@ export default function PossessionDetailsPage({
         </div>
       </div>
 
-      {(documentLoader == false ||
-        paymentPlanLoader == false ||
-        floorPlanLoader == false) &&
-        (propertTypeValue && propertTypeValue === "Commercial" ? (
+      {(documentLoader === true ||
+        paymentPlanLoader === true ||
+        floorPlanLoader === true) ?(null):
+        propertTypeValue && propertTypeValue === "Commercial" ? (
           <ContinueButton
             modalSubmit={SubmitForm}
             butonSubName={"add Facilities Details"}
@@ -531,7 +545,7 @@ export default function PossessionDetailsPage({
             onSubmit={SubmitForm}
             butonSubName={"add Amenity Details"}
           />
-        ))}
+        )}
     </>
   );
 }

@@ -2,14 +2,14 @@
 import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER ,currentPage} from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import NextButton from "@/components/common/admin/nextButton/nextButton";
 
 export default function PropertyFaqForm({
   valueForNextPage,
   mainBackPageValue,
-  valueForBack,
+  valueForBack, editedKeys, pageName
 }) {
   const initialFieldState = [{
     Question: "What is the first step in buying a property?",
@@ -113,6 +113,8 @@ export default function PropertyFaqForm({
                       className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
                     >
                       Question
+                      { (editedKeys?.includes("Faq.Question") && pageName===currentPage) && (<EditedTag/>) } 
+
                     </label>
                     <textarea
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -131,6 +133,8 @@ export default function PropertyFaqForm({
                       className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
                     >
                       Answer
+                      { (editedKeys?.includes("Faq.Answer") && pageName===currentPage) && (<EditedTag/>) } 
+
                     </label>
                     <textarea
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

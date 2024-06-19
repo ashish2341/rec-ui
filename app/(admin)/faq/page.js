@@ -82,7 +82,7 @@ export default function Faq() {
               </button>
             </Link>
           </div>
-          {listData && listData.data.length > 0 && (
+        
           <div className="relative">
             <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
               <svg
@@ -107,7 +107,7 @@ export default function Faq() {
               onChange={searchInputChange}
             />
           </div>
-             )}
+           
         </div>
         {listData ? (
           listData?.data?.length > 0 ? (

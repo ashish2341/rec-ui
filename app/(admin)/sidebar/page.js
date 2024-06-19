@@ -106,7 +106,7 @@ export default function Sidebar({ children }) {
                     src={
                       profilePhoto !== "undefined"
                         ? `${imgApiUrl}/${profilePhoto}`
-                        : "img/default_image.png"
+                        : "https://tse4.mm.bing.net/th?id=OIP.eKTBlb4IZ5UuFavcpylTNgHaE7&pid=Api&P=0&h=180"
                     }
                     alt="Admin Image"
                     className="w-14 h-14 rounded-full mb-4"
@@ -121,7 +121,7 @@ export default function Sidebar({ children }) {
                     src={
                       profilePhoto !== "undefined"
                         ? `${imgApiUrl}/${profilePhoto}`
-                        : "img/default_image.png"
+                        : "https://images-na.ssl-images-amazon.com/images/I/41jLBhDISxL.jpg"
                     }
                     alt="Builder Image"
                     className="w-14 h-14  rounded-full mb-4"
@@ -519,7 +519,7 @@ export default function Sidebar({ children }) {
 
           <div id="bottom-div" className={`${Styles.sidebarBottomImgdiv}`}>
             <img
-              src="img/sidebar_img_3.png"
+              src="https://pngimg.com/uploads/house/house_PNG3.png"
               alt="Description of the image"
               className="w-full h-full"
             />
@@ -532,18 +532,20 @@ export default function Sidebar({ children }) {
           <nav className="border-gray-200 dark:bg-gray-900">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
               <a
-                href=""
+                href="/"
                 className="flex items-center space-x-3 rtl:space-x-reverse"
               >
+                
                 <img
                   src="/img/recLogoPng2.png"
                   className="h-8"
                   alt="Flowbite Logo"
                 />
-                {/* <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-                  REC
-                </span> */}
+               
               </a>
+              <span className={`self-center text-3xl font-bold text-gray-500  whitespace-nowrap dark:text-white ${Styles.navText}`}>
+                 Welcome to REC !!
+                </span>
               <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                 <button
                   type="button"
@@ -564,7 +566,7 @@ export default function Sidebar({ children }) {
                       src={
                         profilePhoto !== "undefined"
                           ? `${imgApiUrl}/${profilePhoto}`
-                          : "img/default_image.png"
+                          : "https://tse4.mm.bing.net/th?id=OIP.eKTBlb4IZ5UuFavcpylTNgHaE7&pid=Api&P=0&h=180"
                       }
                       alt="Admin Image"
                       className="w-10 h-10 rounded-full"
@@ -574,7 +576,7 @@ export default function Sidebar({ children }) {
                       src={
                         profilePhoto !== "undefined"
                           ? `${imgApiUrl}/${profilePhoto}`
-                          : "img/default_image.png"
+                          : "https://images-na.ssl-images-amazon.com/images/I/41jLBhDISxL.jpg"
                       }
                       alt="Builder Image"
                       className="w-10 h-10 rounded-full"

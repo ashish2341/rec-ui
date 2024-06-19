@@ -21,7 +21,7 @@ export default function ProjectInquiry(params) {
   const loginUserId = Cookies.get("userId");
   const roles = roleData && JSON.parse(roleData);
 
-  const inquiryItem = ["Project", "Property", "Astrology", "ContactUs"];
+  const inquiryItem = ["All", "Project", "Property", "Astrology", "ContactUs"];
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isPopupOpenforInquiry, setIsPopupOpenforInquiry] = useState(false);
   const [listData, setListData] = useState(false);
@@ -32,9 +32,7 @@ export default function ProjectInquiry(params) {
   console.log("params", params);
   const typedash = params?.searchParams?.type;
   console.log("typedash", typedash);
-  const [typeOnButton, setTypeOnButton] = useState(
-    typedash ? typedash : "Property"
-  );
+  const [typeOnButton, setTypeOnButton] = useState(typedash ? typedash : "");
   const [AllowedUserList, setAllowedUserList] = useState([]);
   const [isSubmitClicked, setIsSubmitClicked] = useState(0);
   const [inquiryId, setInquiryId] = useState("");
@@ -129,7 +127,12 @@ export default function ProjectInquiry(params) {
 
   const enquiryType = (filterType) => {
     setTypeOnButton(filterType);
-    getAllEnquiry(filterType);
+    if (filterType === "All") {
+      getAllEnquiry();
+    } else {
+      getAllEnquiry(filterType);
+    }
+
     setIsDropdownOpen(false);
   };
   function maskEmail(email) {
@@ -279,7 +282,7 @@ export default function ProjectInquiry(params) {
                   className="text-black bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:ring-gray-100 focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
                   type="button"
                 >
-                  {typeOnButton && typeOnButton}
+                  {typeOnButton ? typeOnButton : "All"}
                   <svg
                     className="w-2.5 h-2.5 ms-3"
                     aria-hidden="true"
@@ -358,11 +361,11 @@ export default function ProjectInquiry(params) {
                   Enquiry Type
                 </th>
               )} */}
-                  {roles.includes("Developer") && (
-                    <th scope="col" className="px-6 py-3">
-                      Enquiry Type
-                    </th>
-                  )}
+
+                  <th scope="col" className="px-6 py-3">
+                    Enquiry Type
+                  </th>
+
                   <th scope="col" className="px-6 py-3">
                     Name
                   </th>
@@ -372,6 +375,7 @@ export default function ProjectInquiry(params) {
                   <th scope="col" className="px-6 py-3">
                     Mobile No.
                   </th>
+
                   {typeOnButton != "Project" &&
                   typeOnButton != "ContactUs" &&
                   typeOnButton != "Astrology" ? (
@@ -423,14 +427,14 @@ export default function ProjectInquiry(params) {
                     {item?.EnquiryType}
                   </td>
                 )} */}
-                      {roles.includes("Developer") && (
-                        <td
-                          scope="row"
-                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                        >
-                          {item?.EnquiryType}
-                        </td>
-                      )}
+
+                      <td
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      >
+                        {item?.EnquiryType}
+                      </td>
+
                       <td
                         scope="row"
                         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -482,8 +486,10 @@ export default function ProjectInquiry(params) {
                           {roles.includes("Developer") &&
                           item?.EnquiryType != "Property" ? (
                             <span>-</span>
-                          ) : (
+                          ) : item?.PropertyId?.Title ? (
                             item?.PropertyId?.Title
+                          ) : (
+                            "-"
                           )}
                         </td>
                       ) : null}
@@ -508,7 +514,7 @@ export default function ProjectInquiry(params) {
                                 scope="row"
                                 className="px-6 py-4 font-medium text-blue-500 whitespace-nowrap dark:text-white"
                               >
-                                URL
+                                {item?.PropertyId?._id ? "URL" : "-"}
                               </td>
                             </a>
                           </Link>
@@ -587,9 +593,11 @@ export default function ProjectInquiry(params) {
                   ))}
                 </tbody>
               ) : (
-                <div className="my-20">
-                  <h1 className={` bigNotFound`}>No Data Found</h1>
-                </div>
+                <tbody>
+                  <div className="my-20">
+                    <h1 className={` bigNotFound`}>No Data Found</h1>
+                  </div>
+                </tbody>
               )}
             </table>
             <Pagination

@@ -158,17 +158,15 @@ export default function Home() {
           <div className={` ${styles.cardImgBottom}`}>
             <div className={` ${styles.populerPropertiesLocationMain} flex`}>
               <i className="bi bi-geo-alt-fill"></i>
-              <p className={`text-gray-700`}>{item.Address}</p>
+              <p className={`text-gray-700 ml-1`}>{item?.Area?.Area}</p>
             </div>
             <div className="flex justify-between">
               <h2 className={` ${styles.populerPropertiesBoxHead}`}>
                 {item.Title}
               </h2>
-              {item.LocationHub ? (
+              {item.Facing ? (
                 <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
-                  {item.LocationHub == "Others"
-                    ? item.CustomLocationHub
-                    : item.LocationHub}
+                  {item?.Facing[0].Facing}
                 </div>
               ) : (
                 <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
@@ -212,11 +210,17 @@ export default function Home() {
       >
         <div className={`${styles.testimonialLeft}`}>
           <div className={`${styles.testimonialLeftBoxDetails} text-center`}>
+            {item.Image ? 
             <img
               className={` ${styles.testimonialImg}  mb-3`}
               src={`${imgApiUrl}/${item.Image}`}
               alt="test"
-            />
+            /> :
+            <img
+            className={` ${styles.testimonialImg}  mb-3`}
+            src="../img/no-image@2x.png"
+             /> 
+             }
             <h2 className={`${styles.testimonialLeftHead} justify-center`}>
               {item.MemberName}
             </h2>

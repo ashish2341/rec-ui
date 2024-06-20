@@ -2,29 +2,63 @@
 
 import { useCallback, useState } from "react";
 import Styles from "./forgetPassword.module.css";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ToastContainer, toast } from "react-toastify";
-import {  UserForgoPassword } from "@/api-functions/auth/authAction";
+import { toast } from "react-toastify";
+import { resetPassword } from "@/api-functions/auth/resetPasssword";
 
-export default function OtpVarify() {
+export default function passwordReset({params}) {
   const router = useRouter();
-  const [email, setEmail] = useState("");
   const [NewPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
 
-  const handleEmail = useCallback((value) => {
-    setEmail(() => value.target.value);
+//   const handleEmail = useCallback((value) => {
+//     setEmail(() => value.target.value);
+//   }, []);
+  const handlePassword = useCallback((value) => {
+    const pvalue = value.target.value;
+    setNewPassword(pvalue);
+
+    // Check if passwords match when new password changes
+    if (pvalue !== confirmPassword) {
+        setPasswordsMatch(false);
+    } else {
+        setPasswordsMatch(true);
+    }
   }, []);
-  const submitForm = async () => {
-    let res = await  UserForgoPassword({ email });
+
+
+const handleConfirmPasswordChange = (event) => {
+    const value = event.target.value;
+    setConfirmPassword(value);
+
+    if (NewPassword !== value) {
+        setPasswordsMatch(false);
+    } else {
+        setPasswordsMatch(true);
+    }
+};
+const submitForm = async () => {
+    if (NewPassword.length < 5) {
+        toast.error("Password must be at least 5 characters long");
+        return;
+      }
+    
+      if (NewPassword !== confirmPassword) {
+        toast.error("Passwords do not match");
+        return;
+      }
+    let res = await  resetPassword(params?.userId, params?.tokenId, { password: NewPassword });
 
     if (res.successMessage) {
       toast.success(res.successMessage.message)
+      router.push("/login")
     } else {
       toast.error(res.errMessage);
       return;
     }
   };
+
   return (
     <section
       className={` ${Styles.loginMain} bg-gray-50 dark:bg-gray-900 h-100`}
@@ -45,10 +79,10 @@ export default function OtpVarify() {
         >
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-             Forgot Password
+             Reset Password
             </h1>
             <form className="space-y-4 md:space-y-6">
-              <div>
+              {/* <div>
                 <label
                   htmlFor="phone"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -63,8 +97,8 @@ export default function OtpVarify() {
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                 />
-              </div>
-              {/* <div>
+              </div> */}
+              <div>
                 <label
                   htmlFor="newpassword"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -81,7 +115,28 @@ export default function OtpVarify() {
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required=""
                 />
-              </div> */}
+              </div>
+              <div>
+                <label
+                  htmlFor="confirmPassword"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Confirm New Password
+                </label>
+                <input
+                  type="confirmPassword"
+                  value={confirmPassword}
+                  onChange={handleConfirmPasswordChange}
+                  name="confirmPassword"
+                  id="confirmPassword"
+                  placeholder="••••••••"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  required=""
+                />
+                {!passwordsMatch && (
+                            <p className="text-red-500 text-sm mt-1">Password should match.</p>
+                        )}
+              </div>
              {/* <Link href={`/auth/reset/${userId}/${token}`}></Link> */}
               <button
                 onClick={submitForm}
@@ -90,15 +145,6 @@ export default function OtpVarify() {
               >
                 Send
               </button>
-              {/* <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                Don’t have an account yet?{" "}
-                <Link
-                  href="/signup"
-                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  Sign up
-                </Link>
-              </p> */}
             </form>
           </div>
         </div>

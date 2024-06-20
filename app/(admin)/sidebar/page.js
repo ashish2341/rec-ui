@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Styles from "./sidebar.module.css";
 import { usePathname } from "next/navigation";
@@ -11,22 +11,50 @@ import { imgApiUrl } from "@/utils/constants";
 
 export default function Sidebar({ children }) {
   const pathname = usePathname();
+
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
   const profilePhoto = Cookies.get("profilePhoto");
   const roles = roleData && JSON.parse(roleData);
   const userId = Cookies.get("userId");
 
+  const [activeTab, setActiveTab] = useState();
 
-  const [activeTab, setActiveTab] = useState(pathname.replace("/", ""));
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const router = useRouter();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const dropdownRef = useRef(null);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const closeDropdown = () => {
+    setIsDropdownOpen(false);
+  };
+
+  // Function to handle clicks outside the dropdown
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsDropdownOpen(false);
+    }
+  };
+  useEffect(() => {
+    // Attach event listener when the component mounts
+    document.addEventListener('mousedown', handleClickOutside);
+    // Clean up the event listener when the component unmounts
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
   };
-
+  useEffect(() => {
+    setActiveTab(pathname.split("/"));
+  }, [pathname]);
   const logout = () => {
     setIsPopupOpen(true);
   };
@@ -46,6 +74,7 @@ export default function Sidebar({ children }) {
       Cookies.remove("name");
       Cookies.remove("userId");
       Cookies.remove("roles");
+      Cookies.remove("profilePhoto");
       router.push("/login");
     }
   };
@@ -139,14 +168,14 @@ export default function Sidebar({ children }) {
                   to="/dashboard"
                   onClick={() => handleTabClick("dashboard")}
                   className={` ${
-                    activeTab === "dashboard"
+                    activeTab?.includes("dashboard")
                       ? Styles.activeTab
                       : Styles.inactiveTab
                   } flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group`}
                 >
                   <svg
                     className={`${
-                      activeTab === "dashboard" ? "" : Styles.inactiveTab
+                      activeTab?.includes("dashboard") ? "" : Styles.inactiveTab
                     }  ${
                       Styles.tabSvg
                     }  flex-shrink-0 w-5 h-5 text-gray-900 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-black`}
@@ -168,14 +197,16 @@ export default function Sidebar({ children }) {
                       href="/property"
                       onClick={() => handleTabClick("property")}
                       className={` ${
-                        activeTab === "property"
+                        activeTab?.includes("property")
                           ? Styles.activeTab
                           : Styles.inactiveTab
                       } flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group`}
                     >
                       <svg
                         className={`${
-                          activeTab === "property" ? "" : Styles.inactiveTab
+                          activeTab?.includes("property")
+                            ? ""
+                            : Styles.inactiveTab
                         }  ${
                           Styles.tabSvg
                         }  flex-shrink-0 w-5 h-5 text-gray-900 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-black`}
@@ -201,14 +232,14 @@ export default function Sidebar({ children }) {
                       href="/users"
                       onClick={() => handleTabClick("users")}
                       className={` ${
-                        activeTab === "users"
+                        activeTab?.includes("users")
                           ? Styles.activeTab
                           : Styles.inactiveTab
                       } flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group`}
                     >
                       <svg
                         className={`${
-                          activeTab === "users" ? "" : Styles.inactiveTab
+                          activeTab?.includes("users") ? "" : Styles.inactiveTab
                         }  ${
                           Styles.tabSvg
                         }  flex-shrink-0 w-5 h-5 text-gray-900 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-black`}
@@ -229,14 +260,14 @@ export default function Sidebar({ children }) {
                       href="/reviewProperty"
                       onClick={() => handleTabClick("reviewProperty")}
                       className={` ${
-                        activeTab === "reviewProperty"
+                        activeTab?.includes("reviewProperty")
                           ? Styles.activeTab
                           : Styles.inactiveTab
                       } flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group`}
                     >
                       <svg
                         className={`${
-                          activeTab === "reviewProperty"
+                          activeTab?.includes("reviewProperty")
                             ? ""
                             : Styles.inactiveTab
                         }  ${
@@ -258,12 +289,26 @@ export default function Sidebar({ children }) {
                   <li>
                     <button
                       type="button"
-                      className={`${Styles.tabText} flex items-center w-full p-2 text-base hover:text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
+                      className={`${
+                        activeTab?.includes("property") ||
+                        activeTab?.includes("project")
+                          ? Styles.activeTab
+                          : Styles.inactiveTab
+                      } ${
+                        Styles.tabText
+                      } flex items-center w-full p-2 text-base hover:text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
                       aria-controls="propertyProjectDropdown"
                       data-collapse-toggle="propertyProjectDropdown"
                     >
                       <svg
-                        className={`${Styles.tabText} flex-shrink-0 w-5 h-5  transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white`}
+                        className={` ${
+                          activeTab?.includes("property") ||
+                          activeTab?.includes("project")
+                            ? Styles.activeTab
+                            : Styles.inactiveTab
+                        } ${
+                          Styles.tabText
+                        } flex-shrink-0 w-5 h-5  transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white`}
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor"
@@ -299,7 +344,7 @@ export default function Sidebar({ children }) {
                           href="/property"
                           onClick={() => handleTabClick("property")}
                           className={` ${
-                            activeTab === "property"
+                            activeTab?.includes("property")
                               ? Styles.activeTab
                               : Styles.inactiveTab
                           } flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
@@ -312,7 +357,7 @@ export default function Sidebar({ children }) {
                           href="/project"
                           onClick={() => handleTabClick("project")}
                           className={` ${
-                            activeTab === "project"
+                            activeTab?.includes("project")
                               ? Styles.activeTab
                               : Styles.inactiveTab
                           } flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
@@ -325,12 +370,30 @@ export default function Sidebar({ children }) {
                   <li>
                     <button
                       type="button"
-                      className={`${Styles.tabText} flex items-center w-full p-2 text-base hover:text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
+                      className={`${
+                        activeTab?.includes("builder") ||
+                        activeTab?.includes("amenity") ||
+                        activeTab?.includes("feature") ||
+                        activeTab?.includes("banner")
+                          ? Styles.activeTab
+                          : Styles.inactiveTab
+                      } ${
+                        Styles.tabText
+                      } flex items-center w-full p-2 text-base hover:text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
                       aria-controls="dropdown-example"
                       data-collapse-toggle="dropdown-example"
                     >
                       <svg
-                        className={`${Styles.tabText} flex-shrink-0 w-5 h-5  transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white`}
+                        className={`${
+                          activeTab?.includes("builder") ||
+                          activeTab?.includes("amenity") ||
+                          activeTab?.includes("feature") ||
+                          activeTab?.includes("banner")
+                            ? Styles.activeTab
+                            : Styles.inactiveTab
+                        } ${
+                          Styles.tabText
+                        } flex-shrink-0 w-5 h-5  transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white`}
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor"
@@ -363,7 +426,7 @@ export default function Sidebar({ children }) {
                           href="/amenity"
                           onClick={() => handleTabClick("amenity")}
                           className={` ${
-                            activeTab === "amenity"
+                            activeTab?.includes("amenity")
                               ? Styles.activeTab
                               : Styles.inactiveTab
                           } flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
@@ -376,7 +439,7 @@ export default function Sidebar({ children }) {
                           href="/feature"
                           onClick={() => handleTabClick("feature")}
                           className={` ${
-                            activeTab === "feature"
+                            activeTab?.includes("feature")
                               ? Styles.activeTab
                               : Styles.inactiveTab
                           } flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
@@ -389,7 +452,7 @@ export default function Sidebar({ children }) {
                           href="/builder"
                           onClick={() => handleTabClick("builder")}
                           className={` ${
-                            activeTab === "builder"
+                            activeTab?.includes("builder")
                               ? Styles.activeTab
                               : Styles.inactiveTab
                           } flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
@@ -402,7 +465,7 @@ export default function Sidebar({ children }) {
                           href="/banner"
                           onClick={() => handleTabClick("banner")}
                           className={` ${
-                            activeTab === "banner"
+                            activeTab?.includes("banner")
                               ? Styles.activeTab
                               : Styles.inactiveTab
                           } flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700`}
@@ -417,14 +480,16 @@ export default function Sidebar({ children }) {
                       href="/testiMonials"
                       onClick={() => handleTabClick("testiMonials")}
                       className={` ${
-                        activeTab === "testiMonials"
+                        activeTab?.includes("testiMonials")
                           ? Styles.activeTab
                           : Styles.inactiveTab
                       } flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group`}
                     >
                       <svg
                         className={`${
-                          activeTab === "testiMonials" ? "" : Styles.inactiveTab
+                          activeTab?.includes("testiMonials")
+                            ? ""
+                            : Styles.inactiveTab
                         }  ${
                           Styles.tabSvg
                         }  flex-shrink-0 w-5 h-5 text-gray-900 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-black`}
@@ -445,14 +510,14 @@ export default function Sidebar({ children }) {
                       href="/faq"
                       onClick={() => handleTabClick("faq")}
                       className={` ${
-                        activeTab === "faq"
+                        activeTab?.includes("faq")
                           ? Styles.activeTab
                           : Styles.inactiveTab
                       } flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group`}
                     >
                       <svg
                         className={`${
-                          activeTab === "faq" ? "" : Styles.inactiveTab
+                          activeTab?.includes("faq") ? "" : Styles.inactiveTab
                         }  ${
                           Styles.tabSvg
                         }  flex-shrink-0 w-5 h-5 text-gray-900 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-black`}
@@ -473,14 +538,14 @@ export default function Sidebar({ children }) {
                   href="/projectInquiry"
                   onClick={() => handleTabClick("projectInquiry")}
                   className={` ${
-                    activeTab === "projectInquiry"
+                    activeTab?.includes("projectInquiry")
                       ? Styles.activeTab
                       : Styles.inactiveTab
                   } flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group`}
                 >
                   <svg
                     className={`${
-                      activeTab === "projectInquiry"
+                      activeTab?.includes("projectInquiry")
                         ? Styles.activeTab
                         : Styles.inactiveTab
                     }${
@@ -535,32 +600,26 @@ export default function Sidebar({ children }) {
                 href="/"
                 className="flex items-center space-x-3 rtl:space-x-reverse"
               >
-                
+
                 <img
                   src="/img/recLogoPng2.png"
                   className="h-8"
                   alt="Flowbite Logo"
                 />
-               
+
               </a>
               <span className={`self-center text-3xl font-bold text-gray-500  whitespace-nowrap dark:text-white ${Styles.navText}`}>
-                 Welcome to REC !!
-                </span>
+                Welcome to REC !!
+              </span>
               <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                 <button
                   type="button"
                   className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                   id="user-menu-button"
-                  aria-expanded="false"
-                  data-dropdown-toggle="user-dropdown"
-                  data-dropdown-placement="bottom"
+                  aria-expanded={isDropdownOpen ? 'true' : 'false'}
+                  onClick={toggleDropdown}
                 >
                   <span className="sr-only">Open user menu</span>
-                  {/* <img
-                    className="w-8 h-8 rounded-full"
-                    src="https://flowbite.com/docs/images/logo.svg"
-                    alt="user photo"
-                  /> */}
                   {roles.includes("Admin") ? (
                     <img
                       src={
@@ -583,42 +642,49 @@ export default function Sidebar({ children }) {
                     />
                   )}
                 </button>
-                <div
-                  className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-                  id="user-dropdown"
-                >
-                  <div className="px-4 py-3">
-                    <span className="block text-sm text-gray-900 dark:text-white">
-                      {name}
-                    </span>
+                {isDropdownOpen && (
+                  <div
+                   ref={dropdownRef}
+                    className="z-50 absolute top-20 right-0 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                    id="user-dropdown"
+                    onBlur={closeDropdown}
+                  >
+                    <div className="px-4 py-3">
+                      <span className="block text-sm text-gray-900 dark:text-white">
+                        {name}
+                      </span>
+                    </div>
+                    <ul className="py-2" aria-labelledby="user-menu-button">
+                      <li>
+                        <Link
+                          href="/profile"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                          onClick={closeDropdown}
+                        >
+                          My Profile
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href={`/password?userId=${userId}`}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                          onClick={closeDropdown}
+                        >
+                          Change Password
+                        </Link>
+                      </li>
+                      <li onClick={logout}>
+                        <Link
+                          href="#"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                          onClick={closeDropdown}
+                        >
+                          Sign out
+                        </Link>
+                      </li>
+                    </ul>
                   </div>
-                  <ul className="py-2" aria-labelledby="user-menu-button">
-                    <li>
-                      <Link
-                        href="/profile"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                      >
-                        My Profile
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href={`/password?userId=${userId}`}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                      >
-                        Change Password
-                      </Link>
-                    </li>
-                    <li onClick={logout}>
-                      <Link
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                      >
-                        Sign out
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
+                )}
               </div>
             </div>
           </nav>

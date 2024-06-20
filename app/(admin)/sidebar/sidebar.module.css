@@ -11,7 +11,12 @@
 }
 .activeTab{
     --tw-bg-opacity: 1;
-    background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+    background-color: rgb(243 244 246 / var(--tw-bg-opacity)) !important;
+    color: black !important;
+}
+.activeTabChild{
+    --tw-bg-opacity: 1;
+    background-color:rgb(191 207 240)  !important;
     color: black !important;
 }
 .inactiveTab:hover {

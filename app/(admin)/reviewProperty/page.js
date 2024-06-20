@@ -11,7 +11,7 @@ import { DeleteProperty } from "@/api-functions/property/deleteProperty";
 import Cookies from "js-cookie";
 import { GetPropertyBybuilderApi } from "@/api-functions/property/getPropertyBybuilder";
 import { GetReviewPropertyApi } from "@/api-functions/property/getReviewProperties";
-export default function ReviewProperty() {
+export default function ReviewProperty(params) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
   const roles = roleData && JSON.parse(roleData);
@@ -25,7 +25,7 @@ export default function ReviewProperty() {
 
   useEffect(() => {
     getAllReviewProperties();
-  }, [page, searchData]);
+  }, [page, searchData,params]);
   const getAllReviewProperties = async () => {
     console.log("getAllReviewProperties searchData",searchData)
     let properties = await GetReviewPropertyApi(searchData);

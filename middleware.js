@@ -1,48 +1,54 @@
 import { NextResponse } from "next/server";
 import jwt from "@tsndr/cloudflare-worker-jwt";
 import { PROD_URL, UI_URL } from "./utils/constants";
-import {jwtVerify} from 'jose';
-const adminRoute = ['/amenity']
+import { jwtVerify } from "jose";
+const builderRoute = ["/property", "/dashboard", "/projectInquiry", "/profile"];
 export const config = {
   matcher: [
-
-    // "/dashboard",
-    // ...adminRoute
-
+    "/property/:path*",
+    "/projectInquiry",
+    "/dashboard",
+    "/amenity/:path*",
+    "/users",
+    "/reviewProperty/:path*",
+    "/project/:path*",
+    "/feature/:path*",
+    "/builder/:path*",
+    "/banner/:path*",
+    "/testiMonials/:path*",
+    "/faq/:path*",
+    "/profile",
   ],
 };
-const navUrl = process.env.NODE_ENV == 'development' ? UI_URL : PROD_URL
+const navUrl = process.env.NODE_ENV == "development" ? UI_URL : PROD_URL;
+console.log("navUrl", navUrl);
 export default async function middleware(req) {
-
-
   try {
     const token = req.cookies.get("token");
-    const roleData = req.cookies.get("roles") ?? '';
+    const roleData = req.cookies.get("roles") ?? "";
 
     if (!token) {
-
       return NextResponse.redirect(`${navUrl}/login`);
     }
-    const cleanedToken = token.value.replace(/"/g, '');
-    const isValid = await jwt.verify(cleanedToken, process.env.JWT);
-    const jwtRes = await jwtVerify(cleanedToken, new TextEncoder().encode(process.env.JWT));
-    const isTokenValid = Object.keys(jwtRes)?.length == 0 ? false :true
-    console.log('payload',isTokenValid)
-    console.log('isValid',isValid)
-    
 
+    const cleanedToken = token.value.replace(/"/g, "");
+    const jwtRes = await jwtVerify(
+      cleanedToken,
+      new TextEncoder().encode(process.env.JWT)
+    );
 
-    if (!isValid) {
-
+    if (!jwtRes?.payload?._id) {
       return NextResponse.redirect(`${navUrl}/login`);
     }
-    if (roleData.value?.includes('Developer') && adminRoute.includes(req.nextUrl.pathname)) {
-
+    if (
+      roleData?.value?.includes("Developer") &&
+      !builderRoute?.includes(req.nextUrl.pathname)
+    ) {
       return NextResponse.redirect(`${navUrl}/dashboard`);
     }
     return NextResponse.next();
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     return NextResponse.redirect(`${navUrl}/login`);
   }
 }

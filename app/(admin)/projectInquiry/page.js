@@ -5,7 +5,7 @@ import Popup from "@/components/common/popup";
 import useFetch from "@/customHooks/useFetch";
 import { API_BASE_URL } from "@/utils/constants";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { ExportToExcel } from "@/components/common/exportToCsv";
 import { GetEnquiryApi } from "@/api-functions/enquiry/getEnquiry";
@@ -29,9 +29,7 @@ export default function ProjectInquiry(params) {
   const [page, setPage] = useState(1);
   const [searchData, setSearchData] = useState("");
   const [filterData, setFilterData] = useState("");
-  console.log("params", params);
   const typedash = params?.searchParams?.type;
-  console.log("typedash", typedash);
   const [typeOnButton, setTypeOnButton] = useState(typedash ? typedash : "");
   const [AllowedUserList, setAllowedUserList] = useState([]);
   const [isSubmitClicked, setIsSubmitClicked] = useState(0);
@@ -42,6 +40,7 @@ export default function ProjectInquiry(params) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [adminExcelData, setadminExcelData] = useState([]);
   const [builderExcelData, setBuilderExcelData] = useState([]);
+  const dropdownRef = useRef(null);
   useEffect(() => {
     initFlowbite(); // Call initCarousels() when component mounts
   }, []);
@@ -49,9 +48,12 @@ export default function ProjectInquiry(params) {
     if (roles.includes("Admin")) {
       getAllEnquiry(typeOnButton);
     } else {
+      if (typeOnButton) {
+        setTypeOnButton("");
+      }
       getAllEnquiryByBuilder(typeOnButton);
     }
-  }, [page, searchData, isSubmitClicked, isDeleted, toDate]);
+  }, [page, searchData, isSubmitClicked, isDeleted, toDate, params]);
 
   const getAllEnquiry = async (filterType) => {
     const todayEnquiry = params.searchParams.todayEnquiry;
@@ -72,9 +74,10 @@ export default function ProjectInquiry(params) {
       return false;
     }
   };
-  console.log("listData", listData);
+
   const getAllEnquiryByBuilder = async (filterType) => {
     const todayEnquiry = params.searchParams.todayEnquiry;
+
     let enquiries = await GetEnquiryByBuilderApi(
       page,
       searchData,
@@ -183,8 +186,6 @@ export default function ProjectInquiry(params) {
           "Name",
         ];
         const filterCsvData = (data, keys) => {
-          console.log("filterCsvData data ", data);
-          console.log("filterCsvData keys ", keys);
           return data.map((item) => {
             let newItem = {};
             keys.forEach((key) => {
@@ -192,7 +193,7 @@ export default function ProjectInquiry(params) {
                 newItem[key] = item[key];
               }
             });
-            console.log("filterCsvData newItem ", newItem);
+
             return newItem;
           });
         };
@@ -214,16 +215,8 @@ export default function ProjectInquiry(params) {
               if (item.hasOwnProperty(key)) {
                 // Check if there's an action to be performed on this key
                 if (!IsInquiryVisiable(item) && key === "MolileNumber") {
-                  console.log(
-                    "!IsInquiryVisiable(item) && key===MolileNumber",
-                    IsInquiryVisiable(item)
-                  );
                   newItem[key] = maskNumber(item?.MolileNumber);
                 } else if (!IsInquiryVisiable(item) && key === "Email") {
-                  console.log(
-                    "!IsInquiryVisiable(item) && key===Email",
-                    IsInquiryVisiable(item)
-                  );
                   newItem[key] = maskEmail(item?.Email);
                 } else {
                   newItem[key] = item[key];
@@ -240,8 +233,20 @@ export default function ProjectInquiry(params) {
       }
     }
   }, [listData]);
-
-  console.log("builderExcelData", builderExcelData);
+ // Function to handle clicks outside the dropdown
+ const handleClickOutside = (event) => {
+  if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    setIsDropdownOpen(false);
+  }
+};
+useEffect(() => {
+  // Attach event listener when the component mounts
+  document.addEventListener('mousedown', handleClickOutside);
+  // Clean up the event listener when the component unmounts
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+  };
+}, []);
   return (
     <section>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3">
@@ -277,6 +282,7 @@ export default function ProjectInquiry(params) {
                 {" "}
                 {/* Ensure relative positioning */}
                 <button
+                
                   id="dropdownPossessionButton"
                   onClick={toggleDropdown}
                   className="text-black bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:ring-gray-100 focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
@@ -300,10 +306,11 @@ export default function ProjectInquiry(params) {
                   </svg>
                 </button>
                 <div
+                 ref={dropdownRef}
                   id="dropdownPossession"
                   className={`z-10 ${
                     isDropdownOpen ? "block" : "hidden"
-                  } absolute top-full mt-2 bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
+                  } absolute top-full mt-2 bg-white divide-y divide-white rounded-lg shadow w-44 dark:bg-white`}
                 >
                   <ul
                     className="p-2 text-sm text-gray-700 dark:text-gray-200 list-none"
@@ -313,7 +320,7 @@ export default function ProjectInquiry(params) {
                       <li key={index} onClick={() => enquiryType(item)}>
                         <Link
                           href="#"
-                          className="block px-4 py-2 hover:bg-white hover:text-black dark:hover:bg-gray-600 dark:hover:text-white"
+                          className="block px-4 py-2 hover:bg-gray-200 hover:text-black dark:hover:bg-gray-600 dark:hover:text-gray-200"
                         >
                           {item}
                         </Link>

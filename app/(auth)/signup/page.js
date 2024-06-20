@@ -153,14 +153,13 @@ export default function Signup() {
       ProfilePhoto:image
     };
     let res = await SignUpUser(signupData)
-    console.log("resdata inside page ",res)
-    if(res.successMessage){
-       router.push("/otpVarify");
+    if(res?.successMessage){
+       router.push("/login");
       
-       toast.success(res.successMessage.message)
+       toast.success(res?.successMessage?.message)
 
     }else{
-      toast.error(res.errMessage);
+      toast.error(res?.errMessage);
       return;
     }
   
@@ -181,7 +180,6 @@ export default function Signup() {
         }
     } else{
       let res = await ImageString(formData)
-      console.log("image resPonse Data=>",res)
       if(res?.successMessage){
        // router.push("/dashboard");
         setImage(res?.successMessage?.imageUrl);

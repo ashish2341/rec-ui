@@ -44,33 +44,33 @@ const FeaturedProperty = (params) => {
   const { data: propertyTypeData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/propertyWithSubTypes`
   );
-  // console.log("propertyTypeData",propertyTypeData)
+
   // fetching Data for bhkTypeData
   const { data: bhkTypeData } = useFetch(`${API_BASE_URL_FOR_MASTER}/bhkType`);
-  // console.log("bhkTypeData",bhkTypeData)
+
   // fetching Data for propertyStatusData
   const { data: propertyStatusData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/propertyStatus`
   );
-  // console.log("propertyStatusData",propertyStatusData)
+
   // fetching Data for preferencesData
   const { data: preferencesData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/preferences`
   );
-  // console.log("",)
+
   // fetching Data for Area
   const { data: areaData } = useFetch(`${API_BASE_URL_FOR_MASTER}/areas`);
-  // console.log("areaData",areaData)
+
   // fetching Data for posessionStatusData
   const { data: posessionStatusData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/possession`
   );
-  // console.log("posessionStatusData",posessionStatusData)
+
   // fetching Data for featureData
   const { data: featureData } = useFetch(
     `${API_BASE_URL}/feature/allFeature?page=1&pageSize=10&search=`
   );
-  // console.log("featureData",featureData)
+ 
   //using params
 
   const {
@@ -102,7 +102,7 @@ const FeaturedProperty = (params) => {
     IsFeatured: "",
     IsExclusive: "",
   });
-  console.log("Outeside payload", payload);
+
   const pathname = usePathname();
   const [expanded, setExpanded] = useState(false);
   const [activeSection, setActiveSection] = useState("general");
@@ -117,7 +117,7 @@ const FeaturedProperty = (params) => {
   useEffect(() => {
     if (payload) {
       const payloadWithId = extractIDsAndUpdateData(payload);
-      // console.log("payloadWithId", payloadWithId);
+     
       payloadWithId.budget = payloadWithId.budget.flat();
       getAllFilterProperties(payloadWithId);
     }
@@ -135,7 +135,7 @@ const FeaturedProperty = (params) => {
     }
     return newData;
   }
-  // console.log("item",item.id)
+
   const longText =
     "Nestled within the vibrant streets of Jaipur, Rajasthan, lies a hidden gem – an enchanting Haveli that embodies the essence of royal living. This majestic property seamlessly blends traditional Rajasthani architecture with modern comforts, offering a truly unique retreat for those seeking an authentic cultural experience.";
 
@@ -229,7 +229,7 @@ const FeaturedProperty = (params) => {
           });
         }
       }
-      console.log("updatedFilters", updatedFilters);
+    
       return updatedFilters;
     });
   };
@@ -257,7 +257,7 @@ const FeaturedProperty = (params) => {
 
   //here upload payload data which is comes from the child component sortbutton
   const updatePayload = (newPayload) => {
-    console.log("newPayload", newPayload);
+  
     setPayload((prevPayload) => ({
       ...prevPayload,
       ...newPayload, // Merge the new payload with the existing state

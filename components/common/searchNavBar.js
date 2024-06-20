@@ -5,7 +5,7 @@ import styles from "./css/navbar.module.css";
 const SearchBar = () => {
   const [query, setQuery] = useState('');
   const router = useRouter();
-  console.log("router",router)
+
 
   const handleSubmit = (e) => {
     e.preventDefault();

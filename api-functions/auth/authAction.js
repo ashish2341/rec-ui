@@ -117,7 +117,7 @@ export const UserForgoPassword = async (payload,setLoading=()=>{}) => {
   setLoading(true);
 console.log('API_BASE_URL',API_BASE_URL)
   try {
-    const res = await fetch(`${API_BASE_URL}/auth/forgetPassword`, {
+    const res = await fetch(`${API_BASE_URL}/auth/emailSendForForget`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -41,17 +41,19 @@ export default function Password(params) {
     const router = useRouter();
 
     const submitUserForm = async () => {
+        if(NewPassword !== confirmPassword){
+            toast.error("Password does not match");
+            return false;
+          }
         const UserDetails = {
             OldPassword: OldPassword,
             NewPassword: NewPassword
         };
-        console.log("UserDetails", UserDetails);
         let updateUserData = await UpdatePassword(params?.searchParams?.userId, UserDetails);
         if (updateUserData?.resData?.success == true && NewPassword == confirmPassword) {
             toast.success(updateUserData?.resData?.message);
             return false;
         } else {
-            console.log("updateUserData", updateUserData)
             toast.error(updateUserData?.errMessage);
             return false;
         }

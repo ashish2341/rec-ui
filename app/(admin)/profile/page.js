@@ -17,6 +17,7 @@ import {
   imgApiUrl,
 } from "@/utils/constants";
 import { UpdateBuilderApi } from "@/api-functions/builder/updateBuilder";
+import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
 
 export default function Profile() {
   const [userData, setUserData] = useState(false);
@@ -30,9 +31,7 @@ export default function Profile() {
   }, [rerenderforUser]);
 
   const getUser = async () => {
-    console.log("get User function is called");
     let user = await GetUserById(userId);
-    console.log("userData", user);
     if (user?.resData?.success == true) {
       setUserData(user?.resData?.data);
       setFirstUserName(user?.resData?.data?.FirstName);
@@ -52,7 +51,6 @@ export default function Profile() {
       Mobile: UserMobile,
       EmailId: UserEmailId,
     };
-    console.log("UserDetails", UserDetails);
     let updateUserData = await UpdateUserApi(UserDetails, userId);
     if (updateUserData?.resData?.success == true) {
       Cookies.set("name", FirstUserName);
@@ -116,15 +114,16 @@ export default function Profile() {
   const [establishDate, setEstablishDate] = useState("");
   const [description, setDescription] = useState("");
   const [builderLogo, setBuilderLogo] = useState("");
+  const [imageLoader, setImageLoader] = useState(false);
+  const [docLoader, setDocLoader] = useState(false);
+  const [logoLoader, setLogoLoader] = useState(false);
   const logoInputRef = useRef(null);
   const router = useRouter();
 
   useEffect(() => {
     const getAllBuilders = async () => {
       let builderData = await GetBuilderByUserId();
-      console.log("builderDatatwo", builderData);
       if (builderData?.resData?.success == true) {
-        console.log("builderData?.resData?.data", builderData?.resData?.data);
         setBuilderData(builderData?.resData?.data || "");
         setBuilderName(builderData?.resData?.data?.Name || "");
         setDetailNote(builderData?.resData?.data?.DetailNote || "");
@@ -247,8 +246,6 @@ export default function Profile() {
     ];
 
     const files = Array.from(event.target.files);
-    console.log("Document Files", files);
-    console.log("files.type", files.type);
 
     // Check file types
     const invalidFiles = files.filter(
@@ -261,35 +258,30 @@ export default function Profile() {
         documentInputRef.current.value = "";
       }
     } else {
+      setDocLoader(true)
       const documentString = [];
 
       // Map each file to its corresponding image string asynchronously
       await Promise.all(
         files.map(async (item) => {
-          console.log("image File inside map", item);
           const formData = new FormData();
           formData.append("profilePic", item);
 
           try {
             const res = await ImageString(formData);
             if (res?.successMessage) {
-              console.log("Image Response", res?.successMessage?.imageUrl);
+              setDocLoader(false);
               documentString.push(res?.successMessage?.imageUrl);
             } else {
               toast.error(res?.errMessage);
+              setDocLoader(false);
               return false;
             }
           } catch (error) {
-            console.error("Error occurred while converting image:", error);
             toast.error("Error occurred while converting image.");
             return false;
           }
         })
-      );
-
-      console.log(
-        "documentString files data after convert string",
-        documentString
       );
 
       // Filter unique files based on filename
@@ -298,22 +290,18 @@ export default function Profile() {
           url.lastIndexOf("-") + 1,
           url.lastIndexOf(".")
         );
-        console.log("documentString filename", filename);
         if (documents.length > 0) {
           return !documents.some((existingFile) => {
             const existingFilename = existingFile.substring(
               existingFile.lastIndexOf("-") + 1,
               existingFile.lastIndexOf(".")
             );
-            console.log("documents existingFilename", existingFilename);
             return existingFilename === filename;
           });
         } else {
           return filename;
         }
       });
-
-      console.log("uniqueFiles data after convert string", uniqueFiles);
 
       // Update the document state
       setDocuments([...documents, ...uniqueFiles]);
@@ -341,33 +329,31 @@ export default function Profile() {
         imageInputRef.current.value = "";
       }
     } else {
+      setImageLoader(true);
       const imageString = [];
 
       // Map each file to its corresponding image string asynchronously
       await Promise.all(
         files.map(async (item) => {
-          console.log("image File inside map", item);
           const formData = new FormData();
           formData.append("profilePic", item);
 
           try {
             const res = await ImageString(formData);
             if (res?.successMessage) {
-              console.log("Image Response", res?.successMessage?.imageUrl);
+              setImageLoader(false);
               imageString.push(res?.successMessage?.imageUrl);
             } else {
               toast.error(res?.errMessage);
+              setImageLoader(false);
               return false;
             }
           } catch (error) {
-            console.error("Error occurred while converting image:", error);
             toast.error("Error occurred while converting image.");
             return false;
           }
         })
       );
-
-      console.log("image files data after convert string", imageString);
 
       // Filter unique files based on filename
       const uniqueFiles = imageString.filter((url) => {
@@ -375,15 +361,12 @@ export default function Profile() {
           url.lastIndexOf("-") + 1,
           url.lastIndexOf(".")
         );
-        console.log("imageString filename", filename);
         if (image.length > 0) {
           return !image.some((existingFile) => {
-            console.log("imageString existingFile", existingFile);
             const existingFilename = existingFile.substring(
               url.lastIndexOf("-") + 1,
               existingFile.lastIndexOf(".")
             );
-            console.log("image existingFilename", existingFilename);
 
             return filename === existingFilename;
           });
@@ -392,7 +375,6 @@ export default function Profile() {
         }
       });
       setImage([...image, ...uniqueFiles]);
-      console.log("uniqueFiles data after convert string", uniqueFiles);
 
       if (imageInputRef.current) {
         imageInputRef.current.value = "";
@@ -401,8 +383,14 @@ export default function Profile() {
   };
 
   const submitForm = async () => {
-    // const branchValidate = validateFields();
-    // if (branchValidate) {
+    if(image.length == 0){
+      toast.error("Image is required")
+      return false;
+    }
+    if(documents.length == 0){
+      toast.error("Document is required")
+      return false;
+    }
     const builderDetails = {
       Name: builderName,
       SocialMediaProfileLinks: socialMediaProfileLinks,
@@ -418,14 +406,11 @@ export default function Profile() {
       Documents: documents.map((URL) => ({ URL })),
       BranchOffices: BranchesData,
     };
-    console.log("builderDetails", builderDetails);
     let updatebuilderData = await UpdateBuilderApi(
       builderDetails,
       builderData._id
     );
-    console.log("updatebuilderData",updatebuilderData)
     if (updatebuilderData?.resData?.success == true) {
-      console.log("builderData", updatebuilderData?.resData?.data);
       router.push("/profile");
       toast.success(updatebuilderData?.resData?.message);
       return false;
@@ -439,7 +424,6 @@ export default function Profile() {
   const removeImage = (index) => {
     const newArray = [...image];
     newArray.splice(index, 1);
-    console.log("newArray", newArray);
     setImage(newArray);
 
     if (newArray.length == 0) {
@@ -472,7 +456,6 @@ export default function Profile() {
     const file = event.target.files[0]; // Get the first file only
     const formData = new FormData();
     formData.append("profilePic", file);
-    console.log("image File", file);
 
     // Check file type
     if (!acceptedFileTypes.includes(file.type)) {
@@ -483,13 +466,14 @@ export default function Profile() {
         logoInputRef.current.value = "";
       }
     } else {
+      setLogoLoader(true)
       let res = await ImageString(formData);
-      console.log("image resPonse Data=>", res);
       if (res?.successMessage) {
-        console.log("Image Response", res?.successMessage?.imageUrl);
+        setLogoLoader(false)
         setBuilderLogo(res?.successMessage?.imageUrl);
       } else {
         toast.error(res?.errMessage);
+        setLogoLoader(false)
         return;
       }
     }
@@ -725,6 +709,7 @@ export default function Profile() {
                 onChange={handleLogoInputChange}
                 required
               />
+              {logoLoader && <LoaderForMedia /> }
               {builderLogo ? (
                 <div className="flex flex-wrap ">
                   <div className="mr-4 mb-1  ">
@@ -760,6 +745,7 @@ export default function Profile() {
                 onChange={handleImageInputChange}
                 required
               />
+              {imageLoader && <LoaderForMedia /> }
               {image.length > 0 ? (
                 <div>
                   <div className="ml-2 mt-3 underline font-bold">
@@ -807,6 +793,7 @@ export default function Profile() {
                 onChange={handleDocumentInputChange}
                 required
               />
+              {docLoader && <LoaderForMedia /> }
               {documents.length > 0 ? (
                 <div>
                   <div className="ml-2 mt-3 underline font-bold">
@@ -1098,7 +1085,7 @@ export default function Profile() {
                             <div>
                               <label
                                 htmlFor={`Name-${index}-${subIndex}`}
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
+                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required "
                               >
                                 Person Name
                               </label>

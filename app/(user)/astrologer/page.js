@@ -50,7 +50,7 @@ const AstrologerPage = () => {
         toast.error(res.errMessage);
         return false;
       }
-    console.log("payload",payload);
+    
   }
   const handleNameChange = (e) => {
     setName(e.target.value);

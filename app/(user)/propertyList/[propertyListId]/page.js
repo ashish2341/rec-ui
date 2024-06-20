@@ -75,9 +75,8 @@ const PropertyListPage = (params) => {
   } = params.searchParams;
   if (budgetData) {
     var budgetStr = budgetData.split(",");
-    // console.log("budgetStr", budgetStr);
+
     var parsedNumbers = AbbreviatedNumberParser(budgetStr);
-    // console.log("parsedNumbers", parsedNumbers);
   }
 
   const [payload, setPayload] = useState({
@@ -100,7 +99,7 @@ const PropertyListPage = (params) => {
     IsFeatured: "",
     IsExclusive: "",
   });
-  // console.log("Outeside payload", payload);
+
   const pathname = usePathname();
   const [expanded, setExpanded] = useState(false);
   const [activeSection, setActiveSection] = useState("general");
@@ -119,13 +118,13 @@ const PropertyListPage = (params) => {
         ? [{ id: areaId, label: areaLabel }]
         : prevPayload.areaType,
     }));
-    // console.log("area useEffect working");
+
     setResetBtnValue(true);
   }, [areaId, areaLabel]);
   useEffect(() => {
     if (payload) {
       const payloadWithId = extractIDsAndUpdateData(payload);
-      // console.log("payloadWithId", payloadWithId);
+
       payloadWithId.budget = payloadWithId.budget.flat();
       payloadWithId.search = searchData;
       // payloadWithId.areaType = areaId;
@@ -166,7 +165,6 @@ const PropertyListPage = (params) => {
   }, []);
 
   const getAllFilterProperties = async (payloadData) => {
-    // console.log("payloadData", payloadData);
     let properties = await GetPropertyByQueryApi(payloadData);
     if (properties?.resData?.success == true) {
       setListData(properties?.resData.data);
@@ -183,12 +181,9 @@ const PropertyListPage = (params) => {
 
   const handleCheckBoxChange = (event) => {
     const { name, checked } = event.target;
-    console.log("handleCheckBoxChange name", name);
-    console.log("handleCheckBoxChange checked", checked);
     const valueObject = JSON.parse(event.target.value);
     const { id, label } = valueObject;
-    console.log("handleCheckBoxChange id", id);
-    console.log("handleCheckBoxChange label", label);
+
     setPayload((prevPayload) => ({
       ...prevPayload,
       [name]: checked
@@ -239,9 +234,6 @@ const PropertyListPage = (params) => {
   };
 
   const handleRemoveBadge = (id) => {
-    console.log("handleRemoveBadge id", id);
-    console.log("handleRemoveBadge before payload", payload);
-
     setPayload((prevFilters) => {
       // Modify the state based on the previous state
       const updatedFilters = { ...prevFilters };
@@ -256,24 +248,7 @@ const PropertyListPage = (params) => {
           });
         }
       }
-      console.log("updatedFilters", updatedFilters);
-      // let keyWithSingleObject = null; // Variable to store the key with exactly one object in its array
 
-      // for (let key in payload) {
-      //   if (Array.isArray(payload[key]) && payload[key].length === 1) {
-      //     if (keyWithSingleObject === null) {
-      //       keyWithSingleObject = key; // Store the key if it meets the condition for the first time
-      //     } else {
-      //       keyWithSingleObject = null; // Reset the variable if another key with single object is found
-      //       break; // Exit the loop since there are multiple keys with single object
-      //     }
-      //   }
-      // }
-
-      // if (keyWithSingleObject !== null) {
-      //   resetSelectItem(); // Perform action if exactly one key with one object is found
-      // }
-      // Return the modified state
       return updatedFilters;
     });
   };
@@ -302,7 +277,6 @@ const PropertyListPage = (params) => {
 
   //here upload payload data which is comes from the child component sortbutton
   const updatePayload = (newPayload) => {
-    // console.log("newPayload", newPayload);
     setPayload((prevPayload) => ({
       ...prevPayload,
       ...newPayload, // Merge the new payload with the existing state

@@ -35,7 +35,8 @@ export default function EditProperty(params) {
   const [loading, setLoading] = useState(false);
   const [isRender, setIsRender] = useState(false);
   const [oldPropertyData, setOldPropertyData] = useState("");
-  const [editedItemsArray,setEditedItemsArray]=useState([])
+  const [editedItemsArray, setEditedItemsArray] = useState([]);
+  const [oldEditedItemArray, setOldEditedItemArray] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -111,6 +112,7 @@ export default function EditProperty(params) {
             "EditPropertyData",
             JSON.stringify(data?.data)
           );
+          setOldEditedItemArray(data?.data.EditedItems)
           setOldPropertyData(data?.data);
           setLoading(false);
           setIsRender(true);
@@ -151,21 +153,20 @@ export default function EditProperty(params) {
     setValueForBack(value);
   };
   function findDifferentKeys(obj1, obj2) {
-    const differentKeys = [];
+    const differentKeysSet = new Set(oldEditedItemArray);
 
     function compareValues(key, value1, value2) {
       if (value1 === value2) {
         return;
       }
 
-      // Include keys if one value is null/undefined/empty and the other is not
       if (
         (value1 === null || value1 === undefined || value1 === "") &&
         value2 !== null &&
         value2 !== undefined &&
         value2 !== ""
       ) {
-        differentKeys.push(key);
+        differentKeysSet.add(key);
         return;
       }
       if (
@@ -174,7 +175,7 @@ export default function EditProperty(params) {
         value1 !== undefined &&
         value1 !== ""
       ) {
-        differentKeys.push(key);
+        differentKeysSet.add(key);
         return;
       }
 
@@ -189,7 +190,7 @@ export default function EditProperty(params) {
             value1.length !== value2.length ||
             !value1.every((item, index) => compareArrays(item, value2[index]))
           ) {
-            differentKeys.push(key);
+            differentKeysSet.add(key);
           }
         } else if (!Array.isArray(value1) && !Array.isArray(value2)) {
           const nestedKeys = new Set([
@@ -204,10 +205,10 @@ export default function EditProperty(params) {
             );
           });
         } else {
-          differentKeys.push(key); // One is array and the other is not
+          differentKeysSet.add(key); // One is array and the other is not
         }
       } else {
-        differentKeys.push(key);
+        differentKeysSet.add(key);
       }
     }
 
@@ -239,7 +240,7 @@ export default function EditProperty(params) {
       compareValues(key, obj1[key], obj2[key]);
     });
 
-    return differentKeys;
+    return Array.from(differentKeysSet);
   }
   function processArray(arr) {
     if (arr.length === 0) {
@@ -429,7 +430,7 @@ export default function EditProperty(params) {
       };
     }
 
-    console.log("formatedPropertyData", formatedPropertyData);
+    
     if (EditPropertyData) {
       const finalizePropertyData = {
         Title: EditPropertyData?.Title,
@@ -603,14 +604,16 @@ export default function EditProperty(params) {
           ? EditPropertyData?.PaymentPlan
           : "",
       };
+
       if (roles.includes("Developer")) {
-        const editedKeys = findDifferentKeys(
+        const editedKeys= findDifferentKeys(
           finalizePropertyData,
           formatedPropertyData
         );
         console.log("editedKeys", editedKeys);
-        finalizePropertyData.EditedItems=editedKeys
+        finalizePropertyData.EditedItems = editedKeys;
       }
+
       console.log("finalizePropertyData", finalizePropertyData);
       const propertyId = params?.params?.editProperty;
       let res = await UpdatePropertyApi(finalizePropertyData, propertyId);
@@ -704,7 +707,7 @@ export default function EditProperty(params) {
               valueForNext={handelNextBtnValue}
               valueForNextPage={pageValue}
               editedKeys={editedItemsArray}
-                pageName={"Property"}
+              pageName={"Property"}
             />
           )}
           {pageValue === 2 && (
@@ -712,8 +715,7 @@ export default function EditProperty(params) {
               valueForNext={handelNextBtnValue}
               valueForNextPage={pageValue}
               editedKeys={editedItemsArray}
-                pageName={"Property"}
-              
+              pageName={"Property"}
             />
           )}
           {pageValue === 3 && (
@@ -723,7 +725,7 @@ export default function EditProperty(params) {
               valueForNextPage={pageValue}
               setPageValueInsidePropertyForm={setPageValueInsidePropertyForm}
               editedKeys={editedItemsArray}
-                pageName={"Property"}
+              pageName={"Property"}
             />
           )}
           {pageValue === 4 && (
@@ -734,7 +736,7 @@ export default function EditProperty(params) {
               valueForNext={handelNextBtnValue}
               valueForNextPage={pageValue}
               editedKeys={editedItemsArray}
-                pageName={"Property"}
+              pageName={"Property"}
             />
           )}
 
@@ -743,7 +745,7 @@ export default function EditProperty(params) {
               valueForNext={handelNextBtnValue}
               valueForNextPage={pageValue}
               editedKeys={editedItemsArray}
-                pageName={"Property"}
+              pageName={"Property"}
             />
           )}
           {pageValue === 6 && (
@@ -752,7 +754,7 @@ export default function EditProperty(params) {
               valueForBack={handelBackValue}
               mainBackPageValue={valueForBack}
               editedKeys={editedItemsArray}
-                pageName={"Property"}
+              pageName={"Property"}
             />
           )}
           {valueForBack === 1 && (

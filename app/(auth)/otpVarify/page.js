@@ -45,7 +45,6 @@ export default function OtpVarify() {
     }
 
     let res = await UserOtpVarify({ Mobile,Otp });
-    console.log("otp data inside page ",res.errMessage)
     if (res.successMessage) {
       router.push("/dashboard");
       toast.success(res.successMessage.message)

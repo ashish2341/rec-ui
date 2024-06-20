@@ -1,9 +1,27 @@
 import styles from "../../../app/(user)/propertyList/[propertyListId]/propertyList.module.css";
 import { GetPropertyApi } from "@/api-functions/property/getProperty";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 const SortByButton = ({ arrayItem, updatePayload }) => {
-
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+ // Function to handle clicks outside the dropdown
+ const handleClickOutside = (event) => {
+  if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    setIsDropdownOpen(false);
+  }
+};
+useEffect(() => {
+  // Attach event listener when the component mounts
+  document.addEventListener('mousedown', handleClickOutside);
+  // Clean up the event listener when the component unmounts
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+  };
+}, []);
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
   const propertiesBySort = (itemkey, sortItem1, sortitem2) => {
     const newPayload = {
       sortBy:
@@ -28,6 +46,7 @@ const SortByButton = ({ arrayItem, updatePayload }) => {
 
     // Call the function passed from the parent to update the state
     updatePayload(newPayload);
+    setIsDropdownOpen(false);
   };
 
   return (
@@ -35,10 +54,8 @@ const SortByButton = ({ arrayItem, updatePayload }) => {
       <div>
         <li className="me-2 mt-2 list-none">
           <button
+           onClick={toggleDropdown}
             id="dropdownSortByButton"
-            data-dropdown-toggle="dropdownSortBy"
-            data-dropdown-delay="500"
-            data-dropdown-trigger="hover"
             className={`text-black bg-lightgrey border border-black hover:bg-lightgrey-800 focus:ring-4 focus:outline-none focus:ring-lightgrey-300 font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center dark:bg-lightgrey-600 dark:hover:bg-lightgrey-700 dark:focus:ring-lightgrey-800 ${styles.GeneralDetailsSortDropdown}`}
             type="button"
           >
@@ -61,8 +78,11 @@ const SortByButton = ({ arrayItem, updatePayload }) => {
           </button>
 
           <div
+           ref={dropdownRef}
             id="dropdownSortBy"
-            className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+            className={`${
+              isDropdownOpen ? "block" : "hidden"
+            } z-10 absolute bg-gray-200 mt-2 divide-y divide-gray-100 rounded-lg shadow w-38 dark:bg-gray-700`}
           >
             <ul
               className="py-2 text-sm text-gray-700 dark:text-gray-200"

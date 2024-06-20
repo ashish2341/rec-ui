@@ -184,7 +184,7 @@ function countNonNullProperties(obj,rolesData) {
     obj?.ProeprtyType === "Residential" &&
     obj?.PropertySubtype?.Name === "Plot"
   ) {
-    console.log("Residential and Plot if worked");
+    // console.log("Residential and Plot if worked");
     skipKeyNames.push(
       "DgUpsCharge",
       "TaxCharge",
@@ -435,7 +435,7 @@ function countNonNullProperties(obj,rolesData) {
       }
     }
   }
-  console.log("countedKeys", countedKeys);
+  // console.log("countedKeys", countedKeys);
   return count;
 }
 
@@ -544,10 +544,10 @@ export const GetPropertyScore = (obj, type) => {
         : 45,
     },
   ];
-   console.log("GetPropertyScore types", types);
+  //  console.log("GetPropertyScore types", types);
   const allFields = types.find((f) => f.type == type)?.fields;
   const fieldValue = countNonNullProperties(obj,roles);
-  console.log("GetPropertyScore fieldValue", fieldValue);
+  // console.log("GetPropertyScore fieldValue", fieldValue);
   // const fillFields  = Object.values(obj)?.filter(type => type)?.length
   const compPerc = (fieldValue / allFields) * 100;
   return parseInt(compPerc);

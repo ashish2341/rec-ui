@@ -18,7 +18,7 @@ export default function Builder(params) {
 
   useEffect(() => {
     getAllBuilder();
-  }, [page, searchData]);
+  }, [page, searchData,params]);
   
   const getAllBuilder = async () => {
     let builder = await GetBuilderApi(page, searchData, todayBuilder);

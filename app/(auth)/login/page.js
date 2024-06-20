@@ -11,47 +11,61 @@ export default function Login() {
   const router = useRouter();
   const [Mobile, setMobile] = useState("");
   const [Password, setPassword] = useState("");
-
+const [passwordShow,setPasswordShow]=useState(false)
   const handleMobile = useCallback((value) => {
     setMobile(() => value.target.value);
   }, []);
   const handlePassword = useCallback((value) => {
     setPassword(() => value.target.value);
   }, []);
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+
+      login();
+    }
+  };
   const login = async () => {
-   // Check if the field is empty
-   if (Mobile === "") {
-    toast.error("Phone number cannot be empty");
-    return false;
-  }
+    // Check if the field is empty
+    if (Mobile === "") {
+      toast.error("Phone number cannot be empty");
+      return false;
+    }
 
-  // Check if the number has exactly 10 digits
-  if (!/^\d{10}$/.test(Mobile)) {
-    toast.error("Phone number must be 10 digits long");
-    return false;
-  }
+    // Check if the number has exactly 10 digits
+    if (!/^\d{10}$/.test(Mobile)) {
+      toast.error("Phone number must be 10 digits long");
+      return false;
+    }
 
-  // Check if the number starts with 9, 8, or 7
-  if (!/^[789]/.test(Mobile)) {
-    toast.error("Phone number must start with 9, 8, or 7");
-    return false;
-  }
+    // Check if the number starts with 9, 8, or 7
+    if (!/^[789]/.test(Mobile)) {
+      toast.error("Phone number must start with 9, 8, or 7");
+      return false;
+    }
     // Validate Password
     if (Password.length < 5) {
       toast.error("Password must be at least 5 characters long");
       return false;
     }
-    let res = await loginUser({Mobile,Password})
-   
-    if(res?.token){
-      router.push("/dashboard");
-      toast.success("LogIn Successfully")
+    let res = await loginUser({ Mobile, Password });
 
-    }else{
+    if (res?.token) {
+      router.push("/dashboard");
+      toast.success("LogIn Successfully");
+    } else {
       toast.error(res?.errMessage);
       return;
     }
   };
+  const handelPasswordShow=()=>{
+    if(!passwordShow){
+      setPasswordShow(true)
+    }else{
+      setPasswordShow(false)
+    }
+    
+  }
   return (
     <section
       className={` ${Styles.loginMain} bg-gray-50 dark:bg-gray-900 h-100`}
@@ -74,14 +88,15 @@ export default function Login() {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Sign in to your account
             </h1>
-            <form className="space-y-4 md:space-y-6">
-            <div>
+            <form onKeyDown={handleKeyPress} className="space-y-4 md:space-y-6">
+              <div>
                 <label
                   htmlFor="phone"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Phone number
                 </label>
+               
                 <input
                   type="tel"
                   value={Mobile}
@@ -100,7 +115,26 @@ export default function Login() {
                 >
                   Password
                 </label>
-                <input
+                <div className="relative">
+                  <input
+                    type={passwordShow ? "text" :"password"}
+                    value={Password}
+                    onChange={handlePassword}
+                    name="password"
+                    id="password"
+                    placeholder="Password"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full  p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    required=""
+                  />
+                  <button
+                  onClick={handelPasswordShow}
+                    type="button"
+                    className={`text-black absolute end-2.5 bottom-2.5 font-bold rounded-lg text-xl px-4 py-2 ${Styles.eyeButton}`}
+                  >{passwordShow ? (<i className="bi bi-eye-slash-fill"></i>):(<i className="bi bi-eye-fill"></i>)}
+                  
+                  </button>
+                </div>
+                {/* <input
                   type="password"
                   value={Password}
                   onChange={handlePassword}
@@ -109,7 +143,7 @@ export default function Login() {
                   placeholder="Password"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required=""
-                />
+                /> */}
               </div>
               <div className="flex items-center justify-between">
                 {/* <div className="flex items-start">

@@ -32,13 +32,13 @@ export default function Dashboard() {
   const [filterData, setFilterData] = useState("");
 
   useEffect(() => {
-    console.log("useEffect roles", roles);
+  
     if (roles.includes("Admin")) {
-      console.log("admin function called");
+    
       getPropertiesAdminDashboard();
       getPropertiesAdminGraph();
     } else {
-      console.log("buillder function called");
+   
       getPropertiesBuilderDashboard();
       getPropertiesBuilderGraph();
     }
@@ -112,7 +112,7 @@ export default function Dashboard() {
       const propertyBuilderData = builderGraphData.properties || [];
       let chartData = {};
 
-      console.log("roles", roles);
+  
 
       if (roles.includes("Admin")) {
         chartData = {
@@ -245,8 +245,7 @@ export default function Dashboard() {
     }
   };
 
-  console.log("adminGraphData", adminGraphData);
-  console.log("builderGraphData", builderGraphData);
+
 
   return (
     <>
@@ -407,10 +406,10 @@ export default function Dashboard() {
                       </h2>
                     </div>
                   </Link>
-                  <div>
+                  <div className="mb-10">
                     <Link href={`/property?todayProperty=yes`}>
                       <p
-                        className={`text-2xl font-bold ${styles.PropColor} hover:underline`}
+                        className={`text-2xl mb-2 font-bold ${styles.PropColor} hover:underline`}
                       >
                         {roles.includes("Admin")
                           ? adminDashboardData?.todayAddProperty
@@ -423,7 +422,7 @@ export default function Dashboard() {
                     {roles.includes("Admin") ? (
                       <Link href="/reviewProperty">
                         <p
-                          className={`text-2xl font-bold ${styles.PropColor} hover:underline`}
+                          className={`text-2xl mb-2 font-bold ${styles.PropColor} hover:underline`}
                         >
                           {adminDashboardData?.underReviewProperty}{" "}
                           <span className={`font-normal `}>
@@ -434,7 +433,7 @@ export default function Dashboard() {
                     ) : (
                       <Link href="/property?showValue=false">
                         <p
-                          className={`text-2xl font-bold ${styles.PropColor} hover:underline`}
+                          className={`text-2xl mb-2 font-bold ${styles.PropColor} hover:underline`}
                         >
                           {builderDashboardData?.underReviewProperty}{" "}
                           <span className={`font-normal `}>
@@ -448,7 +447,7 @@ export default function Dashboard() {
                         {" "}
                         <Link href="/property">
                           <p
-                            className={`text-2xl font-bold ${styles.PropColor} hover:underline`}
+                            className={`text-2xl mb-2 font-bold ${styles.PropColor} hover:underline`}
                           >
                             {adminDashboardData?.approvedProperty}
                             <span className={`font-normal `}>
@@ -459,7 +458,7 @@ export default function Dashboard() {
                         </Link>
                         <Link href="/property?type=Admin">
                           <p
-                            className={`text-2xl font-bold ${styles.PropColor} hover:underline`}
+                            className={`text-2xl mb-2 font-bold ${styles.PropColor} hover:underline`}
                           >
                             {adminDashboardData?.TotalAdminProperty}
                             <span className={`font-normal `}>
@@ -472,7 +471,7 @@ export default function Dashboard() {
                     ) : (
                       <Link href="/property?showValue=true">
                         <p
-                          className={`text-2xl font-bold ${styles.PropColor} hover:underline`}
+                          className={`text-2xl mb-2 font-bold ${styles.PropColor} hover:underline`}
                         >
                           {builderDashboardData?.approvedProperty}{" "}
                           <span className={`font-normal `}>

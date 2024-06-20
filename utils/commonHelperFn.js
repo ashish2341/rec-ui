@@ -86,7 +86,8 @@ export const ArrayNumbertoString = (numberArray) => {
 };
 
 //TO find out Property Score
-function countNonNullProperties(obj) {
+function countNonNullProperties(obj,rolesData) {
+
   let count = 0;
   let countedKeys = [];
   const skipObjNames = [
@@ -121,7 +122,11 @@ function countNonNullProperties(obj) {
     "CurentRent",
     "LeaseYears",
     "ExpectedReturn",
+    "EditedItems"
   ];
+  if (rolesData.includes("Developer")) {
+    skipKeyNames.push("Builder");
+  }
   if (
     obj?.ProeprtyType === "Residential" &&
     obj?.PropertySubtype?.Name !== "Plot"
@@ -154,6 +159,7 @@ function countNonNullProperties(obj) {
       "ExpectedReturn",
       "LeasedOrRented"
     );
+   
     if (obj?.Fencing === "Other") {
       skipKeyNames.push("Fencing");
     }
@@ -178,7 +184,7 @@ function countNonNullProperties(obj) {
     obj?.ProeprtyType === "Residential" &&
     obj?.PropertySubtype?.Name === "Plot"
   ) {
-    console.log("Residential and Plot if worked");
+    // console.log("Residential and Plot if worked");
     skipKeyNames.push(
       "DgUpsCharge",
       "TaxCharge",
@@ -538,10 +544,10 @@ export const GetPropertyScore = (obj, type) => {
         : 45,
     },
   ];
-  // console.log("GetPropertyScore types", types);
+  //  console.log("GetPropertyScore types", types);
   const allFields = types.find((f) => f.type == type)?.fields;
-  const fieldValue = countNonNullProperties(obj);
-  console.log("GetPropertyScore fieldValue", fieldValue);
+  const fieldValue = countNonNullProperties(obj,roles);
+  // console.log("GetPropertyScore fieldValue", fieldValue);
   // const fillFields  = Object.values(obj)?.filter(type => type)?.length
   const compPerc = (fieldValue / allFields) * 100;
   return parseInt(compPerc);

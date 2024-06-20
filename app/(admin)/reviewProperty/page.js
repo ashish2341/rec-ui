@@ -11,7 +11,7 @@ import { DeleteProperty } from "@/api-functions/property/deleteProperty";
 import Cookies from "js-cookie";
 import { GetPropertyBybuilderApi } from "@/api-functions/property/getPropertyBybuilder";
 import { GetReviewPropertyApi } from "@/api-functions/property/getReviewProperties";
-export default function ReviewProperty() {
+export default function ReviewProperty(params) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
   const roles = roleData && JSON.parse(roleData);
@@ -25,9 +25,10 @@ export default function ReviewProperty() {
 
   useEffect(() => {
     getAllReviewProperties();
-  }, [page, searchData]);
+  }, [page, searchData,params]);
   const getAllReviewProperties = async () => {
-    let properties = await GetReviewPropertyApi();
+    console.log("getAllReviewProperties searchData",searchData)
+    let properties = await GetReviewPropertyApi(searchData);
     if (properties?.resData?.success == true) {
       setListData(properties?.resData);
       toast.success(properties?.resData?.message);
@@ -75,7 +76,7 @@ export default function ReviewProperty() {
         <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
           Review Property
         </h1>
-        {listData?.data?.length > 0 ? (
+
           <div className="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-end mr-2 pb-4">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
@@ -102,7 +103,7 @@ export default function ReviewProperty() {
               />
             </div>
           </div>
-        ) : null}
+       
 
         {listData ? (
           listData?.data?.length > 0 ? (

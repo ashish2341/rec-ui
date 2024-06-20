@@ -1,4 +1,9 @@
-export default function TextInput({labelName,inputValue, dynamicState,}) {
+import EditedTag from "../editedTag/editedTag";
+
+export default function TextInput({labelName,inputValue, dynamicState,changedKeyArray,
+  showPageName,
+  currentPageName,
+  specifiedKey,}) {
   
   return (
     <>
@@ -8,6 +13,8 @@ export default function TextInput({labelName,inputValue, dynamicState,}) {
           className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
         >
         {labelName}
+        {changedKeyArray?.includes(specifiedKey) &&
+            showPageName === currentPageName && <EditedTag />}
         </label>
         <input
           type="text"

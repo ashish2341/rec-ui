@@ -17,7 +17,7 @@ import { Table, Card } from "flowbite-react";
 import { useRouter } from 'next/navigation';
 
 
-export default function Users() {
+export default function Users(params) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [listData, setListData] = useState(false);
   const [listPropData, setListPropData] = useState();
@@ -30,14 +30,16 @@ export default function Users() {
   const [isSubmitClicked,setIsSubmitClicked]=useState(0)
   const [openModal, setOpenModal] = useState(false);
   const router = useRouter();
+  const todayUser = params.searchParams.todayUser;
 
   useEffect(() => {
     getAllUser();
-    getUserDetails();
-}, [page, searchData ,isSubmitClicked, userId]);
+    
+}, [page, searchData ,isSubmitClicked,params]);
+
 
   const getAllUser = async () => {
-    let users = await GetUserApi(page, searchData);
+    let users = await GetUserApi(page, searchData, todayUser);
     if (users?.resData?.success == true) {
       setListData(users?.resData);
       toast.success(users?.resData?.message);
@@ -48,22 +50,19 @@ export default function Users() {
     }
   };
 
-  const getUserDetails = async () => {
-    let users = await GetUserDetailsById(userId);
+  const getUserDetails = async (specificUserId) => {
+    let users = await GetUserDetailsById(specificUserId);
     if (users?.resData?.success == true) {
       setListPropData(users?.resData?.data?.properties);
       setListUserData(users?.resData?.data?.user);
       setListEnqData(users?.resData?.data?.enquiries);
       toast.success(users?.resData?.message);
-      console.log("listPropData",users?.resData?.data);
       return false;
     } else {
       toast.error(users?.errMessage);
       return false;
     }
   };
-  console.log("listUserData",listUserData);
-  console.log("listEnqData",listEnqData);
 
   const searchInputChange = (e) => {
     setSearchData(e.target.value);
@@ -71,7 +70,6 @@ export default function Users() {
   const handleDelete = async () => {
     // Perform delete operation
     let res = await DeleteUser(deleteId);
-    console.log(" testimonial res", res);
     if (res?.resData?.success == true) {
       getAllUser();
       setDeleteId("");
@@ -101,7 +99,6 @@ export default function Users() {
     setIsPopupOpen(true);
   };
   const handlePageChange = (newPage) => {
-    console.log(newPage);
     setPage(newPage);
   };
 
@@ -111,7 +108,6 @@ export default function Users() {
         IsEnquiryVisiable: newValue
       };
       const id=selectedId;
-      console.log("payload ",payload)
       let res = await UpdateUserApi(
         payload,
         id
@@ -127,11 +123,10 @@ export default function Users() {
 
   const buttonId = (e) => {
       setOpenModal(true);
-      setUserId(e.target.value);
       setListPropData(null); // Reset property data
   setListUserData(null); // Reset user data
   setListEnqData(null);
-      console.log("user",userId)
+      getUserDetails(e.target.value);
   }
   return (
     <section>
@@ -151,7 +146,7 @@ export default function Users() {
               </button>
             </Link> */}
           </div>
-          {listData && listData.data.length > 0 && (
+          
           <div className="relative">
             <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
               <svg
@@ -176,7 +171,7 @@ export default function Users() {
               onChange={searchInputChange}
             />
           </div>
-            )}
+           
         </div>
         {(listData ? (
           listData?.data?.length > 0 ? (
@@ -246,14 +241,14 @@ export default function Users() {
 
                 <td className="px-6 py-4">
                   <div className="flex items-center space-x-2">
-                    <Link
+                   {/* <Link
                       href={`/testiMonials/${item._id}`}
                       className="font-bold text-lg text-blue-600 dark:text-blue-500 hover:underline"
                     >
                       <i className="bi bi-pencil-square"></i>
-                    </Link>
+                    </Link> */}
                     {/* <Link
-                      href=""
+                      href=""s
                       className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                     >
                       <i className="bi bi-eye-fill"></i>
@@ -291,12 +286,12 @@ export default function Users() {
         onCancel={handleCancel}
       />
       <Modal dismissible className={`bg-transparent/[.8] ${styles.ModalContent} `} size="7xl" show={openModal} onClose={() => setOpenModal(false)}>
-        <Modal.Header>User Details</Modal.Header>
+        <Modal.Header>Builder Details</Modal.Header>
         <Modal.Body className={`${styles.ModalContent}`}  >
         {listUserData ?
           <div className="flex">
           <div>
-           <h1 className="text-md mb-3 ml-2">User Info : </h1>
+           <h1 className="text-md mb-3 ml-2">Builder Info : </h1>
               <div  className="max-w-sm h-80 mr-6 border rounded-md">
                   <div className="overflow-x-auto p-4">
                     <Table className="p-2">
@@ -318,7 +313,7 @@ export default function Users() {
                             {'Role'}
                           </Table.Cell>
                           <Table.Cell>{listUserData ? listUserData.Roles.map(item => (
-                              item.Role
+                               item.Role==="Developer" ? "Builder" :item.Role
                           )) : null}</Table.Cell>
                         </Table.Row>
                         <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">

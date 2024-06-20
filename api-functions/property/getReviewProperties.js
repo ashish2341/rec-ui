@@ -3,11 +3,12 @@ import Cookies from "js-cookie";
 import { API_BASE_URL, PAGE_LIMIT } from "@/utils/constants";
 
 
-export const GetReviewPropertyApi = async (setLoading=()=>{}) => {
+export const GetReviewPropertyApi = async (searchData,setLoading=()=>{}) => {
   const token = Cookies.get("token");
+  console.log("GetReviewPropertyApi searchData",searchData)
   setLoading(true);
   try {
-    const res = await fetch(`${API_BASE_URL}/properties/reviewProperty`, {
+    const res = await fetch(`${API_BASE_URL}/properties/reviewProperty${searchData ? `?search=${searchData}`:"" } `, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

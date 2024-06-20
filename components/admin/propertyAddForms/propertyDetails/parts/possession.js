@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER,imgApiUrl } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
@@ -201,7 +201,7 @@ export default function PossessionDetailsPage({
       // Upload logic (assuming ImageString is a function that handles the upload)
       let res = await ImageString(formData);
       console.log("Upload Response Data =>", res);
-      if (res.successMessage) {
+      if (res?.successMessage) {
         console.log("Image Response", res.successMessage.imageUrl);
         setPaymentPlan(res.successMessage.imageUrl); // Assuming the response contains the image URL
         setPaymentPlanLoader(false);
@@ -253,7 +253,18 @@ export default function PossessionDetailsPage({
   const isImage = (url) => {
     return url.match(/\.(jpeg|jpg|png)$/);
   };
-  
+  const removeFloorPlan = () => {
+    setFloorPlan("")
+    if (floorPlanInputRef.current) {
+      floorPlanInputRef.current.value = "";
+    }
+  }
+  const removePaymentPlan = () => {
+    setPaymentPlan("")
+    if (paymentPlanInputRef.current) {
+      paymentPlanInputRef.current.value = "";
+    }
+  }
   return (
     <>
       <div className="grid gap-4 mb-4 sm:grid-cols-1">
@@ -300,6 +311,7 @@ export default function PossessionDetailsPage({
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               value={posessionDate}
               onChange={(e) => setPosessionDate(e.target.value)}
+              min={new Date().toISOString().split("T")[0]}
             />
           </div>
           {PropertyStatusValue &&
@@ -354,7 +366,7 @@ export default function PossessionDetailsPage({
                 <div className="flex flex-wrap relative mt-3">
                   <div className="mr-4 mb-4 relative">
                     <iframe
-                      src={brochure}
+                      src={`${imgApiUrl}/${brochure}`}
                       className="h-48 w-64 border border-black rounded-lg"
                     />
                   </div>
@@ -383,7 +395,7 @@ export default function PossessionDetailsPage({
             />
             {paymentPlanLoader && <LoaderForMedia />}
             <div>
-              {paymentPlan ? (
+            {paymentPlan ? (
                 <div>
                   <div className="ml-2 mt-3 underline font-bold">
                     <h3>Selected Pyment Plan</h3>
@@ -391,16 +403,38 @@ export default function PossessionDetailsPage({
                   <div className="flex flex-wrap relative mt-3">
                     <div className="mr-4 mb-4 relative">
                       {isImage(paymentPlan) ? (
-                        <img
-                          src={paymentPlan}
-                          alt="Selected Pyment Plan"
-                          className="h-48 w-64 border border-black rounded-lg"
-                        />
+                        <>
+                          <img
+                             src={`${imgApiUrl}/${paymentPlan}`}
+                            alt="Selected Pyment Plan"
+                            className="h-48 w-64 border border-black rounded-lg"
+                          />
+                          <button
+                            className="absolute top-0 right-0 p-1"
+                            onClick={() => removePaymentPlan()}
+                          >
+                            <i
+                              className="bi bi-x-circle-fill"
+                              style={{ color: "red" }}
+                            ></i>
+                          </button>
+                        </>
                       ) : (
-                        <iframe
-                          src={paymentPlan}
-                          className="h-48 w-64 border border-black rounded-lg"
-                        />
+                        <>
+                          <iframe
+                             src={`${imgApiUrl}/${paymentPlan}`}
+                            className="h-48 w-64 border border-black rounded-lg"
+                          />
+                          <button
+                            className="absolute top-0 right-5 p-1"
+                            onClick={() => removePaymentPlan()}
+                          >
+                            <i
+                              className="bi bi-x-circle-fill"
+                              style={{ color: "red" }}
+                            ></i>
+                          </button>
+                        </>
                       )}
                     </div>
                   </div>
@@ -428,7 +462,7 @@ export default function PossessionDetailsPage({
             />
             {floorPlanLoader && <LoaderForMedia />}
             <div>
-              {floorPlan ? (
+            {floorPlan ? (
                 <div>
                   <div className="ml-2 mt-3 underline font-bold">
                     <h3>Selected Floor Plan</h3>
@@ -436,16 +470,38 @@ export default function PossessionDetailsPage({
                   <div className="flex flex-wrap relative mt-3">
                     <div className="mr-4 mb-4 relative">
                       {isImage(floorPlan) ? (
-                        <img
-                          src={floorPlan}
-                          alt="Selected Floor Plan"
-                          className="h-48 w-64 border border-black rounded-lg"
-                        />
+                        <>
+                          <img
+                             src={`${imgApiUrl}/${floorPlan}`}
+                            alt="Selected Floor Plan"
+                            className="h-48 w-64 border border-black rounded-lg"
+                          />
+                          <button
+                            className="absolute top-0 right-0 p-1"
+                            onClick={() => removeFloorPlan()}
+                          >
+                            <i
+                              className="bi bi-x-circle-fill"
+                              style={{ color: "red" }}
+                            ></i>
+                          </button>
+                        </>
                       ) : (
-                        <iframe
-                          src={floorPlan}
-                          className="h-48 w-64 border border-black rounded-lg"
-                        />
+                        <>
+                          <iframe
+                            src={`${imgApiUrl}/${floorPlan}`}
+                            className="h-48 w-64 border border-black rounded-lg"
+                          />
+                          <button
+                            className="absolute top-0 right-5 p-1"
+                            onClick={() => removeFloorPlan()}
+                          >
+                            <i
+                              className="bi bi-x-circle-fill"
+                              style={{ color: "red" }}
+                            ></i>
+                          </button>
+                        </>
                       )}
                     </div>
                   </div>
@@ -456,20 +512,20 @@ export default function PossessionDetailsPage({
         </div>
       </div>
 
-      {(documentLoader == false ||
-        paymentPlanLoader == false ||
-        floorPlanLoader == false) &&
-          (propertTypeValue && propertTypeValue === "Commercial" ? (
-            <ContinueButton
-              modalSubmit={SubmitForm}
-              butonSubName={"add Facilities Details"}
-            />
-          ) : (
-            <NextButton
-              onSubmit={SubmitForm}
-              butonSubName={"add Amenity Details"}
-            />
-          ))}
+      {(documentLoader === true ||
+        paymentPlanLoader === true ||
+        floorPlanLoader === true) ?(null):
+        propertTypeValue && propertTypeValue === "Commercial" ? (
+          <ContinueButton
+            modalSubmit={SubmitForm}
+            butonSubName={"add Facilities Details"}
+          />
+        ) : (
+          <NextButton
+            onSubmit={SubmitForm}
+            butonSubName={"add Amenity Details"}
+          />
+        )}
     </>
   );
 }

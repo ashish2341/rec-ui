@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { GetTestimonials } from "@/api-functions/testimonial/getTestimonials";
 import { DeleteTestimonial } from "@/api-functions/testimonial/deleteTestimonial";
+import { imgApiUrl } from "@/utils/constants";
 
 export default function TestiMonials() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -77,11 +78,11 @@ export default function TestiMonials() {
                 className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                 type="button"
               >
-                + Add TestiMonial
+                + Add Testimonial
               </button>
             </Link>
           </div>
-          {listData && listData.data.length > 0 && (
+          
           <div className="relative">
             <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
               <svg
@@ -106,7 +107,7 @@ export default function TestiMonials() {
               onChange={searchInputChange}
             />
           </div>
-            )}
+           
         </div>
         {(listData ? (
           listData?.data?.length > 0 ? (
@@ -149,7 +150,7 @@ export default function TestiMonials() {
                   {" "}
                   <img
                     className="imageCircle"
-                    src={item.Image}
+                    src={`${imgApiUrl}/${item.Image}`}
                     width={100}
                     height={100}
                   />

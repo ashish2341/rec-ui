@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { ImageString } from "@/api-functions/auth/authAction";
 import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
 import NextButton from "@/components/common/admin/nextButton/nextButton"
+import { API_BASE_URL_FOR_MASTER, imgApiUrl } from "@/utils/constants";
 
 export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
   const [image, setImage] = useState([]);
@@ -212,7 +213,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
     const storedData = JSON.parse(sessionStorage.getItem("propertyData"));
     if(storedData?.Videos){
       const videoArray = storedData?.Videos;
-      if (video.length == videoArray.length) {
+      if (video?.length == videoArray?.length) {
         if (videoArray.length > 0) {
           // // Step 2: Modify the array by removing the desired item
           videoArray.splice(index, 1);
@@ -244,7 +245,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
     const storedData = JSON.parse(sessionStorage.getItem("propertyData"));
     if(storedData?.Images){
       const imageArray = storedData?.Images;
-      if (image.length == imageArray.length) {
+      if (image?.length == imageArray?.length) {
         if (imageArray.length > 0) {
           // // Step 2: Modify the array by removing the desired item
           imageArray.splice(index, 1);
@@ -304,7 +305,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
                     {image.map((imageUrl, index) => (
                       <div key={index} className="mr-4 mb-4 relative ">
                         <img
-                          src={imageUrl}
+                         src={`${imgApiUrl}/${imageUrl}`}
                           alt=""
                           className="h-20 w-20 object-cover m-2 mt-5 border border-black rounded-lg "
                         />
@@ -362,7 +363,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
                           controls
                           className="h-48 w-64 border border-black rounded-lg"
                         >
-                          <source src={video} type="video/mp4" />
+                          <source  src={`${imgApiUrl}/${video}`} type="video/mp4" />
                         </video>
                         <button
                           className="absolute top-0 right-0 p-1"

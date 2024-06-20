@@ -9,6 +9,8 @@ import { API_BASE_URL } from "@/utils/constants";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import { imgApiUrl } from "@/utils/constants";
+
 
 export default function Amenity() {
   // const { data: listData, loading, error } = useFetch(`${API_BASE_URL}/aminity/allAminity?page=1&pageSize=10`);
@@ -79,7 +81,7 @@ export default function Amenity() {
               </button>
             </div>
           </Link>
-          {listData?.data?.length > 0 ? (
+          
             <div className="relative">
               <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
                 <svg
@@ -104,7 +106,7 @@ export default function Amenity() {
                 onChange={searchInputChange}
               />
             </div>
-          ) : null}
+        
         </div>
         {listData ? (
           listData?.data?.length > 0 ? (
@@ -152,7 +154,7 @@ export default function Amenity() {
                         {" "}
                         <img
                           className="imageCircle"
-                          src={item.Icon}
+                          src={!item.Icon.includes('https')  ?`${imgApiUrl}/${item.Icon}`:item.Icon}
                           width={100}
                           height={100}
                         />

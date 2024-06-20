@@ -46,10 +46,7 @@ const PersonalLoanCalculator = () => {
 
 
 const emiDetails = calculateEMI(loanAmount, interestRate, loanTerm);
-console.log("Monthly EMI:", emiDetails.emi);
-console.log("Principal Amount:", emiDetails.principalAmount);
-console.log("Total Interest:", emiDetails.totalInterest);
-console.log("Total Amount:", emiDetails.totalAmount);
+
 
 
 

@@ -9,43 +9,17 @@ import {  UserForgoPassword } from "@/api-functions/auth/authAction";
 
 export default function OtpVarify() {
   const router = useRouter();
-  const [Mobile, setMobile] = useState("");
+  const [email, setEmail] = useState("");
   const [NewPassword, setNewPassword] = useState("");
 
-  const handleMobile = useCallback((value) => {
-    setMobile(() => value.target.value);
-  }, []);
-  const handlePassword = useCallback((value) => {
-    setNewPassword(() => value.target.value);
+  const handleEmail = useCallback((value) => {
+    setEmail(() => value.target.value);
   }, []);
   const submitForm = async () => {
-    // Check if the field is empty
-    if (Mobile === "") {
-      toast.error("Phone number cannot be empty");
-      return false;
-    }
+    let res = await  UserForgoPassword({ email });
 
-    // Check if the number has exactly 10 digits
-    if (!/^\d{10}$/.test(Mobile)) {
-      toast.error("Phone number must be 10 digits long");
-      return false;
-    }
-
-    // Check if the number starts with 9, 8, or 7
-    if (!/^[789]/.test(Mobile)) {
-      toast.error("Phone number must start with 9, 8, or 7");
-      return false;
-    }
-    if (NewPassword.length < 5) {
-      toast.error("Password must be at least 5 characters long");
-      return false;
-    }
-    let res = await  UserForgoPassword({ Mobile,NewPassword });
-     
-    console.log('Forgot password resData inside page',res)
     if (res.successMessage) {
       toast.success(res.successMessage.message)
-      router.push("/login");
     } else {
       toast.error(res.errMessage);
       return;
@@ -79,19 +53,18 @@ export default function OtpVarify() {
                   htmlFor="phone"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Phone number
+                  Email
                 </label>
                 <input
-                  type="tel"
-                  value={Mobile}
-                  onChange={handleMobile}
-                  id="phone"
+                  type="text"
+                  value={email}
+                  onChange={handleEmail}
+                  id="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
                   required
                 />
               </div>
-              <div>
+              {/* <div>
                 <label
                   htmlFor="newpassword"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -108,8 +81,8 @@ export default function OtpVarify() {
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required=""
                 />
-              </div>
-      
+              </div> */}
+             {/* <Link href={`/auth/reset/${userId}/${token}`}></Link> */}
               <button
                 onClick={submitForm}
                 type="button"

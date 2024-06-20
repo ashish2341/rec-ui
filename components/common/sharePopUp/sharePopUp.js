@@ -93,21 +93,13 @@ export function SharePopUp({ isOpenvalue, setValueDynamicState,propertyIdForUrl 
           
           </div>
         </Modal.Body>
-        {/* <Modal.Footer>
-          <button
-            className={`  text-white rounded-md bg-blue-700 h-12 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium  text-sm w-full sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-            type="button"
-            onClick={addcontactEnquiryData}
-          >
-            Send
-          </button>
-        </Modal.Footer> */}
+       
       </Modal>
     </>
   );
 }
 
-// import { useState } from "react";
+
 // import { ToastContainer, toast } from "react-toastify";
 // import styles from "./sharePopUp.module.css"
 // export const SharePopUp = ({ shareModalValue, setStateValue }) => {

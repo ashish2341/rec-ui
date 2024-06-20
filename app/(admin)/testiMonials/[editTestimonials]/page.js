@@ -7,6 +7,8 @@ import { UpdateTestimonial } from "@/api-functions/testimonial/updateTestimonial
 import useFetch from "@/customHooks/useFetch";
 import { API_BASE_URL } from "@/utils/constants";
 import { ImageString } from "@/api-functions/auth/authAction";
+import { imgApiUrl } from "@/utils/constants";
+import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
 
 export default function EditTestiMonials(params) {
   console.log("params", params);
@@ -23,6 +25,7 @@ export default function EditTestiMonials(params) {
   const imageInputRef = useRef(null);
   const [designation, setDesignation] = useState("");
   const [IsEnabled, setIsEnabled] = useState(true);
+  const [imageLoader, setImageLoader] = useState(false);
 
   const router = useRouter();
   useEffect(() => {
@@ -87,7 +90,7 @@ export default function EditTestiMonials(params) {
     console.log("image File", file);
 
     // Check file type
-    if (!acceptedFileTypes.includes(file.type)) {
+    if (!acceptedFileTypes.includes(file?.type)) {
       toast.error(
         "Invalid image type. Please upload only JPEG or PNG or JPG files."
       );
@@ -95,14 +98,13 @@ export default function EditTestiMonials(params) {
         imageInputRef.current.value = "";
       }
     } else {
+      setImageLoader(true);
       let res = await ImageString(formData);
-      console.log("image resPonse Data=>", res);
-      if (res.successMessage) {
-        // router.push("/dashboard");
-        console.log("Image Response", res.successMessage.imageUrl);
-        setImage(res.successMessage.imageUrl);
+      if (res?.successMessage) {
+        setImage(res?.successMessage?.imageUrl);
+        setImageLoader(false);
       } else {
-        toast.error(res.errMessage);
+        toast.error(res?.errMessage);
         return;
       }
     }
@@ -200,7 +202,6 @@ export default function EditTestiMonials(params) {
               name="isEnabled"
               id="isEnabled"
               value="false"
-             
               checked={IsEnabled == false}
               onChange={handleEnabledChange}
               className="form-radio h-5 w-5 text-red-600"
@@ -223,18 +224,18 @@ export default function EditTestiMonials(params) {
               multiple
               accept=".jpg, .jpeg, .png"
               onChange={handleImageInputChange}
-           
             />
           </div>
           <div></div>
+          {imageLoader && <LoaderForMedia />}
           {image ? (
             <div className="flex flex-wrap ">
               <div className="mr-4 mb-4  ">
-              <div className="ml-2  underline">
-              <h3>Selected Image</h3>
-              </div>
+                <div className="ml-2  underline">
+                  <h3>Selected Image</h3>
+                </div>
                 <img
-                  src={image}
+                  src={`${imgApiUrl}/${image}`}
                   alt=""
                   className="object-cover m-2 mt-5 border border-black rounded-lg "
                   width={200}
@@ -245,16 +246,17 @@ export default function EditTestiMonials(params) {
           ) : null}
         </div>
       </form>
-
-      <div>
-        <button
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          type="button"
-          onClick={submitForm}
-        >
-          Submit
-        </button>
-      </div>
+      {imageLoader === false && (
+        <div>
+          <button
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            type="button"
+            onClick={submitForm}
+          >
+            Submit
+          </button>
+        </div>
+      )}
     </section>
   );
 }

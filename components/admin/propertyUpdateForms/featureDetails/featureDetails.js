@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER,currentPage } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import ButtonStepper from "@/components/common/buttonSteeper/buttonstepper";
 import AmenityPage from "./parts/Amenities";
@@ -12,6 +12,7 @@ export default function FeaturesDetailsForm({
   valueForNext,
   valueForNextPage,
   setPropertyBackvalue,
+editedKeys, pageName
 }) {
   const [propertyPageValue, setPropertyPageValue] = useState(1);
 
@@ -26,7 +27,7 @@ export default function FeaturesDetailsForm({
     valueForNext(value);
   };
   const stepperArray = [
-    { name: "Aminities", number: 1 },
+    { name: "Amenities", number: 1 },
     { name: "Features", number: 2 },
   ];
   return (
@@ -45,12 +46,16 @@ export default function FeaturesDetailsForm({
         <AmenityPage
           setPropertyPageValue={setPropertyPageValue}
           setPropertyBackvalue={setPropertyBackvalue}
+          editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName}
         />
       )}
       {propertyPageValue == 2 && (
         <FeaturePage
           valueForNextfromSix={handelvalueForNextfromSix}
           valueForNextPagefromSix={valueForNextPage}
+          editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName}
         />
       )}
       {/* {propertyPageValue == 3 && (

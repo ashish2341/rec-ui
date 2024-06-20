@@ -7,7 +7,7 @@ import {
   ZoneTypeArray,
   suitableArray,
   LocationhubArrayforOffice,
-  LocationhubArrayforall,
+  LocationhubArrayforall,currentPage
 } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
@@ -19,9 +19,11 @@ import ContinueButton from "@/components/common/propertyContinueButton/continueB
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
 import ApiButtons from "@/components/common/admin/propertyapiButtons/ApiButtons";
 import TextInput from "@/components/common/admin/textInput/textInput";
+import EditedTag from "@/components/common/admin/editedTag/editedTag";
 export default function BasicPage({
   setPropertyPageValue,
-  setPropertyBackvalue,
+  setPropertyBackvalue,editedKeysfromMain,
+  pageNamefromMain,
 }) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
@@ -278,6 +280,8 @@ export default function BasicPage({
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white "
             >
               Builder Name
+              { (editedKeysfromMain?.includes("Builder") && pageNamefromMain===currentPage && builderName) && (<EditedTag/>) } 
+
             </label>
             {builderData ? (
               <Select
@@ -315,6 +319,10 @@ export default function BasicPage({
               labelName={"Owner Name"}
               inputValue={ownerName}
               dynamicState={setOwnerName}
+              changedKeyArray={editedKeysfromMain}
+              showPageName={pageNamefromMain}
+              currentPageName={currentPage}
+              specifiedKey={"OwnerName"}
             />
           )}
         {/* Zone type */}
@@ -330,12 +338,20 @@ export default function BasicPage({
                 itemArray={ZoneTypeArray}
                 activeBtnvalue={zoneType}
                 changeState={setZoneType}
+                changedKeyArray={editedKeysfromMain}
+                showPageName={pageNamefromMain}
+                currentPageName={currentPage}
+                specifiedKey={"ZoneType"}
               />
               {zoneType == "Others" && (
                 <TextInput
                   labelName={" Write your Zone Type"}
                   inputValue={customZoneType}
                   dynamicState={setCustomZoneType}
+                  changedKeyArray={editedKeysfromMain}
+                  showPageName={pageNamefromMain}
+                  currentPageName={currentPage}
+                  specifiedKey={"CustomZoneType"}
                 />
               )}
             </>
@@ -350,12 +366,20 @@ export default function BasicPage({
                 itemArray={suitableArray}
                 activeBtnvalue={suitableFor}
                 changeState={setSuitableFor}
+                changedKeyArray={editedKeysfromMain}
+                showPageName={pageNamefromMain}
+                currentPageName={currentPage}
+                specifiedKey={"SuitableFor"}
               />
               {suitableFor == "Others" && (
                 <TextInput
                   labelName={"Write your Suitable For"}
                   inputValue={customSuitable}
                   dynamicState={setCustomSuitable}
+                  changedKeyArray={editedKeysfromMain}
+                  showPageName={pageNamefromMain}
+                  currentPageName={currentPage}
+                  specifiedKey={"CustomSuitable"}
                 />
               )}
             </>
@@ -370,12 +394,20 @@ export default function BasicPage({
                 itemArray={LocationhubArrayforOffice}
                 activeBtnvalue={locationHub}
                 changeState={setLocationHub}
+                changedKeyArray={editedKeysfromMain}
+                showPageName={pageNamefromMain}
+                currentPageName={currentPage}
+                specifiedKey={"LocationHub"}
               />
               {locationHub == "Others" && (
                 <TextInput
                   labelName={"Write your Location Hub"}
                   inputValue={customLocationHub}
                   dynamicState={setCustomLocationHub}
+                  changedKeyArray={editedKeysfromMain}
+                  showPageName={pageNamefromMain}
+                  currentPageName={currentPage}
+                  specifiedKey={"CustomLocationHub"}
                 />
               )}
             </>
@@ -392,12 +424,20 @@ export default function BasicPage({
                 itemArray={LocationhubArrayforall}
                 activeBtnvalue={locationHub}
                 changeState={setLocationHub}
+                changedKeyArray={editedKeysfromMain}
+                showPageName={pageNamefromMain}
+                currentPageName={currentPage}
+                specifiedKey={"LocationHub"}
               />
               {locationHub == "Others" && (
                 <TextInput
                   labelName={"Write your Location Hub"}
                   inputValue={customLocationHub}
                   dynamicState={setCustomLocationHub}
+                  changedKeyArray={editedKeysfromMain}
+                  showPageName={pageNamefromMain}
+                  currentPageName={currentPage}
+                  specifiedKey={"CustomLocationHub"}
                 />
               )}
             </>
@@ -408,6 +448,10 @@ export default function BasicPage({
           labelName={"Owner Name"}
           inputValue={ownerName}
           dynamicState={setOwnerName}
+          changedKeyArray={editedKeysfromMain}
+          showPageName={pageNamefromMain}
+          currentPageName={currentPage}
+          specifiedKey={"OwnerName"}
         />
       )}
       <div className="grid gap-4 mb-4 sm:grid-cols-1">
@@ -419,6 +463,10 @@ export default function BasicPage({
             labelName={"OwnerShip Type"}
             ValueName={"Ownership"}
             changeState={setOwnershipType}
+            changedKeyArray={editedKeysfromMain}
+                showPageName={pageNamefromMain}
+                currentPageName={currentPage}
+                specifiedKey={"OwnershipType"}
           />
         )}
 
@@ -430,6 +478,10 @@ export default function BasicPage({
             labelName={"Property Condition"}
             ValueName={"Status"}
             changeState={setPropertyStatus}
+            changedKeyArray={editedKeysfromMain}
+                showPageName={pageNamefromMain}
+                currentPageName={currentPage}
+                specifiedKey={"PropertyStatus"}
           />
         )}
         {propertTypWithSubTypeValue != "Plot" ? (

@@ -2,13 +2,14 @@
 import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER,currentPage } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import Styles from "../propertyDetails/propertypage.module.css"
 import NextButton from "@/components/common/admin/nextButton/nextButton";
+import EditedTag from "@/components/common/admin/editedTag/editedTag";
 export default function LocationDetailsForm({
   valueForNext,
-  valueForNextPage,
+  valueForNextPage,  editedKeys, pageName
 }) {
   // fetching Data for Area
   const { data: areaData } = useFetch(`${API_BASE_URL_FOR_MASTER}/areas`);
@@ -129,6 +130,8 @@ export default function LocationDetailsForm({
                 htmlFor="address"
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"              >
                 Locality
+                { (editedKeys?.includes("Address") && pageName===currentPage) && (<EditedTag/>) } 
+
               </label>
               <textarea
                 type="text"
@@ -141,63 +144,15 @@ export default function LocationDetailsForm({
                 required=""
               />
             </div>
-            {/* <div>
-              <label
-                htmlFor="area"
-                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"              >
-                Area
-              </label>
-              <input
-                type="text"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Area"
-                required=""
-                value={area.Area}
-                disabled={true}
-              />
-              {areaData ? (
-                <div
-                  className={`flex flex-wrap space-x-2 mt-4 ${
-                    areaData?.data?.length > 8
-                      ? `${Styles.scrollable}`
-                      : ""
-                  }`}
-                >
-                  {areaData?.data?.map((item) => (
-                    <button
-                      key={item._id}
-                      onClick={(event) => {
-                        event.preventDefault();  // Prevent the default form submission behavior
-                        setArea({
-                          _id: item._id,
-                          Area: item.Area,
-                        });
-                      }}
-                      className={` rounded text-white px-4 py-2 ${
-                        Styles.optionButton
-                      } ${
-                        area._id === item._id
-                          ? "bg-[#2a4acb] border-2 border-[#2a4acb]"
-                          : "bg-[#6592d3]  border-2 border-[#6592d3]"
-                      }`}
-                    >
-                      {item.Area}
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <div className="flex flex-wrap space-x-2">
-             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
-            </div>
-              )}
-             
-            </div> */}
+            
             <div>
               <label
                 htmlFor="area"
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"              >
               
                 Area
+                { (editedKeys?.includes("Area") && pageName===currentPage) && (<EditedTag/>) } 
+
               </label>
               {areaData ? (
                 <Select
@@ -228,6 +183,8 @@ export default function LocationDetailsForm({
                 htmlFor="city"
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"              >
                 City
+                { (editedKeys?.includes("City") && pageName===currentPage) && (<EditedTag/>) } 
+
               </label>
               <input
                 type="text"

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Styles from "../admin.common.module.css";
 import Popup from "@/components/common/popup";
+import EditedTag from "../editedTag/editedTag";
 function RenderButtons({
   newid,
   apiId,
@@ -65,12 +66,18 @@ export default function ApiButtons({
   labelName,
   ValueName,
   changeState,
+  changedKeyArray,
+  showPageName,
+  currentPageName,
+  specifiedKey,
 }) {
   return (
     <>
       <div className="mb-2">
         <label className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required">
           {labelName}
+          {changedKeyArray?.includes(specifiedKey) &&
+            showPageName === currentPageName && <EditedTag />}
         </label>
         {itemArray?.data?.length > 0 ? (
           <div className={`flex flex-wrap space-x-2 mt-4`}>

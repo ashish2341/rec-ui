@@ -6,20 +6,22 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
 import { DeleteBuilderApi } from "@/api-functions/builder/deleteBuilder";
+import { imgApiUrl } from "@/utils/constants";
 
-export default function Builder() {
+export default function Builder(params) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [listData, setListData] = useState(false);
   const [deleteId, setDeleteId] = useState();
   const [page, setPage] = useState(1);
   const [searchData, setSearchData] = useState("");
+  const todayBuilder = params.searchParams.todayBuilder;
 
   useEffect(() => {
     getAllBuilder();
-  }, [page, searchData]);
+  }, [page, searchData,params]);
   
   const getAllBuilder = async () => {
-    let builder = await GetBuilderApi(page, searchData);
+    let builder = await GetBuilderApi(page, searchData, todayBuilder);
     if (builder?.resData?.success == true) {
       setListData(builder?.resData);
       toast.success(builder?.resData?.message);
@@ -78,7 +80,6 @@ export default function Builder() {
               </button>
             </Link>
           </div>
-          {listData && listData.data.length > 0 && (
           <div className="relative">
             <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
               <svg
@@ -103,7 +104,7 @@ export default function Builder() {
               onChange={searchInputChange}
             />
           </div>
-            )}
+         
         </div>
         {(listData ? (
           listData?.data?.length > 0 ? (
@@ -117,11 +118,11 @@ export default function Builder() {
               <th scope="col" className="px-6 py-3">
                 Email
               </th>
-              <th scope="col" className="px-6 py-3">
+              {/* <th scope="col" className="px-6 py-3">
               Establish Date
-              </th>
+              </th> */}
               <th scope="col" className="px-6 py-3">
-                Logo
+               Logo
               </th>
               <th scope="col" className="px-6 py-3">
                 Action
@@ -140,14 +141,17 @@ export default function Builder() {
                  {item.Name}
                 </td>
                 <td className="px-6 py-4">{item?.EmailId}</td>
-                <td className="px-6 py-4">{item?.EstablishDate?.slice(0,10)}</td>
+                {/* <td className="px-6 py-4">{item?.EstablishDate?.slice(0,10)}</td> */}
                 <td className="px-6 py-4 text-blue-600 dark:text-blue-500">
-                  <img
+                  {item.logo ? ( <img
                     // className="imageCircle"
-                    src={item.Logo}
+                   
+                    src={`${imgApiUrl}/${item.logo}`}
                     width={100}
                     height={100}
-                  />
+                    
+                  />):(<p className="text-sm text-gray-500 font-bold">No Logo Upload</p>)}
+                 
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center space-x-2">

@@ -1,9 +1,7 @@
 import React from 'react';
 
 const DropdownComponent = ({ id, labelAttribute, data }) => {
-    console.log("Data",data)
-    console.log("id",id)
-    console.log("labelAttribute",labelAttribute)
+   
   return (
     <li className="me-2 mt-3">
       <button

@@ -10,7 +10,11 @@ import { Accordion } from "flowbite-react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import useFetch from "@/customHooks/useFetch";
-import { API_BASE_URL, API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import {
+  API_BASE_URL,
+  API_BASE_URL_FOR_MASTER,
+  imgApiUrl,
+} from "@/utils/constants";
 import { addEnquiry } from "@/api-functions/enquiry/addEnquiry";
 import { toast } from "react-toastify";
 import Link from "next/link";
@@ -26,12 +30,7 @@ import NotifyUserModal from "@/components/common/notifyUserModal";
 // import Skeleton from 'react-loading-skeleton';
 // import 'react-loading-skeleton/dist/skeleton.css'
 
-
 export default function Home() {
-
-
-
-
   const sliderTestimonial = useRef(null);
   const [Name, setName] = useState("");
   const [ZodiacName, setZodaicName] = useState("");
@@ -45,20 +44,14 @@ export default function Home() {
   const [EnquiryType, setEnquiryType] = useState("Project");
   const [openModal, setOpenModal] = useState(false);
 
-
-  const facingImage = [
-    "img/3.png",
-    "img/4.png",
-    "img/1.png",
-    "img/2.png",
-  ];
+  const facingImage = ["img/3.png", "img/4.png", "img/1.png", "img/2.png"];
 
   const facingSubHeading = [
     "Eastward Bound: Explore Homes Awakened by the Rising Sun",
     "Twilight Haven: Embrace the Glow of Western-Facing Residences",
     "Find Your Haven: Northern Comforts in North-Facing Homes",
-    "Southern Serenity: Find Tranquility in Homes Embracing the South"
-  ]
+    "Southern Serenity: Find Tranquility in Homes Embracing the South",
+  ];
 
   // fetching Data for facing
   const {
@@ -88,7 +81,9 @@ export default function Home() {
     data: propertyByAllPropertiesProperty,
     loading: propertyByAllPropertiesLoading,
     error: propertyByAllPropertiesError,
-  } = useFetch(`${API_BASE_URL}/properties/allProperties?page=1&pageSize=5&search=${search}`);
+  } = useFetch(
+    `${API_BASE_URL}/properties/allProperties?page=1&pageSize=5&search=${search}`
+  );
   const {
     data: propertyByZodaicProperty,
     loading: propertyByZodaicLoading,
@@ -119,13 +114,15 @@ export default function Home() {
   } = useFetch(`${API_BASE_URL}/banner/allbanner?page=1&pageSize=5`);
 
   const ShowApartmentProperties = () => {
-
     return propertyByapartmentType?.data?.map((item, index) => (
-      <Link key={index} href={`/propertyList/property?propertyTypeID=${item._id}&propertyTypeLabel=${item?.areaInfo?.Name}`}  >
-        <div
-          className="p-1"
-        >
-          <div className={` ${styles.apartmentTypeBox} border-gray-300 rounded-md`}>
+      <Link
+        key={index}
+        href={`/propertyList/property?propertyTypeID=${item._id}&propertyTypeLabel=${item?.areaInfo?.Name}`}
+      >
+        <div className="p-1">
+          <div
+            className={` ${styles.apartmentTypeBox} border-gray-300 rounded-md`}
+          >
             <div>
               <div>
                 <img
@@ -136,7 +133,9 @@ export default function Home() {
               </div>
             </div>
             <div>
-              <h2 className={` ${styles.apartmentTypeBoxHead}`}>{item?.areaInfo?.Name}</h2>
+              <h2 className={` ${styles.apartmentTypeBoxHead}`}>
+                {item?.areaInfo?.Name}
+              </h2>
               <p className={` ${styles.apartmentTypeBoxText}`}>
                 {item?.propertiesCount} Properties
               </p>
@@ -144,47 +143,54 @@ export default function Home() {
           </div>
         </div>
       </Link>
-    ))
-
-  }
+    ));
+  };
 
   const ShowPopularProperties = () => {
     return propertyByPopularProperty?.data?.map((item, index) => (
-
-      <div key={index} className={` ${styles.cardBoxPopularTop}`} >
+      <div key={index} className={` ${styles.cardBoxPopularTop}`}>
         <img
           className={` ${styles.cardImgTop}`}
-          src={item.Images[0].URL}
+          src={`${imgApiUrl}/${item.Images[0].URL}`}
           alt="Nothing"
         ></img>
         <Link href={`/propertyDetail/${item._id}`}>
           <div className={` ${styles.cardImgBottom}`}>
             <div className={` ${styles.populerPropertiesLocationMain} flex`}>
               <i className="bi bi-geo-alt-fill"></i>
-              <p className={`text-gray-700`}>{item.Address}</p>
+              <p className={`text-gray-700 ml-1`}>{item?.Area?.Area}</p>
             </div>
             <div className="flex justify-between">
               <h2 className={` ${styles.populerPropertiesBoxHead}`}>
                 {item.Title}
               </h2>
-              {item.LocationHub ?
+              {item.Facing ? (
                 <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
-                  {item.LocationHub == "Others" ? item.CustomLocationHub : item.LocationHub}
-                </div> :
+                  {item?.Facing[0].Facing}
+                </div>
+              ) : (
                 <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
                   {item.ProeprtyType}
-                </div>}
+                </div>
+              )}
             </div>
 
             <div className={`${styles.populerPropertiesBoxPriceMain}`}>
               <p className={`${styles.populerPropertiesBoxPrice}`}>
                 {item.TotalPrice?.DisplayValue}
               </p>
-              <Link href={`/propertyDetail/${item._id}`} >
+              <p className={`font-bold${styles.populerPropertiesBoxPrice}`}>
+                {item?.ProeprtyFor}
+              </p>
+            </div>
+            <div className="flex justify-between mt-2">
+              <p className={`font-bold${styles.populerPropertiesBoxPrice}`}>
+                {item?.ProeprtyType}
+              </p>
+              <Link href={`/propertyDetail/${item._id}`}>
                 <button
                   className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   type="button"
-
                 >
                   More Details
                 </button>
@@ -193,90 +199,100 @@ export default function Home() {
           </div>
         </Link>
       </div>
-    ))
-  }
+    ));
+  };
 
   const Testimonial = () => {
-    return (
-      testimonialData?.data?.map((item, index) => (
-        <div key={index} className={`${styles.testimonialcontent} flex justify-center`}>
-          <div className={`${styles.testimonialLeft}`}>
-            <div className={`${styles.testimonialLeftBoxDetails} text-center`}>
-              <img
-                className={` ${styles.testimonialImg}  mb-3`}
-                src={item.Image}
-                alt="test"
-              />
-              <h2 className={`${styles.testimonialLeftHead} justify-center`}>
-                {item.MemberName}
-              </h2>
-              <div className="flex justify-center">
-                <p className={`${styles.testimonialLeftText}`}>
-                  {item.Description}
-                </p>
-              </div>
-              <div>
-                <div className={`${styles.testimonialStars} flex justify-center`}>
-                  <svg
-                    className="w-4 h-4 text-yellow-300 ms-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                  </svg>
-                  <svg
-                    className="w-4 h-4 text-yellow-300 ms-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                  </svg>
-                  <svg
-                    className="w-4 h-4 text-yellow-300 ms-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                  </svg>
-                  <svg
-                    className="w-4 h-4 text-yellow-300 ms-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                  </svg>
-                  <svg
-                    className="w-4 h-4 ms-1 text-gray-300 dark:text-gray-500"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                  </svg>
-                </div>
+    return testimonialData?.data?.map((item, index) => (
+      <div
+        key={index}
+        className={`${styles.testimonialcontent} flex justify-center`}
+      >
+        <div className={`${styles.testimonialLeft}`}>
+          <div className={`${styles.testimonialLeftBoxDetails} text-center`}>
+            {item.Image ? 
+            <img
+              className={` ${styles.testimonialImg}  mb-3`}
+              src={`${imgApiUrl}/${item.Image}`}
+              alt="test"
+            /> :
+            <img
+            className={` ${styles.testimonialImg}  mb-3`}
+            src="../img/no-image@2x.png"
+             /> 
+             }
+            <h2 className={`${styles.testimonialLeftHead} justify-center`}>
+              {item.MemberName}
+            </h2>
+            <div className="flex justify-center">
+              <p className={`${styles.testimonialLeftText}`}>
+                {item.Description}
+              </p>
+            </div>
+            <div>
+              <div className={`${styles.testimonialStars} flex justify-center`}>
+                <svg
+                  className="w-4 h-4 text-yellow-300 ms-1"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 22 20"
+                >
+                  <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                </svg>
+                <svg
+                  className="w-4 h-4 text-yellow-300 ms-1"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 22 20"
+                >
+                  <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                </svg>
+                <svg
+                  className="w-4 h-4 text-yellow-300 ms-1"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 22 20"
+                >
+                  <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                </svg>
+                <svg
+                  className="w-4 h-4 text-yellow-300 ms-1"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 22 20"
+                >
+                  <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                </svg>
+                <svg
+                  className="w-4 h-4 ms-1 text-gray-300 dark:text-gray-500"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 22 20"
+                >
+                  <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                </svg>
               </div>
             </div>
           </div>
         </div>
-      ))
-    )
-  }
+      </div>
+    ));
+  };
 
   const showAreaType = () => {
     return propertyByAreaData?.data?.map((item, index) => (
-      <div key={index}
+      <div
+        key={index}
         className={` ${styles.propertiesByAreaBox} border border-gray-300 rounded-md`}
       >
-        <Link href={`/propertyList/property?areaId=${item?._id}&areaLabel=${item?.areaInfo?.Area}`}>
+        <Link
+          href={`/propertyList/property?areaId=${item?._id}&areaLabel=${item?.areaInfo?.Area}`}
+        >
           <div>
             <div>
               <img
@@ -288,14 +304,18 @@ export default function Home() {
           </div>
           <div className="p-0">
             <div className={` ${styles.populerPropertiesLocationMain} flex`}>
-              <h1 className={` ${styles.propertiesByAreaBoxHead}`}>{item?.areaInfo?.Area}</h1>
+              <h1 className={` ${styles.propertiesByAreaBoxHead}`}>
+                {item?.areaInfo?.Area}
+              </h1>
             </div>
-            <p className={`${styles.smallText}text-gray-900`}>{item?.propertiesCount} Properties</p>
+            <p className={`${styles.smallText}text-gray-900`}>
+              {item?.propertiesCount} Properties
+            </p>
           </div>
         </Link>
       </div>
-    ))
-  }
+    ));
+  };
 
   const currentDate = new Date().toISOString().slice(0, 10);
   const addEnquiryData = async () => {
@@ -315,8 +335,15 @@ export default function Home() {
       toast.error("Number is required");
       return false;
     }
-    let payload = { Name, Email, Message, MolileNumber, EnquiryDate: EnquiryData, EnquiryType };
-    let res = await addEnquiry(payload)
+    let payload = {
+      Name,
+      Email,
+      Message,
+      MolileNumber,
+      EnquiryDate: EnquiryData,
+      EnquiryType,
+    };
+    let res = await addEnquiry(payload);
     if (res?.resData?.success == true) {
       toast.success("Your Query Is being Generated");
       setName("");
@@ -327,7 +354,7 @@ export default function Home() {
       toast.error(res.errMessage);
       return false;
     }
-  }
+  };
   const toggleExpansion = () => {
     setExpanded(!expanded);
   };
@@ -348,27 +375,30 @@ export default function Home() {
     setDob(() => value.target.value);
   };
   const handleSearch = (e) => {
-    setSearch(e.target.value)
-  }
+    setSearch(e.target.value);
+  };
   const handleZodiacName = (e) => {
-    setZodaicName(e.target.value)
-  }
+    setZodaicName(e.target.value);
+  };
   const handleZodiacPhone = (e) => {
-    setZodaicPhone(e.target.value)
-  }
-
+    setZodaicPhone(e.target.value);
+  };
 
   const resetValue = async () => {
     if (Dob == "" || ZodiacName == "" || ZodaicMolileNumber == "") {
-      toast.warn("Please fill D.O.B. & Name Field.")
-      return false
+      toast.warn("Please fill D.O.B. & Name Field.");
+      return false;
     }
     if (!/^(\+\d{1,3}[- ]?)?\d{10}$/.test(ZodaicMolileNumber)) {
-      toast.error('Please enter a valid 10-digit mobile number');
+      toast.error("Please enter a valid 10-digit mobile number");
       return false;
     }
     setOpenModal(true);
-    let ZodiacData = { Name: ZodiacName, MobileNumber: ZodaicMolileNumber, DateOfBirth: Dob };
+    let ZodiacData = {
+      Name: ZodiacName,
+      MobileNumber: ZodaicMolileNumber,
+      DateOfBirth: Dob,
+    };
     let res = await AddZodaic(ZodiacData);
     if (res?.resData?.success == true) {
       console.log("res", res);
@@ -380,15 +410,16 @@ export default function Home() {
       toast.error(res.errMessage);
       return false;
     }
-  }
+  };
 
   const onResetValue = () => {
     setOpenModal(false);
-    setZodaicName("")
-    setDob("")
-    setZodaicPhone("")
-  }
-  var totalSlides = propertyByapartmentType?.data?.length;
+    setZodaicName("");
+    setDob("");
+    setZodaicPhone("");
+  };
+  var totalSlides =propertyByapartmentType? propertyByapartmentType?.data?.length :"";
+  console.log("totalSlides",totalSlides)
   var slidesToShow = totalSlides < 5 ? totalSlides : 5;
 
   var settings = {
@@ -439,7 +470,6 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-
       <Navbar />
       {/* {isLoading && <Spinner />} */}
       <div
@@ -453,60 +483,64 @@ export default function Home() {
             data-carousel-item="active"
           >
             <div className={`${styles.crousalItemContentMain}`}>
-                <div className={`${styles.crousalItemLeftMain}`}>
-                  <div className={`${styles.crousalItemLeftContent}`}>
-                    <h2 className={`${styles.crousalItemLeftMainHeading}`}>
-                      Looking for a home is always easier
-                    </h2>
-                    <p className={`${styles.crousalItemLeftMainPara}`}>
-                      Welcome to REC.in, your trusted partner in the journey of
-                      finding the perfect home. At REC.in,
-                      we understand that finding the right home is more than just a
-                      transaction - it's about finding a place where memories are made,
-                      dreams are realized, and futures are built.
-                    </p>
-                    <div className={`${styles.crousalItemAdvMain} flex`}>
-                      <div className={`${styles.crousalItemAdvContent}`}>
-                        <h2 className={`${styles.crousalItemAdvNumber}`}>
-                          1500+
-                        </h2>
-                        <p className={`${styles.crousalItemAdvText}`}>
-                          Premium Product
-                        </p>
-                      </div>
-                      <div className={`${styles.crousalItemAdvContent}`}>
-                        <h2 className={`${styles.crousalItemAdvNumber}`}>
-                          5500+
-                        </h2>
-                        <p className={`${styles.crousalItemAdvText}`}>
-                          Happy Customer
-                        </p>
-                      </div>
+              <div className={`${styles.crousalItemLeftMain}`}>
+                <div className={`${styles.crousalItemLeftContent}`}>
+                  <h2 className={`${styles.crousalItemLeftMainHeading}`}>
+                    Looking for a home is always easier
+                  </h2>
+                  <p className={`${styles.crousalItemLeftMainPara}`}>
+                    Welcome to REC.in, your trusted partner in the journey of
+                    finding the perfect home. At REC.in, we understand that
+                    finding the right home is more than just a transaction -
+                    it's about finding a place where memories are made, dreams
+                    are realized, and futures are built.
+                  </p>
+                  <div className={`${styles.crousalItemAdvMain} flex`}>
+                    <div className={`${styles.crousalItemAdvContent}`}>
+                      <h2 className={`${styles.crousalItemAdvNumber}`}>
+                        1500+
+                      </h2>
+                      <p className={`${styles.crousalItemAdvText}`}>
+                        Premium Product
+                      </p>
                     </div>
-                    <SearchBar />
+                    <div className={`${styles.crousalItemAdvContent}`}>
+                      <h2 className={`${styles.crousalItemAdvNumber}`}>
+                        5500+
+                      </h2>
+                      <p className={`${styles.crousalItemAdvText}`}>
+                        Happy Customer
+                      </p>
+                    </div>
                   </div>
+                  <SearchBar />
                 </div>
-              <div className={`${styles.crousalItemRightMain} overflow-hidden  `}>
-                {bannerData ?
+              </div>
+              <div
+                className={`${styles.crousalItemRightMain} overflow-hidden  `}
+              >
+                {bannerData ? (
                   <img
-                    src={bannerData?.data[0].Url}
+                    src={`${imgApiUrl}/${bannerData?.data[0].Url}`}
                     className={`${styles.crousalItemLeftImage} block`}
                     alt="...a"
-                  /> :
-                  (
-                    <div className={`${styles.LoaderHeight}  `}>
-                      <Spinner className="mt-70" />
-                    </div>
-                  )
-                }
+                  />
+                ) : (
+                  <div className={`${styles.LoaderHeight}  `}>
+                    <Spinner className="mt-70" />
+                  </div>
+                )}
               </div>
             </div>
           </div>
-          <div className="overflow-hidden duration-700 ease-in-out" data-carousel-item>
+          <div
+            className="overflow-hidden duration-700 ease-in-out"
+            data-carousel-item
+          >
             {/* <SearchBar id="2" /> */}
 
             <img
-              src={bannerData?.data[1].Url}
+              src={`${imgApiUrl}/${bannerData?.data[1].Url}`}
               className={`${styles.crousalItemLeftImageS} absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
               alt="...a"
             />
@@ -522,21 +556,26 @@ export default function Home() {
           </div>
             ))}
           */}
-          <div className="overflow-hidden duration-700 ease-in-out" data-carousel-item>
+          <div
+            className="overflow-hidden duration-700 ease-in-out"
+            data-carousel-item
+          >
             <img
-              src={bannerData?.data[2].Url}
+              src={`${imgApiUrl}/${bannerData?.data[2].Url}`}
               className={`${styles.crousalItemLeftImageS} absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
               alt="...a"
             />
           </div>
-          <div className="overflow-hidden duration-700 ease-in-out" data-carousel-item>
+          <div
+            className="overflow-hidden duration-700 ease-in-out"
+            data-carousel-item
+          >
             <img
-              src={bannerData?.data[3].Url}
+              src={`${imgApiUrl}/${bannerData?.data[3].Url}`}
               className={`${styles.crousalItemLeftImageS} absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
               alt="...a"
             />
           </div>
-
         </div>
         <button
           type="button"
@@ -591,10 +630,12 @@ export default function Home() {
             </p>
           </div>
           <div className={`${styles.campassRightBoxMain} flex flex-wrap`}>
-            {facingData
-              ? facingData?.data?.slice(0, 4).map((item, index) => (
-
-                <Link key={index} href={`/propertyList/property?facingId=${item?._id}&facingLabel=${item?.Facing}`}>
+            {facingData ? (
+              facingData?.data?.slice(0, 4).map((item, index) => (
+                <Link
+                  key={index}
+                  href={`/propertyList/property?facingId=${item?._id}&facingLabel=${item?.Facing}`}
+                >
                   <div
                     className={` ${styles.campassRightBox} border-gray-300 rounded-md`}
                   >
@@ -615,11 +656,12 @@ export default function Home() {
                         {facingSubHeading[index]}
                       </p>
                     </div>
-
                   </div>
                 </Link>
               ))
-              : <SkeletonLoader />}
+            ) : (
+              <SkeletonLoader />
+            )}
           </div>
         </div>
       </div>
@@ -636,11 +678,17 @@ export default function Home() {
           </div>
         </div>
         <div className={` ${styles.propertiesByAreaBoxMain} flex flex-wrap `}>
-          {
-            propertyByAreaData?.data?.length > 0 ? <AreaMultiCarousel UI={showAreaType} /> : <SkeletonLoader />
-          }
+        {propertyByAreaData ? (
+            propertyByAreaData?.data?.length > 0 ? (
+              <AreaMultiCarousel UI={showAreaType} />
+            ) : (
+              <h1 className={`${styles.bigNotFound}`}>No Data Found</h1>
+            )
+          ) : (
+            <SkeletonLoader />
+          )}
+          
         </div>
-
       </div>
 
       <div className={`${styles.apartmentTypeMain} apartmentType`}>
@@ -654,14 +702,19 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <div className={`flex mt-2`} >
-          {
-            propertyByapartmentType?.data?.length > 0 ? <MultiCarousel UI={ShowApartmentProperties} /> : <SkeletonLoader />
-          }
+        <div className={`flex mt-2`}>
+        {propertyByapartmentType ? (
+            propertyByapartmentType?.data?.length > 0 ? (
+              <MultiCarousel UI={ShowApartmentProperties} />
+            ) : (
+              <h1 className={`${styles.bigNotFound}`}>No Data Found</h1>
+            )
+          ) : (
+            <SkeletonLoader />
+          )}
+          
         </div>
       </div>
-
-
 
       <div id="zodiac-id" className={`${styles.buyingOptionWithZodic}`}>
         <div className={`${styles.buyingWithZodicMain}`}>
@@ -672,12 +725,13 @@ export default function Home() {
                 <span className="blueText">Zodiac</span>
               </h2>
               <p className={`${styles.buyingZodicText}`}>
-                Unlock the door to your dream home with Zodiac.
-                Let's embark on this journey together and discover your perfect home.
-                Welcome to Zodiac, where dreams come true.
+                Unlock the door to your dream home with Zodiac. Let's embark on
+                this journey together and discover your perfect home. Welcome to
+                Zodiac, where dreams come true.
               </p>
               <p className={`${styles.buyingZodicText} font-semibold`}>
-                ** Please note that this prediction is based on your D.O.B. rather than your name **
+                ** Please note that this prediction is based on your D.O.B.
+                rather than your name **
               </p>
             </div>
             <div className={`${styles.buyingZodicInputMain}`}>
@@ -731,6 +785,7 @@ export default function Home() {
                     className="bg-gray-50 uppercase border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Dob"
                     required
+                    max={new Date().toISOString().split("T")[0]}
                   />
                 </div>
                 <div>
@@ -785,10 +840,18 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <div className={` ${styles.populerPropertiesBoxMain} flex flex-wrap mt-4 `}>
-          {
-            propertyByPopularProperty?.data?.length > 0 ? <MultiCarousel UI={ShowPopularProperties} /> : <SkeletonLoader />
-          }
+        <div
+          className={` ${styles.populerPropertiesBoxMain} flex flex-wrap mt-4 `}
+        >
+          {propertyByPopularProperty ? (
+            propertyByPopularProperty?.data?.length > 0 ? (
+              <MultiCarousel UI={ShowPopularProperties} />
+            ) : (
+              <h1 className={`${styles.bigNotFound}`}>No Data Found</h1>
+            )
+          ) : (
+            <SkeletonLoader />
+          )}
         </div>
       </div>
 
@@ -803,43 +866,54 @@ export default function Home() {
         <div className={`${styles.agentRightMain}`}>
           <div>
             <h2 className={`${styles.agentRightMainHead}`}>
-              Trusted By Best Exclusive <span className="blueText">Astrologer</span>
+              Trusted By Best Exclusive{" "}
+              <span className="blueText">Astrologer</span>
             </h2>
             <p className={`${styles.agentRightMainText}`}>
-              Unlocking Cosmic Wisdom: How Astrology Enhances Your Property Investment Journey
+              Unlocking Cosmic Wisdom: How Astrology Enhances Your Property
+              Investment Journey
             </p>
           </div>
           <div className={`${styles.agentRightMainContentMain}`}>
             <div className="flex">
               <i className="bi bi-geo-alt-fill"></i>
               <div className={`${styles.agentRightMainContent}`}>
-                <h2 className={`${styles.agentRightMainContentHead} font-semibold`}>
+                <h2
+                  className={`${styles.agentRightMainContentHead} font-semibold`}
+                >
                   Auspicious Timing :
                 </h2>
                 <p className={`${styles.agentRightMainContentText}`}>
-                  Astrology can help determine the most auspicious time (Muhurat) for buying a house.
+                  Astrology can help determine the most auspicious time
+                  (Muhurat) for buying a house.
                 </p>
               </div>
             </div>
             <div className="flex mt-4">
               <i className="bi bi-geo-alt-fill"></i>
               <div className={`${styles.agentRightMainContent}`}>
-                <h2 className={`${styles.agentRightMainContentHead} font-semibold`}>
+                <h2
+                  className={`${styles.agentRightMainContentHead} font-semibold`}
+                >
                   Financial Stability :
                 </h2>
                 <p className={`${styles.agentRightMainContentText}`}>
-                  Astrological analysis can provide insights into an individual's financial prospects and potential hurdles.
+                  Astrological analysis can provide insights into an
+                  individual's financial prospects and potential hurdles.
                 </p>
               </div>
             </div>
             <div className="flex mt-4">
               <i className="bi bi-geo-alt-fill"></i>
               <div className={`${styles.agentRightMainContent}`}>
-                <h2 className={`${styles.agentRightMainContentHead} font-semibold`}>
+                <h2
+                  className={`${styles.agentRightMainContentHead} font-semibold`}
+                >
                   Family Harmony :
                 </h2>
                 <p className={`${styles.agentRightMainContentText}`}>
-                  Astrology considers the influence of planetary positions on family dynamics and relationships.
+                  Astrology considers the influence of planetary positions on
+                  family dynamics and relationships.
                 </p>
               </div>
             </div>
@@ -883,14 +957,19 @@ export default function Home() {
           <div className={` ${styles.faqLeft}`}>
             <Accordion collapseAll className="border-none">
               {faqData?.data?.map((item, index) => (
-                <Accordion.Panel className={`${styles.faqItemMainBox}`} key={index}>
+                <Accordion.Panel
+                  className={`${styles.faqItemMainBox}`}
+                  key={index}
+                >
                   <Accordion.Title
                     className={` ${styles.faqItemMain} rounded-t-md text-white bg-blue-700 hover:bg-blue-700
                       focus:border-none focus:ring-grey-0 focus:ring-0`}
                   >
                     {item?.Subject}
                   </Accordion.Title>
-                  <Accordion.Content className={` ${styles.faqItemMainAnswer} bg-blue-700 text-white`}>
+                  <Accordion.Content
+                    className={` ${styles.faqItemMainAnswer} bg-blue-700 text-white`}
+                  >
                     <p className=" mb-2 text-white dark:text-white-400">
                       {item?.Answer}
                     </p>
@@ -956,7 +1035,6 @@ export default function Home() {
                     onClick={addEnquiryData}
                   >
                     Send
-
                   </button>
                 </div>
               </div>
@@ -1071,9 +1149,9 @@ export default function Home() {
             </div>
           ))}
         </Slider> */}
-        {
-          testimonialData?.data?.length > 0 ? <MultiCarousel UI={Testimonial} /> : null
-        }
+        {testimonialData?.data?.length > 0 ? (
+          <MultiCarousel UI={Testimonial} />
+        ) : null}
       </div>
 
       <div className={`${styles.populerPropertiesMain} blogs`}>
@@ -1111,7 +1189,6 @@ export default function Home() {
           </div>
         </div>
 
-
         {blogData ? (
           <div className="flex flex-wrap">
             {blogData?.data?.map((item, index) => (
@@ -1129,7 +1206,9 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="p-4">
-                  <div className={` ${styles.populerPropertiesLocationMain} flex`}>
+                  <div
+                    className={` ${styles.populerPropertiesLocationMain} flex`}
+                  >
                     <p className={`text-gray-700`}>{item?.BlogType?.Type}</p>
                   </div>
                   <h2 className={` ${styles.populerPropertiesBoxHead}`}>
@@ -1143,7 +1222,9 @@ export default function Home() {
               </div>
             ))}
           </div>
-        ) : <SkeletonLoader />}
+        ) : (
+          <SkeletonLoader />
+        )}
       </div>
 
       <div className={` ${styles.dream} dream`}>
@@ -1151,7 +1232,8 @@ export default function Home() {
           <div className={`${styles.blogContentMain}`}>
             <h2 className={`${styles.blogContentHead}`}>Get Your Dream Home</h2>
             <p className={`${styles.blogContentText}`}>
-              Your Dream Home Journey Begins Now: Dive Into Our Wealth of Options and Turn Your Dreams into Reality
+              Your Dream Home Journey Begins Now: Dive Into Our Wealth of
+              Options and Turn Your Dreams into Reality
             </p>
             <button
               className={` ${styles.blogMainContenBtn} text-blue bg-white-700 h-12 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
@@ -1187,17 +1269,36 @@ export default function Home() {
         </div>
       </div>
       <Footer />
-      <Modal dismissible className="bg-transparent/[.8]" show={openModal} onClose={onResetValue}>
-        <Modal.Header>Properties by <span className="blueText">Zodiac</span></Modal.Header>
+      <Modal
+        dismissible
+        className="bg-transparent/[.8]"
+        show={openModal}
+        onClose={onResetValue}
+      >
+        <Modal.Header>
+          Properties by <span className="blueText">Zodiac</span>
+        </Modal.Header>
         <Modal.Body>
           <div className={`${styles.ModalContent}`}>
             <div>
-              <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400 m-2"><span>Name : </span>{ZodiacName}</p>
-              <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400 m-2"><span>Date of birth : </span>{Dob}</p>
+              <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400 m-2">
+                <span>Name : </span>
+                {ZodiacName}
+              </p>
+              <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400 m-2">
+                <span>Date of birth : </span>
+                {Dob}
+              </p>
             </div>
             <div>
-              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400 m-2"><span>Direction : </span>{propertyByZodaicProperty?.data?.Facing?.Facing}</p>
-              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400 m-2"><span>Zodiac Sign : </span>{propertyByZodaicProperty?.data?.sign}</p>
+              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400 m-2">
+                <span>Direction : </span>
+                {propertyByZodaicProperty?.data?.Facing?.Facing}
+              </p>
+              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400 m-2">
+                <span>Zodiac Sign : </span>
+                {propertyByZodaicProperty?.data?.sign}
+              </p>
             </div>
           </div>
         </Modal.Body>

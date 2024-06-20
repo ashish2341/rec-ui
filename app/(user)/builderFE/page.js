@@ -5,7 +5,7 @@ import Navbar from "@/components/common/navbar";
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./byilderFE.module.css"
 import { Dropdown } from "flowbite-react";
-import { API_BASE_URL, API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL, API_BASE_URL_FOR_MASTER,imgApiUrl } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { Avatar } from "flowbite-react";
 import { Card } from "flowbite-react";
@@ -110,7 +110,7 @@ const BuilderPage = () => {
                                 .slice(0, 4)
                                 .map((item, index) => (
                             <Link href={`/builderFE/${item._id}`}>
-                            <Avatar key={index} img={item.Logo} size="md" className="mr-2 ml-1 justify-start p-4" rounded>
+                            <Avatar key={index} img={`${imgApiUrl}/${item.Logo}`} size="md" className="mr-2 ml-1 justify-start p-4" rounded>
                                 <div className="dark:text-white">
                                     <div className="text-xs font-semibold blueText text-nowrap">{item.Name}</div>
                                     <div className="text-xs text-gray-500 dark:text-gray-400">Joined in {(item.EstablishDate ? String(item.EstablishDate).substring(0, 4) : 'N/A')}</div>
@@ -138,8 +138,8 @@ const BuilderPage = () => {
                         <Link href={`/builderFE/${item._id}`}>
                         <div key={index} className={` ${styles.builderDetailBuilderRight} `}>
                             <img
-                                src={item.Logo}
-                                className={` ${styles.builderImgBuilder} mr-4`}
+                            src={`${imgApiUrl}/${item.Logo}`}
+                                className={` ${styles.builderImgBuilder} mr-5`}
                             />
                             <div>
                                 <h5 className="text-lg font-bold  text-gray-900 dark:text-white blueText">
@@ -152,15 +152,16 @@ const BuilderPage = () => {
                             </div>
                         </div>
                         </Link>
-
+                        
                         <div className={` ${styles.builderDetailPageDown}`}>
                             <div className={` ${styles.builderSocialLine}`} >
+                            {item.SocialMediaProfileLinks ?
                                 <div className={` ${styles.builderSocialIcon} text-gray-700`}>
                                     <Link href={item.SocialMediaProfileLinks.Facebook} target="_blank" rel="noopener noreferrer"><i className="bi bi-facebook"></i></Link>
                                     <Link href={item.SocialMediaProfileLinks.Instagram} target="_blank" rel="noopener noreferrer"><i className="bi bi-instagram ml-3"></i></Link>
                                     <Link href={item.SocialMediaProfileLinks.LinkedIn} target="_blank" rel="noopener noreferrer"><i className="bi bi-linkedin ml-3"></i></Link>
                                     <Link href={item.SocialMediaProfileLinks.Twitter} target="_blank" rel="noopener noreferrer"><i className="bi bi-twitter ml-3"></i></Link>
-                                </div>
+                                </div> : <p>{" "}</p> }
                                 <div>
                                     <p>{item.PropertiesLength} properties listed</p>
                                 </div>

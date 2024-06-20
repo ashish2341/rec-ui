@@ -5,10 +5,12 @@ import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { addAmenity } from "@/api-functions/amenity/addAmenity";
 import { ImageString } from "@/api-functions/auth/authAction";
-import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER, imgApiUrl } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import Select from "react-select";
 import { AddBuilderApi } from "@/api-functions/builder/addBuilder";
+import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
+
 
 export default function AddBuilder() {
   // fetching Data for Area
@@ -57,176 +59,11 @@ export default function AddBuilder() {
   const [description, setDescription] = useState("");
   const [builderLogo, setBuilderLogo] = useState("");
   const [password, setPassword] = useState("");
+  const [imageLoader, setImageLoader] = useState(false);
+  const [docLoader, setDocLoader] = useState(false);
+  const [logoLoader, setLogoLoader] = useState(false);
   const logoInputRef = useRef(null);
   const router = useRouter();
-
-  // const validateFields = () => {
-
-  //   let isValid = true;
-  //   let isEmptyField = false;
-  //   const newBranchesData = [...BranchesData];
-
-  //   newBranchesData.forEach((branch) => {
-  //     // Check if any field is empty
-  //     Object.keys(branch).forEach((key) => {
-  //       if (typeof branch[key] === "string" && branch[key].trim() === "") {
-  //         isEmptyField = true;
-  //       }
-  //     });
-  //   });
-
-  //   // If at least one field is empty, show the error message and return
-  //   if (isEmptyField) {
-  //     toast.error("Branch details  are required.");
-  //     return false;
-  //   }
-
-  //   newBranchesData.forEach((branch) => {
-  //     // Check mobile, whatsapp, phone number format and length
-  //     const mobilePattern = /^[789]\d{9}$/;
-  //     if (!mobilePattern.test(branch.Mobile)) {
-  //       isValid = false;
-  //       toast.error(
-  //         "Mobile number should be 10 digits and start with 9, 8, or 7."
-  //       );
-  //     }
-  //     if (!mobilePattern.test(branch.WhatsApp)) {
-  //       isValid = false;
-  //       toast.error(
-  //         "WhatsApp number should be 10 digits and start with 9, 8, or 7."
-  //       );
-  //     }
-  //     if (!mobilePattern.test(branch.Phone)) {
-  //       isValid = false;
-  //       toast.error(
-  //         "Phone number should be 10 digits and start with 9, 8, or 7."
-  //       );
-  //     }
-
-  //     // Check pincode format and length
-  //     const pincodePattern = /^\d{6}$/;
-  //     if (!pincodePattern.test(branch.PinCode)) {
-  //       isValid = false;
-  //       toast.error("Pincode should be 6 digits.");
-  //     }
-
-  //     // Check email format
-  //     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //     if (
-  //       !emailPattern.test(branch.EmailId) ||
-  //       !branch.EmailId.endsWith("gmail.com")
-  //     ) {
-  //       isValid = false;
-  //       toast.error("Email should be a valid Gmail address.");
-  //     }
-  //   });
-
-  //   return isValid;
-  // };
-
-  // const validateContact = () => {
-  //   let isValid = true;
-  //   let isEmptyField = false;
-  //   const newBranchesData = [...BranchesData];
-  //   newBranchesData.forEach((branch) => {
-  //     // Check mobile, whatsapp, phone number format and length
-  //     const mobilePattern = /^[789]\d{9}$/;
-  //     if (!mobilePattern.test(branch.Mobile)) {
-  //       isValid = false;
-  //       toast.error(
-  //         "Mobile number should be 10 digits and start with 9, 8, or 7."
-  //       );
-  //     }
-  //     if (!mobilePattern.test(branch.WhatsApp)) {
-  //       isValid = false;
-  //       toast.error(
-  //         "WhatsApp number should be 10 digits and start with 9, 8, or 7."
-  //       );
-  //     }
-  //     if (!mobilePattern.test(branch.Phone)) {
-  //       isValid = false;
-  //       toast.error(
-  //         "Phone number should be 10 digits and start with 9, 8, or 7."
-  //       );
-  //     }
-
-  //     // Check pincode format and length
-  //     const pincodePattern = /^\d{6}$/;
-  //     if (!pincodePattern.test(branch.PinCode)) {
-  //       isValid = false;
-  //       toast.error("Pincode should be 6 digits.");
-  //     }
-
-  //     // Check email format
-  //     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //     if (
-  //       !emailPattern.test(branch.EmailId) ||
-  //       !branch.EmailId.endsWith("gmail.com")
-  //     ) {
-  //       isValid = false;
-  //       toast.error("Email should be a valid Gmail address.");
-  //     }
-  //   });
-
-  //   return isValid;
-  // };
-
-  // const validateBasicData = () => {
-  //   let validValue = true;
-  //   if (!builderName || !builderArea) {
-  //     toast.error("Please fill in all required fields.");
-  //     validValue = false;
-  //   }
-
-  //   // email check
-
-  //   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //   if (
-  //     !emailPattern.test(builderEmail) ||
-  //     !builderEmail.endsWith("gmail.com")
-  //   ) {
-  //     toast.error("Email should be a valid Gmail address.");
-  //     validValue = false;
-  //   }
-
-  //   // mobile patteren check
-
-  //   const mobilePattern = /^[789]\d{9}$/;
-  //   if (!mobilePattern.test(builderMobile)) {
-  //     toast.error(
-  //       "Mobile number should be 10 digits and start with 9, 8, or 7."
-  //     );
-  //     validValue = false;
-  //   }
-  //   if (!mobilePattern.test(builderWhatsapp)) {
-  //     toast.error(
-  //       "WhatsApp number should be 10 digits and start with 9, 8, or 7."
-  //     );
-  //     validValue = false;
-  //   }
-
-  //   if (
-  //     !description ||
-  //     !image ||
-  //     !detailNote ||
-  //     !establishDate ||
-  //     !documents ||
-  //     !builderLogo
-  //   ) {
-  //     toast.error("Please fill in all required fields.");
-  //     validValue = false;
-  //   }
-
-  //   if (
-  //     !socialMediaProfileLinks.Facebook ||
-  //     !socialMediaProfileLinks.Twitter ||
-  //     !socialMediaProfileLinks.Instagram ||
-  //     !socialMediaProfileLinks.LinkedIn
-  //   ) {
-  //     toast.error("Please fill in all Social Profile fields.");
-  //     validValue = false;
-  //   }
-  // };
 
   const handleNameChange = (e) => {
     setBuilderName(e.target.value);
@@ -247,8 +84,6 @@ export default function AddBuilder() {
   };
 
   const addMoreContactPerson = (index) => {
-    // const branchValidateforAdd = validateFields();
-    // if (branchValidateforAdd) {
     const updatedFormData = [...BranchesData];
     updatedFormData[index].ContactPerson.push({
       Name: "",
@@ -302,8 +137,6 @@ export default function AddBuilder() {
     ];
 
     const files = Array.from(event.target.files);
-    console.log("Document Files", files);
-    console.log("files.type", files.type);
 
     // Check file types
     const invalidFiles = files.filter(
@@ -316,21 +149,22 @@ export default function AddBuilder() {
         documentInputRef.current.value = "";
       }
     } else {
+      setDocLoader(true)
       const documentString = [];
 
       // Map each file to its corresponding image string asynchronously
       await Promise.all(
         files.map(async (item) => {
-          console.log("image File inside map", item);
           const formData = new FormData();
           formData.append("profilePic", item);
 
           try {
             const res = await ImageString(formData);
-            if (res.successMessage) {
-              console.log("Image Response", res.successMessage.imageUrl);
-              documentString.push(res.successMessage.imageUrl);
+            if (res?.successMessage) {
+              setDocLoader(false)
+              documentString.push(res?.successMessage?.imageUrl);
             } else {
+              setDocLoader(false)
               toast.error(res.errMessage);
               return false;
             }
@@ -342,25 +176,18 @@ export default function AddBuilder() {
         })
       );
 
-      console.log(
-        "documentString files data after convert string",
-        documentString
-      );
-
       // Filter unique files based on filename
       const uniqueFiles = documentString.filter((url) => {
         const filename = url.substring(
           url.lastIndexOf("-") + 1,
           url.lastIndexOf(".")
         );
-        console.log("documentString filename", filename);
         if (documents.length > 0) {
           return !documents.some((existingFile) => {
             const existingFilename = existingFile.substring(
               existingFile.lastIndexOf("-") + 1,
               existingFile.lastIndexOf(".")
             );
-            console.log("documents existingFilename", existingFilename);
             return existingFilename === filename;
           });
         } else {
@@ -368,7 +195,6 @@ export default function AddBuilder() {
         }
       });
 
-      console.log("uniqueFiles data after convert string", uniqueFiles);
 
       // Update the document state
       setDocuments([...documents, ...uniqueFiles]);
@@ -396,22 +222,23 @@ export default function AddBuilder() {
         imageInputRef.current.value = "";
       }
     } else {
+      setImageLoader(true)
       const imageString = [];
 
       // Map each file to its corresponding image string asynchronously
       await Promise.all(
         files.map(async (item) => {
-          console.log("image File inside map", item);
           const formData = new FormData();
           formData.append("profilePic", item);
 
           try {
             const res = await ImageString(formData);
-            if (res.successMessage) {
-              console.log("Image Response", res.successMessage.imageUrl);
-              imageString.push(res.successMessage.imageUrl);
+            if (res?.successMessage) {
+              setImageLoader(false);
+              imageString.push(res?.successMessage?.imageUrl);
             } else {
-              toast.error(res.errMessage);
+              setImageLoader(false);
+              toast.error(res?.errMessage);
               return false;
             }
           } catch (error) {
@@ -422,7 +249,6 @@ export default function AddBuilder() {
         })
       );
 
-      console.log("image files data after convert string", imageString);
 
       // Filter unique files based on filename
       const uniqueFiles = imageString.filter((url) => {
@@ -430,15 +256,12 @@ export default function AddBuilder() {
           url.lastIndexOf("-") + 1,
           url.lastIndexOf(".")
         );
-        console.log("imageString filename", filename);
         if (image.length > 0) {
           return !image.some((existingFile) => {
-            console.log("imageString existingFile", existingFile);
             const existingFilename = existingFile.substring(
               url.lastIndexOf("-") + 1,
               existingFile.lastIndexOf(".")
             );
-            console.log("image existingFilename", existingFilename);
 
             return filename === existingFilename;
           });
@@ -447,7 +270,6 @@ export default function AddBuilder() {
         }
       });
       setImage([...image, ...uniqueFiles]);
-      console.log("uniqueFiles data after convert string", uniqueFiles);
 
       if (imageInputRef.current) {
         imageInputRef.current.value = "";
@@ -456,8 +278,14 @@ export default function AddBuilder() {
   };
 
   const submitForm = async () => {
-    // const branchValidate = validateFields();
-    // if (branchValidate) {
+    if (image.length == 0) {
+      toast.error("Image is required")
+      return false;
+    }
+    if (documents.length == 0) {
+      toast.error("Document is required")
+      return false;
+    }
     const builderDetails = {
       Name: builderName,
       SocialMediaProfileLinks: socialMediaProfileLinks,
@@ -472,9 +300,8 @@ export default function AddBuilder() {
       Images: image,
       Documents: documents.map((URL) => ({ URL })),
       BranchOffices: BranchesData,
-      Password:password
+      Password: password
     };
-    console.log("builderDetails", builderDetails);
     let res = await AddBuilderApi(builderDetails);
     if (res?.resData?.success == true) {
       router.push("/builder");
@@ -489,7 +316,6 @@ export default function AddBuilder() {
   const removeImage = (index) => {
     const newArray = [...image];
     newArray.splice(index, 1);
-    console.log("newArray", newArray);
     setImage(newArray);
 
     if (newArray.length == 0) {
@@ -522,7 +348,6 @@ export default function AddBuilder() {
     const file = event.target.files[0]; // Get the first file only
     const formData = new FormData();
     formData.append("profilePic", file);
-    console.log("image File", file);
 
     // Check file type
     if (!acceptedFileTypes.includes(file.type)) {
@@ -533,13 +358,14 @@ export default function AddBuilder() {
         logoInputRef.current.value = "";
       }
     } else {
+      setLogoLoader(true)
       let res = await ImageString(formData);
-      console.log("image resPonse Data=>", res);
-      if (res.successMessage) {
-        console.log("Image Response", res.successMessage.imageUrl);
-        setBuilderLogo(res.successMessage.imageUrl);
+      if (res?.successMessage) {
+        setLogoLoader(false)
+        setBuilderLogo(res?.successMessage?.imageUrl);
       } else {
-        toast.error(res.errMessage);
+        setLogoLoader(false)
+        toast.error(res?.errMessage);
         return;
       }
     }
@@ -582,7 +408,7 @@ export default function AddBuilder() {
           <div>
             <label
               htmlFor="area"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
               Area
             </label>
@@ -679,7 +505,7 @@ export default function AddBuilder() {
           <div>
             <label
               htmlFor="DetailNote"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
               Detail Note
             </label>
@@ -697,7 +523,7 @@ export default function AddBuilder() {
           <div>
             <label
               htmlFor="description"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
               Description
             </label>
@@ -731,6 +557,7 @@ export default function AddBuilder() {
               onChange={handleLogoInputChange}
               required
             />
+            {logoLoader && <LoaderForMedia />}
             {builderLogo ? (
               <div className="flex flex-wrap ">
                 <div className="mr-4 mb-1  ">
@@ -738,7 +565,7 @@ export default function AddBuilder() {
                     <h3>Selected Logo</h3>
                   </div>
                   <img
-                    src={builderLogo}
+                    src={`${imgApiUrl}/${builderLogo}`}
                     alt=""
                     className=" object-cover m-2 mt-5 border border-black rounded-lg "
                     width={100}
@@ -766,6 +593,7 @@ export default function AddBuilder() {
               onChange={handleImageInputChange}
               required
             />
+            {imageLoader && <LoaderForMedia />}
             {image.length > 0 ? (
               <div>
                 <div className="ml-2 mt-3 underline font-bold">
@@ -775,7 +603,7 @@ export default function AddBuilder() {
                   {image.map((imageUrl, index) => (
                     <div key={index} className="mr-4 mb-4 relative ">
                       <img
-                        src={imageUrl}
+                        src={`${imgApiUrl}/${imageUrl}`}
                         alt=""
                         className="h-20 w-20 object-cover m-2 mt-5 border border-black rounded-lg "
                       />
@@ -813,6 +641,7 @@ export default function AddBuilder() {
               onChange={handleDocumentInputChange}
               required
             />
+            {docLoader && <LoaderForMedia />}
             {documents.length > 0 ? (
               <div>
                 <div className="ml-2 mt-3 underline font-bold">
@@ -823,7 +652,7 @@ export default function AddBuilder() {
                     <div key={index} className="mr-4 mb-4 relative">
                       <iframe
                         title={`Document ${index}`}
-                        src={itemUrl}
+                        src={`${imgApiUrl}/${itemUrl}`}
                         className="h-48 w-64 border border-black rounded-lg"
                       />
                       <button
@@ -867,7 +696,7 @@ export default function AddBuilder() {
           <div>
             <label
               htmlFor="facebook"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
             >
               Facebook Url
             </label>
@@ -885,7 +714,7 @@ export default function AddBuilder() {
           <div>
             <label
               htmlFor="Twitter"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
               Twitter Url
             </label>
@@ -903,7 +732,7 @@ export default function AddBuilder() {
           <div>
             <label
               htmlFor="Instagram"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
             >
               Instagram Url
             </label>
@@ -921,7 +750,7 @@ export default function AddBuilder() {
           <div>
             <label
               htmlFor="Linkdin"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
               Linkdin Url
             </label>
@@ -1009,7 +838,7 @@ export default function AddBuilder() {
                 <div>
                   <label
                     htmlFor={`Area-${index}`}
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Area
                   </label>
@@ -1024,7 +853,7 @@ export default function AddBuilder() {
                 <div>
                   <label
                     htmlFor={`City-${index}`}
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     City
                   </label>
@@ -1039,7 +868,7 @@ export default function AddBuilder() {
                 <div>
                   <label
                     htmlFor={`State-${index}`}
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     State
                   </label>
@@ -1054,7 +883,7 @@ export default function AddBuilder() {
                 <div>
                   <label
                     htmlFor={`Country-${index}`}
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Country
                   </label>
@@ -1069,7 +898,7 @@ export default function AddBuilder() {
                 <div>
                   <label
                     htmlFor={`PinCode-${index}`}
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Pin Code
                   </label>
@@ -1171,7 +1000,7 @@ export default function AddBuilder() {
                       <div>
                         <label
                           htmlFor={`Designation-${index}-${subIndex}`}
-                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                         >
                           Designation
                         </label>

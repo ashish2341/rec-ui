@@ -14,10 +14,8 @@ import {
   GetAdminGraphApi,
   GetBuilderGraphApi,
 } from "@/api-functions/dashboard/graphApi";
-import { Accordion } from "flowbite-react";
 import { getPrevious12Months } from "@/utils/commonHelperFn";
 import Link from "next/link";
-import { GetEnquiryByBuilderApi } from "@/api-functions/enquiry/getEnquiryByBuilder";
 
 export default function Dashboard() {
   const roleData = Cookies.get("roles") ?? "";
@@ -27,18 +25,15 @@ export default function Dashboard() {
   const [adminGraphData, setAdminGraphData] = useState("");
   const [builderDashboardData, setBuilderDashboardData] = useState("");
   const [builderGraphData, setBuilderGraphData] = useState("");
-  const [page, setPage] = useState(1);
-  const [searchData, setSearchData] = useState("");
-  const [filterData, setFilterData] = useState("");
 
   useEffect(() => {
-  
+
     if (roles.includes("Admin")) {
-    
+
       getPropertiesAdminDashboard();
       getPropertiesAdminGraph();
     } else {
-   
+
       getPropertiesBuilderDashboard();
       getPropertiesBuilderGraph();
     }
@@ -105,14 +100,12 @@ export default function Dashboard() {
       const userData = adminGraphData.user || [];
       const EnquiryData = adminGraphData.enquiry || [];
       const propertyData = adminGraphData.properties || [];
-      // const EnquiryData = adminGraphData ? adminGraphData.enquiry : builderGraphData.enquiry ;
-      // const propertyData = adminGraphData ? adminGraphData.properties : builderGraphData.properties ;
 
       const EnquiryBuilderData = builderGraphData.enquiry || [];
       const propertyBuilderData = builderGraphData.properties || [];
       let chartData = {};
 
-  
+
 
       if (roles.includes("Admin")) {
         chartData = {
@@ -193,25 +186,6 @@ export default function Dashboard() {
         };
       }
 
-      //   const chartBuilderData = {
-      //     labels: builderGraphData.properties.length > 0 ? builderGraphData?.properties.map(item => item.month) : 1,
-      //     datasets: [
-      //      {
-      //         label: 'Property',
-      //         data: propertyBuilderData.map(item => item.count),
-      //         fill: false,
-      //         borderColor: 'rgba(4, 153, 54, 1)',
-      //         tension: 0.1
-      //       },
-      //       {
-      //         label: 'Enquiry',
-      //         data: EnquiryBuilderData.map(item => item.count),
-      //         fill: false,
-      //         borderColor: 'rgba(34, 112, 190, 1)',
-      //         tension: 0.1
-      //       }]
-      //   };
-
       return new Chart(ctx, {
         type: "line",
         data: chartData,
@@ -234,23 +208,12 @@ export default function Dashboard() {
     };
   }, [adminGraphData]);
 
-  const getAllEnquiryByBuilder = async (filterType) => {
-    let enquiries = await GetEnquiryByBuilderApi(page, searchData, filterType);
-    if (enquiries?.resData?.success == true) {
-      toast.success(enquiries?.resData?.message);
-      return false;
-    } else {
-      toast.error(enquiries?.errMessage);
-      return false;
-    }
-  };
-
 
 
   return (
     <>
       <div className={`${styles.dashboardContainer}`}>
-        <div className={`grid grid-cols-2 gap-4 `}>
+        <div className={`grid grid-cols-2 gap-4`}>
           {roles.includes("Admin") && (
             <>
               {/* User card */}
@@ -380,110 +343,153 @@ export default function Dashboard() {
           {/* Property Card */}
           {adminDashboardData || builderDashboardData ? (
             <div>
-              <Card className={`col-span-2 text-nowrap ${styles.showCard3}`}>
-                <div className="flex">
-                  <Link href="/property">
-                    <div className="text-center">
-                      <h2
-                        className={`text-xl font-bold mb-4 tracking-wide ${styles.dataSection1}  `}
-                      >
-                        <div className={`${styles.Icon3Outline}`}>
-                          <i
-                            className={`bi bi-house text-4xl ${styles.Icons3Color}`}
-                            aria-hidden="true"
-                          ></i>
-                        </div>
-                        <div className={`${styles.propertyCard}`}>
-                          <p className="text-5xl font-bold mt-2">
-                            {roles.includes("Admin")
-                              ? adminDashboardData?.totalProperty
-                              : builderDashboardData?.totalProperty}
-                          </p>
-                          <p className="text-sm font-semibold mt-2">
-                            Total Property
-                          </p>
-                        </div>
-                      </h2>
-                    </div>
-                  </Link>
-                  <div className="mb-10">
-                    <Link href={`/property?todayProperty=yes`}>
-                      <p
-                        className={`text-2xl mb-2 font-bold ${styles.PropColor} hover:underline`}
-                      >
-                        {roles.includes("Admin")
-                          ? adminDashboardData?.todayAddProperty
-                          : builderDashboardData?.todayAddProperty}{" "}
-                        <span className={`font-normal `}>
-                          Today Added Property{" "}
-                        </span>
-                      </p>
+              {roles.includes("Admin") ?
+                <Card className={`col-span-2 text-nowrap ${styles.showCard3}`}>
+                  <div className="flex">
+
+                    <Link href="/property">
+                      <div className="text-center">
+                        <h2
+                          className={`text-xl font-bold mb-4 tracking-wide ${styles.dataSection1}  `}
+                        >
+                          <div className={`${styles.Icon3Outline}`}>
+                            <i
+                              className={`bi bi-house text-4xl ${styles.Icons3Color}`}
+                              aria-hidden="true"
+                            ></i>
+                          </div>
+                          <div className={`${styles.propertyCard}`}>
+                            <p className="text-5xl font-bold mt-2">
+                              {adminDashboardData?.totalProperty}
+                            </p>
+                            <p className="text-sm font-semibold mt-2">
+                              Total Property
+                            </p>
+                          </div>
+                        </h2>
+                      </div>
                     </Link>
-                    {roles.includes("Admin") ? (
+                    <div className="mb-10">
+                      <Link href={`/property?todayProperty=yes`}>
+                        <p
+                          className={`text-2xl mb-2 font-bold ${styles.PropColor} hover:underline`}
+                        >
+                          {adminDashboardData?.todayAddProperty}
+                          <span className={`font-normal `}>
+                            {" "}Today Added Property
+                          </span>
+                        </p>
+                      </Link>
                       <Link href="/reviewProperty">
                         <p
                           className={`text-2xl mb-2 font-bold ${styles.PropColor} hover:underline`}
                         >
                           {adminDashboardData?.underReviewProperty}{" "}
                           <span className={`font-normal `}>
-                            Under Review Property{" "}
+                            {" "} Under Review Property
                           </span>
                         </p>
                       </Link>
-                    ) : (
-                      <Link href="/property?showValue=false">
+                      <Link href="/property">
                         <p
                           className={`text-2xl mb-2 font-bold ${styles.PropColor} hover:underline`}
                         >
-                          {builderDashboardData?.underReviewProperty}{" "}
-                          <span className={`font-normal `}>
-                            Under Review Property{" "}
-                          </span>
-                        </p>
-                      </Link>
-                    )}
-                    {roles.includes("Admin") ? (
-                      <>
-                        {" "}
-                        <Link href="/property">
-                          <p
-                            className={`text-2xl mb-2 font-bold ${styles.PropColor} hover:underline`}
-                          >
-                            {adminDashboardData?.approvedProperty}
-                            <span className={`font-normal `}>
-                              {" "}
-                              Approved Property{" "}
-                            </span>
-                          </p>
-                        </Link>
-                        <Link href="/property?type=Admin">
-                          <p
-                            className={`text-2xl mb-2 font-bold ${styles.PropColor} hover:underline`}
-                          >
-                            {adminDashboardData?.TotalAdminProperty}
-                            <span className={`font-normal `}>
-                              {" "}
-                             Total Admin Property{" "}
-                            </span>
-                          </p>
-                        </Link>
-                      </>
-                    ) : (
-                      <Link href="/property?showValue=true">
-                        <p
-                          className={`text-2xl mb-2 font-bold ${styles.PropColor} hover:underline`}
-                        >
-                          {builderDashboardData?.approvedProperty}{" "}
+                          {adminDashboardData?.approvedProperty}
                           <span className={`font-normal `}>
                             {" "}
                             Approved Property{" "}
                           </span>
                         </p>
                       </Link>
-                    )}
+                      <Link href="/property?type=Admin">
+                        <p
+                          className={`text-2xl mb-2 font-bold ${styles.PropColor} hover:underline`}
+                        >
+                          {adminDashboardData?.TotalAdminProperty}
+                          <span className={`font-normal `}>
+                            {" "}
+                            Total Admin Property{" "}
+                          </span>
+                        </p>
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              </Card>
+                </Card>
+                :
+                <>
+                  <div className="flex">
+                    <Card className={`text-nowrap rounded-xl col-span-1 ${styles.showBuilderCard3} mr-2 mb-3`}>
+                      <Link href="/property">
+                        <div className="text-start">
+                          <h2
+                            className={`text-xl font-bold tracking-wide ${styles.dataSectionBuilder1}  `}
+                          >
+                            <div>
+                              <img
+                                src="../../../img/town.png"
+                                width="50"
+                                height="50"
+                              />
+                            </div>
+                            <div className={`${styles.propertyCard}`}>
+                              <p className="text-5xl font-bold mt-2">
+                                {builderDashboardData?.totalProperty}
+                              </p>
+                              <p className="text-sm font-semibold mt-2">
+                                Total Property
+                              </p>
+                            </div>
+                            <Link href={`/property?todayProperty=yes`}>
+                              <p
+                                className={`text-lg mb-2 font-bold ${styles.PropColor} hover:underline`}
+                              >
+                                {builderDashboardData?.todayAddProperty}
+                                <span className={`font-normal `}>{" "} added today</span>
+                              </p>
+                            </Link>
+                          </h2>
+                        </div>
+                      </Link>
+                    </Card>
+                    <div>
+                    <Card href="/property?showValue=false" className={`text-nowrap rounded-xl p-0 mb-2 ${styles.showBuilderCardinner3}`}>
+                      <div>
+                        <img
+                          src="../../../img/technician.png"
+                          width="30"
+                          height="30"
+                        />
+                      </div>
+                      <div className={`${styles.propertyCard}`}>
+                        <p className="text-xl font-bold">
+                          {builderDashboardData?.underReviewProperty}
+                        </p>
+                        <p className="text-sm font-semibold mt-2">
+                          Under Review Property
+                        </p>
+                      </div>
+                    </Card>
+                    <Card href="/property?showValue=true" className={`text-nowrap rounded-xl p-0 ${styles.showBuilderCardinner3}`}>
+                      <div>
+                        <img
+                          src="../../../img/technician.png"
+                          width="30"
+                          height="30"
+                        />
+                      </div>
+                      <div className={`${styles.propertyCard}`}>
+                        <p className="text-xl font-bold ">
+                          {builderDashboardData?.approvedProperty}
+                        </p>
+                        <p className="text-sm font-semibold mt-2">
+                         Approved Property
+                        </p>
+                      </div>
+                    </Card>
+                    </div>
+                  </div>
+                </>
+              }
             </div>
           ) : (
             <LoadingImg />
@@ -491,99 +497,200 @@ export default function Dashboard() {
           {/* Enquiry Card */}
           {adminDashboardData || builderDashboardData ? (
             <div>
-              <Card className={`col-span-2  text-nowrap ${styles.showCard4}`}>
-                <div className="flex">
-                  <Link href="/projectInquiry">
-                    <div className="text-center">
-                      <h2
-                        className={`text-xl font-bold mb-4  tracking-wide ${styles.dataSection1} `}
-                      >
-                        <div className={`${styles.IconOutline}`}>
-                          <i
-                            className={`bi bi-chat-square-text text-4xl ${styles.Icons4Color}`}
-                            aria-hidden="true"
-                          ></i>
+              {roles.includes("Admin") ?
+                <Card className={`col-span-2  text-nowrap ${styles.showCard4}`}>
+                  <div className="flex">
+                    <Link href="/projectInquiry">
+                      <div className="text-center">
+                        <h2
+                          className={`text-xl font-bold mb-4  tracking-wide ${styles.dataSection1} `}
+                        >
+                          <div className={`${styles.IconOutline}`}>
+                            <i
+                              className={`bi bi-chat-square-text text-4xl ${styles.Icons4Color}`}
+                              aria-hidden="true"
+                            ></i>
+                          </div>
+                          <div className={`${styles.enquiryCard}`}>
+                            <p className="text-5xl font-bold mt-2">
+                              {adminDashboardData?.totalEnquiry}{" "}
+                            </p>
+                            <p className="text-sm font-semibold mt-2">
+                              Total Enquiry
+                            </p>
+                          </div>
+                        </h2>
+                      </div>
+                    </Link>
+                    <div>
+                      <Link href={`/projectInquiry?todayEnquiry=yes`}>
+                        <p
+                          className={`text-2xl font-bold ${styles.EnqColor} hover:underline `}
+                        >
+                          {adminDashboardData?.todayEnquiry}{" "}
+                          <span className={`font-normal `}>Today's Enquiry </span>
+                        </p>
+                      </Link>
+                      <Link href={`/projectInquiry?type=Astrology`}>
+                        <p
+                          className={`text-2xl font-bold mt-2 ${styles.EnqColor} hover:underline `}
+                        >
+                          {adminDashboardData?.totalEnquiryAstrology}{" "}
+                          <span className={`font-normal `}>
+                            Astrology Enquiry{" "}
+                          </span>
+                        </p>
+                      </Link>
+                      <Link href={`/projectInquiry?type=ContactUs`}>
+                        <p
+                          className={`text-2xl font-bold mt-2 ${styles.EnqColor} hover:underline`}
+                        >
+                          {adminDashboardData?.totalEnquiryContactUs}{" "}
+                          <span className={`font-normal `}>
+                            Contact Us Enquiry{" "}
+                          </span>
+                        </p>
+                      </Link>
+                      <Link href={`/projectInquiry?type=Property`}>
+                        <p
+                          className={`text-2xl font-bold mt-2 ${styles.EnqColor} hover:underline`}
+                        >
+                          {adminDashboardData?.totalEnquiryProperty}{" "}
+                          <span className={`font-normal `}>
+                            Property Enquiry{" "}
+                          </span>
+                        </p>
+                      </Link>
+                      <Link href={`/projectInquiry?type=Project`}>
+                        <p
+                          className={`text-2xl font-bold mt-2 ${styles.EnqColor} hover:underline`}
+                        >
+                          {adminDashboardData?.totalEnquiryProject}{" "}
+                          <span className={`font-normal `}>
+                            Project Enquiry{" "}
+                          </span>
+                        </p>
+                      </Link>
+                    </div>
+                  </div>
+                </Card>
+                :
+                <>
+                  <div className="flex">
+                    <Card className={`text-nowrap rounded-xl p-0 ${styles.showBuilderCard4} mr-1 mb-3`}>
+                      <Link href="/projectInquiry">
+                        <div className="text-start">
+                          <h2
+                            className={`text-xl font-bold tracking-wide ${styles.dataSectionBuilder1}  `}
+                          >
+                            <div>
+                              <img
+                                src="../../../img/questionnaire.png"
+                                width="50"
+                                height="50"
+                              />
+                            </div>
+                            <div className={`${styles.enquiryCard}`}>
+                              <p className="text-5xl font-bold mt-2">
+                                {builderDashboardData?.totalEnquiry}{" "}
+                              </p>
+                              <p className="text-sm font-semibold mt-2">
+                                Total Enquiry
+                              </p>
+                            </div>
+                            <Link href={`/projectInquiry?todayEnquiry=yes`}>
+                              <p
+                                className={`text-lg font-bold ${styles.EnqColor} hover:underline `}
+                              >
+                                {builderDashboardData?.todayEnquiry}{" "}
+                                <span className={`font-normal `}>Today's Enquiry </span>
+                              </p>
+                            </Link>
+
+                          </h2>
+
+                        </div>
+                      </Link>
+                    </Card>
+
+                    <div className="grid grid-cols-2 ">
+                      <Card href={`/projectInquiry?type=Astrology`} className={`text-nowrap rounded-xl p-0 mr-1 ${styles.showBuilderCardInner4}`}>
+                        <div>
+                          <img
+                            src="../../../img/astrology.png"
+                            width="30"
+                            height="30"
+                          />
                         </div>
                         <div className={`${styles.enquiryCard}`}>
-                          <p className="text-5xl font-bold mt-2">
-                            {roles.includes("Admin")
-                              ? adminDashboardData?.totalEnquiry
-                              : builderDashboardData?.totalEnquiry}
+                          <p className="text-xl font-bold">
+                            {builderDashboardData?.totalEnquiryAstrology}
                           </p>
                           <p className="text-sm font-semibold mt-2">
-                            Total Enquiry
+                            Astrology Enquiry
                           </p>
                         </div>
-                      </h2>
+                      </Card>
+                      <Card href={`/projectInquiry?type=ContactUs`} className={`text-nowrap rounded-xl p-0 mr-1 ${styles.showBuilderCardInner4}`}>
+                      <div>
+                          <img
+                            src="../../../img/operator.png"
+                            width="30"
+                            height="30"
+                          />
+                        </div>
+                        <div className={`${styles.enquiryCard}`}>
+                          <p className="text-xl font-bold">
+                          {builderDashboardData?.totalEnquiryContactUs}
+                          </p>
+                          <p className="text-sm font-semibold mt-2">
+                          Contact Us Enquiry
+                          </p>
+                        </div>
+                      </Card>
+                      <Card href={`/projectInquiry?type=Property`} className={`text-nowrap rounded-xl mr-1 mb-1 p-0 ${styles.showBuilderCardInner4}`}>
+                      <div>
+                          <img
+                            src="../../../img/town.png"
+                            width="30"
+                            height="30"
+                          />
+                        </div>
+                        <div className={`${styles.enquiryCard}`}>
+                          <p className="text-xl font-bold">
+                          {builderDashboardData?.totalEnquiryProperty}
+                          </p>
+                          <p className="text-sm font-semibold mt-2">
+                          Property Enquiry
+                          </p>
+                        </div>
+                      </Card>
+                      <Card href={`/projectInquiry?type=Project`} className={`text-nowrap rounded-xl p-0 mr-1 mb-1 ${styles.showBuilderCardInner4}`}>
+                      <div>
+                          <img
+                            src="../../../img/town.png"
+                            width="30"
+                            height="30"
+                          />
+                        </div>
+                        <div className={`${styles.enquiryCard}`}>
+                          <p className="text-xl font-bold">
+                          {builderDashboardData?.totalEnquiryProject}
+                          </p>
+                          <p className="text-sm font-semibold mt-2">
+                          Project Enquiry
+                          </p>
+                        </div>
+                      </Card>
                     </div>
-                  </Link>
-                  <div>
-                    <Link href={`/projectInquiry?todayEnquiry=yes`}>
-                      <p
-                        className={`text-2xl font-bold ${styles.EnqColor} hover:underline `}
-                      >
-                        {roles.includes("Admin")
-                          ? adminDashboardData?.todayEnquiry
-                          : builderDashboardData?.todayEnquiry}{" "}
-                        <span className={`font-normal `}>Today's Enquiry </span>
-                      </p>
-                    </Link>
-                    <Link href={`/projectInquiry?type=Astrology`}>
-                      <p
-                        className={`text-2xl font-bold mt-2 ${styles.EnqColor} hover:underline `}
-                      >
-                        {roles.includes("Admin")
-                          ? adminDashboardData?.totalEnquiryAstrology
-                          : builderDashboardData?.totalEnquiryAstrology}{" "}
-                        <span className={`font-normal `}>
-                          Astrology Enquiry{" "}
-                        </span>
-                      </p>
-                    </Link>
-                    <Link href={`/projectInquiry?type=ContactUs`}>
-                      <p
-                        className={`text-2xl font-bold mt-2 ${styles.EnqColor} hover:underline`}
-                      >
-                        {roles.includes("Admin")
-                          ? adminDashboardData?.totalEnquiryContactUs
-                          : builderDashboardData?.totalEnquiryContactUs}{" "}
-                        <span className={`font-normal `}>
-                          Contact Us Enquiry{" "}
-                        </span>
-                      </p>
-                    </Link>
-                    <Link href={`/projectInquiry?type=Property`}>
-                      <p
-                        className={`text-2xl font-bold mt-2 ${styles.EnqColor} hover:underline`}
-                      >
-                        {roles.includes("Admin")
-                          ? adminDashboardData?.totalEnquiryProperty
-                          : builderDashboardData?.totalEnquiryProperty}{" "}
-                        <span className={`font-normal `}>
-                          Property Enquiry{" "}
-                        </span>
-                      </p>
-                    </Link>
-                    <Link href={`/projectInquiry?type=Project`}>
-                      <p
-                        className={`text-2xl font-bold mt-2 ${styles.EnqColor} hover:underline`}
-                      >
-                        {roles.includes("Admin")
-                          ? adminDashboardData?.totalEnquiryProject
-                          : builderDashboardData?.totalEnquiryProject}{" "}
-                        <span className={`font-normal `}>
-                          Project Enquiry{" "}
-                        </span>
-                      </p>
-                    </Link>
                   </div>
-                </div>
-              </Card>
+                </>
+              }
             </div>
           ) : (
             <LoadingImg />
           )}
-        </div>
+        </div >
         <div className={`${styles.SecondContainer}`}>
           {/* <h1 className="text-3xl font-bold pt-4 pl-4">User Property Growth Report </h1>
                     <div className={`${styles.SecondContainerItems}`}>
@@ -633,7 +740,7 @@ export default function Dashboard() {
             <canvas ref={chartRef} />
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 }

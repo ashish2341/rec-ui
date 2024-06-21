@@ -24,6 +24,7 @@ export default function Signup() {
   const [Pincode, setPincode] = useState("");
   const imageInputRef = useRef(null);
   const [image, setImage] = useState("");
+  const [passwordShow,setPasswordShow]=useState(false)
 
   const handleEmail = useCallback((value) => {
     setEmail(() => value.target.value);
@@ -188,10 +189,16 @@ export default function Signup() {
         return;
       }
     }
-
-     
     
   };
+  const handelPasswordShow=()=>{
+    if(!passwordShow){
+      setPasswordShow(true)
+    }else{
+      setPasswordShow(false)
+    }
+    
+  }
   return (
     <section
       className={` ${Styles.loginMain} bg-gray-50 dark:bg-gray-900 h-full`}
@@ -216,7 +223,7 @@ export default function Signup() {
               Create your Account
             </h1>
 
-            <form className="mb-5">
+            <form className="mb-4">
               <div className="grid gap-6 mb-6 md:grid-cols-2">
                 <div>
                   <label
@@ -353,7 +360,7 @@ export default function Signup() {
                   />
                 </div> */}
               </div>
-              <div className="mb-6">
+              <div className="mb-4">
               <label
                 htmlFor="imageInput"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
@@ -373,7 +380,7 @@ export default function Signup() {
               />
               </div>
              
-              <div className="mb-6">
+              <div className="mb-4">
                 <label
                   htmlFor="email"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
@@ -390,23 +397,31 @@ export default function Signup() {
                   required
                 />
               </div>
-              <div className="mb-6">
-                <label
-                  htmlFor="password"
+              <div className="relative mb-2">
+              <label
+                  htmlFor="email"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
                 >
                   Password
                 </label>
-                <input
-                  type="password"
-                  value={Password}
-                  onChange={handlePassword}
-                  id="password"
+                  <input
+                    type={passwordShow ? "text" :"password"}
+                    value={Password}
+                    onChange={handlePassword}
+                    name="password"
+                    id="password"
+                    placeholder="Password"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Password"
-                  required
-                />
-              </div>
+                  required=""
+                  />
+                  <button
+                  onClick={handelPasswordShow}
+                    type="button"
+                    className={`text-black absolute end-2.5 bottom-2.5 font-bold rounded-lg text-xl px-4 py-2 ${Styles.eyeButton}`}
+                  >{passwordShow ? (<i className="bi bi-eye-slash-fill"></i>):(<i className="bi bi-eye-fill"></i>)}
+                  
+                  </button>
+                </div>
 
               <button
                 onClick={signup}

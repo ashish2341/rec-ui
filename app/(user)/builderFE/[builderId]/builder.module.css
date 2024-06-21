@@ -122,7 +122,13 @@
 .loaderImg{
     margin-bottom: 1rem;
 }
-
+.bigNotFound{
+    font-weight: 600;
+    margin: 0.5rem;
+    color: grey;
+    text-align: center;
+    font-size: 2rem;
+  }
 @media screen and (max-width: 1000px) {
     .builderDetailPage{
         display: block;

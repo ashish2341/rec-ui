@@ -79,7 +79,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage,  edit
       propertTypWithSubTypeValue !== "" &&
       propertyTypeWithSubtype.Name != propertTypWithSubTypeValue
     ) {
-      console.log("entered");
+     
       setTitle("");
       setDescription("");
       setFacing("");

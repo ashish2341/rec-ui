@@ -115,7 +115,6 @@ console.log('API_BASE_URL',API_BASE_URL)
 //FOr forget PassWord
 export const UserForgoPassword = async (payload,setLoading=()=>{}) => {
   setLoading(true);
-console.log('API_BASE_URL',API_BASE_URL)
   try {
     const res = await fetch(`${API_BASE_URL}/auth/emailSendForForget`, {
       method: "POST",
@@ -125,20 +124,16 @@ console.log('API_BASE_URL',API_BASE_URL)
       body: JSON.stringify(payload),
     });
     const resData = await res.json();
-   
-    console.log('Forgot password resData',resData)
-   
+    console.log('resData',resData)
 
     if (resData?.success) {
       //toast.success("SuccessFully Login");
-     
-      //Cookies.set("token", resData?.message);
       setLoading(false);
       return {successMessage:resData};
     } else {
       //toast.error(resData.message);
       setLoading(false);
-      return {errMessage:resData.error};
+      return {errMessage:resData};
     }
   } catch (error) {
     setLoading(false);

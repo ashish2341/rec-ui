@@ -25,8 +25,6 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
     `${API_BASE_URL_FOR_MASTER}/furnishedes`
   );
 
-
-
   // console.log("areaUnitData", areaUnitData);
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("propertyData")
@@ -86,9 +84,9 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
       setLandArea(sessionStoragePropertyData?.LandArea || "");
       setCarpetArea(sessionStoragePropertyData?.CarpetArea || "");
       setBuiltUpArea(sessionStoragePropertyData?.BuiltUpArea || "");
-      setCustomFencing(sessionStoragePropertyData?.CustomFencing || "")
-      setCustomFlooring(sessionStoragePropertyData?.CustomFlooring || "")
-      setCustomWallType(sessionStoragePropertyData?.CustomWallType || "")
+      setCustomFencing(sessionStoragePropertyData?.CustomFencing || "");
+      setCustomFlooring(sessionStoragePropertyData?.CustomFlooring || "");
+      setCustomWallType(sessionStoragePropertyData?.CustomWallType || "");
       setAreaUnits({
         value: sessionStoragePropertyData?.AreaUnits || "Sq-ft",
         label: sessionStoragePropertyData?.AreaUnits || "Sq-ft",
@@ -113,12 +111,18 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
       propertTypWithSubTypeValue != "Plot" &&
       (propertTypeValue == "Residential" || propertTypeValue == "Commercial")
     ) {
-      var requiredFields = [fencing, flooring, furnished, builtUpArea,landArea];
-      if(fencing==="Other"){
-        requiredFields.push(customFencing)
+      var requiredFields = [
+        fencing,
+        flooring,
+        furnished,
+        builtUpArea,
+        landArea,
+      ];
+      if (fencing === "Other") {
+        requiredFields.push(customFencing);
       }
-      if(flooring==="Other"){
-        requiredFields.push(customFlooring)
+      if (flooring === "Other") {
+        requiredFields.push(customFlooring);
       }
     }
     if (propertTypWithSubTypeValue == "Plot") {
@@ -133,16 +137,17 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
         flooring,
         furnished,
         builtUpArea,
-        wallType,landArea
+        wallType,
+        landArea,
       ];
-      if(wallType==="Other"){
-        requiredFields.push(customWallType)
+      if (wallType === "Other") {
+        requiredFields.push(customWallType);
       }
-      if(fencing==="Other"){
-        requiredFields.push(customFencing)
+      if (fencing === "Other") {
+        requiredFields.push(customFencing);
       }
-      if(flooring==="Other"){
-        requiredFields.push(customFlooring)
+      if (flooring === "Other") {
+        requiredFields.push(customFlooring);
       }
     }
 
@@ -155,8 +160,7 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
   };
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
-  
-   
+
     if (allFieldsFilled) {
       const thirdPropertyData = {};
       if (propertTypWithSubTypeValue != "Plot") {
@@ -165,27 +169,27 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
           (thirdPropertyData.Furnished = furnished),
           (thirdPropertyData.BuiltUpArea = builtUpArea),
           (thirdPropertyData.LandArea = landArea ? parseInt(landArea) : ""),
-          (thirdPropertyData.LandAreaUnit = landAreaUnit ? landAreaUnit.value : ""),
+          (thirdPropertyData.LandAreaUnit = landAreaUnit
+            ? landAreaUnit.value
+            : ""),
           (thirdPropertyData.CarpetArea = carpetArea
             ? parseInt(carpetArea)
             : ""),
           (thirdPropertyData.Fitting = fittingValues ? fittingValues : "");
         thirdPropertyData.CellingHeight = cellingHeight;
         thirdPropertyData.EntranceWidth = entranceWidth;
-        if(fencing==="Other"){
+        if (fencing === "Other") {
           thirdPropertyData.CustomFencing = customFencing;
         }
-        if(flooring==="Other"){
+        if (flooring === "Other") {
           thirdPropertyData.CustomFlooring = customFlooring;
         }
-        if(fencing!=="Other" && customFencing ){
+        if (fencing !== "Other" && customFencing) {
           thirdPropertyData.CustomFencing = "";
         }
-        if(flooring!=="Other" && customFlooring){
+        if (flooring !== "Other" && customFlooring) {
           thirdPropertyData.CustomFlooring = "";
         }
-
-
       }
       if (propertTypWithSubTypeValue == "Plot") {
         (thirdPropertyData.PlotArea = plotArea),
@@ -195,15 +199,14 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
       }
       if (propertTypWithSubTypeValue == "Office") {
         thirdPropertyData.WallType = wallType;
-        if(wallType==="Other"){
+        if (wallType === "Other") {
           thirdPropertyData.CustomWallType = customWallType;
         }
-        if(wallType!=="Other" &&customWallType ){
+        if (wallType !== "Other" && customWallType) {
           thirdPropertyData.CustomWallType = "";
         }
       }
 
-      console.log("thirdPropertyData", thirdPropertyData);
       const localStorageData = JSON.parse(
         sessionStorage.getItem("propertyData")
       );
@@ -319,33 +322,32 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
           )}
           {/* Fencing */}
           {fencingArray && (
-          <>
-           <PropertyBigButtons
-              labelName={"Fencing"}
-              itemArray={fencingArray}
-              activeBtnvalue={fencing}
-              changeState={setFencing}
-            />
-            {fencing === "Other" && (
+            <>
+              <PropertyBigButtons
+                labelName={"Fencing"}
+                itemArray={fencingArray}
+                activeBtnvalue={fencing}
+                changeState={setFencing}
+              />
+              {fencing === "Other" && (
                 <TextInput
                   labelName={"Fencing Type"}
                   inputValue={customFencing}
                   dynamicState={setCustomFencing}
                 />
               )}
-          </>
-           
+            </>
           )}
           {/* Flooring */}
           {flooringArray && (
             <>
-            <PropertyBigButtons
-              labelName={"Flooring"}
-              itemArray={flooringArray}
-              activeBtnvalue={flooring}
-              changeState={setFlooring}
-            />
-            {flooring == "Other" && (
+              <PropertyBigButtons
+                labelName={"Flooring"}
+                itemArray={flooringArray}
+                activeBtnvalue={flooring}
+                changeState={setFlooring}
+              />
+              {flooring == "Other" && (
                 <TextInput
                   labelName={"Flooring Type"}
                   inputValue={customFlooring}
@@ -353,7 +355,6 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
                 />
               )}
             </>
-            
           )}
           {/* Furnished */}
           {furnishedesData && (
@@ -365,44 +366,42 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
               changeState={setFurnished}
             />
           )}
-
-           
           <div className="grid gap-4 mb-4 mt-5 sm:grid-cols-2">
             {/* land area and unit */}
-           <div className="w-full mx-auto">
-            <div>
-              <label
-                for="search-dropdown"
-                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
-              >
-                Land Area
-              </label>
-              <div className="relative w-full">
-                <input
-                  type="number"
-                  name="landArea"
-                  id="landArea"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Land Area"
-                  value={landArea}
-                  onChange={(e) => setLandArea(e.target.value)}
-                />
-                <div className="absolute top-0 end-0 text-sm font-medium h-full text-black  rounded-e-lg border-none m-0.5 ">
-                  <Select
-                    options={staticAreaUnitArray.map((element) => ({
-                      value: element.value,
-                      label: element.label,
-                    }))}
-                    value={landAreaUnit}
-                    onChange={(e) =>
-                      setLandAreaUnit({ value: e.value, label: e.label })
-                    }
-                    placeholder="Select Unit"
+            <div className="w-full mx-auto">
+              <div>
+                <label
+                  for="search-dropdown"
+                  className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
+                >
+                  Land Area
+                </label>
+                <div className="relative w-full">
+                  <input
+                    type="number"
+                    name="landArea"
+                    id="landArea"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Land Area"
+                    value={landArea}
+                    onChange={(e) => setLandArea(e.target.value)}
                   />
+                  <div className="absolute top-0 end-0 text-sm font-medium h-full text-black  rounded-e-lg border-none m-0.5 ">
+                    <Select
+                      options={staticAreaUnitArray.map((element) => ({
+                        value: element.value,
+                        label: element.label,
+                      }))}
+                      value={landAreaUnit}
+                      onChange={(e) =>
+                        setLandAreaUnit({ value: e.value, label: e.label })
+                      }
+                      placeholder="Select Unit"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
             {/* Builtup ARea */}
             <div>
               <label
@@ -480,7 +479,6 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
         </>
       )}
 
-    
       {propertTypWithSubTypeValue &&
         propertTypeValue &&
         propertTypWithSubTypeValue != "Plot" &&

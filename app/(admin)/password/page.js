@@ -52,6 +52,7 @@ export default function Password(params) {
         let updateUserData = await UpdatePassword(params?.searchParams?.userId, UserDetails);
         if (updateUserData?.resData?.success == true && NewPassword == confirmPassword) {
             toast.success(updateUserData?.resData?.message);
+            router.push("/login")
             return false;
         } else {
             toast.error(updateUserData?.errMessage);

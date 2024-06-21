@@ -11,6 +11,7 @@ export default function passwordReset({params}) {
   const [NewPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordsMatch, setPasswordsMatch] = useState(true);
+const [passwordShow,setPasswordShow]=useState(false)
 
 //   const handleEmail = useCallback((value) => {
 //     setEmail(() => value.target.value);
@@ -26,6 +27,15 @@ export default function passwordReset({params}) {
         setPasswordsMatch(true);
     }
   }, []);
+
+  const handelPasswordShow=()=>{
+    if(!passwordShow){
+      setPasswordShow(true)
+    }else{
+      setPasswordShow(false)
+    }
+    
+  }
 
 
 const handleConfirmPasswordChange = (event) => {
@@ -49,12 +59,11 @@ const submitForm = async () => {
         return;
       }
     let res = await  resetPassword(params?.userId, params?.tokenId, { password: NewPassword });
-
-    if (res.successMessage) {
+    if (res.successMessage?.success == true) {
       toast.success(res.successMessage.message)
       router.push("/login")
     } else {
-      toast.error(res.errMessage);
+      toast.error(res.errMessage.message);
       return;
     }
   };
@@ -98,24 +107,25 @@ const submitForm = async () => {
                   required
                 />
               </div> */}
-              <div>
-                <label
-                  htmlFor="newpassword"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  New Password
-                </label>
-                <input
-                  type="newpassword"
-                  value={NewPassword}
-                  onChange={handlePassword}
-                  name="newpassword"
-                  id="newpassword"
-                  placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required=""
-                />
-              </div>
+              <div className="relative">
+                  <input
+                    type={passwordShow ? "text" :"password"}
+                    value={NewPassword}
+                    onChange={handlePassword}
+                    name="password"
+                    id="password"
+                    placeholder="Password"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full  p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    required=""
+                  />
+                  <button
+                  onClick={handelPasswordShow}
+                    type="button"
+                    className={`text-black absolute end-2.5 bottom-2.5 font-bold rounded-lg text-xl px-4 py-2 ${Styles.eyeButton}`}
+                  >{passwordShow ? (<i className="bi bi-eye-slash-fill"></i>):(<i className="bi bi-eye-fill"></i>)}
+                  
+                  </button>
+                </div>
               <div>
                 <label
                   htmlFor="confirmPassword"
@@ -124,12 +134,12 @@ const submitForm = async () => {
                   Confirm New Password
                 </label>
                 <input
-                  type="confirmPassword"
+                  type="password"
                   value={confirmPassword}
                   onChange={handleConfirmPasswordChange}
                   name="confirmPassword"
                   id="confirmPassword"
-                  placeholder="••••••••"
+                  placeholder="Confirm Password"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required=""
                 />

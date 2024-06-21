@@ -19,7 +19,6 @@ export default function AmenityPage({
   const { data: aminitiesData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/aminities`
   );
- 
 
   const [selectedAmenities, setSelectedAmenities] = useState([]);
 
@@ -28,18 +27,13 @@ export default function AmenityPage({
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("propertyData")
     );
-    console.log("sessionStoragePropertyData ", sessionStoragePropertyData);
+
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
-      console.log(
-        "sessionStoragePropertyData Aminities ",
-        sessionStoragePropertyData?.Aminities
-      );
       setSelectedAmenities(sessionStoragePropertyData?.Aminities || []);
     }
   }, []);
 
-  console.log("selectedAminities", selectedAmenities);
   const SubmitForm = () => {
     if (selectedAmenities.length == 0) {
       toast.error("Please select a Amenity.");
@@ -48,7 +42,7 @@ export default function AmenityPage({
     const AmenityData = {
       Aminities: selectedAmenities,
     };
-    console.log("AmenityData", AmenityData);
+
     const localStorageData = JSON.parse(sessionStorage.getItem("propertyData"));
     const newProjectData = { ...localStorageData, ...AmenityData };
     sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
@@ -57,23 +51,21 @@ export default function AmenityPage({
   };
   return (
     <>
-      {aminitiesData && (<>
-        <ArrayButtons
-          itemArray={aminitiesData}
-          selectItems={selectedAmenities}
-          labelName={"Amenity"}
-          buttonName={"Aminity"}
-          setValueinState={setSelectedAmenities}
-        />
-         <ContinueButton
-        modalSubmit={SubmitForm}
-        butonSubName={"add Feature Details"}
-      />
-      </>
-       
+      {aminitiesData && (
+        <>
+          <ArrayButtons
+            itemArray={aminitiesData}
+            selectItems={selectedAmenities}
+            labelName={"Amenity"}
+            buttonName={"Aminity"}
+            setValueinState={setSelectedAmenities}
+          />
+          <ContinueButton
+            modalSubmit={SubmitForm}
+            butonSubName={"add Feature Details"}
+          />
+        </>
       )}
-
-     
     </>
   );
 }

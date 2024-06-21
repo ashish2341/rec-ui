@@ -31,11 +31,12 @@ export default function OtpVarify() {
     }
     let res = await  UserForgoPassword({ email });
     console.log("res",res)
-    if (res.resData?.success == true) {
-      toast.success(res.successMessage.message);
+    if (res.successMessage?.success == true) {
+    console.log("resi",res)
+      toast.success(res?.successMessage?.message);
       router.push("/login")
     } else {
-      toast.error(res.errMessage.message);
+      toast.error(res?.errMessage?.message);
       return;
     }
   };

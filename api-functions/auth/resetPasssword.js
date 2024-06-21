@@ -22,7 +22,7 @@ export const resetPassword = async (userId,Token,payload,setLoading=()=>{}) => {
       console.log('Forgot password resData',resData)
       if (resData?.success) {
         setLoading(false);
-        return {successMessage:resData};
+        return {resData};
       } else {
         setLoading(false);
         return {errMessage:resData};

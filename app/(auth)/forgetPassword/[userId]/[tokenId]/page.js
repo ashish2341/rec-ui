@@ -59,7 +59,7 @@ const submitForm = async () => {
         return;
       }
     let res = await  resetPassword(params?.userId, params?.tokenId, { password: NewPassword });
-    if (res.successMessage) {
+    if (res.successMessage?.success == true) {
       toast.success(res.successMessage.message)
       router.push("/login")
     } else {

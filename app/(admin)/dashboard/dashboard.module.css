@@ -1,8 +1,6 @@
 .dashboardContainer{
     margin-top: 1rem;
     margin-bottom: 1.5rem;
-    
-    
 }
 
 .dashboardContainerCards{
@@ -26,17 +24,47 @@
    
 }
 
+.showBuilderCard3{
+    background-color:  #dbcdf0 !important;
+    color: white !important;
+    width:50%;
+    /* text-shadow:   2px 2px 4px rgba(4, 153, 54, 0.5)  !important; */
+   
+}
+
+.showBuilderCardinner3{
+    background-color:  #dbcdf0 !important;
+    color: white !important;
+    height: 46%;
+}
+
 .showCard4{
     background-color:    #f7d9c4 !important;
     color: white !important
 }
+
+.showBuilderCard4{
+    background-color:    #f7d9c4 !important;
+    color: white !important;
+    width:50%;
+}
+
+.showBuilderCardInner4{
+    background-color:    #f7d9c4 !important;
+    color: white !important;
+    height: 92%;
+}
+
 .dataSection1{
     margin-left: 4rem;
     margin-right: 4rem;
     text-wrap: nowrap;
     justify-content: center;
     display: grid;
-   
+}
+.dataSectionBuilder1{
+    text-wrap: nowrap;
+    display: grid;
 }
 .firstCard{
     color:#e8af09 ;
@@ -176,4 +204,8 @@ Link.InvertedUserColor :hover{
     width: 100%;
     padding: 0.2rem !important;
     margin: 0rem !important;
+}
+
+.displayNone{
+    display: none;
 }

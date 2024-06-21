@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { API_BASE_URL_FOR_MASTER,currentPage } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER, currentPage } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
@@ -16,7 +16,8 @@ import EditedTag from "@/components/common/admin/editedTag/editedTag";
 export default function FacilitiesPage({
   valueForNextfromSix,
   valueForNextPagefromSix,
-  setPropertyBackvalue,editedKeysfromMain,
+  setPropertyBackvalue,
+  editedKeysfromMain,
   pageNamefromMain,
 }) {
   const sessionStoragePropertyData = JSON.parse(
@@ -50,7 +51,7 @@ export default function FacilitiesPage({
       setPrivateWashroom(sessionStoragePropertyData?.PrivateWashroom || null);
       setPublicParking(sessionStoragePropertyData?.PublicParking || null);
       setServiceLifts(sessionStoragePropertyData?.ServiceLifts || null);
-      setStairCase(sessionStoragePropertyData?.Staircase  || null);
+      setStairCase(sessionStoragePropertyData?.Staircase || null);
       setPublicWashroom(sessionStoragePropertyData?.PublicWashroom || null);
     }
   }, []);
@@ -74,28 +75,32 @@ export default function FacilitiesPage({
   };
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
-    
+
     if (allFieldsFilled) {
       const sixthPropertyData = {
-        PublicParking: publicParking ? publicParking :null,
-        PrivateParking: privateParking ? privateParking :null,
-        PublicWashroom: publicWashroom ? publicWashroom :null,
-        PrivateWashroom: privateWashroom ? privateWashroom :null,
+        PublicParking: publicParking ? publicParking : null,
+        PrivateParking: privateParking ? privateParking : null,
+        PublicWashroom: publicWashroom ? publicWashroom : null,
+        PrivateWashroom: privateWashroom ? privateWashroom : null,
       };
       if (propertTypWithSubTypeValue == "Office") {
         (sixthPropertyData.PublicWashroom = null),
           (sixthPropertyData.PrivateWashroom = null),
-          (sixthPropertyData.Staircase = stairCase ? stairCase :null),
-          (sixthPropertyData.ServiceLifts = serviceLifts ? serviceLifts :null),
-          (sixthPropertyData.passengerLifts = passengerLifts ? passengerLifts :null);
+          (sixthPropertyData.Staircase = stairCase ? stairCase : null),
+          (sixthPropertyData.ServiceLifts = serviceLifts ? serviceLifts : null),
+          (sixthPropertyData.passengerLifts = passengerLifts
+            ? passengerLifts
+            : null);
       }
-    
-      console.log("sixthPropertyData", sixthPropertyData);
+
       const localStorageData = JSON.parse(
         sessionStorage.getItem("EditPropertyData")
       );
       const newProjectData = { ...localStorageData, ...sixthPropertyData };
-      sessionStorage.setItem("EditPropertyData", JSON.stringify(newProjectData));
+      sessionStorage.setItem(
+        "EditPropertyData",
+        JSON.stringify(newProjectData)
+      );
       valueForNextfromSix(valueForNextPagefromSix + 1);
       setPropertyBackvalue((prev) => prev - 1);
     } else {
@@ -104,12 +109,10 @@ export default function FacilitiesPage({
   };
 
   const handleBankClick = (item) => {
-    console.log("Clicked item:", item);
     setByBank((prev) => {
       const isSelected = prev.some(
         (selectedItem) => selectedItem._id === item._id
       );
-      console.log("Is selected:", isSelected);
       if (isSelected) {
         return prev.filter((selectedItem) => selectedItem._id !== item._id);
       } else {
@@ -119,8 +122,6 @@ export default function FacilitiesPage({
   };
   return (
     <>
-      
-
       {propertTypWithSubTypeValue == "Office" && (
         <>
           <h3 className="block mb-2 text-md font-lg underline font-bold text-gray-500 dark:text-white">
@@ -134,8 +135,8 @@ export default function FacilitiesPage({
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
               >
                 No. of StairCase
-                { (editedKeysfromMain?.includes("Staircase") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
-
+                {editedKeysfromMain?.includes("Staircase") &&
+                  pageNamefromMain === currentPage && <EditedTag />}
               </label>
               <input
                 type="number"
@@ -154,8 +155,8 @@ export default function FacilitiesPage({
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
               >
                 Passengers Lifts
-                { (editedKeysfromMain?.includes("passengerLifts") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
-
+                {editedKeysfromMain?.includes("passengerLifts") &&
+                  pageNamefromMain === currentPage && <EditedTag />}
               </label>
               <input
                 type="number"
@@ -174,8 +175,8 @@ export default function FacilitiesPage({
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
               >
                 Service Lifts
-                { (editedKeysfromMain?.includes("ServiceLifts") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
-
+                {editedKeysfromMain?.includes("ServiceLifts") &&
+                  pageNamefromMain === currentPage && <EditedTag />}
               </label>
               <input
                 type="number"
@@ -205,8 +206,8 @@ export default function FacilitiesPage({
                   className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
                 >
                   Public Parking
-                  { (editedKeysfromMain?.includes("PublicParking") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
-
+                  {editedKeysfromMain?.includes("PublicParking") &&
+                    pageNamefromMain === currentPage && <EditedTag />}
                 </label>
                 <input
                   type="number"
@@ -225,8 +226,8 @@ export default function FacilitiesPage({
                   className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
                 >
                   Private Parking
-                  { (editedKeysfromMain?.includes("PrivateParking") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
-
+                  {editedKeysfromMain?.includes("PrivateParking") &&
+                    pageNamefromMain === currentPage && <EditedTag />}
                 </label>
                 <input
                   type="number"
@@ -252,8 +253,8 @@ export default function FacilitiesPage({
                       className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
                     >
                       Public Washroom
-                      { (editedKeysfromMain?.includes("PublicWashroom") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
-
+                      {editedKeysfromMain?.includes("PublicWashroom") &&
+                        pageNamefromMain === currentPage && <EditedTag />}
                     </label>
                     <input
                       type="number"
@@ -272,8 +273,8 @@ export default function FacilitiesPage({
                       className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
                     >
                       Private Washroom
-                      { (editedKeysfromMain?.includes("PrivateWashroom") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
-
+                      {editedKeysfromMain?.includes("PrivateWashroom") &&
+                        pageNamefromMain === currentPage && <EditedTag />}
                     </label>
                     <input
                       type="number"
@@ -290,8 +291,7 @@ export default function FacilitiesPage({
             )}
           </>
         )}
-                <NextButton onSubmit={SubmitForm} butonSubName={"add Amenity Details"}/>
-
+      <NextButton onSubmit={SubmitForm} butonSubName={"add Amenity Details"} />
     </>
   );
 }

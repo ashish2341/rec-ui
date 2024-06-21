@@ -27,20 +27,15 @@ export default function AmenityPage({
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("EditPropertyData")
     );
-    console.log("sessionStoragePropertyData ", sessionStoragePropertyData);
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
-      console.log(
-        "sessionStoragePropertyData Aminities ",
-        sessionStoragePropertyData?.Aminities
-      );
+    
       setSelectedAmenities(sessionStoragePropertyData?.Aminities?.map((item) => {
         return item._id ? item._id :item ;
       }) || []);
     }
   }, []);
 
-  console.log("selectedAminities", selectedAmenities);
   const SubmitForm = () => {
     if (selectedAmenities.length == 0) {
       toast.error("Please select a Amenity.");
@@ -49,7 +44,6 @@ export default function AmenityPage({
     const AmenityData = {
       Aminities: selectedAmenities,
     };
-    console.log("AmenityData", AmenityData);
     const localStorageData = JSON.parse(
       sessionStorage.getItem("EditPropertyData")
     );

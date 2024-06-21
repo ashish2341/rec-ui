@@ -10,18 +10,33 @@ import {  UserForgoPassword } from "@/api-functions/auth/authAction";
 export default function OtpVarify() {
   const router = useRouter();
   const [email, setEmail] = useState("");
-  const [NewPassword, setNewPassword] = useState("");
+  const [isValid, setIsValid] = useState(true);
+
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    return re.test(email.toLowerCase());
+  };
+
 
   const handleEmail = useCallback((value) => {
     setEmail(() => value.target.value);
+    setIsValid(true);
   }, []);
   const submitForm = async () => {
+    const isValidEmail = validateEmail(email);
+    setIsValid(isValidEmail);
+    if (!isValidEmail) {
+      toast.error('Invalid Email');
+      return false;
+    }
     let res = await  UserForgoPassword({ email });
-
-    if (res.successMessage) {
-      toast.success(res.successMessage.message)
+    console.log("res",res)
+    if (res.successMessage?.success == true) {
+    console.log("resi",res)
+      toast.success(res?.successMessage?.message);
+      router.push("/login")
     } else {
-      toast.error(res.errMessage);
+      toast.error(res?.errMessage?.message);
       return;
     }
   };
@@ -56,10 +71,11 @@ export default function OtpVarify() {
                   Email
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   value={email}
                   onChange={handleEmail}
                   id="email"
+                  placeholder="Enter Your Email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                 />

@@ -28,7 +28,6 @@ export default function AreaDetailPage({ setPropertyPageValue,editedKeysfromMain
   );
 
 
-  // console.log("areaUnitData", areaUnitData);
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("EditPropertyData")
   );
@@ -68,10 +67,7 @@ export default function AreaDetailPage({ setPropertyPageValue,editedKeysfromMain
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("EditPropertyData")
     );
-    console.log(
-      "sessionStoragePropertyData?.LandAreaUnit",
-      sessionStoragePropertyData?.LandAreaUnit
-    );
+   
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
       setFittingValues({
@@ -214,7 +210,6 @@ export default function AreaDetailPage({ setPropertyPageValue,editedKeysfromMain
         }
       }
 
-      console.log("thirdPropertyData", thirdPropertyData);
       const localStorageData = JSON.parse(
         sessionStorage.getItem("EditPropertyData")
       );

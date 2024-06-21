@@ -22,7 +22,7 @@ export default function FeaturesDetailsForm({
     }
   };
   const handelvalueForNextfromSix = (value) => {
-    console.log("handelvalueForNextfromSix value", value);
+  
     valueForNext(value);
   };
   const stepperArray = [

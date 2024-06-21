@@ -2,18 +2,19 @@
 import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { API_BASE_URL_FOR_MASTER,currentPage } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER, currentPage } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
-import Styles from "../propertyDetails/propertypage.module.css"
+import Styles from "../propertyDetails/propertypage.module.css";
 import NextButton from "@/components/common/admin/nextButton/nextButton";
 import EditedTag from "@/components/common/admin/editedTag/editedTag";
 export default function LocationDetailsForm({
   valueForNext,
-  valueForNextPage,  editedKeys, pageName
+  valueForNextPage,
+  editedKeys,
+  pageName,
 }) {
   // fetching Data for Area
   const { data: areaData } = useFetch(`${API_BASE_URL_FOR_MASTER}/areas`);
-  console.log("areaData", areaData);
 
   const defaultOption = [{ value: "", label: "no data found" }];
 
@@ -34,10 +35,7 @@ export default function LocationDetailsForm({
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("EditPropertyData")
     );
-    console.log(
-      "localStorageData from localstorage",
-      sessionStoragePropertyData
-    );
+
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
       setCity(sessionStoragePropertyData?.City || "");
@@ -55,32 +53,26 @@ export default function LocationDetailsForm({
   }, []);
 
   const handleCityChange = (event) => {
-    console.log("City changed:", event.target.value);
     setCity(event.target.value);
   };
 
   const handleStateChange = (event) => {
-    console.log("State changed:", event.target.value);
     setState(event.target.value);
   };
 
   const handleCountryChange = (event) => {
-    console.log("Country changed:", event.target.value);
     setCountry(event.target.value);
   };
 
   const handleAddressChange = (event) => {
-    
-     setAddress(event.target.value);
+    setAddress(event.target.value);
   };
 
   const handleLandmarkChange = (event) => {
-    console.log("Landmark changed:", event.target.value);
     setLandmark(event.target.value);
   };
 
   const handlePincodeChange = (event) => {
-    console.log("Pincode changed:", event.target.value);
     setPincode(event.target.value);
   };
 
@@ -112,8 +104,9 @@ export default function LocationDetailsForm({
       // Location: locationDetails,
       Area: area,
     };
-    console.log("locationDetailsData", locationDetailsData);
-    const localStorageData = JSON.parse(sessionStorage.getItem("EditPropertyData"));
+    const localStorageData = JSON.parse(
+      sessionStorage.getItem("EditPropertyData")
+    );
     const newProjectData = { ...localStorageData, ...locationDetailsData };
     sessionStorage.setItem("EditPropertyData", JSON.stringify(newProjectData));
     valueForNext(valueForNextPage + 1);
@@ -122,16 +115,16 @@ export default function LocationDetailsForm({
   return (
     <>
       <div>
-      
         <form>
           <div className="grid gap-4 mb-4 sm:grid-cols-1">
             <div>
               <label
                 htmlFor="address"
-                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"              >
+                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
+              >
                 Locality
-                { (editedKeys?.includes("Address") && pageName===currentPage) && (<EditedTag/>) } 
-
+                {editedKeys?.includes("Address") &&
+                  pageName === currentPage && <EditedTag />}
               </label>
               <textarea
                 type="text"
@@ -144,15 +137,16 @@ export default function LocationDetailsForm({
                 required=""
               />
             </div>
-            
+
             <div>
               <label
                 htmlFor="area"
-                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"              >
-              
+                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
+              >
                 Area
-                { (editedKeys?.includes("Area") && pageName===currentPage) && (<EditedTag/>) } 
-
+                {editedKeys?.includes("Area") && pageName === currentPage && (
+                  <EditedTag />
+                )}
               </label>
               {areaData ? (
                 <Select
@@ -161,11 +155,14 @@ export default function LocationDetailsForm({
                     label: element.Area,
                   }))}
                   placeholder="Select One"
-                  onChange={(e)=>setArea({
-                    _id:e.value,Area:e.label
-                  })}
+                  onChange={(e) =>
+                    setArea({
+                      _id: e.value,
+                      Area: e.label,
+                    })
+                  }
                   required={true}
-                  value={{value:area._id,label:area.Area}}
+                  value={{ value: area._id, label: area.Area }}
                 />
               ) : (
                 <Select
@@ -181,10 +178,12 @@ export default function LocationDetailsForm({
             <div>
               <label
                 htmlFor="city"
-                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"              >
+                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
+              >
                 City
-                { (editedKeys?.includes("City") && pageName===currentPage) && (<EditedTag/>) } 
-
+                {editedKeys?.includes("City") && pageName === currentPage && (
+                  <EditedTag />
+                )}
               </label>
               <input
                 type="text"
@@ -234,12 +233,12 @@ export default function LocationDetailsForm({
               />
             </div> */}
           </div>
-         
         </form>
-        <NextButton onSubmit={SubmitForm} butonSubName={"add Property Details"}/>
-
+        <NextButton
+          onSubmit={SubmitForm}
+          butonSubName={"add Property Details"}
+        />
       </div>
-      
     </>
   );
 }

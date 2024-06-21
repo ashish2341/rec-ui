@@ -7,7 +7,8 @@ import {
   ZoneTypeArray,
   suitableArray,
   LocationhubArrayforOffice,
-  LocationhubArrayforall,currentPage
+  LocationhubArrayforall,
+  currentPage,
 } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
@@ -22,7 +23,8 @@ import TextInput from "@/components/common/admin/textInput/textInput";
 import EditedTag from "@/components/common/admin/editedTag/editedTag";
 export default function BasicPage({
   setPropertyPageValue,
-  setPropertyBackvalue,editedKeysfromMain,
+  setPropertyBackvalue,
+  editedKeysfromMain,
   pageNamefromMain,
 }) {
   const roleData = Cookies.get("roles") ?? "";
@@ -34,15 +36,12 @@ export default function BasicPage({
   const { data: propertyOwnerShipData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/propertyOwnerShip`
   );
-  // console.log("propertyOwnerShipData", propertyOwnerShipData);
 
   // fetching Data for propertyStatusData
   const { data: propertyStatusData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/propertyStatus`
   );
-  // console.log("propertyStatusData", propertyStatusData);
 
-  // console.log("propertyTypeData", propertyTypeData);
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("EditPropertyData")
   );
@@ -79,7 +78,6 @@ export default function BasicPage({
       return false;
     }
   };
-  console.log("builderName", builderName);
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
@@ -242,7 +240,7 @@ export default function BasicPage({
       }
       if (
         propertyStatus.Status === "Under Contruction" &&
-        (ageofPropertyData) &&
+        ageofPropertyData &&
         propertTypWithSubTypeValue !== "Plot"
       ) {
         firstPropertyData.AgeofProperty = null;
@@ -251,7 +249,6 @@ export default function BasicPage({
       if (roles.includes("Admin") && propertTypWithSubTypeValue != "Plot") {
         firstPropertyData.Builder = builderName;
       }
-      console.log("firstPropertyData", firstPropertyData);
       const localStorageData = JSON.parse(
         sessionStorage.getItem("EditPropertyData")
       );
@@ -280,8 +277,9 @@ export default function BasicPage({
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white "
             >
               Builder Name
-              { (editedKeysfromMain?.includes("Builder") && pageNamefromMain===currentPage && builderName) && (<EditedTag/>) } 
-
+              {editedKeysfromMain?.includes("Builder") &&
+                pageNamefromMain === currentPage &&
+                builderName && <EditedTag />}
             </label>
             {builderData ? (
               <Select
@@ -464,9 +462,9 @@ export default function BasicPage({
             ValueName={"Ownership"}
             changeState={setOwnershipType}
             changedKeyArray={editedKeysfromMain}
-                showPageName={pageNamefromMain}
-                currentPageName={currentPage}
-                specifiedKey={"OwnershipType"}
+            showPageName={pageNamefromMain}
+            currentPageName={currentPage}
+            specifiedKey={"OwnershipType"}
           />
         )}
 
@@ -479,9 +477,9 @@ export default function BasicPage({
             ValueName={"Status"}
             changeState={setPropertyStatus}
             changedKeyArray={editedKeysfromMain}
-                showPageName={pageNamefromMain}
-                currentPageName={currentPage}
-                specifiedKey={"PropertyStatus"}
+            showPageName={pageNamefromMain}
+            currentPageName={currentPage}
+            specifiedKey={"PropertyStatus"}
           />
         )}
         {propertTypWithSubTypeValue != "Plot" ? (

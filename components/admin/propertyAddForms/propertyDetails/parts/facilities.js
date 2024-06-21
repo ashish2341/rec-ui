@@ -86,7 +86,7 @@ export default function FacilitiesPage({
           (sixthPropertyData.ServiceLifts = serviceLifts),
           (sixthPropertyData.passengerLifts = passengerLifts);
       }
-      console.log("sixthPropertyData", sixthPropertyData);
+
       const localStorageData = JSON.parse(
         sessionStorage.getItem("propertyData")
       );
@@ -100,12 +100,11 @@ export default function FacilitiesPage({
   };
 
   const handleBankClick = (item) => {
-    console.log("Clicked item:", item);
     setByBank((prev) => {
       const isSelected = prev.some(
         (selectedItem) => selectedItem._id === item._id
       );
-      console.log("Is selected:", isSelected);
+
       if (isSelected) {
         return prev.filter((selectedItem) => selectedItem._id !== item._id);
       } else {
@@ -115,8 +114,6 @@ export default function FacilitiesPage({
   };
   return (
     <>
-    
-
       {propertTypWithSubTypeValue == "Office" && (
         <>
           <h3 className="block mb-2 text-md font-lg underline font-bold text-gray-500 dark:text-white">
@@ -272,7 +269,7 @@ export default function FacilitiesPage({
             )}
           </>
         )}
-        <NextButton onSubmit={SubmitForm} butonSubName={"add Amenity Details"}/>
+      <NextButton onSubmit={SubmitForm} butonSubName={"add Amenity Details"} />
     </>
   );
 }

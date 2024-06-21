@@ -12,7 +12,7 @@ export default function LocationDetailsForm({
 }) {
   // fetching Data for Area
   const { data: areaData } = useFetch(`${API_BASE_URL_FOR_MASTER}/areas`);
-  console.log("areaData", areaData);
+
 
   const defaultOption = [{ value: "", label: "no data found" }];
 
@@ -33,10 +33,7 @@ export default function LocationDetailsForm({
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("propertyData")
     );
-    console.log(
-      "localStorageData from localstorage",
-      sessionStoragePropertyData
-    );
+  
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
       setCity(sessionStoragePropertyData?.City || "");
@@ -54,17 +51,17 @@ export default function LocationDetailsForm({
   }, []);
 
   const handleCityChange = (event) => {
-    console.log("City changed:", event.target.value);
+    
     setCity(event.target.value);
   };
 
   const handleStateChange = (event) => {
-    console.log("State changed:", event.target.value);
+   
     setState(event.target.value);
   };
 
   const handleCountryChange = (event) => {
-    console.log("Country changed:", event.target.value);
+  
     setCountry(event.target.value);
   };
 
@@ -74,12 +71,12 @@ export default function LocationDetailsForm({
   };
 
   const handleLandmarkChange = (event) => {
-    console.log("Landmark changed:", event.target.value);
+
     setLandmark(event.target.value);
   };
 
   const handlePincodeChange = (event) => {
-    console.log("Pincode changed:", event.target.value);
+   
     setPincode(event.target.value);
   };
 
@@ -111,7 +108,7 @@ export default function LocationDetailsForm({
       // Location: locationDetails,
       Area: area,
     };
-    console.log("locationDetailsData", locationDetailsData);
+    
     const localStorageData = JSON.parse(sessionStorage.getItem("propertyData"));
     const newProjectData = { ...localStorageData, ...locationDetailsData };
     sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));

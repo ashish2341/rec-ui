@@ -18,7 +18,7 @@ export default function PropertyDetailsForm({
   setPropertyBackvalue,
   valueForNext,
   valueForNextPage,
-  setPageValueInsidePropertyForm
+  setPageValueInsidePropertyForm,
 }) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
@@ -33,10 +33,10 @@ export default function PropertyDetailsForm({
   const PropertyForValue = sessionStoragePropertyData?.ProeprtyFor || "";
 
   const [propertyPageValue, setPropertyPageValue] = useState(1);
-  console.log("PropertyDetailsForm propertyPageValue",propertyPageValue)
-useEffect(()=>{
-  setPageValueInsidePropertyForm(propertyPageValue)
-},[propertyPageValue])
+
+  useEffect(() => {
+    setPageValueInsidePropertyForm(propertyPageValue);
+  }, [propertyPageValue]);
   const handelBack = (value) => {
     setPropertyPageValue(propertyPageValue - 1);
 
@@ -45,12 +45,10 @@ useEffect(()=>{
     }
   };
   const handelvalueForNextfromSix = (value) => {
-    console.log("handelvalueForNextfromSix value", value);
     valueForNext(value);
   };
   let stepperArray = "";
   if (propertTypeValue == "Commercial") {
-    console.log("propertTypeValue == Commercial- is worked")
     stepperArray = [
       { name: "Basic", number: 1 },
       { name: "Rooms", number: 2 },
@@ -61,7 +59,6 @@ useEffect(()=>{
     ];
   }
   if (propertTypWithSubTypeValue && propertTypWithSubTypeValue == "Plot") {
-    console.log("propertTypWithSubTypeValue && propertTypWithSubTypeValue == == Plot -is worked")
     stepperArray = [
       { name: "Basic", number: 1 },
       { name: "Area", number: 2 },
@@ -71,9 +68,10 @@ useEffect(()=>{
     ];
   }
   if (
-    propertTypeValue && propertTypeValue == "Residential"  && propertTypWithSubTypeValue != "Plot"
+    propertTypeValue &&
+    propertTypeValue == "Residential" &&
+    propertTypWithSubTypeValue != "Plot"
   ) {
-    console.log("propertTypeValue != Commercial  - this is worked")
     stepperArray = [
       { name: "Basic", number: 1 },
       { name: "Rooms", number: 2 },
@@ -87,91 +85,86 @@ useEffect(()=>{
     <>
       <div className="mb-5 ">
         <ButtonStepper
-        setPropertyPageValue={setPropertyPageValue}
+          setPropertyPageValue={setPropertyPageValue}
           forStepper={stepperArray}
           forpageValue={propertyPageValue}
         />
       </div>
-
-      {/* {propertyPageValue > 1 ? (
-        <button
-          onClick={handelBack}
-          type="button"
-          className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border-2 border-black hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-black dark:hover:text-white dark:hover:bg-gray-700"
-        >
-          <span>
-            <i className="bi bi-arrow-left"></i>
-          </span>{" "}
-          Back
-        </button>
-      ) : null} */}
-      {propertTypeValue && (propertTypeValue == "Residential" ) && propertTypWithSubTypeValue != "Plot" && (
-        <>
-          {propertyPageValue == 1 && (
-            <BasicPage
-              setPropertyPageValue={setPropertyPageValue}
-              setPropertyBackvalue={setPropertyBackvalue}
-            />
-          )}
-          {propertyPageValue == 2 ? (
-            <RoomDetailPage setPropertyPageValue={setPropertyPageValue} />
-          ) : null}
-          {propertyPageValue == 3 ? (
-            <AreaDetailPage setPropertyPageValue={setPropertyPageValue} />
-          ) : null}
-          {propertyPageValue == 4 && (
-            <FinancialDetailsPage setPropertyPageValue={setPropertyPageValue} />
-          )}
-          {propertyPageValue == 5 && (
-            <PossessionDetailsPage
-              valueForNextfromSix={handelvalueForNextfromSix}
-              valueForNextPagefromSix={valueForNextPage}
-              setPropertyBackvalue={setPropertyBackvalue}
-            />
-          )}
-          {/* {propertyPageValue == 6 && (
+      {propertTypeValue &&
+        propertTypeValue == "Residential" &&
+        propertTypWithSubTypeValue != "Plot" && (
+          <>
+            {propertyPageValue == 1 && (
+              <BasicPage
+                setPropertyPageValue={setPropertyPageValue}
+                setPropertyBackvalue={setPropertyBackvalue}
+              />
+            )}
+            {propertyPageValue == 2 ? (
+              <RoomDetailPage setPropertyPageValue={setPropertyPageValue} />
+            ) : null}
+            {propertyPageValue == 3 ? (
+              <AreaDetailPage setPropertyPageValue={setPropertyPageValue} />
+            ) : null}
+            {propertyPageValue == 4 && (
+              <FinancialDetailsPage
+                setPropertyPageValue={setPropertyPageValue}
+              />
+            )}
+            {propertyPageValue == 5 && (
+              <PossessionDetailsPage
+                valueForNextfromSix={handelvalueForNextfromSix}
+                valueForNextPagefromSix={valueForNextPage}
+                setPropertyBackvalue={setPropertyBackvalue}
+              />
+            )}
+            {/* {propertyPageValue == 6 && (
             <PartSix
               valueForNextfromSix={handelvalueForNextfromSix}
               valueForNextPagefromSix={valueForNextPage}
               setPropertyBackvalue={setPropertyBackvalue}
             />
           )} */}
-        </>
-      )}
-      {propertTypeValue && propertTypeValue == "Commercial" && propertTypWithSubTypeValue != "Plot" && (
-        <>
-          {propertyPageValue == 1 && (
-            <BasicPage
-              setPropertyPageValue={setPropertyPageValue}
-              setPropertyBackvalue={setPropertyBackvalue}
-            />
-          )}
-          {propertyPageValue == 2 ? (
-            <RoomDetailPage setPropertyPageValue={setPropertyPageValue} />
-          ) : null}
-          {propertyPageValue == 3 ? (
-            <AreaDetailPage setPropertyPageValue={setPropertyPageValue} />
-          ) : null}
-          {propertyPageValue == 4 && (
-            <FinancialDetailsPage setPropertyPageValue={setPropertyPageValue} />
-          )}
-          {propertyPageValue == 5 && (
-            <PossessionDetailsPage
-            setPropertyPageValue={setPropertyPageValue}
-              valueForNextfromSix={handelvalueForNextfromSix}
-              valueForNextPagefromSix={valueForNextPage}
-              setPropertyBackvalue={setPropertyBackvalue}
-            />
-          )}
-          {propertyPageValue == 6 && (
-            <FacilitiesPage
-              valueForNextfromSix={handelvalueForNextfromSix}
-              valueForNextPagefromSix={valueForNextPage}
-              setPropertyBackvalue={setPropertyBackvalue}
-            />
-          )}
-        </>
-      )}
+          </>
+        )}
+      {propertTypeValue &&
+        propertTypeValue == "Commercial" &&
+        propertTypWithSubTypeValue != "Plot" && (
+          <>
+            {propertyPageValue == 1 && (
+              <BasicPage
+                setPropertyPageValue={setPropertyPageValue}
+                setPropertyBackvalue={setPropertyBackvalue}
+              />
+            )}
+            {propertyPageValue == 2 ? (
+              <RoomDetailPage setPropertyPageValue={setPropertyPageValue} />
+            ) : null}
+            {propertyPageValue == 3 ? (
+              <AreaDetailPage setPropertyPageValue={setPropertyPageValue} />
+            ) : null}
+            {propertyPageValue == 4 && (
+              <FinancialDetailsPage
+                setPropertyPageValue={setPropertyPageValue}
+              />
+            )}
+            {propertyPageValue == 5 && (
+              <PossessionDetailsPage
+                setPropertyPageValue={setPropertyPageValue}
+                valueForNextfromSix={handelvalueForNextfromSix}
+                valueForNextPagefromSix={valueForNextPage}
+                setPropertyBackvalue={setPropertyBackvalue}
+              />
+            )}
+            {propertyPageValue == 6 && (
+              <FacilitiesPage
+                valueForNextfromSix={handelvalueForNextfromSix}
+                valueForNextPagefromSix={valueForNextPage}
+                setPropertyBackvalue={setPropertyBackvalue}
+              />
+            )}
+          </>
+        )}
       {propertTypWithSubTypeValue && propertTypWithSubTypeValue == "Plot" && (
         <>
           {propertyPageValue == 1 && (

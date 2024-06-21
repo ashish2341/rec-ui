@@ -18,7 +18,6 @@ export default function FeaturePage({
   const { data: featuresData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/features`
   );
-  console.log("featuresData", featuresData);
 
   const [selectedFeatures, setSelectedFeatures] = useState([]);
   useEffect(() => {
@@ -26,10 +25,7 @@ export default function FeaturePage({
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("EditPropertyData")
     );
-    console.log(
-      "localStorageData from localstorage",
-      sessionStoragePropertyData
-    );
+   
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
       setSelectedFeatures(sessionStoragePropertyData?.Features?.map((item) => {
@@ -46,7 +42,6 @@ export default function FeaturePage({
     const featureData = {
       Features: selectedFeatures,
     };
-    console.log("featureData", featureData);
     const localStorageData = JSON.parse(
       sessionStorage.getItem("EditPropertyData")
     );

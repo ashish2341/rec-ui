@@ -25,7 +25,6 @@ export default function PossessionDetailsPage({
   const { data: posessionStatusData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/possession`
   );
-  console.log("posessionStatusData", posessionStatusData);
 
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("propertyData")
@@ -60,7 +59,6 @@ export default function PossessionDetailsPage({
     );
   }
 
-  console.log("possessionStatusArray", possessionStatusArray);
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
@@ -89,7 +87,6 @@ export default function PossessionDetailsPage({
     const file = event.target.files[0]; // Get the first file only
     const formData = new FormData();
     formData.append("profilePic", file);
-    console.log("image File", file);
 
     // Check file type
     if (!acceptedFileTypes.includes(file.type)) {
@@ -102,10 +99,8 @@ export default function PossessionDetailsPage({
     } else {
       setDocumentLoader(true);
       let res = await ImageString(formData);
-      console.log("image resPonse Data=>", res);
       if (res.successMessage) {
         // router.push("/dashboard");
-        console.log("Image Response", res.successMessage.imageUrl);
         setBrochure(res.successMessage.imageUrl);
         setDocumentLoader(false);
       } else {
@@ -150,13 +145,11 @@ export default function PossessionDetailsPage({
       if (PropertyStatusValue.Status != "Under Contruction") {
         fifthPropertyData.AgeofProperty = ageofProperty;
       }
-      console.log("fifthPropertyData", fifthPropertyData);
       const localStorageData = JSON.parse(
         sessionStorage.getItem("propertyData")
       );
       const newProjectData = { ...localStorageData, ...fifthPropertyData };
       sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
-      console.log("propertTypeValue", propertTypeValue);
       if (
         propertTypeValue == "Commercial" &&
         propertTypWithSubTypeValue != "Plot"
@@ -185,7 +178,6 @@ export default function PossessionDetailsPage({
     const file = event.target.files[0]; // Get the first file only
     const formData = new FormData();
     formData.append("profilePic", file);
-    console.log("Selected File", file);
 
     // Check file type
     if (!acceptedFileTypes.includes(file.type)) {
@@ -200,9 +192,7 @@ export default function PossessionDetailsPage({
 
       // Upload logic (assuming ImageString is a function that handles the upload)
       let res = await ImageString(formData);
-      console.log("Upload Response Data =>", res);
       if (res?.successMessage) {
-        console.log("Image Response", res.successMessage.imageUrl);
         setPaymentPlan(res.successMessage.imageUrl); // Assuming the response contains the image URL
         setPaymentPlanLoader(false);
       } else {
@@ -225,7 +215,7 @@ export default function PossessionDetailsPage({
     const file = event.target.files[0]; // Get the first file only
     const formData = new FormData();
     formData.append("profilePic", file);
-    console.log("Selected File", file);
+    
 
     // Check file type
     if (!acceptedFileTypes.includes(file.type)) {
@@ -239,9 +229,9 @@ export default function PossessionDetailsPage({
       setFloorPlanLoader(true);
       // Upload logic (assuming ImageString is a function that handles the upload)
       let res = await ImageString(formData);
-      console.log("Upload Response Data =>", res);
+      
       if (res.successMessage) {
-        console.log("Image Response", res.successMessage.imageUrl);
+        
         setFloorPlan(res.successMessage.imageUrl); // Assuming the response contains the image URL
         setFloorPlanLoader(false);
       } else {

@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { API_BASE_URL_FOR_MASTER ,currentPage} from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER, currentPage } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
@@ -14,8 +14,11 @@ import PropertyBigButtons from "@/components/common/admin/propertyBigButton/prop
 import NumberInput from "@/components/common/admin/numberInput/numberInput";
 import { conditionalArray } from "@/utils/constants";
 import EditedTag from "@/components/common/admin/editedTag/editedTag";
-export default function FinancialDetailsPage({ setPropertyPageValue,editedKeysfromMain,
-  pageNamefromMain, }) {
+export default function FinancialDetailsPage({
+  setPropertyPageValue,
+  editedKeysfromMain,
+  pageNamefromMain,
+}) {
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("EditPropertyData")
   );
@@ -51,7 +54,6 @@ export default function FinancialDetailsPage({ setPropertyPageValue,editedKeysfr
   const [leaseYears, setLeaseYears] = useState("");
   const [expectedReturn, setExpectedReturn] = useState("");
 
-
   const priceUnitArray = [
     { value: "Lacs", label: "Lacs" },
     { value: "Cr", label: "Cr" },
@@ -61,7 +63,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue,editedKeysfr
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("EditPropertyData")
     );
-   
+
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
       setStartPrice(
@@ -83,12 +85,14 @@ export default function FinancialDetailsPage({ setPropertyPageValue,editedKeysfr
       setPriceUnit(
         {
           minPriceUnit: {
-            value: sessionStoragePropertyData?.TotalPrice?.MinPriceUnit||"Lacs",
-            label: sessionStoragePropertyData?.TotalPrice?.MinPriceUnit||"Lacs",
+            value:
+              sessionStoragePropertyData?.TotalPrice?.MinPriceUnit || "Lacs",
+            label:
+              sessionStoragePropertyData?.TotalPrice?.MinPriceUnit || "Lacs",
           },
           maxPriceUnit: {
-            value: sessionStoragePropertyData?.TotalPrice?.MaxPriceUnit||"Cr",
-            label: sessionStoragePropertyData?.TotalPrice?.MaxPriceUnit|| "Cr",
+            value: sessionStoragePropertyData?.TotalPrice?.MaxPriceUnit || "Cr",
+            label: sessionStoragePropertyData?.TotalPrice?.MaxPriceUnit || "Cr",
           },
         } || {
           minPriceUnit: { value: "Lacs", label: "Lacs" },
@@ -137,7 +141,6 @@ export default function FinancialDetailsPage({ setPropertyPageValue,editedKeysfr
       );
     }
   }, []);
-console.log("preleased button value ",preReleasedBtn)
   const checkRequiredFields = () => {
     if (propertTypeValue == "Residential") {
       var requiredFields = [startPrice, endPrice];
@@ -152,7 +155,6 @@ console.log("preleased button value ",preReleasedBtn)
       var requiredFields = [startPrice, endPrice, curentRent, leaseYears];
     }
 
-
     // Check if any required field is empty
     const isEmpty = requiredFields.some(
       (field) => field === "" || field === null || field === undefined
@@ -163,18 +165,26 @@ console.log("preleased button value ",preReleasedBtn)
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
     if (allFieldsFilled) {
-     const  minValue=startPrice *(priceUnit?.minPriceUnit?.value == "Lacs" ? 100000 : 10000000);
-      const maxValue= endPrice *(priceUnit?.maxPriceUnit?.value == "Lacs" ? 100000 : 10000000);
-   
-      if(minValue>maxValue){
-        toast.error("End Price Should be Greater then Start Price.")
-        return false
+      const minValue =
+        startPrice *
+        (priceUnit?.minPriceUnit?.value == "Lacs" ? 100000 : 10000000);
+      const maxValue =
+        endPrice *
+        (priceUnit?.maxPriceUnit?.value == "Lacs" ? 100000 : 10000000);
+
+      if (minValue > maxValue) {
+        toast.error("End Price Should be Greater then Start Price.");
+        return false;
       }
       const fourthPropertyData = {
         TotalPrice: {
-          DisplayValue: `${parseFloat(startPrice).toFixed(2)} ${priceUnit?.minPriceUnit?.value} - ${parseFloat(endPrice).toFixed(2)} ${priceUnit?.maxPriceUnit?.value}`,
-          MinValue:minValue, 
-          MaxValue:maxValue, 
+          DisplayValue: `${parseFloat(startPrice).toFixed(2)} ${
+            priceUnit?.minPriceUnit?.value
+          } - ${parseFloat(endPrice).toFixed(2)} ${
+            priceUnit?.maxPriceUnit?.value
+          }`,
+          MinValue: minValue,
+          MaxValue: maxValue,
           MinPriceUnit: priceUnit?.minPriceUnit?.value,
           MaxPriceUnit: priceUnit?.maxPriceUnit?.value,
         },
@@ -185,27 +195,30 @@ console.log("preleased button value ",preReleasedBtn)
         fourthPropertyData.TaxCharge = taxCharge ? taxCharge : false;
         fourthPropertyData.LeasedOrRented = preReleasedBtn;
         if (preReleasedBtn === false) {
-          fourthPropertyData.ExpectedReturn = expectedReturn ? expectedReturn :null;
+          fourthPropertyData.ExpectedReturn = expectedReturn
+            ? expectedReturn
+            : null;
           if (curentRent && leaseYears) {
             fourthPropertyData.CurentRent = null;
             fourthPropertyData.LeaseYears = null;
           }
         }
         if (preReleasedBtn === true) {
-          fourthPropertyData.CurentRent = curentRent ? curentRent :null;
-          fourthPropertyData.LeaseYears = leaseYears ? leaseYears :null;
-          if (expectedReturn || expectedReturn==="" || expectedReturn===null ) {
+          fourthPropertyData.CurentRent = curentRent ? curentRent : null;
+          fourthPropertyData.LeaseYears = leaseYears ? leaseYears : null;
+          if (
+            expectedReturn ||
+            expectedReturn === "" ||
+            expectedReturn === null
+          ) {
             fourthPropertyData.ExpectedReturn = null;
           }
         }
         if (propertTypWithSubTypeValue == "Office") {
-          fourthPropertyData.DgUpsCharge = dgUpsCharge
-            ? dgUpsCharge
-            : false;
+          fourthPropertyData.DgUpsCharge = dgUpsCharge ? dgUpsCharge : false;
         }
       }
-    
-      console.log("fourthPropertyData", fourthPropertyData);
+
       const localStorageData = JSON.parse(
         sessionStorage.getItem("EditPropertyData")
       );
@@ -222,7 +235,6 @@ console.log("preleased button value ",preReleasedBtn)
 
   return (
     <>
-    
       <div className="grid gap-4 mb-4 sm:grid-cols-2">
         {/* Start Price */}
         <div className="w-full mx-auto">
@@ -232,8 +244,9 @@ console.log("preleased button value ",preReleasedBtn)
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
             >
               Start Price
-              { (editedKeysfromMain?.includes("TotalPrice.MinValue") || editedKeysfromMain?.includes("TotalPrice.MinPriceUnit") ) && pageNamefromMain===currentPage && (<EditedTag/>) } 
-
+              {(editedKeysfromMain?.includes("TotalPrice.MinValue") ||
+                editedKeysfromMain?.includes("TotalPrice.MinPriceUnit")) &&
+                pageNamefromMain === currentPage && <EditedTag />}
             </label>
             <div className="relative w-full">
               <input
@@ -275,8 +288,9 @@ console.log("preleased button value ",preReleasedBtn)
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
             >
               End Price
-              { (editedKeysfromMain?.includes("TotalPrice.MaxValue") || editedKeysfromMain?.includes("TotalPrice.MaxPriceUnit") ) && pageNamefromMain===currentPage && (<EditedTag/>) } 
-
+              {(editedKeysfromMain?.includes("TotalPrice.MaxValue") ||
+                editedKeysfromMain?.includes("TotalPrice.MaxPriceUnit")) &&
+                pageNamefromMain === currentPage && <EditedTag />}
             </label>
             <div className="relative w-full">
               <input
@@ -318,9 +332,9 @@ console.log("preleased button value ",preReleasedBtn)
           activeBtnvalue={isNegotiable}
           changeState={setIsNegotiable}
           changedKeyArray={editedKeysfromMain}
-              showPageName={pageNamefromMain}
-              currentPageName={currentPage}
-              specifiedKey={"IsNegotiable"}
+          showPageName={pageNamefromMain}
+          currentPageName={currentPage}
+          specifiedKey={"IsNegotiable"}
         />
         {propertTypeValue == "Commercial" &&
           propertTypWithSubTypeValue == "Office" && (
@@ -345,9 +359,9 @@ console.log("preleased button value ",preReleasedBtn)
             activeBtnvalue={taxCharge}
             changeState={setTaxCharge}
             changedKeyArray={editedKeysfromMain}
-              showPageName={pageNamefromMain}
-              currentPageName={currentPage}
-              specifiedKey={"TaxCharge"}
+            showPageName={pageNamefromMain}
+            currentPageName={currentPage}
+            specifiedKey={"TaxCharge"}
           />
         )}
       </div>
@@ -362,9 +376,9 @@ console.log("preleased button value ",preReleasedBtn)
             activeBtnvalue={preReleasedBtn}
             changeState={setPreReleasedBtn}
             changedKeyArray={editedKeysfromMain}
-              showPageName={pageNamefromMain}
-              currentPageName={currentPage}
-              specifiedKey={"LeasedOrRented"}
+            showPageName={pageNamefromMain}
+            currentPageName={currentPage}
+            specifiedKey={"LeasedOrRented"}
           />
 
           {preReleasedBtn === true && (
@@ -404,8 +418,8 @@ console.log("preleased button value ",preReleasedBtn)
           )}
         </>
       )}
-      
-         <ContinueButton
+
+      <ContinueButton
         modalSubmit={SubmitForm}
         butonSubName={"add Possession Details"}
       />

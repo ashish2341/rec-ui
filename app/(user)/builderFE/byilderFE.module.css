@@ -92,7 +92,13 @@
     font-weight: 600;
     color: gray;
 }
-
+.bigNotFound{
+    font-weight: 600;
+    margin: 0.5rem;
+    color: grey;
+    text-align: center;
+    font-size: 2rem;
+  }
 @media screen and (max-width: 900px) {
     .builderDetailPage{
         display: block;

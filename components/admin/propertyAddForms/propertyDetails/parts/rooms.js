@@ -23,7 +23,6 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
   const PropertyForValue = sessionStoragePropertyData?.ProeprtyFor || "";
   // fetching Data for bhkTypeData
   const { data: bhkTypeData } = useFetch(`${API_BASE_URL_FOR_MASTER}/bhkType`);
-  // console.log("bhkTypeData", bhkTypeData);
   const [bhkType, setBhkType] = useState("");
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
@@ -40,20 +39,10 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("propertyData")
     );
-    console.log(
-      "localStorageData from localstorage",
-      sessionStoragePropertyData.Facing
-    );
+   
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
-      console.log(
-        "if function called sessionStoragePropertyData.ProeprtyFor ",
-        sessionStoragePropertyData.ProeprtyFor
-      );
-      console.log(
-        "sessionStoragePropertyData?.Brochure",
-        sessionStoragePropertyData?.Brochure
-      );
+      
 
       setBedrooms(sessionStoragePropertyData?.Bedrooms || "");
       setBathrooms(sessionStoragePropertyData?.Bathrooms || "");
@@ -84,8 +73,6 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
   };
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
-    console.log("parseInt(totalFloors)",parseInt(totalFloors))
-    console.log("parseInt(floorNumber)",parseInt(floorNumber))
    
     if (allFieldsFilled) {
       if(parseInt(totalFloors) < parseInt(floorNumber)){
@@ -101,7 +88,6 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
         secondPropertyData.Bedrooms = bedrooms;
         secondPropertyData.Bathrooms = bathrooms;
       }
-      console.log("secondPropertyData", secondPropertyData);
       const localStorageData = JSON.parse(
         sessionStorage.getItem("propertyData")
       );

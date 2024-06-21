@@ -6,12 +6,12 @@ import Accordion from "@/components/common/accodion";
 import { Carousel } from "flowbite-react";
 import { SharePopUp } from "../sharePopUp/sharePopUp";
 import ContactModal from "../contactModel/contactModal";
-import { API_BASE_URL,imgApiUrl } from "@/utils/constants";
+import { API_BASE_URL, imgApiUrl } from "@/utils/constants";
 
 const PropertyListCard = ({ item }) => {
   const [isPopoverOpenforShare, setIsPopoverOpenforShare] = useState(false);
   const [valueforContactModal, setValueforContactModal] = useState(false);
-  const [propertyId,setPropertyId]=useState("")
+  const [propertyId, setPropertyId] = useState("");
   const handleDownload = (BrochureUrl) => {
     // Construct the URL of the file
     const fileUrl = BrochureUrl; // Adjust the file path as needed
@@ -28,15 +28,13 @@ const PropertyListCard = ({ item }) => {
     // Clean up
     anchor.remove();
   };
-  const openContactModal=()=>{
-    setValueforContactModal(!valueforContactModal)
-   
-  }
-  const openShareModal=(id)=>{
-    setIsPopoverOpenforShare(!isPopoverOpenforShare)
-    setPropertyId(id)
-  
-  }
+  const openContactModal = () => {
+    setValueforContactModal(!valueforContactModal);
+  };
+  const openShareModal = (id) => {
+    setIsPopoverOpenforShare(!isPopoverOpenforShare);
+    setPropertyId(id);
+  };
   return (
     <>
       <div className={`mb-3 ml-3 mr-3 ${styles.GeneralDetailsBox}`}>
@@ -93,10 +91,12 @@ const PropertyListCard = ({ item }) => {
                   </div>
                 </Link>
                 <div className="flex ">
-                  <div className={` mr-3 font-bold text-lg text-blue-600 dark:text-blue-500 hover:underline ${styles.GeneralDetailsBoxIcon}`}>
+                  <div
+                    className={` mr-3 font-bold text-lg text-blue-600 dark:text-blue-500 hover:underline ${styles.GeneralDetailsBoxIcon}`}
+                  >
                     {" "}
                     <i
-                       onClick={()=>openShareModal(item?._id) }
+                      onClick={() => openShareModal(item?._id)}
                       className="bi bi-share"
                     ></i>
                   </div>
@@ -108,29 +108,34 @@ const PropertyListCard = ({ item }) => {
                             </div> */}
                 </div>
               </div>
+              <p className="mb-2 flex font-medium text-gray-700 dark:text-gray-400">
+                <i className="bi bi-geo-alt-fill"></i>
+                <span className={`ml-1 ${styles.textCapitalized}`}>
+                  <ReadMore text={item?.Address} maxLength={20} />
+                </span>
+              </p>
               <Link href={`/propertyDetail/${item._id}`}>
-                <p className="mb-2 flex font-medium text-gray-700 dark:text-gray-400">
-                  <i className="bi bi-geo-alt-fill"></i>
-                  <span className={`ml-1 ${styles.textCapitalized}`}>
-                    <ReadMore text={item?.Address} maxLength={20} />
-                  </span>
-                </p>
                 <p className="mb-4 font-medium text-gray-700 dark:text-gray-400">
                   <span className=" mr-2 font-bold text-gray-700 dark:text-gray-400">
-                    {item?.ProeprtyType == "Commercial"
-                      ? item?.PropertySubtype?.Name
-                      : item?.PropertySubtype?.Name === "Plot"
-                      ? item?.PropertySubtype?.Name
-                      :  (<span>{item?.BhkType?.Type} {item?.PropertySubtype?.Name}</span>)} 
+                    {item?.ProeprtyType == "Commercial" ? (
+                      item?.PropertySubtype?.Name
+                    ) : item?.PropertySubtype?.Name === "Plot" ? (
+                      item?.PropertySubtype?.Name
+                    ) : (
+                      <span>
+                        {item?.BhkType?.Type} {item?.PropertySubtype?.Name}
+                      </span>
+                    )}
                   </span>
-                  for<span className=""> {item?.ProeprtyFor}</span> in <span>{item?.Area?.Area}</span> 
+                  for<span className=""> {item?.ProeprtyFor}</span> in{" "}
+                  <span>{item?.Area?.Area}</span>
                 </p>
               </Link>
               <div className="mb-4">
                 <Accordion listData={[item]} />
               </div>
               <Link href={`/propertyDetail/${item?._id}`}></Link>
-              <div className=" ">
+              <div className="w-full ">
                 <ReadMore text={item?.Description} maxLength={65} />
               </div>
               <Link href={`/propertyDetail/${item?._id}`}>
@@ -165,7 +170,7 @@ const PropertyListCard = ({ item }) => {
                   Brochure
                 </button>
                 <button
-                onClick={openContactModal}
+                  onClick={openContactModal}
                   type="button"
                   className={`text-white  bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-xs md:text-sm px-3 py-1.5 md:px-5 md:py-2.5 text-center ${styles.cardLastBtn}`}
                 >
@@ -175,29 +180,57 @@ const PropertyListCard = ({ item }) => {
                   Contact Sellers
                 </button>
               </div>
-              <Link href={`/propertyDetail/${item._id}`}>
-                <div className="flex items-center mt-5 mb-2 md:mb-0">
-                  <img
-                    className={`${styles.cardImage} w-10 h-10 md:w-auto md:h-auto rounded-full`}
-                 
-                    src={`${imgApiUrl}/${item?.Builder?.Logo}`}
-                    alt=""
-                  />
+              {item?.Builder?._id ? (
+                <Link href={`/builderFE/${item?.Builder?._id}`}>
+                  <div className="flex items-center mt-2 mb-2 md:mb-0">
+                    {item?.Builder?.Logo ? (
+                      <img
+                        className={`${styles.cardImage} w-10 h-10 md:w-auto md:h-auto rounded-full`}
+                        src={` ${imgApiUrl}/${item?.Builder?.Logo}`}
+                        alt=""
+                      />
+                    ) : (
+                      <img
+                        className={`${styles.cardImage} w-10 h-10 md:w-auto md:h-auto rounded-full`}
+                        src= "https://tse2.explicit.bing.net/th?id=OIP.9AeFX9VvFYTXrL5IwhGhYwHaHa&pid=Api&P=0&h=180"
+                        alt=""
+                      />
+                    )}
 
-                  <div className="flex flex-col ml-2">
-                    <h3 className="font-bold text-sm md:text-base">
-                      {item?.Builder?.Name}
-                    </h3>
-                    <p className="text-gray-900 text-xs md:text-sm">Seller</p>
+                    <div className="flex flex-col ml-2">
+                      <h3 className="font-bold text-xs md:text-base">
+                        {item?.Builder?.Name}
+                      </h3>
+                      <p className="text-gray-900 text-xs font-medium ">
+                        Seller
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              ) : (
+                <Link href={`/`}>
+                  <div className="flex items-center mt-2 mb-2 md:mb-0">
+                    <img
+                      className={` w-16 h-10 mt-2`}
+                      src="/img/recLogoPng2.png"
+                      alt=""
+                    />
+                  </div>
+                </Link>
+              )}
             </div>
           </div>
         </div>
       </div>
-     <ContactModal isOpen={valueforContactModal} setDynamicState={setValueforContactModal}/>
-     <SharePopUp isOpenvalue={isPopoverOpenforShare} setValueDynamicState={setIsPopoverOpenforShare} propertyIdForUrl={propertyId}/>
+      <ContactModal
+        isOpen={valueforContactModal}
+        setDynamicState={setValueforContactModal}
+      />
+      <SharePopUp
+        isOpenvalue={isPopoverOpenforShare}
+        setValueDynamicState={setIsPopoverOpenforShare}
+        propertyIdForUrl={propertyId}
+      />
     </>
   );
 };

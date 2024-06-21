@@ -23,7 +23,6 @@ editedKeys, pageName
     }
   };
   const handelvalueForNextfromSix = (value) => {
-    console.log("handelvalueForNextfromSix value", value);
     valueForNext(value);
   };
   const stepperArray = [

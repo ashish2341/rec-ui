@@ -34,9 +34,8 @@ export default async function middleware(req) {
     const cleanedToken = token.value.replace(/"/g, "");
     const jwtRes = await jwtVerify(
       cleanedToken,
-      new TextEncoder().encode(process.env.JWT)
+      new TextEncoder().encode('WinterIsComingGOT2019')
     );
-
     if (!jwtRes?.payload?._id) {
       return NextResponse.redirect(`${navUrl}/login`);
     }

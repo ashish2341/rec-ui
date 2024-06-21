@@ -142,7 +142,7 @@ margin: 0rem;
   color: grey;
 }
 .price{
-  font-size: 1.3rem !important;
+  font-size: 1.1rem !important;
 }
 .itemTitle{
 font-size: 1.4rem;
@@ -176,7 +176,7 @@ font-size: 1.4rem;
   color: White !important;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
   border-radius: 4rem !important;
-  width: 4rem !important;
+  width: auto !important;
 }
 .cardSecondbtn{
   background-color: lightgrey !important;

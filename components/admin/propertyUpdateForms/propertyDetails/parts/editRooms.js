@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { API_BASE_URL_FOR_MASTER ,currentPage} from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER, currentPage } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
@@ -14,8 +14,11 @@ import ApiButtons from "@/components/common/admin/propertyapiButtons/ApiButtons"
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
 import EditedTag from "@/components/common/admin/editedTag/editedTag";
 
-export default function RoomDetailPage({ setPropertyPageValue,editedKeysfromMain,
-  pageNamefromMain, }) {
+export default function RoomDetailPage({
+  setPropertyPageValue,
+  editedKeysfromMain,
+  pageNamefromMain,
+}) {
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("EditPropertyData")
   );
@@ -25,7 +28,6 @@ export default function RoomDetailPage({ setPropertyPageValue,editedKeysfromMain
   const PropertyForValue = sessionStoragePropertyData?.ProeprtyFor || "";
   // fetching Data for bhkTypeData
   const { data: bhkTypeData } = useFetch(`${API_BASE_URL_FOR_MASTER}/bhkType`);
-  // console.log("bhkTypeData", bhkTypeData);
   const [bhkType, setBhkType] = useState("");
   const [bedrooms, setBedrooms] = useState("");
   const [bathrooms, setBathrooms] = useState("");
@@ -42,11 +44,9 @@ export default function RoomDetailPage({ setPropertyPageValue,editedKeysfromMain
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("EditPropertyData")
     );
-   
+
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
-    
-
       setBedrooms(sessionStoragePropertyData?.Bedrooms || null);
       setBathrooms(sessionStoragePropertyData?.Bathrooms || null);
       setFloorNumber(sessionStoragePropertyData?.FloorNumber || null);
@@ -77,7 +77,7 @@ export default function RoomDetailPage({ setPropertyPageValue,editedKeysfromMain
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
     if (allFieldsFilled) {
-      if(parseInt(totalFloors) < parseInt(floorNumber)){
+      if (parseInt(totalFloors) < parseInt(floorNumber)) {
         toast.error("Total Floor Should greater then Floor Number.");
         return false;
       }
@@ -87,15 +87,17 @@ export default function RoomDetailPage({ setPropertyPageValue,editedKeysfromMain
       };
       if (propertTypeValue == "Residential") {
         secondPropertyData.BhkType = bhkType;
-        secondPropertyData.Bedrooms = bedrooms ? bedrooms :null;
-        secondPropertyData.Bathrooms = bathrooms ? bathrooms :null;
+        secondPropertyData.Bedrooms = bedrooms ? bedrooms : null;
+        secondPropertyData.Bathrooms = bathrooms ? bathrooms : null;
       }
-      console.log("secondPropertyData", secondPropertyData);
       const localStorageData = JSON.parse(
         sessionStorage.getItem("EditPropertyData")
       );
       const newProjectData = { ...localStorageData, ...secondPropertyData };
-      sessionStorage.setItem("EditPropertyData", JSON.stringify(newProjectData));
+      sessionStorage.setItem(
+        "EditPropertyData",
+        JSON.stringify(newProjectData)
+      );
       setPropertyPageValue((prev) => prev + 1);
     } else {
       toast.error("Please fill in all required fields!");
@@ -103,7 +105,6 @@ export default function RoomDetailPage({ setPropertyPageValue,editedKeysfromMain
   };
   return (
     <>
-     
       <div className="grid gap-4 mb-4 sm:grid-cols-2">
         {/* FloorNumber */}
         <div>
@@ -112,8 +113,8 @@ export default function RoomDetailPage({ setPropertyPageValue,editedKeysfromMain
             className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
           >
             Floor Number
-            { (editedKeysfromMain?.includes("FloorNumber") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
-
+            {editedKeysfromMain?.includes("FloorNumber") &&
+              pageNamefromMain === currentPage && <EditedTag />}
           </label>
           <input
             type="number"
@@ -133,8 +134,8 @@ export default function RoomDetailPage({ setPropertyPageValue,editedKeysfromMain
             className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
           >
             Total Floors
-            { (editedKeysfromMain?.includes("TotalFloors") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
-
+            {editedKeysfromMain?.includes("TotalFloors") &&
+              pageNamefromMain === currentPage && <EditedTag />}
           </label>
           <input
             type="number"
@@ -193,9 +194,9 @@ export default function RoomDetailPage({ setPropertyPageValue,editedKeysfromMain
         )}
       </div>
       <ContinueButton
-            modalSubmit={SubmitForm}
-            butonSubName={"add Area Details"}
-          />
+        modalSubmit={SubmitForm}
+        butonSubName={"add Area Details"}
+      />
     </>
   );
 }

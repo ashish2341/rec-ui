@@ -2,7 +2,11 @@
 import { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { API_BASE_URL_FOR_MASTER,imgApiUrl,currentPage } from "@/utils/constants";
+import {
+  API_BASE_URL_FOR_MASTER,
+  imgApiUrl,
+  currentPage,
+} from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
@@ -28,7 +32,6 @@ export default function PossessionDetailsPage({
   const { data: posessionStatusData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/possession`
   );
-  console.log("posessionStatusData", posessionStatusData);
 
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("EditPropertyData")
@@ -63,7 +66,6 @@ export default function PossessionDetailsPage({
     );
   }
 
-  console.log("possessionStatusArray", possessionStatusArray);
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
@@ -94,7 +96,6 @@ export default function PossessionDetailsPage({
     const file = event.target.files[0]; // Get the first file only
     const formData = new FormData();
     formData.append("profilePic", file);
-    console.log("image File", file);
 
     // Check file type
     if (!acceptedFileTypes.includes(file.type)) {
@@ -154,7 +155,6 @@ export default function PossessionDetailsPage({
         fifthPropertyData.AgeofProperty = ageofProperty ? ageofProperty : null;
       }
 
-      console.log("fifthPropertyData", fifthPropertyData);
       const localStorageData = JSON.parse(
         sessionStorage.getItem("EditPropertyData")
       );
@@ -163,7 +163,6 @@ export default function PossessionDetailsPage({
         "EditPropertyData",
         JSON.stringify(newProjectData)
       );
-      console.log("propertTypeValue", propertTypeValue);
       if (
         propertTypeValue == "Commercial" &&
         propertTypWithSubTypeValue != "Plot"
@@ -191,7 +190,6 @@ export default function PossessionDetailsPage({
     const file = event.target.files[0]; // Get the first file only
     const formData = new FormData();
     formData.append("profilePic", file);
-    console.log("Selected File", file);
 
     // Check file type
     if (!acceptedFileTypes.includes(file.type)) {
@@ -229,7 +227,6 @@ export default function PossessionDetailsPage({
     const file = event.target.files[0]; // Get the first file only
     const formData = new FormData();
     formData.append("profilePic", file);
-    console.log("Selected File", file);
 
     // Check file type
     if (!acceptedFileTypes.includes(file.type)) {
@@ -256,18 +253,18 @@ export default function PossessionDetailsPage({
     return url.match(/\.(jpeg|jpg|png)$/);
   };
   const removeFloorPlan = () => {
-    setFloorPlan("")
+    setFloorPlan("");
     if (floorPlanInputRef.current) {
       floorPlanInputRef.current.value = "";
     }
-  }
+  };
   const removePaymentPlan = () => {
-    setPaymentPlan("")
+    setPaymentPlan("");
     if (paymentPlanInputRef.current) {
       paymentPlanInputRef.current.value = "";
     }
-  }
- 
+  };
+
   return (
     <>
       <div className="grid gap-4 mb-4 sm:grid-cols-1">
@@ -288,7 +285,7 @@ export default function PossessionDetailsPage({
               specifiedKey={"PosessionStatus"}
             />
           )}
-      
+
         {possessionStatusArray &&
           posessionStatusData &&
           propertTypWithSubTypeValue != "Plot" && (
@@ -314,8 +311,8 @@ export default function PossessionDetailsPage({
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
             >
               Available From
-              { (editedKeysfromMain?.includes("PosessionDate") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
-
+              {editedKeysfromMain?.includes("PosessionDate") &&
+                pageNamefromMain === currentPage && <EditedTag />}
             </label>
             <input
               type="date"
@@ -336,8 +333,8 @@ export default function PossessionDetailsPage({
                   className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
                 >
                   Age of Property
-                  { (editedKeysfromMain?.includes("AgeofProperty") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
-
+                  {editedKeysfromMain?.includes("AgeofProperty") &&
+                    pageNamefromMain === currentPage && <EditedTag />}
                 </label>
                 <input
                   type="number"
@@ -359,8 +356,8 @@ export default function PossessionDetailsPage({
             className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
           >
             Brochure
-            { (editedKeysfromMain?.includes("Brochure") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
-
+            {editedKeysfromMain?.includes("Brochure") &&
+              pageNamefromMain === currentPage && <EditedTag />}
           </label>
           <input
             type="file"
@@ -399,8 +396,8 @@ export default function PossessionDetailsPage({
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
             >
               Payement Plan
-              { (editedKeysfromMain?.includes("PaymentPlan") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
-
+              {editedKeysfromMain?.includes("PaymentPlan") &&
+                pageNamefromMain === currentPage && <EditedTag />}
             </label>
             <input
               type="file"
@@ -468,8 +465,8 @@ export default function PossessionDetailsPage({
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
             >
               Floor Plan
-              { (editedKeysfromMain?.includes("FloorPlan") && pageNamefromMain===currentPage) && (<EditedTag/>) } 
-
+              {editedKeysfromMain?.includes("FloorPlan") &&
+                pageNamefromMain === currentPage && <EditedTag />}
             </label>
             <input
               type="file"
@@ -532,20 +529,20 @@ export default function PossessionDetailsPage({
         </div>
       </div>
 
-      {(documentLoader === true ||
-        paymentPlanLoader === true ||
-        floorPlanLoader === true) ?(null):
-        propertTypeValue && propertTypeValue === "Commercial" ? (
-          <ContinueButton
-            modalSubmit={SubmitForm}
-            butonSubName={"add Facilities Details"}
-          />
-        ) : (
-          <NextButton
-            onSubmit={SubmitForm}
-            butonSubName={"add Amenity Details"}
-          />
-        )}
+      {documentLoader === true ||
+      paymentPlanLoader === true ||
+      floorPlanLoader === true ? null : propertTypeValue &&
+        propertTypeValue === "Commercial" ? (
+        <ContinueButton
+          modalSubmit={SubmitForm}
+          butonSubName={"add Facilities Details"}
+        />
+      ) : (
+        <NextButton
+          onSubmit={SubmitForm}
+          butonSubName={"add Amenity Details"}
+        />
+      )}
     </>
   );
 }

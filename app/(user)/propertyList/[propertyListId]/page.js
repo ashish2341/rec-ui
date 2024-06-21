@@ -283,9 +283,13 @@ const PropertyListPage = (params) => {
     }));
   };
   const fetchMoreData = () => {
-    if (listDataForShow.length >= listData.length) {
+    if(listData.length===1){
       setHasMore(false);
-      return;
+      return ;
+    }
+    if (listDataForShow.length == listData.length) {
+      setHasMore(false);
+      return ;
     }
     setTimeout(() => {
       setListDataForShow((prevList) => [
@@ -1141,7 +1145,6 @@ const PropertyListPage = (params) => {
                     loader={<LoaderForMedia />}
                     endMessage={
                       <h1 className={`${styles.noDataHead}`}>
-                        {" "}
                         Now, There is no Property to see.
                       </h1>
                     }

@@ -2,7 +2,13 @@
 import { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { API_BASE_URL_FOR_MASTER ,ZoneTypeArray,suitableArray,LocationhubArrayforOffice,LocationhubArrayforall} from "@/utils/constants";
+import {
+  API_BASE_URL_FOR_MASTER,
+  ZoneTypeArray,
+  suitableArray,
+  LocationhubArrayforOffice,
+  LocationhubArrayforall,
+} from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
@@ -26,16 +32,12 @@ export default function BasicPage({
   const { data: propertyOwnerShipData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/propertyOwnerShip`
   );
-  // console.log("propertyOwnerShipData", propertyOwnerShipData);
 
   // fetching Data for propertyStatusData
   const { data: propertyStatusData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/propertyStatus`
   );
-  // console.log("propertyStatusData", propertyStatusData);
 
-
-  // console.log("propertyTypeData", propertyTypeData);
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("propertyData")
   );
@@ -59,7 +61,6 @@ export default function BasicPage({
   const [ageofPropertyData, setAgeOfPropertyData] = useState("");
   const defaultOption = [{ value: "", label: "no data found" }];
 
- 
   useEffect(() => {
     getAllBuilder();
   }, []);
@@ -80,10 +81,7 @@ export default function BasicPage({
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("propertyData")
     );
-    console.log(
-      "localStorageData from localstorage",
-      sessionStoragePropertyData
-    );
+
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
       setOwnerName(sessionStoragePropertyData?.OwnerName || "");
@@ -116,11 +114,7 @@ export default function BasicPage({
     ) {
       var requiredFields = [ownershipType, ownerName];
     }
-    console.log("checkRequiredFields propertTypeValue", propertTypeValue);
-    console.log(
-      "checkRequiredFields propertTypWithSubTypeValue",
-      propertTypWithSubTypeValue
-    );
+
     if (
       propertTypeValue == "Commercial" &&
       (propertTypWithSubTypeValue == "Office" ||
@@ -249,7 +243,7 @@ export default function BasicPage({
       if (roles.includes("Admin") && propertTypWithSubTypeValue != "Plot") {
         firstPropertyData.Builder = builderName;
       }
-      console.log("firstPropertyData", firstPropertyData);
+
       const localStorageData = JSON.parse(
         sessionStorage.getItem("propertyData")
       );
@@ -264,7 +258,6 @@ export default function BasicPage({
     }
   };
 
-  // console.log("",)
   return (
     <>
       <div className="grid gap-4 mb-4 sm:grid-cols-1">

@@ -25,7 +25,7 @@ export const resetPassword = async (userId,Token,payload,setLoading=()=>{}) => {
         return {successMessage:resData};
       } else {
         setLoading(false);
-        return {errMessage:resData.error};
+        return {errMessage:resData};
       }
     } catch (error) {
       setLoading(false);

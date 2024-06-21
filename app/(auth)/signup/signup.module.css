@@ -1,10 +1,13 @@
 .loginMain {
     background-color: #6592D3 !important;
-    height: 100%;
   }
   .signInBtn{
     background-color: #2b4ac7 !important;
   
+  }
+  .eyeButton{
+    top: 1.8rem;
+    font-weight: bolder !important;
   }
   
   .mt7{

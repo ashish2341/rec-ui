@@ -17,10 +17,8 @@ export const AddBuilderApi = async (payload,setLoading=()=>{}) => {
       body: JSON.stringify(payload),
     });
     const resData = await res.json();
-    console.log('resData',resData)
 
     if (resData?.success == true) {
-      console.log('working')
       setLoading(false);
       return {resData};
     } else {
@@ -31,6 +29,5 @@ export const AddBuilderApi = async (payload,setLoading=()=>{}) => {
   } catch (error) {
     setLoading(false);
     toast.error("someting went wrong");
-    console.log("error message ", error);
   }
 };

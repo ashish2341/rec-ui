@@ -13,7 +13,6 @@ export const GetEnquiryByBuilderApi = async (
 ) => {
   const token = Cookies.get("token");
   setLoading(true);
-  console.log("GetEnquiryApi filterType", filterType);
   try {
     const res = await fetch(
       `${API_BASE_URL}/enquiry/enquiryGetByDeveloperId?page=${page}&pageSize=${PAGE_LIMIT}&search=${
@@ -42,6 +41,6 @@ export const GetEnquiryByBuilderApi = async (
   } catch (error) {
     setLoading(false);
     toast.error("someting went wrong");
-    console.log("error message ", error);
+     
   }
 };

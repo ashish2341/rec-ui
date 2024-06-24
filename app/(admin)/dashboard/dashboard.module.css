@@ -138,6 +138,7 @@
     width: 100%;
     text-wrap: nowrap;
     padding: 0.2rem !important;
+    width: 10%;
 }
 
 .UserColor{
@@ -146,6 +147,7 @@
     font-weight: bold;
     border-radius: 0.5rem;
     background-color:  #faedcb;
+    width: 10%;
 }
 
 Link.InvertedUserColor :hover{
@@ -160,6 +162,7 @@ Link.InvertedUserColor :hover{
     width: 100%;
     text-wrap: nowrap;
     padding: 0.2rem !important;
+    width: 10%;
 }
 
 .AccordiaonPropColor{
@@ -175,6 +178,7 @@ Link.InvertedUserColor :hover{
     width: 100%;
     text-wrap: nowrap;
     padding: 0.2rem !important;
+    width: 10%;
 }
 
 .SecondContainer{

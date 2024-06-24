@@ -7,7 +7,6 @@ import { API_BASE_URL } from "@/utils/constants";
 export const deleteAminity = async (id,setLoading=()=>{}) => {
   const token = Cookies.get("token");
   setLoading(true);
-  console.log(id)
   try {
     const res = await fetch(`${API_BASE_URL}/aminity/deleteAminity/${id}`, {
       method: "DELETE",
@@ -17,7 +16,7 @@ export const deleteAminity = async (id,setLoading=()=>{}) => {
       },
     });
     const resData = await res.json();
-    console.log('resData',resData)
+     
 
     if (resData?.statusCode==200) {
       
@@ -31,6 +30,6 @@ export const deleteAminity = async (id,setLoading=()=>{}) => {
   } catch (error) {
     setLoading(false);
     toast.error("someting went wrong");
-    console.log("error message ", error);
+     
   }
 };

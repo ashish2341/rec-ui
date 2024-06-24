@@ -16,7 +16,6 @@ export const GetAdminGraphApi = async (setLoading=()=>{}) => {
         },
       });
       const resData = await res.json();
-      console.log('resData',resData)
   
       if (resData?.statusCode==200) {
         
@@ -30,7 +29,6 @@ export const GetAdminGraphApi = async (setLoading=()=>{}) => {
     } catch (error) {
       setLoading(false);
       toast.error("someting went wrong");
-      console.log("error message ", error);
     }
   };
 
@@ -46,7 +44,6 @@ export const GetBuilderGraphApi = async (setLoading=()=>{}) => {
       },
     });
     const resData = await res.json();
-    console.log('resData',resData)
 
     if (resData?.statusCode==200) {
       
@@ -60,6 +57,5 @@ export const GetBuilderGraphApi = async (setLoading=()=>{}) => {
   } catch (error) {
     setLoading(false);
     toast.error("someting went wrong");
-    console.log("error message ", error);
   }
 };

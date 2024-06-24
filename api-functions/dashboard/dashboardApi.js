@@ -16,7 +16,7 @@ export const GetAdminDashboardApi = async (setLoading=()=>{}) => {
         },
       });
       const resData = await res.json();
-      console.log('resData',resData)
+       
   
       if (resData?.statusCode==200) {
         
@@ -30,7 +30,7 @@ export const GetAdminDashboardApi = async (setLoading=()=>{}) => {
     } catch (error) {
       setLoading(false);
       toast.error("someting went wrong");
-      console.log("error message ", error);
+       
     }
   };
 
@@ -46,7 +46,7 @@ export const GetBuilderDashboardApi = async (setLoading=()=>{}) => {
       },
     });
     const resData = await res.json();
-    console.log('resData',resData)
+     
 
     if (resData?.statusCode==200) {
       
@@ -60,6 +60,6 @@ export const GetBuilderDashboardApi = async (setLoading=()=>{}) => {
   } catch (error) {
     setLoading(false);
     toast.error("someting went wrong");
-    console.log("error message ", error);
+     
   }
 };

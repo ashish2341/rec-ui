@@ -19,7 +19,6 @@ export const resetPassword = async (userId,Token,payload,setLoading=()=>{}) => {
         body: JSON.stringify(payload),
       });
       const resData = await res.json();
-    console.log('resData',resData)
 
     if (resData?.success) {
       //toast.success("SuccessFully Login");
@@ -33,6 +32,5 @@ export const resetPassword = async (userId,Token,payload,setLoading=()=>{}) => {
   } catch (error) {
     setLoading(false);
     toast.error("someting went wrong");
-    console.log("error message ", error);
   }
   };

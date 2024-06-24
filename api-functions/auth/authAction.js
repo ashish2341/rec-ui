@@ -19,7 +19,7 @@ export const loginUser = async (payload,setLoading=()=>{}) => {
       body: JSON.stringify(payload),
     });
     const resData = await res.json();
-    console.log('resData',resData)
+     
 
     if (resData?.success) {
       //toast.success("SuccessFully Login");
@@ -39,13 +39,13 @@ export const loginUser = async (payload,setLoading=()=>{}) => {
   } catch (error) {
     setLoading(false);
     toast.error("someting went wrong");
-    console.log("error message ", error);
+     
   }
 };
 //For SignUp
 export const SignUpUser = async (payload,setLoading=()=>{}) => {
   setLoading(true);
-console.log('API_BASE_URL',API_BASE_URL)
+ 
   try {
     const res = await fetch(`${API_BASE_URL}/auth/register`, {
       method: "POST",
@@ -55,8 +55,6 @@ console.log('API_BASE_URL',API_BASE_URL)
       body: JSON.stringify(payload),
     });
     const resData = await res.json();
-    console.log('register resData message ',resData.message)
-    console.log('register resData',resData)
    
 
     if (resData?.success) {
@@ -73,7 +71,7 @@ console.log('API_BASE_URL',API_BASE_URL)
   } catch (error) {
     setLoading(false);
     toast.error("someting went wrong");
-    console.log("error message ", error);
+     
   }
 };
 
@@ -81,7 +79,7 @@ console.log('API_BASE_URL',API_BASE_URL)
 
 export const UserOtpVarify = async (payload,setLoading=()=>{}) => {
   setLoading(true);
-console.log('API_BASE_URL',API_BASE_URL)
+ 
   try {
     const res = await fetch(`${API_BASE_URL}/auth/verifyOtp`, {
       method: "POST",
@@ -92,8 +90,6 @@ console.log('API_BASE_URL',API_BASE_URL)
     });
     const resData = await res.json();
    
-    console.log('register resData',resData)
-   
 
     if (resData?.success) {
       //toast.success("SuccessFully Login");
@@ -109,7 +105,7 @@ console.log('API_BASE_URL',API_BASE_URL)
   } catch (error) {
     setLoading(false);
     toast.error("someting went wrong");
-    console.log("error message ", error);
+     
   }
 };
 //FOr forget PassWord
@@ -124,7 +120,7 @@ export const UserForgoPassword = async (payload,setLoading=()=>{}) => {
       body: JSON.stringify(payload),
     });
     const resData = await res.json();
-    console.log('resData',resData)
+     
 
     if (resData?.success) {
       //toast.success("SuccessFully Login");
@@ -138,13 +134,13 @@ export const UserForgoPassword = async (payload,setLoading=()=>{}) => {
   } catch (error) {
     setLoading(false);
     toast.error("someting went wrong");
-    console.log("error message ", error);
+     
   }
 };
 //For user Picture
 export const ImageString = async (payload,setLoading=()=>{}) => {
   setLoading(true);
-console.log('API_BASE_URL',API_BASE_URL)
+ 
   try {
     const res = await fetch(`${API_BASE_URL}/auth/upload`, {
       method: "POST",
@@ -154,7 +150,7 @@ console.log('API_BASE_URL',API_BASE_URL)
       body: payload,
     });
     const resData = await res.json();
-    console.log('resData',resData)
+     
 
     if (resData?.success) {
       //toast.success("SuccessFully Login");
@@ -168,6 +164,6 @@ console.log('API_BASE_URL',API_BASE_URL)
   } catch (error) {
     setLoading(false);
     toast.error("someting went wrong");
-    console.log("error message ", error);
+     
   }
 };

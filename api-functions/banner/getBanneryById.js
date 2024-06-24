@@ -16,7 +16,6 @@ export const GetBannerById = async (id,setLoading=()=>{}) => {
       },
     });
     const resData = await res.json();
-    console.log('resData',resData)
 
     if (resData?.statusCode==200) {
       
@@ -30,6 +29,5 @@ export const GetBannerById = async (id,setLoading=()=>{}) => {
   } catch (error) {
     setLoading(false);
     toast.error("someting went wrong");
-    console.log("error message ", error);
   }
 };

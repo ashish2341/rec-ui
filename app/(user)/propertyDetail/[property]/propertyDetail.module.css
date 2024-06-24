@@ -504,10 +504,51 @@
     margin-left: 0.5rem;
 
   }
+  .configureBoxSize{
+    flex-wrap: nowrap !important;
+    overflow-x: scroll;
+    text-wrap: nowrap;
+  }
+  .configureFlex{
+    flex-direction: column;
+    margin-left: 2rem;
+  }
+  .configureFlexInner{
+    margin-bottom: 1rem;
+  }
+  .overviewBoxMain {
+    display: grid;
+    grid-template-columns: auto auto;
+    text-wrap: nowrap;
+  }
+  .AccordionContentInner{
+    grid-template-columns: auto auto !important;
+  }
+  .AccordionContentInner2{
+    grid-template-columns: auto auto auto !important;
+  }
+  .AccordionContent{
+    padding-left: 0 !important;
+  }
+  .BottomBoxcontenet{
+    flex-direction: column;
+    justify-content: start !important;
+  }
   .heroSectionBottomBoxHead,
   .heroSectionBottomBoxText {
-    text-align: center;
+    text-align: start;
     font-size: 0.75rem; /* Adjust font sizes */
+  }
+  .heroSectionVL{
+    display: none;
+  }
+  .heroSectionBottomBox{
+    display: grid;
+    grid-template-columns: auto auto;
+    margin: 0rem;
+  }
+  .heroSectionBottomBoxText{
+    margin-bottom: 1rem;
   }
 
   .GeneralDetailsBox{
@@ -574,7 +615,10 @@
     margin-right: 1rem;
     margin-bottom: 1rem;
   }
-  .similarMainType{
-    margin-left: 4.5rem;
+  .populerPropertiesBoxMain{
+    margin-left: 1rem;
+  }
+  .cardBoxPopularTop{
+    width: 96%;
   }
 }

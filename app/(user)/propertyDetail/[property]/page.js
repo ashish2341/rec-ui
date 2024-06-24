@@ -217,7 +217,7 @@ const PropertyDetail = ({ params }) => {
       <SkeletonLoader />
     ) : (
       listDataConst?.data?.map((item, index) => (
-        <div key={index} className="mr-3">
+        <div key={index} className={` ${styles.cardBoxPopularTop}`}>
           <img
             className={` ${styles.cardImgTop}`}
             src={`${imgApiUrl}/${item.Images[0].URL}`}
@@ -227,17 +227,15 @@ const PropertyDetail = ({ params }) => {
             <div className={` ${styles.cardImgBottom}`}>
               <div className={` ${styles.populerPropertiesLocationMain} flex`}>
                 <i className="bi bi-geo-alt-fill"></i>
-                <p className={`text-gray-700`}>{item.Address}</p>
+                <p className={`text-gray-700 ml-1`}>{item?.Area?.Area}</p>
               </div>
               <div className="flex justify-between">
                 <h2 className={` ${styles.populerPropertiesBoxHead}`}>
                   {item.Title}
                 </h2>
-                {item.LocationHub ? (
+                {item.Facing ? (
                   <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
-                    {item.LocationHub == "Others"
-                      ? item.CustomLocationHub
-                      : item.LocationHub}
+                    {item?.Facing[0].Facing}
                   </div>
                 ) : (
                   <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
@@ -245,7 +243,7 @@ const PropertyDetail = ({ params }) => {
                   </div>
                 )}
               </div>
-
+  
               <div className={`${styles.populerPropertiesBoxPriceMain}`}>
                 <p className={`${styles.populerPropertiesBoxPrice}`}>
                   {item.TotalPrice?.DisplayValue}
@@ -653,7 +651,7 @@ const PropertyDetail = ({ params }) => {
                   </p>
                 </div>
                 {listPropertiesData.Builder ? (
-                  <div className="flex">
+                  <div className={`flex`}>
                     <div>
                       <img
                         className="mr-2"
@@ -843,9 +841,9 @@ const PropertyDetail = ({ params }) => {
                 {listPropertiesData.Title} Configuration And Floor Plan
               </h2>
               <div className={`${styles.configureBox}`}>
-                <div className="mb-4 border-b border-gray-200 dark:border-gray-700">
+                <div className={`mb-4 border-b border-gray-200 dark:border-gray-700`}>
                   <ul
-                    className="flex flex-wrap -mb-px text-sm font-medium text-center"
+                    className={`flex flex-wrap -mb-px text-sm font-medium text-center ${styles.configureBoxSize}`}
                     id="default-tab"
                     data-tabs-toggle="#default-tab-content"
                     role="tablist"
@@ -917,8 +915,8 @@ const PropertyDetail = ({ params }) => {
                     aria-labelledby="profile-tab"
                   >
                     {listPropertiesData ? (
-                      <div className="flex justify-between">
-                        <div>
+                      <div className={`flex justify-between ${styles.configureFlex}`}>
+                        <div className={`${styles.configureFlexInner}`}>
                           {listPropertiesData?.ProeprtyType == "Commercial" ? (
                             <ol className={`${styles.configureOl}`}>
                               <p className={`${styles.configureLiHead}`}>
@@ -1309,7 +1307,7 @@ const PropertyDetail = ({ params }) => {
                       <AccordionContent
                         className={` ${styles.AccordionContent}`}
                       >
-                        <div className="grid grid-cols-5 gap-2">
+                        <div className={`grid grid-cols-5 gap-2 ${styles.AccordionContentInner}`}>
                           {listPropertiesData?.Aminities?.map((item, index) => (
                             <div key={index} className=" p-4">
                               <img
@@ -1338,7 +1336,7 @@ const PropertyDetail = ({ params }) => {
                   <AccordionPanel>
                     <AccordionTitle>Features</AccordionTitle>
                     <AccordionContent className={`${styles.AccordionContent}`}>
-                      <div className="grid grid-cols-5 gap-2">
+                      <div className={`grid grid-cols-5 gap-2 ${styles.AccordionContentInner2}`}>
                         {listPropertiesData?.Features?.map((item, index) => (
                           <div key={index} className="p-4 justify-between">
                             <img

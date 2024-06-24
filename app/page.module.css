@@ -835,6 +835,9 @@ font-size: 0.8rem;
     margin-left: 1rem;
     margin-right: 1rem;
   }
+  .campassMain{
+    width: 100% !important;
+  }
   .campassMainRightHead{
     text-align: center;
   }

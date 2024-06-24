@@ -490,7 +490,7 @@ font-size: 1.4rem;
     margin-bottom: 1rem;
   }
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1200px) {
   .forSticky {
     /* position: relative; Change to relative to disable sticky behavior */
     top: 5rem;

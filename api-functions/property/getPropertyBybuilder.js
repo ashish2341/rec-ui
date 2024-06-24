@@ -7,7 +7,7 @@ export const GetPropertyBybuilderApi = async (page,searchData,showValue,type,tod
   const token = Cookies.get("token");
   setLoading(true);
   try {
-    const res = await fetch(`${API_BASE_URL}/properties/propertyByUserId?page=${page ?page:1}&pageSize=${PAGE_LIMIT}&search=${searchData ?searchData:""}${showValue ?`&isEnable=${showValue}`:""}${type ? `&type=${type}` : ""}${todayProperty ? `&todayPropertyString=${todayProperty}` : ""}`, {
+    const res = await fetch(`${API_BASE_URL}/properties/propertyByUserId?page=${page ?page:1}&pageSize=${PAGE_LIMIT}&search=${searchData ?searchData:""}${showValue || showValue===false ?`&isEnable=${showValue}`:""}${type ? `&type=${type}` : ""}${todayProperty ? `&todayPropertyString=${todayProperty}` : ""}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -15,7 +15,6 @@ export const GetPropertyBybuilderApi = async (page,searchData,showValue,type,tod
       },
     });
     const resData = await res.json();
-    console.log('resData',resData)
 
     if (resData?.statusCode==200) {
       
@@ -29,6 +28,5 @@ export const GetPropertyBybuilderApi = async (page,searchData,showValue,type,tod
   } catch (error) {
     setLoading(false);
     toast.error("someting went wrong");
-    console.log("error message ", error);
   }
 };

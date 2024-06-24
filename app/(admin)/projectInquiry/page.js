@@ -15,6 +15,8 @@ import Cookies from "js-cookie";
 import "flowbite/dist/flowbite.min.css";
 import SendInquiryModal from "@/components/common/sendInquiryModal/sendInquiryModal";
 import DateRange from "@/components/common/dateRange/dateRange";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
+
 export default function ProjectInquiry(params) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
@@ -40,6 +42,8 @@ export default function ProjectInquiry(params) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [adminExcelData, setadminExcelData] = useState([]);
   const [builderExcelData, setBuilderExcelData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const dropdownRef = useRef(null);
   useEffect(() => {
     initFlowbite(); // Call initCarousels() when component mounts
@@ -56,6 +60,7 @@ export default function ProjectInquiry(params) {
   }, [page, searchData, isSubmitClicked, isDeleted, toDate, params]);
 
   const getAllEnquiry = async (filterType) => {
+    setIsLoading(true);
     const todayEnquiry = params.searchParams.todayEnquiry;
     let enquiries = await GetEnquiryApi(
       page,
@@ -67,15 +72,17 @@ export default function ProjectInquiry(params) {
     );
     if (enquiries?.resData?.success == true) {
       setListData(enquiries?.resData);
-      toast.success(enquiries?.resData?.message);
+      setIsLoading(false);
       return false;
     } else {
       toast.error(enquiries?.errMessage);
+      setIsLoading(false);
       return false;
     }
   };
 
   const getAllEnquiryByBuilder = async (filterType) => {
+    setIsLoading(true);
     const todayEnquiry = params.searchParams.todayEnquiry;
 
     let enquiries = await GetEnquiryByBuilderApi(
@@ -86,10 +93,11 @@ export default function ProjectInquiry(params) {
     );
     if (enquiries?.resData?.success == true) {
       setListData(enquiries?.resData);
-      toast.success(enquiries?.resData?.message);
+      setIsLoading(false);
       return false;
     } else {
       toast.error(enquiries?.errMessage);
+      setIsLoading(false);
       return false;
     }
   };
@@ -249,6 +257,7 @@ useEffect(() => {
 }, []);
   return (
     <section>
+      {isLoading && <CommonLoader />}
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3">
         <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
           Project Enquiry
@@ -642,6 +651,7 @@ useEffect(() => {
           setIsSubmitClicked={setIsSubmitClicked}
           selectedInquiryId={inquiryId}
           setIsPopupOpenforInquiry={setIsPopupOpenforInquiry}
+          setIsLoading={setIsLoading}
         />
       )}
     </section>

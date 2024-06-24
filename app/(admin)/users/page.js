@@ -15,7 +15,7 @@ import { Button, Modal } from "flowbite-react";
 import styles from "./user.module.css";
 import { Table, Card } from "flowbite-react";
 import { useRouter } from 'next/navigation';
-
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 
 export default function Users(params) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -29,6 +29,7 @@ export default function Users(params) {
   const [searchData, setSearchData] = useState("");
   const [isSubmitClicked,setIsSubmitClicked]=useState(0)
   const [openModal, setOpenModal] = useState(false);
+  const [isLoading,setIsLoading]=useState(false)
   const router = useRouter();
   const todayUser = params.searchParams.todayUser;
 
@@ -39,13 +40,16 @@ export default function Users(params) {
 
 
   const getAllUser = async () => {
+    setIsLoading(true)
     let users = await GetUserApi(page, searchData, todayUser);
     if (users?.resData?.success == true) {
       setListData(users?.resData);
-      toast.success(users?.resData?.message);
+      setIsLoading(false)
+      // toast.success(users?.resData?.message);
       return false;
     } else {
       toast.error(users?.errMessage);
+      setIsLoading(false)
       return false;
     }
   };
@@ -56,7 +60,6 @@ export default function Users(params) {
       setListPropData(users?.resData?.data?.properties);
       setListUserData(users?.resData?.data?.user);
       setListEnqData(users?.resData?.data?.enquiries);
-      toast.success(users?.resData?.message);
       return false;
     } else {
       toast.error(users?.errMessage);
@@ -69,15 +72,18 @@ export default function Users(params) {
   };
   const handleDelete = async () => {
     // Perform delete operation
+    setIsLoading(true)
     let res = await DeleteUser(deleteId);
     if (res?.resData?.success == true) {
-      getAllUser();
-      setDeleteId("");
       setIsPopupOpen(false);
       toast.success(res?.resData?.message);
+      setIsLoading(false)
+      getAllUser();
+      setDeleteId("");
       return false;
     } else {
       toast.error(res.errMessage);
+      setIsLoading(false)
       return false;
     }
   };
@@ -103,6 +109,7 @@ export default function Users(params) {
   };
 
   const handleCheckboxChange =  (selectedId)  => async (event) => {
+    setIsLoading(true)
     const newValue = event.target.checked;
     const payload={
         IsEnquiryVisiable: newValue
@@ -113,10 +120,15 @@ export default function Users(params) {
         id
       );
       if (res?.resData?.success == true) {
-       toast.success("Successfully checked")
         setIsSubmitClicked( prev => prev +1 )
+        setIsLoading(false)
+       toast.success("Successfully Done")
+        
+       
       } else {
+        setIsLoading(false)
         toast.error(res.errMessage);
+       
         return false;
       }
   };
@@ -130,6 +142,8 @@ export default function Users(params) {
   }
   return (
     <section>
+      {isLoading && <CommonLoader/>}
+      
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
           Users
@@ -233,7 +247,7 @@ export default function Users(params) {
                   type="checkbox"
                   checked={item.IsEnquiryVisiable}
                   onChange={handleCheckboxChange(item._id)}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  className="w-5 h-5 text-blue-600 bg-gray-300 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600 focus:outline-none"
                 />
 
                   </div>

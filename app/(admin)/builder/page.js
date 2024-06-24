@@ -7,6 +7,8 @@ import { ToastContainer, toast } from "react-toastify";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
 import { DeleteBuilderApi } from "@/api-functions/builder/deleteBuilder";
 import { imgApiUrl } from "@/utils/constants";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
+
 
 export default function Builder(params) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -14,6 +16,8 @@ export default function Builder(params) {
   const [deleteId, setDeleteId] = useState();
   const [page, setPage] = useState(1);
   const [searchData, setSearchData] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const todayBuilder = params.searchParams.todayBuilder;
 
   useEffect(() => {
@@ -21,13 +25,15 @@ export default function Builder(params) {
   }, [page, searchData,params]);
   
   const getAllBuilder = async () => {
+    setIsLoading(true);
     let builder = await GetBuilderApi(page, searchData, todayBuilder);
     if (builder?.resData?.success == true) {
       setListData(builder?.resData);
-      toast.success(builder?.resData?.message);
+      setIsLoading(false);
       return false;
     } else {
       toast.error(builder?.errMessage);
+      setIsLoading(false);
       return false;
     }
   };
@@ -64,6 +70,7 @@ export default function Builder(params) {
 
   return (
     <section>
+      {isLoading && <CommonLoader />}
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
        Builder

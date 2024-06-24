@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { imgApiUrl } from "@/utils/constants";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 
 
 export default function Amenity() {
@@ -19,18 +20,22 @@ export default function Amenity() {
   const [deleteId, setDeleteId] = useState();
   const [page, setPage] = useState(1);
   const [searchData, setSearchData] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
 
   useEffect(() => {
     getAllAmenity();
   }, [page, searchData]);
   const getAllAmenity = async () => {
+    setIsLoading(true);
     let amenities = await getAminity(page, searchData);
     if (amenities?.resData?.success == true) {
       setListData(amenities?.resData);
-      toast.success(amenities?.resData?.message);
+      setIsLoading(false);
       return false;
     } else {
       toast.error(amenities?.errMessage);
+      setIsLoading(false);
       return false;
     }
   };
@@ -66,6 +71,8 @@ export default function Amenity() {
   };
   return (
     <section>
+      {isLoading && <CommonLoader />}
+
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3">
         <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
           Amenity

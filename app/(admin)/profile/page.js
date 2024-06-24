@@ -18,6 +18,7 @@ import {
 } from "@/utils/constants";
 import { UpdateBuilderApi } from "@/api-functions/builder/updateBuilder";
 import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 
 export default function Profile() {
   const [userData, setUserData] = useState(false);
@@ -25,6 +26,7 @@ export default function Profile() {
   const [UserEmailId, setUserEmail] = useState("");
   const [UserMobile, setUserMobile] = useState("");
   const [rerenderforUser, setRerenderforUser] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const userId = Cookies.get("userId");
   useEffect(() => {
     getUser();
@@ -46,6 +48,36 @@ export default function Profile() {
   };
 
   const submitUserForm = async () => {
+     // Validate Email Address
+     if (UserEmailId === "") {
+      toast.error("Email address is required");
+      return false;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(UserEmailId)) {
+      toast.error("Please enter a valid email address");
+      return false;
+    }
+     // Check if the field is empty
+     if (UserMobile === "") {
+      toast.error("Phone number cannot be empty");
+      return false;
+    }
+
+    // Check if the number has exactly 10 digits
+    if (!/^\d{10}$/.test(UserMobile)) {
+      toast.error("Phone number must be 10 digits long");
+      return false;
+    }
+
+    // Check if the number starts with 9, 8, or 7
+    if (!/^[789]/.test(UserMobile)) {
+      toast.error("Phone number must start with 9, 8, or 7");
+      return false;
+    }
+   
+    setIsLoading(true)
     const UserDetails = {
       FirstName: FirstUserName,
       Mobile: UserMobile,
@@ -56,9 +88,11 @@ export default function Profile() {
       Cookies.set("name", FirstUserName);
       toast.success(updateUserData?.resData?.message);
       setRerenderforUser((prev) => prev + 1);
+      setIsLoading(false)
       return false;
     } else {
       toast.error(updateUserData?.errMessage);
+      setIsLoading(false)
       return false;
     }
   };
@@ -121,6 +155,7 @@ export default function Profile() {
   const router = useRouter();
 
   useEffect(() => {
+    setIsLoading(true)
     const getAllBuilders = async () => {
       let builderData = await GetBuilderByUserId();
       if (builderData?.resData?.success == true) {
@@ -162,10 +197,11 @@ export default function Profile() {
             Instagram: "",
           }
         );
-
+        setIsLoading(false)
         return false;
       } else {
         toast.error(builderData?.errMessage);
+        setIsLoading(false)
         return false;
       }
     };
@@ -391,6 +427,7 @@ export default function Profile() {
       toast.error("Document is required")
       return false;
     }
+    setIsLoading(true)
     const builderDetails = {
       Name: builderName,
       SocialMediaProfileLinks: socialMediaProfileLinks,
@@ -413,9 +450,11 @@ export default function Profile() {
     if (updatebuilderData?.resData?.success == true) {
       router.push("/profile");
       toast.success(updatebuilderData?.resData?.message);
+      setIsLoading(false)
       return false;
     } else {
       toast.error(updatebuilderData?.errMessage);
+      setIsLoading(false)
       return false;
     }
     // }
@@ -481,6 +520,7 @@ export default function Profile() {
 
   return (
     <>
+    {isLoading && <CommonLoader />}
       <section>
         <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
           Update User Details

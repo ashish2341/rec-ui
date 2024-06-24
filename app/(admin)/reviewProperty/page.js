@@ -11,6 +11,8 @@ import { DeleteProperty } from "@/api-functions/property/deleteProperty";
 import Cookies from "js-cookie";
 import { GetPropertyBybuilderApi } from "@/api-functions/property/getPropertyBybuilder";
 import { GetReviewPropertyApi } from "@/api-functions/property/getReviewProperties";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
+
 export default function ReviewProperty(params) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
@@ -21,20 +23,23 @@ export default function ReviewProperty(params) {
   const [deleteId, setDeleteId] = useState();
   const [page, setPage] = useState(1);
   const [searchData, setSearchData] = useState("");
-  console.log("listData", listData);
+  const [isLoading,setIsLoading]=useState(false)
+
 
   useEffect(() => {
     getAllReviewProperties();
   }, [page, searchData,params]);
   const getAllReviewProperties = async () => {
-    console.log("getAllReviewProperties searchData",searchData)
+    setIsLoading(true)
     let properties = await GetReviewPropertyApi(searchData);
     if (properties?.resData?.success == true) {
       setListData(properties?.resData);
       toast.success(properties?.resData?.message);
+      setIsLoading(false)
       return false;
     } else {
       toast.error(properties.errMessage);
+      setIsLoading(false)
       return false;
     }
   };
@@ -43,21 +48,24 @@ export default function ReviewProperty(params) {
     setSearchData(e.target.value);
   };
   const handlePageChange = (newPage) => {
-    console.log(newPage);
+   
     setPage(newPage);
   };
   const handleDelete = async () => {
     // Perform delete operation
+    setIsLoading(true)
     let res = await DeleteProperty(deleteId);
-    console.log(" property delete res", res);
+
     if (res?.resData?.success == true) {
-      getAllReviewProperties;
-      setDeleteId("");
       setIsPopupOpen(false);
       toast.success(res?.resData?.message);
+      setIsLoading(false)
+      getAllReviewProperties;
+      setDeleteId("");
       return false;
     } else {
       toast.error(res.errMessage);
+      setIsLoading(false)
       return false;
     }
   };
@@ -72,6 +80,7 @@ export default function ReviewProperty(params) {
   };
   return (
     <section>
+      {isLoading && <CommonLoader/>}
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
           Review Property

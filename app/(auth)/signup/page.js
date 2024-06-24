@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import { ImageString ,SignUpUser } from "@/api-functions/auth/authAction";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 
 
 export default function Signup() {
@@ -25,7 +26,7 @@ export default function Signup() {
   const imageInputRef = useRef(null);
   const [image, setImage] = useState("");
   const [passwordShow,setPasswordShow]=useState(false)
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleEmail = useCallback((value) => {
     setEmail(() => value.target.value);
   }, []);
@@ -153,14 +154,16 @@ export default function Signup() {
       Role:"Developer",
       ProfilePhoto:image
     };
+    setIsLoading(true)
     let res = await SignUpUser(signupData)
     if(res?.successMessage){
        router.push("/login");
       
        toast.success(res?.successMessage?.message)
-
+       setIsLoading(false)
     }else{
       toast.error(res?.errMessage);
+      setIsLoading(false)
       return;
     }
   
@@ -203,6 +206,7 @@ export default function Signup() {
     <section
       className={` ${Styles.loginMain} bg-gray-50 dark:bg-gray-900 h-full`}
     >
+      {isLoading && <CommonLoader />}
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-2">
         <a
           href="#"

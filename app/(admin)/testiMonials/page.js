@@ -10,6 +10,8 @@ import { ToastContainer, toast } from "react-toastify";
 import { GetTestimonials } from "@/api-functions/testimonial/getTestimonials";
 import { DeleteTestimonial } from "@/api-functions/testimonial/deleteTestimonial";
 import { imgApiUrl } from "@/utils/constants";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
+
 
 export default function TestiMonials() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -17,19 +19,22 @@ export default function TestiMonials() {
   const [deleteId, setDeleteId] = useState();
   const [page, setPage] = useState(1);
   const [searchData, setSearchData] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   console.log("listData", listData);
   useEffect(() => {
     getAllTestimonial();
   }, [page, searchData]);
   const getAllTestimonial = async () => {
+    setIsLoading(true);
     let testimonials = await GetTestimonials(page, searchData);
     if (testimonials?.resData?.success == true) {
       setListData(testimonials?.resData);
-      toast.success(testimonials?.resData?.message);
+      setIsLoading(false);
       return false;
     } else {
       toast.error(testimonials.errMessage);
+      setIsLoading(false);
       return false;
     }
   };
@@ -66,6 +71,7 @@ export default function TestiMonials() {
   };
   return (
     <section>
+      {isLoading && <CommonLoader />}
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
           Testimonials

@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { GetFaqApi } from "@/api-functions/faq/getFaq";
 import { DeleteFaqApi } from "@/api-functions/faq/deleteFaq";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 
 export default function Faq() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -16,20 +17,22 @@ export default function Faq() {
   const [deleteId, setDeleteId] = useState();
   const [page, setPage] = useState(1);
   const [searchData, setSearchData] = useState("");
-  console.log("listData", listData);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getAllFaq();
   }, [page, searchData]);
 
   const getAllFaq = async () => {
+    setIsLoading(true);
     let faq = await GetFaqApi(page, searchData);
     if (faq?.resData?.success == true) {
       setListData(faq?.resData);
-      toast.success(faq?.resData?.message);
+      setIsLoading(false);
       return false;
     } else {
       toast.error(faq.errMessage);
+      setIsLoading(false);
       return false;
     }
   };
@@ -37,13 +40,11 @@ export default function Faq() {
     setSearchData(e.target.value);
   };
   const handlePageChange = (newPage) => {
-    console.log(newPage);
     setPage(newPage);
   };
   const handleDelete = async () => {
     // Perform delete operation
     let res = await DeleteFaqApi(deleteId);
-    console.log(" testimonial res", res);
     if (res?.resData?.success == true) {
       getAllFaq();
       setDeleteId("");
@@ -66,6 +67,7 @@ export default function Faq() {
   };
   return (
     <section>
+      {isLoading && <CommonLoader />}
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
           FAQ

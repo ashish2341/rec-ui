@@ -10,6 +10,7 @@ import { API_BASE_URL } from "@/utils/constants";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { imgApiUrl } from "@/utils/constants";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 
 
 export default function Feature() {
@@ -18,18 +19,20 @@ export default function Feature() {
   const [deleteId, setDeleteId] = useState();
   const [page, setPage] = useState(1);
   const [searchData, setSearchData] = useState("");
-
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     getAllFeature();
   }, [page, searchData]);
   const getAllFeature = async () => {
+    setIsLoading(true);
     let feature = await getFeatures(page, searchData);
     if (feature?.resData?.success == true) {
       setListData(feature?.resData);
-      toast.success(feature?.resData?.message);
+      setIsLoading(false);
       return false;
     } else {
       toast.error(feature.errMessage);
+      setIsLoading(false);
       return false;
     }
   };
@@ -65,6 +68,8 @@ export default function Feature() {
   };
   return (
     <section>
+            {isLoading && <CommonLoader />}
+
       <div className="p-3 relative overflow-x-auto shadow-md sm:rounded-lg">
         <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
           Features

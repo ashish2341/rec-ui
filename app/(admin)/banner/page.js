@@ -11,6 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { GetAllBannerApi } from "@/api-functions/banner/getAllBanner";
 import { DeleteBannerApi } from "@/api-functions/banner/deleteBanner";
 import { imgApiUrl } from "@/utils/constants";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 
 export default function Banner() {
  
@@ -19,18 +20,21 @@ export default function Banner() {
      const [deleteId, setDeleteId] = useState();
   //   const [page, setPage] = useState(1);
      const [searchData,setSearchData]=useState("")
+     const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     GetAllBannerData();
   }, [searchData]);
   const GetAllBannerData = async () => {
+    setIsLoading(true);
     let bannersImage = await GetAllBannerApi(searchData);
     if (bannersImage?.resData?.success == true) {
       setListData(bannersImage?.resData);
-      toast.success(bannersImage?.resData?.message);
+      setIsLoading(false);
       return false;
     } else {
       toast.error(bannersImage?.errMessage);
+      setIsLoading(false);
       return false;
     }
   };
@@ -68,6 +72,7 @@ export default function Banner() {
     }
   return (
     <section>
+      {isLoading && <CommonLoader />}
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3">
         <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
           Banner

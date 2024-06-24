@@ -34,7 +34,6 @@ export default function Sidebar({ children }) {
   const closeDropdown = () => {
     setIsDropdownOpen(false);
   };
-
   // Function to handle clicks outside the dropdown
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {

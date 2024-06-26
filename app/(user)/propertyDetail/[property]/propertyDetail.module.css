@@ -476,12 +476,12 @@
   flex-wrap: wrap;
 }
 
-@media screen and (min-width: 768px) and (max-width: 1024px) {
+@media screen and (min-width: 2560px) {
   .AccordionContentInner{
-    grid-template-columns: auto auto    !important;
+    grid-template-columns: auto auto auto  auto auto auto  auto auto  !important;
   }
   .AccordionContentInner2{
-    grid-template-columns: auto auto auto !important;
+    grid-template-columns: auto auto auto auto auto auto  auto auto !important;
   }
 }
 @media screen and (min-width: 700px) and (max-width: 1100px) {

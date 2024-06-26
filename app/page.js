@@ -30,7 +30,9 @@ import NotifyUserModal from "@/components/common/notifyUserModal";
 import CommonLoader from "@/components/common/commonLoader/commonLoader";
 // import Skeleton from 'react-loading-skeleton';
 // import 'react-loading-skeleton/dist/skeleton.css'
-
+import "flowbite";
+import { Carousel } from "flowbite-react";
+import { data } from "autoprefixer";
 export default function Home() {
   const sliderTestimonial = useRef(null);
   const [Name, setName] = useState("");
@@ -119,7 +121,27 @@ export default function Home() {
     loading: bannerDataLoading,
     error: bannerDataError,
   } = useFetch(`${API_BASE_URL}/banner/allbanner?page=1&pageSize=5`);
+  useEffect(() => {
+    // Function to reinitialize Flowbite carousel
+    const initCarousels = () => {
+      // Check if the Flowbite Carousel class is available in the window object
+      if (window.Carousel) {
+        document.querySelectorAll("[data-carousel]").forEach((carousel) => {
+          new window.Carousel(carousel, {
+            interval: 3000, // Example option, customize as needed
+            pause: false, // Example option, customize as needed
+          });
+        });
+      } else {
+        console.error(
+          "Flowbite Carousel class is not available in the window object."
+        );
+      }
+    };
 
+    // Call the function to initialize the carousel
+    initCarousels();
+  }, [bannerData]);
   const ShowApartmentProperties = () => {
     return propertyByapartmentType?.data?.map((item, index) => (
       <Link
@@ -475,30 +497,16 @@ export default function Home() {
   useEffect(() => {
     initFlowbite(); // Call initCarousels() when component mounts
   }, []);
-
+  console.log("banner data", bannerData);
   return (
     <main className={styles.main}>
-      {loaderIsLoading &&
-        propertyByAreaDataLoading &&
-        bannerDataLoading &&
-        faqLoading &&
-        testimonialDataLoading &&
-        propertyByZodaicLoading &&
-        propertyByAllPropertiesLoading &&
-        popularPropertiesLoading &&
-        apartmentTypeLoading && <CommonLoader />}
+      {bannerDataLoading && <CommonLoader />}
       <Navbar />
       {/* {isLoading && <Spinner />} */}
-      <div
-        id="controls-carousel"
-        className={`${styles.banner} relative w-full`}
-        data-carousel="static"
-      >
-        <div className={`${styles.bannerHidden} relative h-full rounded-lg`}>
-          <div
-            className="crousalItem hidden duration-700 ease-in-out"
-            data-carousel-item="active"
-          >
+
+      <div className={`${styles.banner} relative h-56 overflow-hidden rounded-lg md:h-96`}>
+        {bannerData ? (
+          <Carousel indicators={false} slide={false}>
             <div className={`${styles.crousalItemContentMain}`}>
               <div className={`${styles.crousalItemLeftMain}`}>
                 <div className={`${styles.crousalItemLeftContent}`}>
@@ -549,80 +557,21 @@ export default function Home() {
                 )}
               </div>
             </div>
-          </div>
-          <div
-            className="overflow-hidden duration-700 ease-in-out"
-            data-carousel-item
-          >
-          
 
-            <img
-              src={`${imgApiUrl}/${bannerData?.data[1].Url}`}
-              className={`${styles.crousalItemLeftImageS} absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
-              alt="...a"
-            />
-          </div>
-          {/*
-               {bannerData?.data.map(item => (
-               <div className="overflow-hidden duration-700 ease-in-out" data-carousel-item>
-            <img
-              src={item.Url}
-              className= {`${styles.crousalItemLeftImageS} absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
-              alt="...a"
-            />
-          </div>
+            {bannerData?.data?.slice(1,bannerData?.data?.length-1).map((banneritem, index) => (
+             
+                <img
+                 key={index}
+                  src={`${imgApiUrl}/${banneritem?.Url}`}
+                  className="absolute block w-full h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                  alt={`Slide ${index}`}
+                />
+            
             ))}
-          */}
-          <div
-            className="overflow-hidden duration-700 ease-in-out"
-            data-carousel-item
-          >
-            <img
-              src={`${imgApiUrl}/${bannerData?.data[2].Url}`}
-              className={`${styles.crousalItemLeftImageS} absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
-              alt="...a"
-            />
-          </div>
-          <div
-            className="overflow-hidden duration-700 ease-in-out"
-            data-carousel-item
-          >
-            <img
-              src={`${imgApiUrl}/${bannerData?.data[3].Url}`}
-              className={`${styles.crousalItemLeftImageS} absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
-              alt="...a"
-            />
-          </div>
-        </div>
-        <button
-          type="button"
-          className={` ${styles.crousalItemLeftArrowBtn} absolute bottom-0 h-16 z-30 flex items-end justify-center px-4 cursor-pointer group focus:outline-none`}
-          data-carousel-prev
-        >
-          <span
-            className={` ${styles.crousalItemLeftArrowSpan} inline-flex items-end justify-center dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none `}
-          >
-            <i
-              className={` ${styles.crousalItemArrowIcon} bi bi-arrow-left `}
-            ></i>
-            <span className="sr-only">Previous</span>
-          </span>
-        </button>
-        <button
-          type="button"
-          className={`  absolute bottom-0 end-0 z-30 flex items-end justify-center h-16 px-4 cursor-pointer group focus:outline-none`}
-          data-carousel-next
-        >
-          <span
-            className={` ${styles.crousalItemRightArrowSpan} inline-flex items-end justify-center dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none `}
-          >
-            <i
-              className={` ${styles.crousalItemArrowIconRight} bi bi-arrow-right `}
-            ></i>
-            <span className="sr-only">Next</span>
-          </span>
-        </button>
+          </Carousel>
+        ) : null}
       </div>
+
       <NotifyUserModal />
       <div className={`${styles.campassDirection} flex flex-wrap`}>
         <div className={styles.campassMain}>
@@ -816,7 +765,7 @@ export default function Home() {
             </div>
           </div>
           <div className={`${styles.buyingZodicRight}`}>
-            <img src="/img/bestBuyImg.png" alt="" />
+            <img src="/img/bestBuyImg.png" className={`${styles.ImageResponsive}`} alt="" />
           </div>
         </div>
       </div>

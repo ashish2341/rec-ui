@@ -293,6 +293,196 @@ const FeaturedProperty = (params) => {
         <div className={`${styles.heroSection} heroSection `}>
           <div className="text-sm font-medium text-center text-black-500 border-black-900 dark:text-gray-400 dark:border-gray-700">
             <ul className="flex flex-wrap -mb-px ml-3">
+            <li className="me-2 mt-3">
+                <button
+                  id="multiLevelDropdownButton"
+                  data-dropdown-toggle="multi-dropdown"
+                  className="text-black bg-white border border-black hover:bg-white-800 focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
+                  type="button"
+                >
+                  More Filter
+                  <svg
+                    className="w-2.5 h-2.5 ms-3"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m1 1 4 4 4-4"
+                    />
+                  </svg>
+                </button>
+
+                <div
+                  id="multi-dropdown"
+                  className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-38 dark:bg-gray-700"
+                >
+                  <ul
+                    className="p-2 text-sm text-gray-700 dark:text-gray-200"
+                    aria-labelledby="multiLevelDropdownButton"
+                  >
+                    {/* Feature */}
+                    <li>
+                      <button
+                        id="doubleDropdownButton"
+                        data-dropdown-toggle="doubleDropdown"
+                        data-dropdown-placement="right-start"
+                        type="button"
+                        className="flex items-center justify-between w-full px-4 py-2 hover:bg-white dark:hover:bg-white dark:text-white"
+                      >
+                        Feature
+                        <svg
+                          className="w-2.5 h-2.5 ms-3 rtl:rotate-180"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 6 10"
+                        >
+                          <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="m1 9 4-4-4-4"
+                          />
+                        </svg>
+                      </button>
+                      <div
+                        id="doubleDropdown"
+                        className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 overflow-y-auto"
+                      >
+                        <ul
+                          // className="p-2 text-sm text-gray-700 dark:text-gray-200 flex flex-wrap"
+                          className="h-48  overflow-y-auto grid gap-1  p-2 md:grid-cols-1"
+                          aria-labelledby="doubleDropdownButton"
+                        >
+                          {featureData ? (
+                            featureData.data.map((item, index) => (
+                              <li key={index} className=" mb-2">
+                                {" "}
+                                {/* Ensure each item takes 1/3 of the width */}
+                                <div className="flex items-center p-1 rounded hover:bg-white dark:hover:bg-gray-600">
+                                  <input
+                                    id={`checkbox-item-${item._id}`}
+                                    type="checkbox"
+                                    value={JSON.stringify({
+                                      id: item._id,
+                                      label: item.Feature,
+                                    })}
+                                    checked={payload.feature.some(
+                                      (obj) => obj.id === item._id
+                                    )}
+                                    name="feature"
+                                    onChange={handleCheckBoxChange}
+                                    className=" text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                                  />
+                                  <label
+                                    htmlFor={`checkbox-item-${item._id}`}
+                                    className="text-sm font-medium text-gray-900 rounded dark:text-gray-300 sm:w-full  ml-3"
+                                  >
+                                    {item.Feature}
+                                  </label>
+                                </div>
+                              </li>
+                            ))
+                          ) : (
+                            <li>
+                              <a
+                                href="#"
+                                className="block px-4 py-2 hover:bg-white dark:hover:bg-gray-200 dark:hover:text-white"
+                              >
+                                No data found
+                              </a>
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+                    </li>
+                    {/* Bathroom */}
+                    <li>
+                      <button
+                        id="bathroomDropdownButton"
+                        data-dropdown-toggle="bathroomDropdown"
+                        data-dropdown-placement="right-start"
+                        type="button"
+                        className="flex items-center justify-between w-full px-4 py-2 hover:bg-white dark:hover:bg-white dark:text-white"
+                      >
+                        Bathroom
+                        <svg
+                          className="w-2.5 h-2.5 ms-3 rtl:rotate-180"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 6 10"
+                        >
+                          <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="m1 9 4-4-4-4"
+                          />
+                        </svg>
+                      </button>
+                      <div
+                        id="bathroomDropdown"
+                        className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-40  dark:bg-gray-700"
+                      >
+                        <ul
+                          // className="p-2 text-sm text-gray-700 dark:text-gray-200 flex flex-wrap"
+                          className="grid gap-1  p-2 md:grid-cols-2"
+                          aria-labelledby="bathroomDropdownButton"
+                        >
+                          {bathroomArray ? (
+                            bathroomArray.map((item, index) => (
+                              <li key={index} className="w-1/3 mb-2">
+                                {" "}
+                                {/* Ensure each item takes 1/3 of the width */}
+                                <div className="flex items-center p-1 rounded hover:bg-white dark:hover:bg-gray-600">
+                                  <input
+                                    id={`checkbox-item-${item._id}`}
+                                    type="checkbox"
+                                    value={JSON.stringify({
+                                      id: item.value,
+                                      label: item.label,
+                                    })}
+                                    checked={payload.bathroom.some(
+                                      (obj) => obj.id === item.value
+                                    )}
+                                    name="bathroom"
+                                    onChange={handleCheckBoxChange}
+                                    className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                                  />
+                                  <label
+                                    htmlFor={`checkbox-item-${item._id}`}
+                                    className="text-sm font-medium text-gray-900 rounded dark:text-gray-300 sm:w-full  ml-3"
+                                  >
+                                    {item.label}
+                                  </label>
+                                </div>
+                              </li>
+                            ))
+                          ) : (
+                            <li>
+                              <a
+                                href="#"
+                                className="block px-4 py-2 hover:bg-white dark:hover:bg-gray-200 dark:hover:text-white"
+                              >
+                                No data found
+                              </a>
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </li>
               {/* Facing */}
               <li className="me-2 mt-3">
                 <button
@@ -397,7 +587,7 @@ const FeaturedProperty = (params) => {
                   className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-54 dark:bg-gray-700"
                 >
                   <ul
-                    className="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
+                    className="p-3 h-48  overflow-y-auto space-y-1 text-sm text-gray-700 dark:text-gray-200"
                     aria-labelledby="dropdownPropertyTypeButton"
                   >
                     {propertyTypeData ? (
@@ -801,196 +991,7 @@ const FeaturedProperty = (params) => {
                 </div>
               </li>
               {/* More Filter */}
-              <li className="me-2 mt-3">
-                <button
-                  id="multiLevelDropdownButton"
-                  data-dropdown-toggle="multi-dropdown"
-                  className="text-black bg-white border border-black hover:bg-white-800 focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
-                  type="button"
-                >
-                  More Filter
-                  <svg
-                    className="w-2.5 h-2.5 ms-3"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 10 6"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m1 1 4 4 4-4"
-                    />
-                  </svg>
-                </button>
-
-                <div
-                  id="multi-dropdown"
-                  className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-                >
-                  <ul
-                    className="p-2 text-sm text-gray-700 dark:text-gray-200"
-                    aria-labelledby="multiLevelDropdownButton"
-                  >
-                    {/* Feature */}
-                    <li>
-                      <button
-                        id="doubleDropdownButton"
-                        data-dropdown-toggle="doubleDropdown"
-                        data-dropdown-placement="right-start"
-                        type="button"
-                        className="flex items-center justify-between w-full px-4 py-2 hover:bg-white dark:hover:bg-white dark:text-white"
-                      >
-                        Feature
-                        <svg
-                          className="w-2.5 h-2.5 ms-3 rtl:rotate-180"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 6 10"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="m1 9 4-4-4-4"
-                          />
-                        </svg>
-                      </button>
-                      <div
-                        id="doubleDropdown"
-                        className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-96 sm:w-36 dark:bg-gray-700"
-                      >
-                        <ul
-                          // className="p-2 text-sm text-gray-700 dark:text-gray-200 flex flex-wrap"
-                          className="grid gap-1  p-2 md:grid-cols-2"
-                          aria-labelledby="doubleDropdownButton"
-                        >
-                          {featureData ? (
-                            featureData.data.map((item, index) => (
-                              <li key={index} className="w-1/3 mb-2">
-                                {" "}
-                                {/* Ensure each item takes 1/3 of the width */}
-                                <div className="flex items-center p-1 rounded hover:bg-white dark:hover:bg-gray-600">
-                                  <input
-                                    id={`checkbox-item-${item._id}`}
-                                    type="checkbox"
-                                    value={JSON.stringify({
-                                      id: item._id,
-                                      label: item.Feature,
-                                    })}
-                                    checked={payload.feature.some(
-                                      (obj) => obj.id === item._id
-                                    )}
-                                    name="feature"
-                                    onChange={handleCheckBoxChange}
-                                    className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                  />
-                                  <label
-                                    htmlFor={`checkbox-item-${item._id}`}
-                                    className="text-sm font-medium text-gray-900 rounded dark:text-gray-300 sm:w-full  ml-3"
-                                  >
-                                    {item.Feature}
-                                  </label>
-                                </div>
-                              </li>
-                            ))
-                          ) : (
-                            <li>
-                              <a
-                                href="#"
-                                className="block px-4 py-2 hover:bg-white dark:hover:bg-gray-200 dark:hover:text-white"
-                              >
-                                No data found
-                              </a>
-                            </li>
-                          )}
-                        </ul>
-                      </div>
-                    </li>
-                    {/* Bathroom */}
-                    <li>
-                      <button
-                        id="bathroomDropdownButton"
-                        data-dropdown-toggle="bathroomDropdown"
-                        data-dropdown-placement="right-start"
-                        type="button"
-                        className="flex items-center justify-between w-full px-4 py-2 hover:bg-white dark:hover:bg-white dark:text-white"
-                      >
-                        Bathroom
-                        <svg
-                          className="w-2.5 h-2.5 ms-3 rtl:rotate-180"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 6 10"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="m1 9 4-4-4-4"
-                          />
-                        </svg>
-                      </button>
-                      <div
-                        id="bathroomDropdown"
-                        className="z-10 hidden bg-gray-200 divide-y divide-gray-100 rounded-lg shadow w-40  dark:bg-gray-700"
-                      >
-                        <ul
-                          // className="p-2 text-sm text-gray-700 dark:text-gray-200 flex flex-wrap"
-                          className="grid gap-1  p-2 md:grid-cols-2"
-                          aria-labelledby="bathroomDropdownButton"
-                        >
-                          {bathroomArray ? (
-                            bathroomArray.map((item, index) => (
-                              <li key={index} className="w-1/3 mb-2">
-                                {" "}
-                                {/* Ensure each item takes 1/3 of the width */}
-                                <div className="flex items-center p-1 rounded hover:bg-white dark:hover:bg-gray-600">
-                                  <input
-                                    id={`checkbox-item-${item._id}`}
-                                    type="checkbox"
-                                    value={JSON.stringify({
-                                      id: item.value,
-                                      label: item.label,
-                                    })}
-                                    checked={payload.bathroom.some(
-                                      (obj) => obj.id === item.value
-                                    )}
-                                    name="bathroom"
-                                    onChange={handleCheckBoxChange}
-                                    className="w-4 h-4 text-blue-600 bg-white-100 border-white-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                  />
-                                  <label
-                                    htmlFor={`checkbox-item-${item._id}`}
-                                    className="text-sm font-medium text-gray-900 rounded dark:text-gray-300 sm:w-full  ml-3"
-                                  >
-                                    {item.label}
-                                  </label>
-                                </div>
-                              </li>
-                            ))
-                          ) : (
-                            <li>
-                              <a
-                                href="#"
-                                className="block px-4 py-2 hover:bg-white dark:hover:bg-gray-200 dark:hover:text-white"
-                              >
-                                No data found
-                              </a>
-                            </li>
-                          )}
-                        </ul>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </li>
+              
             </ul>
           </div>
         </div>

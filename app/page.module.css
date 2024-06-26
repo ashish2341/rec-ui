@@ -13,6 +13,9 @@
   display: flex !important;
   height: 100%;
 }
+.crousalItemContent {
+  height: 100%;
+}
 .crousalItemLeftMain {
   width: 64%;
   background-color: #2a4ac8;
@@ -103,6 +106,7 @@
 }
 .crousalItemLeftImage {
   height: 100%;
+
 }
 .crousalItemLeftArrowBtn {
   inset-inline-end: 4rem;
@@ -1123,5 +1127,9 @@
   .buyingZodicLeft {
     margin-top: 4rem;
     padding-right: 10%;
+  }
+  .crousalItemLeftImage {
+    width: 100% !important;
+  
   }
 }

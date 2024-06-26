@@ -454,7 +454,7 @@ const PropertyDetail = ({ params }) => {
       const targetElement = document.getElementById(targetId);
 
       window.scrollTo({
-        top: targetElement.offsetTop - menuRef.current.offsetHeight - 100,
+        top: targetElement.offsetTop - menuRef.current.offsetHeight - 90,
         behavior: "smooth",
       });
     };

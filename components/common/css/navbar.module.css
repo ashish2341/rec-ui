@@ -1,23 +1,53 @@
-.navbarStyle{
-    justify-content: space-around;
+.navbarStyle {
+  justify-content: space-around;
 }
 
-.NavBarSearchButton{
-    height: 2rem;
-    margin-top: 0.1rem;
-    margin-right: 0.1rem;
+.NavBarSearchButton {
+  height: 2rem;
+  margin-top: 0.1rem;
+  margin-right: 0.1rem;
 }
 
-.NavBarSearchIcon{
-    display: grid;
-    align-items: center;
+.NavBarSearchIcon {
+  display: grid;
+  align-items: center;
 }
 
-.navbarStyleBaseLine{
-    align-items: baseline;
+.navbarStyleBaseLine {
+  align-items: baseline;
 }
-@media screen and (min-width: 320px ) and (max-width: 360px) {
+@media screen and (min-width: 320px) and (max-width: 360px) {
+  .recLogo {
+    height: 3rem !important;
+    width: 3rem !important;
+    margin-right: 1rem !important;
+  }
+  .loginBtn {
+    margin-left: 0.5rem !important;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  .navbarStyle{
+    padding-left: 0.5rem !important;
+  }
+}
+@media screen and (min-width: 375px) and (max-width: 424px) {
+    .recLogo {
+      height: 3rem !important;
+      width: 3rem !important;
+      margin-right: 1rem !important;
+    }
+    /* .loginBtn {
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
+    } */
     .navbarStyle{
-      flex-wrap: nowrap !important;
+      padding-left: 0.5rem !important;
+    }
+  }
+
+  @media screen and (min-width: 425px) and (max-width: 1023px) {
+    .navbarStyle{
+      margin-left: 1rem;
     }
   }

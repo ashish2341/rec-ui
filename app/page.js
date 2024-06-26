@@ -497,77 +497,80 @@ export default function Home() {
   useEffect(() => {
     initFlowbite(); // Call initCarousels() when component mounts
   }, []);
-  console.log("banner data", bannerData);
   return (
     <main className={styles.main}>
       {bannerDataLoading && <CommonLoader />}
       <Navbar />
       {/* {isLoading && <Spinner />} */}
 
-      <div className={`${styles.banner} relative h-56 overflow-hidden rounded-lg md:h-96`}>
+      <div
+        className={`${styles.banner} relative h-56 overflow-hidden rounded-lg md:h-96`}
+      >
         {bannerData ? (
           <Carousel indicators={false} slide={false}>
-            <div className={`${styles.crousalItemContentMain}`}>
-              <div className={`${styles.crousalItemLeftMain}`}>
-                <div className={`${styles.crousalItemLeftContent}`}>
-                  <h2 className={`${styles.crousalItemLeftMainHeading}`}>
-                    Looking for a home is always easier
-                  </h2>
-                  <p className={`${styles.crousalItemLeftMainPara}`}>
-                    Welcome to REC.in, your trusted partner in the journey of
-                    finding the perfect home. At REC.in, we understand that
-                    finding the right home is more than just a transaction -
-                    it's about finding a place where memories are made, dreams
-                    are realized, and futures are built.
-                  </p>
-                  <div className={`${styles.crousalItemAdvMain} flex`}>
-                    <div className={`${styles.crousalItemAdvContent}`}>
-                      <h2 className={`${styles.crousalItemAdvNumber}`}>
-                        1500+
-                      </h2>
-                      <p className={`${styles.crousalItemAdvText}`}>
-                        Premium Product
-                      </p>
+            <div className={`${styles.crousalItemContent}`}>
+              <div className={`${styles.crousalItemContentMain}`}>
+                <div className={`${styles.crousalItemLeftMain}`}>
+                  <div className={`${styles.crousalItemLeftContent}`}>
+                    <h2 className={`${styles.crousalItemLeftMainHeading}`}>
+                      Looking for a home is always easier
+                    </h2>
+                    <p className={`${styles.crousalItemLeftMainPara}`}>
+                      Welcome to REC.in, your trusted partner in the journey of
+                      finding the perfect home. At REC.in, we understand that
+                      finding the right home is more than just a transaction -
+                      it's about finding a place where memories are made, dreams
+                      are realized, and futures are built.
+                    </p>
+                    <div className={`${styles.crousalItemAdvMain} flex`}>
+                      <div className={`${styles.crousalItemAdvContent}`}>
+                        <h2 className={`${styles.crousalItemAdvNumber}`}>
+                          1500+
+                        </h2>
+                        <p className={`${styles.crousalItemAdvText}`}>
+                          Premium Product
+                        </p>
+                      </div>
+                      <div className={`${styles.crousalItemAdvContent}`}>
+                        <h2 className={`${styles.crousalItemAdvNumber}`}>
+                          5500+
+                        </h2>
+                        <p className={`${styles.crousalItemAdvText}`}>
+                          Happy Customer
+                        </p>
+                      </div>
                     </div>
-                    <div className={`${styles.crousalItemAdvContent}`}>
-                      <h2 className={`${styles.crousalItemAdvNumber}`}>
-                        5500+
-                      </h2>
-                      <p className={`${styles.crousalItemAdvText}`}>
-                        Happy Customer
-                      </p>
-                    </div>
+                    <SearchBar />
                   </div>
-                  <SearchBar />
                 </div>
-              </div>
-              <div
-                className={`${styles.crousalItemRightMain} overflow-hidden  `}
-              >
-                {bannerData ? (
-                  <img
-                    src={`${imgApiUrl}/${bannerData?.data[0].Url}`}
-                    className={`${styles.crousalItemLeftImage} block`}
-                    alt="...a"
-                  />
-                ) : (
-                  <div className={`${styles.LoaderHeight}  `}>
-                    <Spinner className="mt-70" />
-                  </div>
-                )}
+                <div
+                  className={`${styles.crousalItemRightMain} overflow-hidden  `}
+                >
+                  {bannerData ? (
+                    <img
+                      src={`${imgApiUrl}/${bannerData?.data[0].Url}`}
+                      className={`${styles.crousalItemLeftImage} `}
+                      alt="...a"
+                    />
+                  ) : (
+                    <div className={`${styles.LoaderHeight}  `}>
+                      <Spinner className="mt-70" />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
-            {bannerData?.data?.slice(1,bannerData?.data?.length-1).map((banneritem, index) => (
-             
+            {bannerData?.data
+              ?.slice(1, bannerData?.data?.length - 1)
+              .map((banneritem, index) => (
                 <img
-                 key={index}
+                  key={index}
                   src={`${imgApiUrl}/${banneritem?.Url}`}
                   className="absolute block w-full h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
                   alt={`Slide ${index}`}
                 />
-            
-            ))}
+              ))}
           </Carousel>
         ) : null}
       </div>
@@ -765,7 +768,11 @@ export default function Home() {
             </div>
           </div>
           <div className={`${styles.buyingZodicRight}`}>
-            <img src="/img/bestBuyImg.png" className={`${styles.ImageResponsive}`} alt="" />
+            <img
+              src="/img/bestBuyImg.png"
+              className={`${styles.ImageResponsive}`}
+              alt=""
+            />
           </div>
         </div>
       </div>

@@ -33,6 +33,7 @@ import SortByButton from "@/components/common/sortbyButton/sortByButton";
 import PriceRangeSlider from "@/components/common/priceRangeModal/priceRangeModal";
 import InfiniteScroll from "react-infinite-scroll-component";
 import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 const PropertyListPage = (params) => {
   // fetching Data for facing
   const {
@@ -110,6 +111,7 @@ const PropertyListPage = (params) => {
   const [resetBtnValue, setResetBtnValue] = useState(false);
   const [rangeModalvalue, setRangeModalValue] = useState(true);
   const [hasMore, setHasMore] = useState(true);
+  const [loaderIsLoading, setLoaderIsLoading] = useState(false);
 
   useEffect(() => {
     setPayload((prevPayload) => ({
@@ -165,6 +167,7 @@ const PropertyListPage = (params) => {
   }, []);
 
   const getAllFilterProperties = async (payloadData) => {
+    setLoaderIsLoading(true)
     let properties = await GetPropertyByQueryApi(payloadData);
     if (properties?.resData?.success == true) {
       setListData(properties?.resData.data);
@@ -172,9 +175,11 @@ const PropertyListPage = (params) => {
         properties?.resData?.data.slice(0, propertyCardToShow)
       );
       setHasMore(true);
+      setLoaderIsLoading(false)
       return false;
     } else {
       toast.error(properties?.errMessage);
+      setLoaderIsLoading(false)
       return false;
     }
   };
@@ -303,6 +308,7 @@ const PropertyListPage = (params) => {
   };
   return (
     <>
+    {loaderIsLoading && <CommonLoader />}
       <Navbar />
 
       <div className={`${styles.forSticky}`}>

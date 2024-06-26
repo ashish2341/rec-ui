@@ -24,6 +24,7 @@ import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
 import Link from "next/link";
 import LoadingSideImg from "@/components/common/sideImgLoader";
 import LoadingSideSmallImg from "@/components/common/sideSmallImgLoader";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 
 const BuilderPage = () => {
   const [search, setSearch] = useState("");
@@ -38,6 +39,7 @@ const BuilderPage = () => {
 
   const [builderData, setBuilderData] = useState("");
   const [loading, setLoading] = useState(true);
+  const [loaderIsLoading, setLoaderIsLoading] = useState(false);
 
   useEffect(() => {
     getAllBuilder();
@@ -48,13 +50,16 @@ const BuilderPage = () => {
   }, [developLoading]);
 
   const getAllBuilder = async () => {
+    setLoaderIsLoading(true)
     let builder = await GetBuilderApi(search);
     if (builder?.resData?.success == true) {
       setBuilderData(builder?.resData);
       toast.success(builder?.resData?.message);
+      setLoaderIsLoading(false)
       setLoading(false);
     } else {
       toast.error(builder?.errMessage);
+      setLoaderIsLoading(false)
       setLoading(false);
     }
   };
@@ -62,9 +67,12 @@ const BuilderPage = () => {
   const handleSearch = (e) => {
     setSearch(e.target.value);
   };
-
+  useEffect(() => {
+    initFlowbite();
+}, []);
   return (
     <>
+    {loaderIsLoading && <CommonLoader />}
       <Navbar />
       <div className={` ${styles.divideDetailPage} divideDetailPage`}>
         <div className={` ${styles.builderTop} mb-10`}>

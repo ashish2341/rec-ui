@@ -213,127 +213,144 @@ export default function Dashboard() {
   return (
     <>
       <div className={`${styles.dashboardContainer}`}>
-        <div className={`grid grid-cols-2 gap-4`}>
+        <div className={`${styles.ALLConatiner}`}>
           {roles.includes("Admin") && (
             <>
               {/* User card */}
               {adminDashboardData ? (
-                <div>
-                  <Card
-                    className={`col-span-2  text-nowrap ${styles.showCard1}`}
-                  >
-                    <div className="flex">
-                      <Link href="/users" className="focus:outline ">
-                        <div className="text-center">
-                          <h2
-                            className={`text-xl font-bold mb-4 tracking-wide ${styles.dataSection1} `}
-                          >
-                            <div className={`${styles.IconOutline}`}>
-                              <i
-                                className={`bi bi-file-earmark-person text-4xl ${styles.IconsColor}`}
-                                aria-hidden="true"
-                              ></i>
-                            </div>
-                            <div className={`${styles.firstCard}`}>
-                              <p className="text-5xl font-bold mt-2">
-                                {adminDashboardData?.totalUser - 1}
-                              </p>
-                              <p className="text-sm font-semibold mt-2">
-                                Total User
-                              </p>
-                            </div>
-                          </h2>
-                        </div>
-                      </Link>
-                      <div className="text-nowrap">
-                        <Link
-                          href={`/users?todayUser=yes`}
-                          className={`${styles.InvertedUserColor} `}
+                <div className={` flex ${styles.showResponsive1}`}>
+                  <Card className={`text-nowrap rounded-xl p-0 ${styles.showCard1} mr-1 mb-6`}>
+                    <Link href="/users">
+                      <div className="text-start">
+                        <h2
+                          className={`text-xl font-bold tracking-wide ${styles.dataSection1}  `}
                         >
-                          <p
-                            className={`text-2xl font-bold mt-4  ${styles.UserColor} hover:underline `}
-                          >
-                            {adminDashboardData?.todayUsers}{" "}
-                            <span className={`font-normal nowrap `}>
-                              Today Joined User{" "}
-                            </span>
-                          </p>
-                        </Link>
-                        <Link
-                          href={`/users?type=builder`}
-                          className={`${styles.InvertedUserColor} hover:underline`}
-                        >
-                          <p
-                            className={`text-2xl font-bold mt-4  ${styles.UserColor} hover:underline`}
-                          >
-                            {adminDashboardData?.totalBuilder}{" "}
-                            <span className={`font-normal nowrap `}>
-                              {" "}
-                              Builder
-                            </span>
-                          </p>
-                        </Link>
+                          <div>
+                            <img
+                              src="../../../img/questionnaire.png"
+                              width="50"
+                              height="50"
+                            />
+                          </div>
+                          <div className={`${styles.firstCard}`}>
+                            <p className="text-5xl font-bold mt-2">
+                              {adminDashboardData?.totalUser - 1}{" "}
+                            </p>
+                            <p className="text-sm font-semibold mt-2">
+                              Total Users
+                            </p>
+                          </div>
+                        </h2>
                       </div>
-                    </div>
+                    </Link>
                   </Card>
+
+                  <div className="flex ">
+                    <Card href={`/users?todayUser=yes`} className={`text-nowrap rounded-xl mr-1 mb-1 pr-4 ${styles.showBuilderCardInner1}`}>
+                      <div>
+                        <img
+                          src="../../../img/town.png"
+                          width="30"
+                          height="30"
+                        />
+                      </div>
+                      <div className={`${styles.firstCard}`}>
+                        <p className="text-xl font-bold">
+                          {adminDashboardData?.todayUsers}
+                        </p>
+                        <p className="text-sm font-semibold mt-2">
+                          Today Joined User
+                        </p>
+                      </div>
+                    </Card>
+                    <Card href={`/users?type=builder`} className={`text-nowrap rounded-xl mr-1 mb-1 ${styles.showBuilderCardInnerNEXT} pr-24`}>
+                      <div>
+                        <img
+                          src="../../../img/town.png"
+                          width="30"
+                          height="30"
+                        />
+                      </div>
+                      <div className={`${styles.firstCard}`}>
+                        <p className="text-xl font-bold">
+                          {adminDashboardData?.totalBuilder}
+                        </p>
+                        <p className="text-sm font-semibold mt-2">
+                          Builder
+                        </p>
+                      </div>
+                    </Card>
+                  </div>
                 </div>
               ) : (
                 <LoadingImg />
               )}
               {/* Builder card */}
               {adminDashboardData ? (
-                <div>
-                  <Card
-                    className={`col-span-2  text-nowrap ${styles.showCard2}`}
-                  >
-                    <div className="flex">
-                      <Link href="/builder">
-                        <div className="text-center">
-                          <h2
-                            className={`text-xl font-bold mb-4 tracking-wide ${styles.dataSection1}  `}
-                          >
-                            <div className={`${styles.Icon2Outline}`}>
-                              <i
-                                className={`bi bi-file-earmark-person text-4xl ${styles.Icons2Color}`}
-                                aria-hidden="true"
-                              ></i>
-                            </div>
-                            <div className={`${styles.secondCard}`}>
-                              <p className="text-5xl font-bold mt-2">
-                                {adminDashboardData?.totalBuilder}
-                              </p>
-                              <p className="text-sm font-semibold mt-2">
-                                Total Builder
-                              </p>
-                            </div>
-                          </h2>
-                        </div>
-                      </Link>
-                      <div>
-                        <Link href={`/builder?todayBuilder=yes`}>
-                          <p
-                            className={`text-2xl font-bold mt-4 ${styles.builderColor} hover:underline`}
-                          >
-                            {adminDashboardData?.todayAddBuilder}{" "}
-                            <span className={`font-normal `}>
-                              Today Joined Builder{" "}
-                            </span>
-                          </p>
-                        </Link>
-                        <Link href={`/property?type=builder`}>
-                          <p
-                            className={`text-2xl font-bold mt-4 ${styles.builderColor} hover:underline`}
-                          >
-                            {adminDashboardData?.totalBuilderProperty}{" "}
-                            <span className={`font-normal `}>
-                              Total Builder Property
-                            </span>
-                          </p>
-                        </Link>
+                <div className={` flex ${styles.showResponsive2}`}>
+                  <Card className={`text-nowrap rounded-xl col-span-1 ${styles.showCard2} mr-1 mb-3`}>
+                    <Link href="/builder">
+                      <div className="text-start">
+                        <h2
+                          className={`text-xl font-bold tracking-wide ${styles.dataSectionBuilder2}  `}
+                        >
+                          <div>
+                            <img
+                              src="../../../img/town.png"
+                              width="50"
+                              height="50"
+                            />
+                          </div>
+                          <div className={`${styles.secondCard}`}>
+                            <p className="text-5xl font-bold mt-2">
+                              {adminDashboardData?.totalBuilder}
+                            </p>
+                            <p className="text-sm font-semibold mt-2">
+                              Total Builder
+                            </p>
+                          </div>
+                        </h2>
                       </div>
-                    </div>
+                    </Link>
                   </Card>
+                  <div className="flex">
+                    <Card href={`/builder?todayBuilder=yes`} className={`text-nowrap rounded-xl p-0 mb-2 mr-1 ${styles.showBuilderCardinner2}`}>
+                      <div>
+                        <img
+                          src="../../../img/technician.png"
+                          width="30"
+                          height="30"
+                        />
+                      </div>
+                      <div className={`${styles.secondCard}`}>
+                        <p className="text-xl font-bold">
+                          {adminDashboardData?.todayAddBuilder}
+                        </p>
+                        <p className="text-sm font-semibold mt-2">
+                          Today Joined Builder
+                        </p>
+                      </div>
+                    </Card>
+                    <Card href={`/property?type=builder`} className={`text-nowrap rounded-xl p-0 ${styles.showBuilderCardinner2}`}>
+                      <div>
+                        <img
+                          src="../../../img/technician.png"
+                          width="30"
+                          height="30"
+                        />
+                      </div>
+                      <div className={`${styles.secondCard}`}>
+                        <p className="text-xl font-bold ">
+                          {adminDashboardData?.totalBuilderProperty}
+                        </p>
+                        <p className="text-sm font-semibold mt-2">
+                          Total Builder Property
+                        </p>
+                      </div>
+                    </Card>
+                  </div>
                 </div>
+
               ) : (
                 <LoadingImg />
               )}
@@ -342,83 +359,93 @@ export default function Dashboard() {
 
           {/* Property Card */}
           {adminDashboardData || builderDashboardData ? (
-            <div>
+            <div className={` ${styles.showResponsive3}`}>
               {roles.includes("Admin") ?
-                <Card className={`col-span-2 text-nowrap ${styles.showCard3}`}>
-                  <div className="flex">
-
-                    <Link href="/property">
-                      <div className="text-center">
-                        <h2
-                          className={`text-xl font-bold mb-4 tracking-wide ${styles.dataSection1}  `}
-                        >
-                          <div className={`${styles.Icon3Outline}`}>
-                            <i
-                              className={`bi bi-house text-4xl ${styles.Icons3Color}`}
-                              aria-hidden="true"
-                            ></i>
+                <div className="flex">
+                    <Card className={`text-nowrap rounded-xl ${styles.showAdminCard3} mr-1 mb-8`}>
+                      <Link href="/property">
+                        <div className="text-start">
+                          <div>
+                            <img src="../../../img/town.png" width="50" height="50" />
                           </div>
                           <div className={`${styles.propertyCard}`}>
-                            <p className="text-5xl font-bold mt-2">
+                            <p className="text-3xl font-bold mt-2">
                               {adminDashboardData?.totalProperty}
                             </p>
                             <p className="text-sm font-semibold mt-2">
                               Total Property
                             </p>
                           </div>
-                        </h2>
-                      </div>
-                    </Link>
-                    <div className="mb-10">
-                      <Link href={`/property?todayProperty=yes`}>
-                        <p
-                          className={`text-2xl mb-2 font-bold ${styles.PropColor} hover:underline`}
-                        >
-                          {adminDashboardData?.todayAddProperty}
-                          <span className={`font-normal `}>
-                            {" "}Today Added Property
-                          </span>
-                        </p>
+                          <Link href={`/property?todayProperty=yes`}>
+                            <p className={`text-lg mb-2 font-bold ${styles.PropColor} hover:underline`}>
+                              {adminDashboardData?.todayAddProperty}
+                              <span className={`font-normal`}> added today</span>
+                            </p>
+                          </Link>
+                        </div>
                       </Link>
-                      <Link href="/reviewProperty">
-                        <p
-                          className={`text-2xl mb-2 font-bold ${styles.PropColor} hover:underline`}
-                        >
-                          {adminDashboardData?.underReviewProperty}{" "}
-                          <span className={`font-normal `}>
-                            {" "} Under Review Property
-                          </span>
-                        </p>
-                      </Link>
-                      <Link href="/property">
-                        <p
-                          className={`text-2xl mb-2 font-bold ${styles.PropColor} hover:underline`}
-                        >
-                          {adminDashboardData?.approvedProperty}
-                          <span className={`font-normal `}>
-                            {" "}
-                            Approved Property{" "}
-                          </span>
-                        </p>
-                      </Link>
-                      <Link href="/property?type=Admin">
-                        <p
-                          className={`text-2xl mb-2 font-bold ${styles.PropColor} hover:underline`}
-                        >
-                          {adminDashboardData?.TotalAdminProperty}
-                          <span className={`font-normal `}>
-                            {" "}
-                            Total Admin Property{" "}
-                          </span>
-                        </p>
-                      </Link>
+                    </Card>
+                  <div className={`grid grid-cols-2 gap-x-1 ${styles.showResponsiveInner3}`}>
+
+                    <div className={`${styles.propertyCardInner}`}>
+                      <Card href="/property" className={`text-nowrap rounded-xl ${styles.showAdminCardinner3}`}>
+                        <div className="text-start">
+                          <div>
+                            <img src="../../../img/technician.png" width="50" height="50" />
+                          </div>
+                          <div className={`${styles.propertyCard}`}>
+                            <p className="text-3xl font-bold">
+                              {adminDashboardData?.approvedProperty}
+                            </p>
+                            <p className="text-sm font-semibold mt-2">
+                              Approved Property
+                            </p>
+                          </div>
+                        </div>
+                      </Card>
+                    </div>
+
+                    <div className={`${styles.propertyCardInner}`}>
+                      <Card href="/property?type=Admin" className={`text-nowrap rounded-xl ${styles.showAdminCardinner3}`}>
+                        <div className="text-start">
+                          <div>
+                            <img src="../../../img/technician.png" width="50" height="50" />
+                          </div>
+                          <div className={`${styles.propertyCard}`}>
+                            <p className="text-3xl font-bold">
+                              {adminDashboardData?.TotalAdminProperty}
+                            </p>
+                            <p className="text-sm font-semibold mt-2">
+                              Total Admin Property
+                            </p>
+                          </div>
+                        </div>
+                      </Card>
+                    </div>
+
+                    <div className={`${styles.propertyCardInner} mb-6`}>
+                      <Card href="/reviewProperty" className={`text-nowrap rounded-xl ${styles.showAdminCardinner3} `}>
+                        <div className="text-start">
+                          <div>
+                            <img src="../../../img/technician.png" width="50" height="50" />
+                          </div>
+                          <div className={`${styles.propertyCard}`}>
+                            <p className="text-3xl font-bold">
+                              {adminDashboardData?.underReviewProperty}
+                            </p>
+                            <p className="text-sm font-semibold mt-2 pr-2">
+                              Under Review Property
+                            </p>
+                          </div>
+                        </div>
+                      </Card>
                     </div>
                   </div>
-                </Card>
+                </div>
                 :
                 <>
-                  <div className="flex">
-                    <Card className={`text-nowrap rounded-xl col-span-1 ${styles.showBuilderCard3} mr-2 mb-3`}>
+                  <div className={`flex ${styles.showResponsive3}`}>
+                    <Card className={`text-nowrap rounded-xl col-span-1 ${styles.showBuilderCard3} mr-2 mb-5`}>
                       <Link href="/property">
                         <div className="text-start">
                           <h2
@@ -451,41 +478,41 @@ export default function Dashboard() {
                         </div>
                       </Link>
                     </Card>
-                    <div>
-                    <Card href="/property?showValue=false" className={`text-nowrap rounded-xl p-0 mb-2 ${styles.showBuilderCardinner3}`}>
-                      <div>
-                        <img
-                          src="../../../img/technician.png"
-                          width="30"
-                          height="30"
-                        />
-                      </div>
-                      <div className={`${styles.propertyCard}`}>
-                        <p className="text-xl font-bold">
-                          {builderDashboardData?.underReviewProperty}
-                        </p>
-                        <p className="text-sm font-semibold mt-2">
-                          Under Review Property
-                        </p>
-                      </div>
-                    </Card>
-                    <Card href="/property?showValue=true" className={`text-nowrap rounded-xl p-0 ${styles.showBuilderCardinner3}`}>
-                      <div>
-                        <img
-                          src="../../../img/technician.png"
-                          width="30"
-                          height="30"
-                        />
-                      </div>
-                      <div className={`${styles.propertyCard}`}>
-                        <p className="text-xl font-bold ">
-                          {builderDashboardData?.approvedProperty}
-                        </p>
-                        <p className="text-sm font-semibold mt-2">
-                         Approved Property
-                        </p>
-                      </div>
-                    </Card>
+                    <div className={`${styles.showResponsiveInner3}`}>
+                      <Card href="/property?showValue=false" className={`text-nowrap rounded-xl p-0 mb-2 ${styles.showBuilderCardinner3} mr-1`}>
+                        <div>
+                          <img
+                            src="../../../img/technician.png"
+                            width="30"
+                            height="30"
+                          />
+                        </div>
+                        <div className={`${styles.propertyCard}`}>
+                          <p className="text-xl font-bold">
+                            {builderDashboardData?.underReviewProperty}
+                          </p>
+                          <p className="text-sm font-semibold mt-2">
+                            Under Review Property
+                          </p>
+                        </div>
+                      </Card>
+                      <Card href="/property?showValue=true" className={`text-nowrap rounded-xl p-0 mb-2 ${styles.showBuilderCardinner3}`}>
+                        <div>
+                          <img
+                            src="../../../img/technician.png"
+                            width="30"
+                            height="30"
+                          />
+                        </div>
+                        <div className={`${styles.propertyCard}`}>
+                          <p className="text-xl font-bold ">
+                            {builderDashboardData?.approvedProperty}
+                          </p>
+                          <p className="text-sm font-semibold mt-2">
+                            Approved Property
+                          </p>
+                        </div>
+                      </Card>
                     </div>
                   </div>
                 </>
@@ -496,20 +523,21 @@ export default function Dashboard() {
           )}
           {/* Enquiry Card */}
           {adminDashboardData || builderDashboardData ? (
-            <div>
+            <div className={`${styles.showResponsive4}`}>
               {roles.includes("Admin") ?
-                <Card className={`col-span-2  text-nowrap ${styles.showCard4}`}>
-                  <div className="flex">
+                <div className={`flex`}>
+                  <Card className={`text-nowrap rounded-xl p-0 ${styles.showBuilderCard4} mr-1`}>
                     <Link href="/projectInquiry">
-                      <div className="text-center">
+                      <div className="text-start">
                         <h2
-                          className={`text-xl font-bold mb-4  tracking-wide ${styles.dataSection1} `}
+                          className={`text-xl font-bold tracking-wide ${styles.dataSectionBuilder1}  `}
                         >
-                          <div className={`${styles.IconOutline}`}>
-                            <i
-                              className={`bi bi-chat-square-text text-4xl ${styles.Icons4Color}`}
-                              aria-hidden="true"
-                            ></i>
+                          <div>
+                            <img
+                              src="../../../img/questionnaire.png"
+                              width="50"
+                              height="50"
+                            />
                           </div>
                           <div className={`${styles.enquiryCard}`}>
                             <p className="text-5xl font-bold mt-2">
@@ -519,64 +547,95 @@ export default function Dashboard() {
                               Total Enquiry
                             </p>
                           </div>
+                          <Link href={`/projectInquiry?todayEnquiry=yes`}>
+                            <p
+                              className={`text-lg font-bold ${styles.EnqColor} hover:underline `}
+                            >
+                              {adminDashboardData?.todayEnquiry}{" "}
+                              <span className={`font-normal `}>Today's Enquiry </span>
+                            </p>
+                          </Link>
+
                         </h2>
+
                       </div>
                     </Link>
-                    <div>
-                      <Link href={`/projectInquiry?todayEnquiry=yes`}>
-                        <p
-                          className={`text-2xl font-bold ${styles.EnqColor} hover:underline `}
-                        >
-                          {adminDashboardData?.todayEnquiry}{" "}
-                          <span className={`font-normal `}>Today's Enquiry </span>
+                  </Card>
+
+                  <div className={`grid grid-cols-2 ${styles.showResponsiveInner3}`}>
+                    <Card href={`/projectInquiry?type=Astrology`} className={`text-nowrap rounded-xl p-0 mr-1 ${styles.showAdminCardInner4}`}>
+                      <div>
+                        <img
+                          src="../../../img/astrology.png"
+                          width="30"
+                          height="30"
+                        />
+                      </div>
+                      <div className={`${styles.enquiryCard}`}>
+                        <p className="text-xl font-bold">
+                          {adminDashboardData?.totalEnquiryAstrology}
                         </p>
-                      </Link>
-                      <Link href={`/projectInquiry?type=Astrology`}>
-                        <p
-                          className={`text-2xl font-bold mt-2 ${styles.EnqColor} hover:underline `}
-                        >
-                          {adminDashboardData?.totalEnquiryAstrology}{" "}
-                          <span className={`font-normal `}>
-                            Astrology Enquiry{" "}
-                          </span>
+                        <p className="text-sm font-semibold mt-2">
+                          Astrology Enquiry
                         </p>
-                      </Link>
-                      <Link href={`/projectInquiry?type=ContactUs`}>
-                        <p
-                          className={`text-2xl font-bold mt-2 ${styles.EnqColor} hover:underline`}
-                        >
-                          {adminDashboardData?.totalEnquiryContactUs}{" "}
-                          <span className={`font-normal `}>
-                            Contact Us Enquiry{" "}
-                          </span>
+                      </div>
+                    </Card>
+                    <Card href={`/projectInquiry?type=ContactUs`} className={`text-nowrap rounded-xl p-0 mr-1 ${styles.showAdminCardInner4}`}>
+                      <div>
+                        <img
+                          src="../../../img/operator.png"
+                          width="30"
+                          height="30"
+                        />
+                      </div>
+                      <div className={`${styles.enquiryCard}`}>
+                        <p className="text-xl font-bold">
+                          {adminDashboardData?.totalEnquiryContactUs}
                         </p>
-                      </Link>
-                      <Link href={`/projectInquiry?type=Property`}>
-                        <p
-                          className={`text-2xl font-bold mt-2 ${styles.EnqColor} hover:underline`}
-                        >
-                          {adminDashboardData?.totalEnquiryProperty}{" "}
-                          <span className={`font-normal `}>
-                            Property Enquiry{" "}
-                          </span>
+                        <p className="text-sm font-semibold mt-2">
+                          Contact Us Enquiry
                         </p>
-                      </Link>
-                      <Link href={`/projectInquiry?type=Project`}>
-                        <p
-                          className={`text-2xl font-bold mt-2 ${styles.EnqColor} hover:underline`}
-                        >
-                          {adminDashboardData?.totalEnquiryProject}{" "}
-                          <span className={`font-normal `}>
-                            Project Enquiry{" "}
-                          </span>
+                      </div>
+                    </Card>
+                    <Card href={`/projectInquiry?type=Property`} className={`text-nowrap rounded-xl mr-1 mb-1 p-0 ${styles.showAdminCardInner4}`}>
+                      <div>
+                        <img
+                          src="../../../img/town.png"
+                          width="30"
+                          height="30"
+                        />
+                      </div>
+                      <div className={`${styles.enquiryCard}`}>
+                        <p className="text-xl font-bold">
+                          {adminDashboardData?.totalEnquiryProperty}
                         </p>
-                      </Link>
-                    </div>
+                        <p className="text-sm font-semibold mt-2">
+                          Property Enquiry
+                        </p>
+                      </div>
+                    </Card>
+                    <Card href={`/projectInquiry?type=Project`} className={`text-nowrap rounded-xl p-0 mr-1 mb-1 ${styles.showAdminCardInner4}`}>
+                      <div>
+                        <img
+                          src="../../../img/town.png"
+                          width="30"
+                          height="30"
+                        />
+                      </div>
+                      <div className={`${styles.enquiryCard}`}>
+                        <p className="text-xl font-bold">
+                          {adminDashboardData?.totalEnquiryProject}
+                        </p>
+                        <p className="text-sm font-semibold mt-2">
+                          Project Enquiry
+                        </p>
+                      </div>
+                    </Card>
                   </div>
-                </Card>
+                </div>
                 :
                 <>
-                  <div className="flex">
+                  <div className={`flex ${styles.showResponsive4}`}>
                     <Card className={`text-nowrap rounded-xl p-0 ${styles.showBuilderCard4} mr-1 mb-3`}>
                       <Link href="/projectInquiry">
                         <div className="text-start">
@@ -613,8 +672,8 @@ export default function Dashboard() {
                       </Link>
                     </Card>
 
-                    <div className="grid grid-cols-2 ">
-                      <Card href={`/projectInquiry?type=Astrology`} className={`text-nowrap rounded-xl p-0 mr-1 ${styles.showBuilderCardInner4}`}>
+                    <div className={`grid grid-cols-2  ${styles.showResponsiveInner3}`}>
+                      <Card href={`/projectInquiry?type=Astrology`} className={`text-nowrap rounded-xl pr-2 mr-1 ${styles.showBuilderCardInner4}`}>
                         <div>
                           <img
                             src="../../../img/astrology.png"
@@ -631,8 +690,8 @@ export default function Dashboard() {
                           </p>
                         </div>
                       </Card>
-                      <Card href={`/projectInquiry?type=ContactUs`} className={`text-nowrap rounded-xl p-0 mr-1 ${styles.showBuilderCardInner4}`}>
-                      <div>
+                      <Card href={`/projectInquiry?type=ContactUs`} className={`text-nowrap rounded-xl pr-2 mr-1 ${styles.showBuilderCardInner4}`}>
+                        <div>
                           <img
                             src="../../../img/operator.png"
                             width="30"
@@ -641,15 +700,15 @@ export default function Dashboard() {
                         </div>
                         <div className={`${styles.enquiryCard}`}>
                           <p className="text-xl font-bold">
-                          {builderDashboardData?.totalEnquiryContactUs}
+                            {builderDashboardData?.totalEnquiryContactUs}
                           </p>
                           <p className="text-sm font-semibold mt-2">
-                          Contact Us Enquiry
+                            Contact Us Enquiry
                           </p>
                         </div>
                       </Card>
-                      <Card href={`/projectInquiry?type=Property`} className={`text-nowrap rounded-xl mr-1 mb-1 p-0 ${styles.showBuilderCardInner4}`}>
-                      <div>
+                      <Card href={`/projectInquiry?type=Property`} className={`text-nowrap rounded-xl mr-1 mb-1 pr-2 ${styles.showBuilderCardInner4}`}>
+                        <div>
                           <img
                             src="../../../img/town.png"
                             width="30"
@@ -658,15 +717,15 @@ export default function Dashboard() {
                         </div>
                         <div className={`${styles.enquiryCard}`}>
                           <p className="text-xl font-bold">
-                          {builderDashboardData?.totalEnquiryProperty}
+                            {builderDashboardData?.totalEnquiryProperty}
                           </p>
                           <p className="text-sm font-semibold mt-2">
-                          Property Enquiry
+                            Property Enquiry
                           </p>
                         </div>
                       </Card>
-                      <Card href={`/projectInquiry?type=Project`} className={`text-nowrap rounded-xl p-0 mr-1 mb-1 ${styles.showBuilderCardInner4}`}>
-                      <div>
+                      <Card href={`/projectInquiry?type=Project`} className={`text-nowrap rounded-xl pr-2 mr-1 mb-1 ${styles.showBuilderCardInner4}`}>
+                        <div>
                           <img
                             src="../../../img/town.png"
                             width="30"
@@ -675,10 +734,10 @@ export default function Dashboard() {
                         </div>
                         <div className={`${styles.enquiryCard}`}>
                           <p className="text-xl font-bold">
-                          {builderDashboardData?.totalEnquiryProject}
+                            {builderDashboardData?.totalEnquiryProject}
                           </p>
                           <p className="text-sm font-semibold mt-2">
-                          Project Enquiry
+                            Project Enquiry
                           </p>
                         </div>
                       </Card>
@@ -692,50 +751,6 @@ export default function Dashboard() {
           )}
         </div >
         <div className={`${styles.SecondContainer}`}>
-          {/* <h1 className="text-3xl font-bold pt-4 pl-4">User Property Growth Report </h1>
-                    <div className={`${styles.SecondContainerItems}`}>
-                        <div className="w-full">
-                            <h1 className="text-2xl font-bold">{adminDashboardData?.approvedProperty ? adminDashboardData?.approvedProperty : "0"}% <span className="text-lg font-semibold text-gray-400">User</span></h1>
-                            <div className="w-full bg-gray-300 rounded-full dark:bg-gray-300 mt-2">
-                                <div
-                                    className="bg-yellow-400 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full"
-                                    style={adminDashboardData?.approvedProperty ? { width: `${adminDashboardData?.approvedProperty}%` } : { width: "0%" }}
-                                >
-                                </div>
-                            </div>
-                        </div>
-                        <div className="w-full">
-                            <h1 className="text-2xl font-bold">{adminDashboardData?.approvedProperty ? adminDashboardData?.approvedProperty : "0"}% <span className="text-lg font-semibold text-gray-400">Builder</span></h1>
-                            <div className="w-full bg-gray-300 rounded-full dark:bg-gray-300 mt-2 ">
-                                <div
-                                    className="bg-blue-400 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full"
-                                    style={adminDashboardData?.approvedProperty ? { width: `${adminDashboardData?.approvedProperty}%` } : { width: "0%" }}
-                                >
-                                </div>
-                            </div>
-                        </div>
-                        <div className="w-full">
-                            <h1 className="text-2xl font-bold">{adminDashboardData?.approvedProperty ? adminDashboardData?.approvedProperty : "0"}% <span className="text-lg font-semibold text-gray-400">Property</span></h1>
-                            <div className="w-full bg-gray-300 rounded-full dark:bg-gray-300 mt-2">
-                                <div
-                                    className="bg-green-400 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full"
-                                    style={adminDashboardData?.approvedProperty ? { width: `${adminDashboardData?.approvedProperty}%` } : { width: "0%" }}
-                                >
-                                </div>
-                            </div>
-                        </div>
-                        <div className="w-full">
-                            <h1 className="text-2xl font-bold">{adminDashboardData?.approvedProperty ? adminDashboardData?.approvedProperty : "0"}% <span className="text-lg font-semibold text-gray-400">Enquiry</span></h1>
-                            <div className="w-full bg-gray-300 rounded-full dark:bg-gray-300 mt-2">
-                                <div
-                                    className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full"
-                                    style={adminDashboardData?.approvedProperty ? { width: `${adminDashboardData?.approvedProperty}%` } : { width: "0%" }}
-                                >
-                                </div>
-                            </div>
-                        </div>
-
-                    </div> */}
           <div className={`${styles.graphSize}`}>
             <canvas ref={chartRef} />
           </div>

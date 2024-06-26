@@ -82,7 +82,7 @@ export default function Builder(params) {
     for (let i = 0; i < listData?.data?.length; i++) {
       const id = listData.data[i]._id;
       const name = listData.data[i].Name;
-      const url = "http://recadmin-001-site2.etempurl.com/builderFE" + id;
+      const url = "http://recadmin-001-site2.etempurl.com/builderFE/" + id;
 
       // Create a canvas element to draw the QR code
       const qrCanvas = document.createElement("canvas");

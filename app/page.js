@@ -562,7 +562,7 @@ export default function Home() {
             </div>
 
             {bannerData?.data
-              ?.slice(1, bannerData?.data?.length - 1)
+              ?.slice(1)
               .map((banneritem, index) => (
                 <img
                   key={index}

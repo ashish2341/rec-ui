@@ -8,6 +8,8 @@ import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
 import { DeleteBuilderApi } from "@/api-functions/builder/deleteBuilder";
 import { imgApiUrl } from "@/utils/constants";
 import CommonLoader from "@/components/common/commonLoader/commonLoader";
+import QRCode from "qrcode";
+import { jsPDF } from "jspdf";
 
 
 export default function Builder(params) {
@@ -22,7 +24,11 @@ export default function Builder(params) {
 
   useEffect(() => {
     getAllBuilder();
-  }, [page, searchData,params]);
+  }, [page, searchData, params]);
+
+  const searchInputChange = (e) => {
+    setSearchData(e.target.value);
+  };
   
   const getAllBuilder = async () => {
     setIsLoading(true);
@@ -36,9 +42,6 @@ export default function Builder(params) {
       setIsLoading(false);
       return false;
     }
-  };
-  const searchInputChange = (e) => {
-    setSearchData(e.target.value);
   };
   const handlePageChange = (newPage) => {
     setPage(newPage);
@@ -68,6 +71,47 @@ export default function Builder(params) {
 
   };
 
+  console.log(listData);
+  const generatePDF = async () => {
+    const doc = new jsPDF();
+    let yOffset = 20; // Initial Y offset
+    const qrSize = 100; // Size of the QR code
+    const pageHeight = doc.internal.pageSize.height; // Page height
+    const xOffset = (doc.internal.pageSize.width - qrSize) / 2; // Center alignment for X
+  
+    for (let i = 0; i < listData?.data?.length; i++) {
+      const id = listData.data[i]._id;
+      const name = listData.data[i].Name;
+      const url = "http://recadmin-001-site2.etempurl.com/builderFE" + id;
+
+      // Create a canvas element to draw the QR code
+      const qrCanvas = document.createElement("canvas");
+      await QRCode.toCanvas(qrCanvas, url, { width: qrSize });
+  
+      // Convert canvas to JPEG image (base64 format)
+      const qrImage = qrCanvas.toDataURL("image/png", 1.0);
+  
+      // Add the QR code image to the PDF document
+      doc.addImage(qrImage, "JPEG", xOffset, yOffset, qrSize, qrSize);
+  
+      // Add the URL text below the QR code (centered)
+      doc.text(name, doc.internal.pageSize.width / 2, yOffset + qrSize + 10, { align: "center" });
+  
+      // Increase Y offset for the next QR code and text
+      yOffset += qrSize + 40;
+  
+      // Check if there's enough space for the next QR code
+      if (yOffset + qrSize + 20 > pageHeight) {
+        doc.addPage();
+        yOffset = 20; // Reset Y offset for new page
+      }
+    }
+  
+    // Save the PDF document with all QR codes
+    doc.save("coupons.pdf");
+  };
+  
+
   return (
     <section>
       {isLoading && <CommonLoader />}
@@ -87,8 +131,17 @@ export default function Builder(params) {
               </button>
             </Link>
           </div>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
+          <div className="flex justify-between">
+          <div>
+          <button
+                className="py-2.5 ml-2 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                type="button"
+                onClick={generatePDF}
+              >
+                Generate QRCode
+              </button>
+          </div>
+            <div className="relative inset-y-0 left-8 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
               <svg
                 className="w-5 h-5 text-gray-500 dark:text-gray-400"
                 aria-hidden="true"
@@ -106,11 +159,12 @@ export default function Builder(params) {
             <input
               type="text"
               id="table-search"
-              className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="block p-1 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Search builder"
               onChange={searchInputChange}
             />
           </div>
+          
          
         </div>
         {(listData ? (

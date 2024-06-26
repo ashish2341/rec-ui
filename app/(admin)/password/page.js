@@ -84,7 +84,7 @@ export default function Password(params) {
         <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
           Update Password
         </h1>
-        <form className="flex justify-between">
+        <form className="grid gap-4 mb-4 md:grid-cols-3">
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">
               Old Password
@@ -94,6 +94,7 @@ export default function Password(params) {
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               value={OldPassword}
               onChange={handleOldPasswordChange}
+              placeholder="Old Password"
             />
           </div>
           <div className="relative">

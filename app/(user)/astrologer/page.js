@@ -1,12 +1,13 @@
 "use client"
 import Navbar from "@/components/common/navbar";
 import styles from "./astrologer.module.css"
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DayPicker } from 'react-day-picker';
 import { Blockquote } from "flowbite-react";
 import Footer from "@/components/common/footer";
 import { addEnquiry } from "@/api-functions/enquiry/addEnquiry";
 import { toast } from "react-toastify";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 
 
 const AstrologerPage = () => {
@@ -16,7 +17,14 @@ const AstrologerPage = () => {
   const [MolileNumber, setPhone] = useState("");
   const [EnquiryData, setEnquiryData] = useState("");
   const [EnquiryType, setEnquiryType] = useState("Astrology");
+  const [loaderIsLoading, setLoaderIsLoading] = useState(false);
 
+  useEffect(() => {
+    setLoaderIsLoading(true);
+    setTimeout(() => {
+      setLoaderIsLoading(false);
+    }, 2000);
+  }, []);
   const addEnquiryData = async () => {
     if (Name === "") {
       toast.error("Name  is required");
@@ -67,6 +75,7 @@ const AstrologerPage = () => {
     return (
 
         <>
+        {loaderIsLoading && <CommonLoader />}
             <Navbar />
             <div className={`${styles.backGroundyellow}`}>
             <div className={`${styles.buyingOptionWithZodic}`}>

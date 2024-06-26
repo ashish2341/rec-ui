@@ -57,8 +57,13 @@ export default function ProjectInquiry(params) {
       }
       getAllEnquiryByBuilder(typeOnButton);
     }
-  }, [page, searchData, isSubmitClicked, isDeleted, toDate, params]);
+  }, [page, searchData, isSubmitClicked, isDeleted, params]);
 
+  useEffect(()=>{
+if(fromDate && toDate){
+  getAllEnquiry(typeOnButton);
+}
+  },[fromDate,toDate])
   const getAllEnquiry = async (filterType) => {
     setIsLoading(true);
     const todayEnquiry = params.searchParams.todayEnquiry;
@@ -84,7 +89,6 @@ export default function ProjectInquiry(params) {
   const getAllEnquiryByBuilder = async (filterType) => {
     setIsLoading(true);
     const todayEnquiry = params.searchParams.todayEnquiry;
-
     let enquiries = await GetEnquiryByBuilderApi(
       page,
       searchData,

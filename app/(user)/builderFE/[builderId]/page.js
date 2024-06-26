@@ -17,7 +17,8 @@ import LoadingSideImg from "@/components/common/sideImgLoader";
 import { addEnquiry } from "@/api-functions/enquiry/addEnquiry";
 import SkeletonLoader from "@/components/common/loader";
 import { toast } from "react-toastify";
-
+import { GetBuilderById } from "@/api-functions/builder/getBuilderById";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 const BuilderHomePage = (params) => {
   const [Name, setName] = useState("");
   const [Email, setEmail] = useState("");
@@ -25,7 +26,8 @@ const BuilderHomePage = (params) => {
   const [MolileNumber, setPhone] = useState("");
   const [EnquiryData, setEnquiryData] = useState("");
   const [EnquiryType, setEnquiryType] = useState("ContactUs");
-
+  const [loaderIsLoading, setLoaderIsLoading] = useState(false);
+const [developData,setDevelopData]=useState("")
   const currentDate = new Date().toISOString().slice(0, 10);
 
   const addEnquiryData = async () => {
@@ -81,19 +83,40 @@ const BuilderHomePage = (params) => {
   const handleMessageChange = (e) => {
     setMessage(e.target.value);
   };
-  const {
-    data: developData,
-    loading: developLoading,
-    error: developError,
-  } = useFetch(
-    `${API_BASE_URL}/developer/developer/${params?.params?.builderId}`
-  );
+  // const {
+  //   data: developData,
+  //   loading: developLoading,
+  //   error: developError,
+  // } = useFetch(
+  //   `${API_BASE_URL}/developer/developer/${params?.params?.builderId}`
+  // );
+useEffect(()=>{
+  getBuilderDatabyId()
+},[])
+const getBuilderDatabyId = async () => {
+  setLoaderIsLoading(true)
+  const id=params?.params?.builderId
+  let builder = await GetBuilderById(id);
+  if (builder?.resData?.success == true) {
+    setDevelopData(builder?.resData)
+    setLoaderIsLoading(false)
+  
+  } else {
+    toast.error(builder?.errMessage);
+    setLoaderIsLoading(false)
+  
+  }
+};
 
-  console.log("developIdData", developData);
+
   const date = new Date(developData?.data?.EstablishDate);
   const year = date.getFullYear();
+  useEffect(() => {
+    initFlowbite();
+}, []);
   return (
     <>
+    {loaderIsLoading && <CommonLoader />}
       <Navbar />
       <div className={` ${styles.divideDetailPage} divideDetailPage`}>
         {/* <div className={` ${styles.builderTop} mb-5`}>

@@ -27,6 +27,7 @@ import SearchBar from "./search";
 import AreaMultiCarousel from "../components/common/areapropertyCarousel";
 import { AddZodaic } from "@/api-functions/zodiac/addZodiac";
 import NotifyUserModal from "@/components/common/notifyUserModal";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 // import Skeleton from 'react-loading-skeleton';
 // import 'react-loading-skeleton/dist/skeleton.css'
 
@@ -43,6 +44,7 @@ export default function Home() {
   const [EnquiryData, setEnquiryData] = useState("");
   const [EnquiryType, setEnquiryType] = useState("Project");
   const [openModal, setOpenModal] = useState(false);
+  // const [loaderIsLoading, setLoaderIsLoading] = useState(false);
 
   const facingImage = ["img/3.png", "img/4.png", "img/1.png", "img/2.png"];
 
@@ -53,16 +55,22 @@ export default function Home() {
     "Southern Serenity: Find Tranquility in Homes Embracing the South",
   ];
 
+  // useEffect(() => {
+  //   setLoaderIsLoading(true);
+  //   setTimeout(() => {
+  //     setLoaderIsLoading(false);
+  //   }, 2000);
+  // }, []);
   // fetching Data for facing
   const {
     data: facingData,
-    loading: facingDataLoading,
+    loading: loaderIsLoading,
     error: facingDataError,
   } = useFetch(`${API_BASE_URL_FOR_MASTER}/facing`);
 
   const {
     data: propertyByAreaData,
-    loading,
+    loading: propertyByAreaDataLoading,
     error,
   } = useFetch(`${API_BASE_URL}/properties/propertyByArea`);
 
@@ -94,7 +102,6 @@ export default function Home() {
     loading: testimonialDataLoading,
     error: testimonialDataError,
   } = useFetch(`${API_BASE_URL}/testimonial/allTestimonial?page=1&pageSize=5`);
-  console.log("propertyByPopularProperty", propertyByPopularProperty);
   const {
     data: faqData,
     loading: faqLoading,
@@ -210,17 +217,18 @@ export default function Home() {
       >
         <div className={`${styles.testimonialLeft}`}>
           <div className={`${styles.testimonialLeftBoxDetails} text-center`}>
-            {item.Image ? 
-            <img
-              className={` ${styles.testimonialImg}  mb-3`}
-              src={`${imgApiUrl}/${item.Image}`}
-              alt="test"
-            /> :
-            <img
-            className={` ${styles.testimonialImg}  mb-3`}
-            src="../img/no-image@2x.png"
-             /> 
-             }
+            {item.Image ? (
+              <img
+                className={` ${styles.testimonialImg}  mb-3`}
+                src={`${imgApiUrl}/${item.Image}`}
+                alt="test"
+              />
+            ) : (
+              <img
+                className={` ${styles.testimonialImg}  mb-3`}
+                src="../img/no-image@2x.png"
+              />
+            )}
             <h2 className={`${styles.testimonialLeftHead} justify-center`}>
               {item.MemberName}
             </h2>
@@ -401,7 +409,6 @@ export default function Home() {
     };
     let res = await AddZodaic(ZodiacData);
     if (res?.resData?.success == true) {
-      console.log("res", res);
       setName("");
       setPhone("");
       setMessage("");
@@ -418,8 +425,9 @@ export default function Home() {
     setDob("");
     setZodaicPhone("");
   };
-  var totalSlides =propertyByapartmentType? propertyByapartmentType?.data?.length :"";
-  console.log("totalSlides",totalSlides)
+  var totalSlides = propertyByapartmentType
+    ? propertyByapartmentType?.data?.length
+    : "";
   var slidesToShow = totalSlides < 5 ? totalSlides : 5;
 
   var settings = {
@@ -470,6 +478,15 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
+      {loaderIsLoading &&
+        propertyByAreaDataLoading &&
+        bannerDataLoading &&
+        faqLoading &&
+        testimonialDataLoading &&
+        propertyByZodaicLoading &&
+        propertyByAllPropertiesLoading &&
+        popularPropertiesLoading &&
+        apartmentTypeLoading && <CommonLoader />}
       <Navbar />
       {/* {isLoading && <Spinner />} */}
       <div
@@ -537,7 +554,7 @@ export default function Home() {
             className="overflow-hidden duration-700 ease-in-out"
             data-carousel-item
           >
-            {/* <SearchBar id="2" /> */}
+          
 
             <img
               src={`${imgApiUrl}/${bannerData?.data[1].Url}`}
@@ -678,7 +695,7 @@ export default function Home() {
           </div>
         </div>
         <div className={` ${styles.propertiesByAreaBoxMain} flex flex-wrap `}>
-        {propertyByAreaData ? (
+          {propertyByAreaData ? (
             propertyByAreaData?.data?.length > 0 ? (
               <AreaMultiCarousel UI={showAreaType} />
             ) : (
@@ -687,7 +704,6 @@ export default function Home() {
           ) : (
             <SkeletonLoader />
           )}
-          
         </div>
       </div>
 
@@ -703,7 +719,7 @@ export default function Home() {
           </div>
         </div>
         <div className={`flex mt-2`}>
-        {propertyByapartmentType ? (
+          {propertyByapartmentType ? (
             propertyByapartmentType?.data?.length > 0 ? (
               <MultiCarousel UI={ShowApartmentProperties} />
             ) : (
@@ -712,7 +728,6 @@ export default function Home() {
           ) : (
             <SkeletonLoader />
           )}
-          
         </div>
       </div>
 
@@ -962,15 +977,15 @@ export default function Home() {
                   key={index}
                 >
                   <Accordion.Title
-                    className={` ${styles.faqItemMain} rounded-t-md text-white bg-blue-700 hover:bg-blue-700
+                    className={` ${styles.faqItemMain} rounded-t-md text-black text-sm font-bold bg-white hover:bg-white
                       focus:border-none focus:ring-grey-0 focus:ring-0`}
                   >
                     {item?.Subject}
                   </Accordion.Title>
                   <Accordion.Content
-                    className={` ${styles.faqItemMainAnswer} bg-blue-700 text-white`}
+                    className={` ${styles.faqItemMainAnswer} bg-white text-black`}
                   >
-                    <p className=" mb-2 text-white dark:text-white-400">
+                    <p className=" mb-2 text-black leading-[1.5rem] dark:text-black-400">
                       {item?.Answer}
                     </p>
                   </Accordion.Content>

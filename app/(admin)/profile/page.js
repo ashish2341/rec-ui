@@ -21,6 +21,11 @@ import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMe
 import CommonLoader from "@/components/common/commonLoader/commonLoader";
 
 export default function Profile() {
+  const roleData = Cookies.get("roles") ?? "";
+  const name = Cookies.get("name");
+  const loginUserId = Cookies.get("userId");
+  const roles = roleData && JSON.parse(roleData);
+
   const [userData, setUserData] = useState(false);
   const [FirstUserName, setFirstUserName] = useState("");
   const [UserEmailId, setUserEmail] = useState("");
@@ -48,8 +53,8 @@ export default function Profile() {
   };
 
   const submitUserForm = async () => {
-     // Validate Email Address
-     if (UserEmailId === "") {
+    // Validate Email Address
+    if (UserEmailId === "") {
       toast.error("Email address is required");
       return false;
     }
@@ -59,8 +64,8 @@ export default function Profile() {
       toast.error("Please enter a valid email address");
       return false;
     }
-     // Check if the field is empty
-     if (UserMobile === "") {
+    // Check if the field is empty
+    if (UserMobile === "") {
       toast.error("Phone number cannot be empty");
       return false;
     }
@@ -76,8 +81,8 @@ export default function Profile() {
       toast.error("Phone number must start with 9, 8, or 7");
       return false;
     }
-   
-    setIsLoading(true)
+
+    setIsLoading(true);
     const UserDetails = {
       FirstName: FirstUserName,
       Mobile: UserMobile,
@@ -88,11 +93,11 @@ export default function Profile() {
       Cookies.set("name", FirstUserName);
       toast.success(updateUserData?.resData?.message);
       setRerenderforUser((prev) => prev + 1);
-      setIsLoading(false)
+      setIsLoading(false);
       return false;
     } else {
       toast.error(updateUserData?.errMessage);
-      setIsLoading(false)
+      setIsLoading(false);
       return false;
     }
   };
@@ -155,7 +160,7 @@ export default function Profile() {
   const router = useRouter();
 
   useEffect(() => {
-    setIsLoading(true)
+    setIsLoading(true);
     const getAllBuilders = async () => {
       let builderData = await GetBuilderByUserId();
       if (builderData?.resData?.success == true) {
@@ -197,11 +202,11 @@ export default function Profile() {
             Instagram: "",
           }
         );
-        setIsLoading(false)
+        setIsLoading(false);
         return false;
       } else {
         toast.error(builderData?.errMessage);
-        setIsLoading(false)
+        setIsLoading(false);
         return false;
       }
     };
@@ -294,7 +299,7 @@ export default function Profile() {
         documentInputRef.current.value = "";
       }
     } else {
-      setDocLoader(true)
+      setDocLoader(true);
       const documentString = [];
 
       // Map each file to its corresponding image string asynchronously
@@ -419,15 +424,15 @@ export default function Profile() {
   };
 
   const submitForm = async () => {
-    if(image.length == 0){
-      toast.error("Image is required")
+    if (image.length == 0) {
+      toast.error("Image is required");
       return false;
     }
-    if(documents.length == 0){
-      toast.error("Document is required")
+    if (documents.length == 0) {
+      toast.error("Document is required");
       return false;
     }
-    setIsLoading(true)
+    setIsLoading(true);
     const builderDetails = {
       Name: builderName,
       SocialMediaProfileLinks: socialMediaProfileLinks,
@@ -450,11 +455,11 @@ export default function Profile() {
     if (updatebuilderData?.resData?.success == true) {
       router.push("/profile");
       toast.success(updatebuilderData?.resData?.message);
-      setIsLoading(false)
+      setIsLoading(false);
       return false;
     } else {
       toast.error(updatebuilderData?.errMessage);
-      setIsLoading(false)
+      setIsLoading(false);
       return false;
     }
     // }
@@ -505,14 +510,14 @@ export default function Profile() {
         logoInputRef.current.value = "";
       }
     } else {
-      setLogoLoader(true)
+      setLogoLoader(true);
       let res = await ImageString(formData);
       if (res?.successMessage) {
-        setLogoLoader(false)
+        setLogoLoader(false);
         setBuilderLogo(res?.successMessage?.imageUrl);
       } else {
         toast.error(res?.errMessage);
-        setLogoLoader(false)
+        setLogoLoader(false);
         return;
       }
     }
@@ -520,12 +525,12 @@ export default function Profile() {
 
   return (
     <>
-    {isLoading && <CommonLoader />}
+      {isLoading && <CommonLoader />}
       <section>
         <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
           Update User Details
         </h1>
-        <form className="flex justify-between">
+        <form className="grid gap-4 mb-4 md:grid-cols-3">
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white ">
               Name
@@ -564,12 +569,12 @@ export default function Profile() {
           Update
         </button>
       </section>
-
-      <section>
-        <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
-          Update Your Builder Details
-        </h1>
-        {/* <Link href="/builder">
+      {roles.includes("Developer") && (
+        <section>
+          <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
+            Update Your Builder Details
+          </h1>
+          {/* <Link href="/builder">
                 <div className="mb-5 mt-5">
                   <button
                     className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
@@ -579,718 +584,733 @@ export default function Profile() {
                   </button>
                 </div>
               </Link> */}
-        <form className="mb-5">
-          <div className="grid gap-4 mb-4 md:grid-cols-2">
-            {/* Builder Name */}
-            <div>
-              <label
-                htmlFor="builderName"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Builder Name
-              </label>
-              <input
-                type="text"
-                value={builderName}
-                onChange={handleNameChange}
-                id="builderName"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Builder Name"
-                required
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="area"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
-              >
-                Area
-              </label>
-              {areaData ? (
-                <Select
-                  options={areaData.data.map((element) => ({
-                    value: element._id,
-                    label: element.Area,
-                  }))}
-                  placeholder="Select One"
-                  onChange={(e) =>
-                    setBuilderArea({ _id: e.value, Area: e.label })
-                  }
-                  value={{ value: builderArea?._id, label: builderArea?.Area }}
+          <form className="mb-5">
+            <div className="grid gap-4 mb-4 md:grid-cols-2">
+              {/* Builder Name */}
+              <div>
+                <label
+                  htmlFor="builderName"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                >
+                  Builder Name
+                </label>
+                <input
+                  type="text"
+                  value={builderName}
+                  onChange={handleNameChange}
+                  id="builderName"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Builder Name"
+                  required
                 />
-              ) : (
-                <Select
-                  options={defaultOption.map((element) => ({
-                    value: element.value,
-                    label: element.label,
-                  }))}
-                  placeholder="Select One"
-                  required={true}
+              </div>
+              <div>
+                <label
+                  htmlFor="area"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
+                >
+                  Area
+                </label>
+                {areaData ? (
+                  <Select
+                    options={areaData.data.map((element) => ({
+                      value: element._id,
+                      label: element.Area,
+                    }))}
+                    placeholder="Select One"
+                    onChange={(e) =>
+                      setBuilderArea({ _id: e.value, Area: e.label })
+                    }
+                    value={{
+                      value: builderArea?._id,
+                      label: builderArea?.Area,
+                    }}
+                  />
+                ) : (
+                  <Select
+                    options={defaultOption.map((element) => ({
+                      value: element.value,
+                      label: element.label,
+                    }))}
+                    placeholder="Select One"
+                    required={true}
+                  />
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="builderEmail"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                >
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={builderEmail}
+                  onChange={(e) => setBuilderEmail(e.target.value)}
+                  id="builderEmail"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Builder Email"
+                  required
                 />
-              )}
-            </div>
-            <div>
-              <label
-                htmlFor="builderEmail"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                value={builderEmail}
-                onChange={(e) => setBuilderEmail(e.target.value)}
-                id="builderEmail"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Builder Email"
-                required
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="builderMobile"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Mobile
-              </label>
-              <input
-                type="number"
-                value={builderMobile}
-                onChange={(e) => setBuilderMobile(e.target.value)}
-                id="builderMobile"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Builder Mobile"
-                required
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="builderWhatsapp"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Whatsapp
-              </label>
-              <input
-                type="text"
-                value={builderWhatsapp}
-                onChange={(e) => setBuilderWhatsapp(e.target.value)}
-                id="builderWhatsapp"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Builder Whatsapp"
-                required
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="establishDate"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Established Date
-              </label>
-              <input
-                type="date"
-                value={establishDate}
-                onChange={(e) => setEstablishDate(e.target.value)}
-                id="establishDate"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Establish Date"
-                required
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="DetailNote"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
-              >
-                Detail Note
-              </label>
-              <textarea
-                type="DetailNote"
-                value={detailNote}
-                onChange={(e) => setDetailNote(e.target.value)}
-                id="DetailNote"
-                className=" mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder=""
-                rows={4}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="description"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
-              >
-                Description
-              </label>
-              <textarea
-                type="text"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                id="description"
-                className=" mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder=""
-                rows={4}
-              />
-            </div>
+              </div>
+              <div>
+                <label
+                  htmlFor="builderMobile"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                >
+                  Mobile
+                </label>
+                <input
+                  type="number"
+                  value={builderMobile}
+                  onChange={(e) => setBuilderMobile(e.target.value)}
+                  id="builderMobile"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Builder Mobile"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="builderWhatsapp"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                >
+                  Whatsapp
+                </label>
+                <input
+                  type="text"
+                  value={builderWhatsapp}
+                  onChange={(e) => setBuilderWhatsapp(e.target.value)}
+                  id="builderWhatsapp"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Builder Whatsapp"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="establishDate"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                >
+                  Established Date
+                </label>
+                <input
+                  type="date"
+                  value={establishDate}
+                  onChange={(e) => setEstablishDate(e.target.value)}
+                  id="establishDate"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Establish Date"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="DetailNote"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
+                >
+                  Detail Note
+                </label>
+                <textarea
+                  type="DetailNote"
+                  value={detailNote}
+                  onChange={(e) => setDetailNote(e.target.value)}
+                  id="DetailNote"
+                  className=" mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder=""
+                  rows={4}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="description"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
+                >
+                  Description
+                </label>
+                <textarea
+                  type="text"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  id="description"
+                  className=" mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder=""
+                  rows={4}
+                />
+              </div>
 
-            <div className="mb-6">
-              <label
-                htmlFor="logo"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Upload Logo
-              </label>
-              <input
-                type="file"
-                id="logo"
-                name="logo"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                ref={logoInputRef}
-                accept=".jpg, .jpeg, .png"
-                onChange={handleLogoInputChange}
-                required
-              />
-              {logoLoader && <LoaderForMedia /> }
-              {builderLogo ? (
-                <div className="flex flex-wrap ">
-                  <div className="mr-4 mb-1  ">
+              <div className="mb-6">
+                <label
+                  htmlFor="logo"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                >
+                  Upload Logo
+                </label>
+                <input
+                  type="file"
+                  id="logo"
+                  name="logo"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  ref={logoInputRef}
+                  accept=".jpg, .jpeg, .png"
+                  onChange={handleLogoInputChange}
+                  required
+                />
+                {logoLoader && <LoaderForMedia />}
+                {builderLogo ? (
+                  <div className="flex flex-wrap ">
+                    <div className="mr-4 mb-1  ">
+                      <div className="ml-2 mt-3 underline font-bold">
+                        <h3>Selected Logo</h3>
+                      </div>
+                      <img
+                        src={`${imgApiUrl}/${builderLogo}`}
+                        alt=""
+                        className=" object-cover m-2 mt-5 border border-black rounded-lg "
+                        width={100}
+                        height={100}
+                      />
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+              <div className="mb-6">
+                <label
+                  htmlFor="imageInput"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                >
+                  Upload Image
+                </label>
+                <input
+                  type="file"
+                  id="imageInput"
+                  name="imageInput"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  ref={imageInputRef}
+                  multiple
+                  accept=".jpg, .jpeg, .png"
+                  onChange={handleImageInputChange}
+                  required
+                />
+                {imageLoader && <LoaderForMedia />}
+                {image.length > 0 ? (
+                  <div>
                     <div className="ml-2 mt-3 underline font-bold">
-                      <h3>Selected Logo</h3>
+                      <h3>Selected Image</h3>
                     </div>
-                    <img
-                      src={`${imgApiUrl}/${builderLogo}`}
-                      alt=""
-                      className=" object-cover m-2 mt-5 border border-black rounded-lg "
-                      width={100}
-                      height={100}
-                    />
-                  </div>
-                </div>
-              ) : null}
-            </div>
-            <div className="mb-6">
-              <label
-                htmlFor="imageInput"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Upload Image
-              </label>
-              <input
-                type="file"
-                id="imageInput"
-                name="imageInput"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                ref={imageInputRef}
-                multiple
-                accept=".jpg, .jpeg, .png"
-                onChange={handleImageInputChange}
-                required
-              />
-              {imageLoader && <LoaderForMedia /> }
-              {image.length > 0 ? (
-                <div>
-                  <div className="ml-2 mt-3 underline font-bold">
-                    <h3>Selected Image</h3>
-                  </div>
-                  <div className="flex flex-wrap relative mt-3">
-                    {image.map((imageUrl, index) => (
-                      <div key={index} className="mr-4 mb-4 relative ">
-                        <img
-                          src={`${imgApiUrl}/${imageUrl}`}
-                          alt=""
-                          className="h-20 w-20 object-cover m-2 mt-5 border border-black rounded-lg "
-                        />
-                        <button
-                          type="button"
-                          className="absolute top-0 right-0 p-1  "
-                          onClick={() => removeImage(index)}
-                        >
-                          <i
-                            className="bi bi-x-circle-fill"
-                            style={{ color: "red" }}
-                          ></i>
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-            </div>
-            <div className="mb-6">
-              <label
-                htmlFor="documentInput"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-              >
-                Upload Document
-              </label>
-              <input
-                type="file"
-                id="documentInput"
-                name="documentInput"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                ref={documentInputRef}
-                multiple
-                accept=".pdf,.doc,.docx"
-                onChange={handleDocumentInputChange}
-                required
-              />
-              {docLoader && <LoaderForMedia /> }
-              {documents.length > 0 ? (
-                <div>
-                  <div className="ml-2 mt-3 underline font-bold">
-                    <h3>Selected Document</h3>
-                  </div>
-                  <div className="flex flex-wrap relative mt-3">
-                    {documents.map((itemUrl, index) => (
-                      <div key={index} className="mr-4 mb-4 relative">
-                        <iframe
-                          title={`Document ${index}`}
-                          src={`${imgApiUrl}/${itemUrl}`}
-                          className="h-48 w-64 border border-black rounded-lg"
-                        />
-                        <button
-                          type="button"
-                          className="absolute top-0 right-0 p-1"
-                          onClick={() => removeDocument(index)}
-                        >
-                          <i
-                            className="bi bi-x-circle-fill"
-                            style={{ color: "red" }}
-                          ></i>
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-            </div>
-
-            <div></div>
-            <h2 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white underline">
-              Social Profiles
-            </h2>
-            <div></div>
-            {/* Facebook Url */}
-            <div>
-              <label
-                htmlFor="facebook"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
-              >
-                Facebook Url
-              </label>
-              <input
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                type="text"
-                id="facebook"
-                value={socialMediaProfileLinks.Facebook}
-                onChange={(e) =>
-                  handleSocialProfileChange("Facebook", e.target.value)
-                }
-              />
-            </div>
-            {/* Twitter Url */}
-            <div>
-              <label
-                htmlFor="Twitter"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
-              >
-                Twitter Url
-              </label>
-              <input
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                type="text"
-                id="Twitter"
-                value={socialMediaProfileLinks.Twitter}
-                onChange={(e) =>
-                  handleSocialProfileChange("Twitter", e.target.value)
-                }
-              />
-            </div>
-            {/* Instagram Url */}
-            <div>
-              <label
-                htmlFor="Instagram"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
-              >
-                Instagram Url
-              </label>
-              <input
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                type="text"
-                id="Instagram"
-                value={socialMediaProfileLinks.Instagram}
-                onChange={(e) =>
-                  handleSocialProfileChange("Instagram", e.target.value)
-                }
-              />
-            </div>
-            {/* Linkdin Url */}
-            <div>
-              <label
-                htmlFor="Linkdin"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
-              >
-                Linkdin Url
-              </label>
-              <input
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                type="text"
-                id="facebLinkdinook"
-                value={socialMediaProfileLinks.LinkedIn}
-                onChange={(e) =>
-                  handleSocialProfileChange("LinkedIn", e.target.value)
-                }
-              />
-            </div>
-          </div>
-          <div>
-            {BranchesData
-              ? BranchesData.map((data, index) => (
-                  <div key={index}>
-                    {/* Main BranchOffices fields */}
-                    <h2 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white underline mt-10">
-                      Office Branch Details{" "}
-                      <span>{index > 0 ? <span>{index + 1}</span> : null}</span>
-                    </h2>
-                    <div className="grid gap-4 mb-2 sm:grid-cols-3">
-                      <div>
-                        <label
-                          htmlFor={`Phone-${index}`}
-                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                        >
-                          Phone
-                        </label>
-                        <input
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          type="text"
-                          id={`Phone-${index}`}
-                          value={data.Phone}
-                          onChange={(e) =>
-                            handleOfficeChange(e, index, "Phone")
-                          }
-                        />
-                      </div>
-
-                      <div>
-                        <label
-                          htmlFor={`Mobile-${index}`}
-                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                        >
-                          Mobile
-                        </label>
-                        <input
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          type="text"
-                          id={`Mobile-${index}`}
-                          value={data.Mobile}
-                          onChange={(e) =>
-                            handleOfficeChange(e, index, "Mobile")
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor={`EmailId-${index}`}
-                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                        >
-                          Email ID
-                        </label>
-                        <input
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          type="email"
-                          id={`EmailId-${index}`}
-                          value={data.EmailId}
-                          onChange={(e) =>
-                            handleOfficeChange(e, index, "EmailId")
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor={`WhatsApp-${index}`}
-                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                        >
-                          WhatsApp
-                        </label>
-                        <input
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          type="text"
-                          id={`WhatsApp-${index}`}
-                          value={data.WhatsApp}
-                          onChange={(e) =>
-                            handleOfficeChange(e, index, "WhatsApp")
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor={`Area-${index}`}
-                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
-                        >
-                          Area
-                        </label>
-                        <input
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          type="text"
-                          id={`Area-${index}`}
-                          value={data.Area}
-                          onChange={(e) => handleOfficeChange(e, index, "Area")}
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor={`City-${index}`}
-                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
-                        >
-                          City
-                        </label>
-                        <input
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          type="text"
-                          id={`City-${index}`}
-                          value={data.City}
-                          onChange={(e) => handleOfficeChange(e, index, "City")}
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor={`State-${index}`}
-                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
-                        >
-                          State
-                        </label>
-                        <input
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          type="text"
-                          id={`State-${index}`}
-                          value={data.State}
-                          onChange={(e) =>
-                            handleOfficeChange(e, index, "State")
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor={`Country-${index}`}
-                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
-                        >
-                          Country
-                        </label>
-                        <input
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          type="text"
-                          id={`Country-${index}`}
-                          value={data.Country}
-                          onChange={(e) =>
-                            handleOfficeChange(e, index, "Country")
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor={`PinCode-${index}`}
-                          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
-                        >
-                          Pin Code
-                        </label>
-                        <input
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          type="text"
-                          id={`PinCode-${index}`}
-                          value={data.PinCode}
-                          onChange={(e) =>
-                            handleOfficeChange(e, index, "PinCode")
-                          }
-                        />
-                      </div>
-                      <div></div>
-                    </div>
-                    <div className="grid gap-4 mb-2 sm:grid-cols-3">
-                      {data.ContactPerson.map((person, subIndex) => (
-                        <div key={subIndex}>
-                          <div>
-                            <h2 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white underline mt-10">
-                              Contact Person Details{" "}
-                              <span>
-                                {subIndex > 0 ? (
-                                  <span>{subIndex + 1}</span>
-                                ) : null}
-                              </span>
-                            </h2>
-                          </div>
-
-                          <div
-                            className="grid gap-4 mb-2 sm:grid-cols-2"
-                            key={`${index}-${subIndex}`}
+                    <div className="flex flex-wrap relative mt-3">
+                      {image.map((imageUrl, index) => (
+                        <div key={index} className="mr-4 mb-4 relative ">
+                          <img
+                            src={`${imgApiUrl}/${imageUrl}`}
+                            alt=""
+                            className="h-20 w-20 object-cover m-2 mt-5 border border-black rounded-lg "
+                          />
+                          <button
+                            type="button"
+                            className="absolute top-0 right-0 p-1  "
+                            onClick={() => removeImage(index)}
                           >
-                            <div>
-                              <label
-                                htmlFor={`Name-${index}-${subIndex}`}
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required "
-                              >
-                                Person Name
-                              </label>
-                              <input
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                type="text"
-                                id={`Name-${index}-${subIndex}`}
-                                value={person.Name}
-                                onChange={(e) =>
-                                  handleOfficeChange(e, index, "Name", subIndex)
-                                }
-                              />
-                            </div>
-
-                            <div>
-                              <label
-                                htmlFor={`Mobile-${index}-${subIndex}`}
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                              >
-                                Mobile
-                              </label>
-                              <input
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                type="text"
-                                id={`Mobile-${index}-${subIndex}`}
-                                value={person.Mobile}
-                                onChange={(e) =>
-                                  handleOfficeChange(
-                                    e,
-                                    index,
-                                    "Mobile",
-                                    subIndex
-                                  )
-                                }
-                              />
-                            </div>
-                            <div>
-                              <label
-                                htmlFor={`EmailId-${index}-${subIndex}`}
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                              >
-                                Email
-                              </label>
-                              <input
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                type="email"
-                                id={`EmailId-${index}-${subIndex}`}
-                                value={person.EmailId}
-                                onChange={(e) =>
-                                  handleOfficeChange(
-                                    e,
-                                    index,
-                                    "EmailId",
-                                    subIndex
-                                  )
-                                }
-                              />
-                            </div>
-                            <div>
-                              <label
-                                htmlFor={`Phone-${index}-${subIndex}`}
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
-                              >
-                                Phone
-                              </label>
-                              <input
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                type="text"
-                                id={`Phone-${index}-${subIndex}`}
-                                value={person.Phone}
-                                onChange={(e) =>
-                                  handleOfficeChange(
-                                    e,
-                                    index,
-                                    "Phone",
-                                    subIndex
-                                  )
-                                }
-                              />
-                            </div>
-                            <div>
-                              <label
-                                htmlFor={`Designation-${index}-${subIndex}`}
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
-                              >
-                                Designation
-                              </label>
-                              <input
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                type="text"
-                                id={`Designation-${index}-${subIndex}`}
-                                value={person.Designation}
-                                onChange={(e) =>
-                                  handleOfficeChange(
-                                    e,
-                                    index,
-                                    "Designation",
-                                    subIndex
-                                  )
-                                }
-                              />
-                            </div>
-
-                            <div>
-                              {subIndex == 0 ? (
-                                <button
-                                  type="button"
-                                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
-                                  onClick={() => addMoreContactPerson(index)}
-                                >
-                                  Add More Contact
-                                </button>
-                              ) : (
-                                <button
-                                  type="button"
-                                  className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mt-5"
-                                  onClick={() =>
-                                    handleDeleteContactPerson(index, subIndex)
-                                  }
-                                >
-                                  Delete Contact
-                                </button>
-                              )}
-                            </div>
-                          </div>
+                            <i
+                              className="bi bi-x-circle-fill"
+                              style={{ color: "red" }}
+                            ></i>
+                          </button>
                         </div>
                       ))}
                     </div>
-                    {/* ContactPerson fields */}
-
-                    <div>
-                      {index > 0 && (
-                        <button
-                          type="button"
-                          className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mt-5"
-                          onClick={() => handleDeleteBranch(index)}
-                        >
-                          Delete Branch
-                        </button>
-                      )}
+                  </div>
+                ) : null}
+              </div>
+              <div className="mb-6">
+                <label
+                  htmlFor="documentInput"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                >
+                  Upload Document
+                </label>
+                <input
+                  type="file"
+                  id="documentInput"
+                  name="documentInput"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  ref={documentInputRef}
+                  multiple
+                  accept=".pdf,.doc,.docx"
+                  onChange={handleDocumentInputChange}
+                  required
+                />
+                {docLoader && <LoaderForMedia />}
+                {documents.length > 0 ? (
+                  <div>
+                    <div className="ml-2 mt-3 underline font-bold">
+                      <h3>Selected Document</h3>
+                    </div>
+                    <div className="flex flex-wrap relative mt-3">
+                      {documents.map((itemUrl, index) => (
+                        <div key={index} className="mr-4 mb-4 relative">
+                          <iframe
+                            title={`Document ${index}`}
+                            src={`${imgApiUrl}/${itemUrl}`}
+                            className="h-48 w-64 border border-black rounded-lg"
+                          />
+                          <button
+                            type="button"
+                            className="absolute top-0 right-0 p-1"
+                            onClick={() => removeDocument(index)}
+                          >
+                            <i
+                              className="bi bi-x-circle-fill"
+                              style={{ color: "red" }}
+                            ></i>
+                          </button>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                ))
-              : null}
+                ) : null}
+              </div>
 
+              <div></div>
+              <h2 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white underline">
+                Social Profiles
+              </h2>
+              <div></div>
+              {/* Facebook Url */}
+              <div>
+                <label
+                  htmlFor="facebook"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
+                >
+                  Facebook Url
+                </label>
+                <input
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  type="text"
+                  id="facebook"
+                  value={socialMediaProfileLinks.Facebook}
+                  onChange={(e) =>
+                    handleSocialProfileChange("Facebook", e.target.value)
+                  }
+                />
+              </div>
+              {/* Twitter Url */}
+              <div>
+                <label
+                  htmlFor="Twitter"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
+                >
+                  Twitter Url
+                </label>
+                <input
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  type="text"
+                  id="Twitter"
+                  value={socialMediaProfileLinks.Twitter}
+                  onChange={(e) =>
+                    handleSocialProfileChange("Twitter", e.target.value)
+                  }
+                />
+              </div>
+              {/* Instagram Url */}
+              <div>
+                <label
+                  htmlFor="Instagram"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
+                >
+                  Instagram Url
+                </label>
+                <input
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  type="text"
+                  id="Instagram"
+                  value={socialMediaProfileLinks.Instagram}
+                  onChange={(e) =>
+                    handleSocialProfileChange("Instagram", e.target.value)
+                  }
+                />
+              </div>
+              {/* Linkdin Url */}
+              <div>
+                <label
+                  htmlFor="Linkdin"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
+                >
+                  Linkdin Url
+                </label>
+                <input
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  type="text"
+                  id="facebLinkdinook"
+                  value={socialMediaProfileLinks.LinkedIn}
+                  onChange={(e) =>
+                    handleSocialProfileChange("LinkedIn", e.target.value)
+                  }
+                />
+              </div>
+            </div>
+            <div>
+              {BranchesData
+                ? BranchesData.map((data, index) => (
+                    <div key={index}>
+                      {/* Main BranchOffices fields */}
+                      <h2 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white underline mt-10">
+                        Office Branch Details{" "}
+                        <span>
+                          {index > 0 ? <span>{index + 1}</span> : null}
+                        </span>
+                      </h2>
+                      <div className="grid gap-4 mb-2 sm:grid-cols-3">
+                        <div>
+                          <label
+                            htmlFor={`Phone-${index}`}
+                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                          >
+                            Phone
+                          </label>
+                          <input
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            type="text"
+                            id={`Phone-${index}`}
+                            value={data.Phone}
+                            onChange={(e) =>
+                              handleOfficeChange(e, index, "Phone")
+                            }
+                          />
+                        </div>
+
+                        <div>
+                          <label
+                            htmlFor={`Mobile-${index}`}
+                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                          >
+                            Mobile
+                          </label>
+                          <input
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            type="text"
+                            id={`Mobile-${index}`}
+                            value={data.Mobile}
+                            onChange={(e) =>
+                              handleOfficeChange(e, index, "Mobile")
+                            }
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor={`EmailId-${index}`}
+                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                          >
+                            Email ID
+                          </label>
+                          <input
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            type="email"
+                            id={`EmailId-${index}`}
+                            value={data.EmailId}
+                            onChange={(e) =>
+                              handleOfficeChange(e, index, "EmailId")
+                            }
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor={`WhatsApp-${index}`}
+                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                          >
+                            WhatsApp
+                          </label>
+                          <input
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            type="text"
+                            id={`WhatsApp-${index}`}
+                            value={data.WhatsApp}
+                            onChange={(e) =>
+                              handleOfficeChange(e, index, "WhatsApp")
+                            }
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor={`Area-${index}`}
+                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
+                          >
+                            Area
+                          </label>
+                          <input
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            type="text"
+                            id={`Area-${index}`}
+                            value={data.Area}
+                            onChange={(e) =>
+                              handleOfficeChange(e, index, "Area")
+                            }
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor={`City-${index}`}
+                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
+                          >
+                            City
+                          </label>
+                          <input
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            type="text"
+                            id={`City-${index}`}
+                            value={data.City}
+                            onChange={(e) =>
+                              handleOfficeChange(e, index, "City")
+                            }
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor={`State-${index}`}
+                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
+                          >
+                            State
+                          </label>
+                          <input
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            type="text"
+                            id={`State-${index}`}
+                            value={data.State}
+                            onChange={(e) =>
+                              handleOfficeChange(e, index, "State")
+                            }
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor={`Country-${index}`}
+                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
+                          >
+                            Country
+                          </label>
+                          <input
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            type="text"
+                            id={`Country-${index}`}
+                            value={data.Country}
+                            onChange={(e) =>
+                              handleOfficeChange(e, index, "Country")
+                            }
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor={`PinCode-${index}`}
+                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
+                          >
+                            Pin Code
+                          </label>
+                          <input
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            type="text"
+                            id={`PinCode-${index}`}
+                            value={data.PinCode}
+                            onChange={(e) =>
+                              handleOfficeChange(e, index, "PinCode")
+                            }
+                          />
+                        </div>
+                        <div></div>
+                      </div>
+                      <div className="grid gap-4 mb-2 sm:grid-cols-3">
+                        {data.ContactPerson.map((person, subIndex) => (
+                          <div key={subIndex}>
+                            <div>
+                              <h2 className="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white underline mt-10">
+                                Contact Person Details{" "}
+                                <span>
+                                  {subIndex > 0 ? (
+                                    <span>{subIndex + 1}</span>
+                                  ) : null}
+                                </span>
+                              </h2>
+                            </div>
+
+                            <div
+                              className="grid gap-4 mb-2 sm:grid-cols-2"
+                              key={`${index}-${subIndex}`}
+                            >
+                              <div>
+                                <label
+                                  htmlFor={`Name-${index}-${subIndex}`}
+                                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required "
+                                >
+                                  Person Name
+                                </label>
+                                <input
+                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                  type="text"
+                                  id={`Name-${index}-${subIndex}`}
+                                  value={person.Name}
+                                  onChange={(e) =>
+                                    handleOfficeChange(
+                                      e,
+                                      index,
+                                      "Name",
+                                      subIndex
+                                    )
+                                  }
+                                />
+                              </div>
+
+                              <div>
+                                <label
+                                  htmlFor={`Mobile-${index}-${subIndex}`}
+                                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                                >
+                                  Mobile
+                                </label>
+                                <input
+                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                  type="text"
+                                  id={`Mobile-${index}-${subIndex}`}
+                                  value={person.Mobile}
+                                  onChange={(e) =>
+                                    handleOfficeChange(
+                                      e,
+                                      index,
+                                      "Mobile",
+                                      subIndex
+                                    )
+                                  }
+                                />
+                              </div>
+                              <div>
+                                <label
+                                  htmlFor={`EmailId-${index}-${subIndex}`}
+                                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                                >
+                                  Email
+                                </label>
+                                <input
+                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                  type="email"
+                                  id={`EmailId-${index}-${subIndex}`}
+                                  value={person.EmailId}
+                                  onChange={(e) =>
+                                    handleOfficeChange(
+                                      e,
+                                      index,
+                                      "EmailId",
+                                      subIndex
+                                    )
+                                  }
+                                />
+                              </div>
+                              <div>
+                                <label
+                                  htmlFor={`Phone-${index}-${subIndex}`}
+                                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white required"
+                                >
+                                  Phone
+                                </label>
+                                <input
+                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                  type="text"
+                                  id={`Phone-${index}-${subIndex}`}
+                                  value={person.Phone}
+                                  onChange={(e) =>
+                                    handleOfficeChange(
+                                      e,
+                                      index,
+                                      "Phone",
+                                      subIndex
+                                    )
+                                  }
+                                />
+                              </div>
+                              <div>
+                                <label
+                                  htmlFor={`Designation-${index}-${subIndex}`}
+                                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
+                                >
+                                  Designation
+                                </label>
+                                <input
+                                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                  type="text"
+                                  id={`Designation-${index}-${subIndex}`}
+                                  value={person.Designation}
+                                  onChange={(e) =>
+                                    handleOfficeChange(
+                                      e,
+                                      index,
+                                      "Designation",
+                                      subIndex
+                                    )
+                                  }
+                                />
+                              </div>
+
+                              <div>
+                                {subIndex == 0 ? (
+                                  <button
+                                    type="button"
+                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
+                                    onClick={() => addMoreContactPerson(index)}
+                                  >
+                                    Add More Contact
+                                  </button>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mt-5"
+                                    onClick={() =>
+                                      handleDeleteContactPerson(index, subIndex)
+                                    }
+                                  >
+                                    Delete Contact
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      {/* ContactPerson fields */}
+
+                      <div>
+                        {index > 0 && (
+                          <button
+                            type="button"
+                            className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 mt-5"
+                            onClick={() => handleDeleteBranch(index)}
+                          >
+                            Delete Branch
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                : null}
+
+              <button
+                type="button"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
+                onClick={addMore}
+              >
+                Add More Branch
+              </button>
+            </div>
+          </form>
+
+          <div>
             <button
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5"
-              onClick={addMore}
+              onClick={submitForm}
             >
-              Add More Branch
+              Update
             </button>
           </div>
-        </form>
-
-        <div>
-          <button
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            type="button"
-            onClick={submitForm}
-          >
-            Update
-          </button>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }

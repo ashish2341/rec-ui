@@ -33,6 +33,7 @@ import LoadingBigImg from "@/components/common/loadingBigImg";
 import PersonalLoanCalculator from "@/components/common/emiCalculator";
 import { Carousel } from "flowbite-react";
 import ReadMore from "@/components/common/readMore";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 
 const PropertyDetail = ({ params }) => {
   const [copied, setCopied] = useState(false);
@@ -65,7 +66,8 @@ const PropertyDetail = ({ params }) => {
   const [contactMolileNumber, setcontactPhone] = useState("");
   const [contactEnquiryData, setcontactEnquiryData] = useState("");
   const [contactEnquiryType, setcontactEnquiryType] = useState("ContactUs");
-
+  const menuRef = useRef(null);
+  const [loaderIsLoading, setLoaderIsLoading] = useState(false);
   const currentDate = new Date().toISOString().slice(0, 10);
 
   const addcontactEnquiryData = async () => {
@@ -243,7 +245,7 @@ const PropertyDetail = ({ params }) => {
                   </div>
                 )}
               </div>
-  
+
               <div className={`${styles.populerPropertiesBoxPriceMain}`}>
                 <p className={`${styles.populerPropertiesBoxPrice}`}>
                   {item.TotalPrice?.DisplayValue}
@@ -273,6 +275,7 @@ const PropertyDetail = ({ params }) => {
   };
 
   const GetPropertyId = async () => {
+    setLoaderIsLoading(true)
     let properties = await GetPropertyById(params?.property);
     if (properties?.resData?.success == true) {
       setListPropertiesData(properties?.resData?.data);
@@ -282,12 +285,13 @@ const PropertyDetail = ({ params }) => {
       setAminityData(properties?.resData?.data?.Aminities);
       setBrochureData(properties?.resData?.data?.Brochure);
       setPaymentPlanData(properties?.resData?.data?.PaymentPlan);
-
+      setLoaderIsLoading(false)
       setIsLoading(false);
       toast.success(properties?.resData?.message);
       return false;
     } else {
       toast.error(properties?.errMessage);
+      setLoaderIsLoading(false)
       return false;
     }
   };
@@ -424,9 +428,8 @@ const PropertyDetail = ({ params }) => {
       const scrollPosition = window.scrollY;
 
       pages.forEach((page) => {
-        const pageTop = page.offsetTop - nav.offsetHeight;
+        const pageTop = page.offsetTop - nav.offsetHeight - 100;
         const pageBottom = pageTop + page.offsetHeight;
-
         if (scrollPosition >= pageTop && scrollPosition < pageBottom) {
           const activeLink = document.querySelector(`a[href="#${page.id}"]`);
           if (activeLink) {
@@ -444,7 +447,29 @@ const PropertyDetail = ({ params }) => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  useEffect(() => {
+    const handleScroll = (e) => {
+      e.preventDefault();
+      const targetId = e.currentTarget.getAttribute("href").substring(1);
+      const targetElement = document.getElementById(targetId);
 
+      window.scrollTo({
+        top: targetElement.offsetTop - menuRef.current.offsetHeight - 100,
+        behavior: "smooth",
+      });
+    };
+
+    const anchors = menuRef.current.querySelectorAll("a");
+    anchors.forEach((anchor) => {
+      anchor.addEventListener("click", handleScroll);
+    });
+
+    return () => {
+      anchors.forEach((anchor) => {
+        anchor.removeEventListener("click", handleScroll);
+      });
+    };
+  }, []);
   function convertSystem(number) {
     if (number >= 10000000) {
       return (number / 10000000).toFixed(2) + "Cr";
@@ -459,9 +484,18 @@ const PropertyDetail = ({ params }) => {
   const isImage = (url) => {
     return url.match(/\.(jpeg|jpg|png)$/);
   };
+  const checkIfAllEmpty = (obj) => {
+    const allEmpty = Object.values(obj).every((value) => value === "");
+
+    // If all values are empty, return null
+    return allEmpty ? true : false;
+
+    // Check if all values in the object are empty strings
+  };
+
   return (
     <>
-      {/* {isLoading && <Spinner />} */}
+    {loaderIsLoading && <CommonLoader />}
       <Navbar />
       <div className={`${styles.heroSection} heroSection`}>
         <div className={`${styles.heroSectionMain}`}>
@@ -522,63 +556,14 @@ const PropertyDetail = ({ params }) => {
             <LoadingImg />
           )}
         </div>
-        {/* <div className={`${styles.heroSectionBottomMain}`}>
-          <div className={`${styles.heroSectionBottomBox}`}>
-            <div className={`${styles.BottomBoxcontenet}`}>
-              <h2 className={`${styles.heroSectionBottomBoxHead}`}>
-                {listPropertiesData.Title}
-              </h2>
-              <p className={`${styles.heroSectionBottomBoxText}`}>
-                {" "}
-                <i className="bi bi-geo-alt-fill"></i>
-                {listPropertiesData.Address}
-              </p>
-            </div>
-            <div className={`${styles.heroSectionVL}`}></div>
-            <div className={`${styles.BottomBoxcontenet}`}>
-              <h2 className={`${styles.heroSectionBottomBoxHead}`}>Price</h2>
-              <p className={`${styles.heroSectionBottomBoxText}`}>
-                {" "}
-                {listPropertiesData.TotalPrice?.DisplayValue}
-              </p>
-            </div>
-            <div className={`${styles.heroSectionVL}`}></div>
-            <div className={`${styles.BottomBoxcontenet}`}>
-              <h2 className={`${styles.heroSectionBottomBoxHead}`}>Facing</h2>
-              {listPropertiesData?.Facing?.map((item, index) => (
-                <p key={index} className={`${styles.heroSectionBottomBoxText}`}>
-                  {" "}
-                  {item.Facing}
-                </p>
-              ))}
-            </div>
-            <div className={`${styles.heroSectionVL}`}></div>
-            <div className={`${styles.BottomBoxcontenet}`}>
-              <h2 className={`${styles.heroSectionBottomBoxHead}`}>
-                Project Type
-              </h2>
-              <p className={`${styles.heroSectionBottomBoxText}`}>
-                {listPropertiesData?.PropertyType?.Type}
-              </p>
-            </div>
-            <div className={`${styles.heroSectionVL}`}></div>
-            <div className={`${styles.BottomBoxcontenet}`}>
-              <h2 className={`${styles.heroSectionBottomBoxHead}`}>
-                Posession Status
-              </h2>
-              <p className={`${styles.heroSectionBottomBoxText}`}>
-                {listPropertiesData?.PosessionStatus?.Possession}
-              </p>
-            </div>
-          </div>
-        </div> */}
       </div>
 
-      <div className={`${styles.detailSectionBar} detailSectionBar`}>
-        <div
-          className="text-sm font-medium text-center text-black-500 border-b border-black-900 dark:text-gray-400 dark:border-gray-700 content"
-          id="nav"
-        >
+      <div
+        className={`${styles.detailSectionBar} detailSectionBar`}
+        id="nav"
+        ref={menuRef}
+      >
+        <div className="text-sm font-medium text-center text-black-500 border-b border-black-900 dark:text-gray-400 dark:border-gray-700 content">
           <ul className="flex flex-nowrap overflow-x-auto -mb-px">
             <li className="me-2">
               <Link href="#general" className="nonActiveBar">
@@ -607,13 +592,18 @@ const PropertyDetail = ({ params }) => {
               </Link>
             </li>
             */}
-            {listPropertiesData?.ProeprtyType == "Commercial" ? null : (
-              <li className="me-2">
-                <Link href="#specifications" className="nonActiveBar">
-                  Specifications
-                </Link>
-              </li>
-            )}
+            {(listPropertiesData &&
+              listPropertiesData?.ProeprtyType == "Commercial") ||
+              ((listPropertiesData?.Fitting &&
+                checkIfAllEmpty(listPropertiesData?.Fitting)) ||
+              listPropertiesData?.PropertySubtype?.Name === "Plot" ? null : (
+                <li className="me-2">
+                  <Link href="#specifications" className="nonActiveBar">
+                    Specifications
+                  </Link>
+                </li>
+              ))}
+
             {/*
             <li className="me-2">
               <Link href="#location" className="nonActiveBar">
@@ -634,7 +624,7 @@ const PropertyDetail = ({ params }) => {
         <div className={` ${styles.divideDetailPageLeft}`}>
           {listPropertiesData ? (
             <div
-              id="general"
+              // id="general"
               className={`${styles.generalDetails} GeneralDetails page`}
             >
               <div
@@ -651,27 +641,29 @@ const PropertyDetail = ({ params }) => {
                   </p>
                 </div>
                 {listPropertiesData.Builder ? (
-                  <div className={`flex`}>
-                    <div>
-                      <img
-                        className="mr-2"
-                        height="50"
-                        width="50"
-                        src={
-                          listPropertiesData.Builder
-                            ? `${imgApiUrl}/${listPropertiesData.Builder.Logo}`
-                            : null
-                        }
-                      />
+                  <Link href={`/builderFE/${listPropertiesData.Builder._id}`}>
+                    <div className={`flex`}>
+                      <div>
+                        <img
+                          className="mr-2"
+                          height="50"
+                          width="50"
+                          src={
+                            listPropertiesData?.Builder?.Logo
+                              ? `${imgApiUrl}/${listPropertiesData?.Builder?.Logo}`
+                              : "https://tse2.explicit.bing.net/th?id=OIP.9AeFX9VvFYTXrL5IwhGhYwHaHa&pid=Api&P=0&h=180"
+                          }
+                        />
+                      </div>
+                      <h2
+                        className={`${styles.heroSectionBottomBoxHead} text-2xl mt-1`}
+                      >
+                        {listPropertiesData.Builder
+                          ? listPropertiesData?.Builder.Name
+                          : null}
+                      </h2>
                     </div>
-                    <h2
-                      className={`${styles.heroSectionBottomBoxHead} text-2xl mt-1`}
-                    >
-                      {listPropertiesData.Builder
-                        ? listPropertiesData?.Builder.Name
-                        : null}
-                    </h2>
-                  </div>
+                  </Link>
                 ) : (
                   <div className="flex">
                     <div>
@@ -687,7 +679,7 @@ const PropertyDetail = ({ params }) => {
               </div>
               <div className={`${styles.heroSectionBottomMain}`}>
                 <div className={`${styles.heroSectionBottomBox}`}>
-                  <div className={`${styles.BottomBoxcontenet}`}>
+                  <div className={`text-center ${styles.BottomBoxcontenet}`}>
                     <h2 className={`${styles.heroSectionBottomBoxHead}`}>
                       Price
                     </h2>
@@ -697,7 +689,7 @@ const PropertyDetail = ({ params }) => {
                     </p>
                   </div>
                   <div className={`${styles.heroSectionVL}`}></div>
-                  <div className={`${styles.BottomBoxcontenet}`}>
+                  <div className={`text-center  ${styles.BottomBoxcontenet}`}>
                     <h2 className={`${styles.heroSectionBottomBoxHead}`}>
                       Facing
                     </h2>
@@ -712,8 +704,8 @@ const PropertyDetail = ({ params }) => {
                     ))}
                   </div>
                   <div className={`${styles.heroSectionVL}`}></div>
-                  <div className={`${styles.BottomBoxcontenet}`}>
-                    <h2 className={`${styles.heroSectionBottomBoxHead}`}>
+                  <div className={`text-center  ${styles.BottomBoxcontenet}`}>
+                    <h2 className={` ${styles.heroSectionBottomBoxHead}`}>
                       Project Type
                     </h2>
                     <p className={`${styles.heroSectionBottomBoxText}`}>
@@ -721,7 +713,7 @@ const PropertyDetail = ({ params }) => {
                     </p>
                   </div>
                   <div className={`${styles.heroSectionVL}`}></div>
-                  <div className={`${styles.BottomBoxcontenet}`}>
+                  <div className={`text-center  ${styles.BottomBoxcontenet}`}>
                     <h2 className={`${styles.heroSectionBottomBoxHead}`}>
                       Posession Status
                     </h2>
@@ -841,7 +833,9 @@ const PropertyDetail = ({ params }) => {
                 {listPropertiesData.Title} Configuration And Floor Plan
               </h2>
               <div className={`${styles.configureBox}`}>
-                <div className={`mb-4 border-b border-gray-200 dark:border-gray-700`}>
+                <div
+                  className={`mb-4 border-b border-gray-200 dark:border-gray-700`}
+                >
                   <ul
                     className={`flex flex-wrap -mb-px text-sm font-medium text-center ${styles.configureBoxSize}`}
                     id="default-tab"
@@ -915,7 +909,9 @@ const PropertyDetail = ({ params }) => {
                     aria-labelledby="profile-tab"
                   >
                     {listPropertiesData ? (
-                      <div className={`flex justify-between ${styles.configureFlex}`}>
+                      <div
+                        className={`flex justify-between ${styles.configureFlex}`}
+                      >
                         <div className={`${styles.configureFlexInner}`}>
                           {listPropertiesData?.ProeprtyType == "Commercial" ? (
                             <ol className={`${styles.configureOl}`}>
@@ -1307,7 +1303,9 @@ const PropertyDetail = ({ params }) => {
                       <AccordionContent
                         className={` ${styles.AccordionContent}`}
                       >
-                        <div className={`grid grid-cols-5 gap-2 ${styles.AccordionContentInner}`}>
+                        <div
+                          className={`grid gap-4 mb-4 sm:grid-cols-5 md:grid-cols-4  ${styles.AccordionContentInner}`}
+                        >
                           {listPropertiesData?.Aminities?.map((item, index) => (
                             <div key={index} className=" p-4">
                               <img
@@ -1336,7 +1334,9 @@ const PropertyDetail = ({ params }) => {
                   <AccordionPanel>
                     <AccordionTitle>Features</AccordionTitle>
                     <AccordionContent className={`${styles.AccordionContent}`}>
-                      <div className={`grid grid-cols-5 gap-2 ${styles.AccordionContentInner2}`}>
+                      <div
+                        className={`grid gap-4 mb-4 sm:grid-cols-5 md:grid-cols-4  ${styles.AccordionContentInner2}`}
+                      >
                         {listPropertiesData?.Features?.map((item, index) => (
                           <div key={index} className="p-4 justify-between">
                             <img
@@ -1377,10 +1377,10 @@ const PropertyDetail = ({ params }) => {
               </div>
             </div>
           </div>
-          */}
+          */} 
 
           {/* Specifications */}
-          {listPropertiesData?.ProeprtyType == "Residential" ? (
+          {listPropertiesData?.ProeprtyType == "Residential" &&  listPropertiesData?.PropertySubtype?.Name !== "Plot" ? (
             listPropertiesData?.Fitting?.Electrical == "" &&
             listPropertiesData?.Fitting?.Toilets == "" &&
             listPropertiesData?.Fitting?.Kitchen == "" &&

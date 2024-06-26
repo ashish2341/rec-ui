@@ -107,7 +107,7 @@
   width: 70%;
 }
 .divideDetailPageRight{
-  width: 33%;
+  width: auto;
 }
 
 
@@ -476,9 +476,35 @@
   flex-wrap: wrap;
 }
 
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .AccordionContentInner{
+    grid-template-columns: auto auto    !important;
+  }
+  .AccordionContentInner2{
+    grid-template-columns: auto auto auto !important;
+  }
+}
+@media screen and (min-width: 700px) and (max-width: 1100px) {
 
-
-@media screen and (max-width: 700px) {
+  .divideDetailPage {
+    display: flex;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-top: 3rem;
+  }
+  .heroSectionMain{
+    margin-left: 2rem;
+    margin-right: 2rem;
+  }
+  .similarMainType {
+    margin-left: 2rem;
+    margin-right: 1rem;
+  }
+  .detailSectionBar {
+    padding: 0 2rem 0 2rem;
+  }
+  }
+@media screen and (max-width: 768px) {
   .heroSection {
     height: auto;
   }
@@ -510,7 +536,7 @@
     text-wrap: nowrap;
   }
   .configureFlex{
-    flex-direction: column;
+    /* flex-direction: column; */
     margin-left: 2rem;
   }
   .configureFlexInner{
@@ -522,10 +548,10 @@
     text-wrap: nowrap;
   }
   .AccordionContentInner{
-    grid-template-columns: auto auto !important;
+    grid-template-columns: auto auto  ;
   }
   .AccordionContentInner2{
-    grid-template-columns: auto auto auto !important;
+    grid-template-columns: auto auto  ;
   }
   .AccordionContent{
     padding-left: 0 !important;

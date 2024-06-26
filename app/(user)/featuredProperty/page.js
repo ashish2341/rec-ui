@@ -32,6 +32,8 @@ import TextComponent from "@/components/common/textComponent";
 import PriceRangeSlider from "@/components/common/priceRangeModal/priceRangeModal";
 import InfiniteScroll from "react-infinite-scroll-component";
 import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
+
 const FeaturedProperty = (params) => {
   // fetching Data for facing
   const {
@@ -113,6 +115,7 @@ const FeaturedProperty = (params) => {
   const [resetBtnValue, setResetBtnValue] = useState(false);
   const [rangeModalvalue, setRangeModalValue] = useState(true);
   const [hasMore, setHasMore] = useState(true);
+  const [loaderIsLoading, setLoaderIsLoading] = useState(false);
 
   useEffect(() => {
     if (payload) {
@@ -149,16 +152,20 @@ const FeaturedProperty = (params) => {
   }, []);
 
   const getAllFilterProperties = async (payloadData) => {
+    setLoaderIsLoading(true)
     let properties = await GetPropertyByQueryApi(payloadData);
     if (properties?.resData?.success == true) {
       setListData(properties?.resData.data);
       setListDataForShow(
         properties?.resData?.data.slice(0, propertyCardToShow)
       );
+      setLoaderIsLoading(false)
+
       setHasMore(true);
       return false;
     } else {
       toast.error(properties?.errMessage);
+      setLoaderIsLoading(false)
       return false;
     }
   };
@@ -280,6 +287,7 @@ const FeaturedProperty = (params) => {
   };
   return (
     <>
+    {loaderIsLoading && <CommonLoader />}
       <Navbar />
       <div className={`${styles.forSticky}`}>
         <div className={`${styles.heroSection} heroSection `}>

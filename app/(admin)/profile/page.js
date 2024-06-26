@@ -19,6 +19,9 @@ import {
 import { UpdateBuilderApi } from "@/api-functions/builder/updateBuilder";
 import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
 import CommonLoader from "@/components/common/commonLoader/commonLoader";
+import QRCode from "qrcode";
+import QRCodeFunction from "@/components/admin/QRscan";
+
 
 export default function Profile() {
   const roleData = Cookies.get("roles") ?? "";
@@ -33,6 +36,7 @@ export default function Profile() {
   const [rerenderforUser, setRerenderforUser] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const userId = Cookies.get("userId");
+    
   useEffect(() => {
     getUser();
   }, [rerenderforUser]);
@@ -562,6 +566,11 @@ export default function Profile() {
             />
           </div>
         </form>
+        {roles.includes("Developer") ? (
+          <div className="flex justify-between">
+            <QRCodeFunction id={userId} />
+          </div>
+          ): null}
         <button
           onClick={submitUserForm}
           className="text-white mb-4 mt-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

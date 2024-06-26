@@ -567,7 +567,7 @@ export default function Profile() {
           </div>
         </form>
         {roles.includes("Developer") ? (
-          <div className="flex justify-between">
+          <div className="flex justify-center">
             <QRCodeFunction id={userId} />
           </div>
           ): null}

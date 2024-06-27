@@ -11,7 +11,6 @@ import { imgApiUrl } from "@/utils/constants";
 import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
 
 export default function EditTestiMonials(params) {
-  console.log("params", params);
   const {
     data: listEditData,
     loading,
@@ -45,7 +44,6 @@ export default function EditTestiMonials(params) {
     setDesignation(e.target.value);
   };
   const handleEnabledChange = (e) => {
-    console.log("isEnabled Value", e.target.value);
     setIsEnabled(e.target.value === "true");
   };
 
@@ -67,12 +65,10 @@ export default function EditTestiMonials(params) {
       Image: image,
       IsEnabled: IsEnabled,
     };
-    console.log("testiMonialsDetails", testiMonialsDetails);
     let res = await UpdateTestimonial(
       testiMonialsDetails,
       params?.params?.editTestimonials
     );
-    console.log("UpdateTestimonial res", res);
     if (res?.resData?.success == true) {
       toast.success(res?.resData?.message);
       router.push("/testiMonials");
@@ -87,7 +83,6 @@ export default function EditTestiMonials(params) {
     const file = event.target.files[0]; // Get the first file only
     const formData = new FormData();
     formData.append("profilePic", file);
-    console.log("image File", file);
 
     // Check file type
     if (!acceptedFileTypes.includes(file?.type)) {
@@ -105,6 +100,10 @@ export default function EditTestiMonials(params) {
         setImageLoader(false);
       } else {
         toast.error(res?.errMessage);
+        setImageLoader(false);
+        if (imageInputRef.current) {
+          imageInputRef.current.value = "";
+        }
         return;
       }
     }

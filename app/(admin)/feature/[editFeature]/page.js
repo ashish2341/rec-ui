@@ -97,6 +97,10 @@ export default function EditFeature({ params }) {
         setImageLoader(false);
       } else {
         toast.error(res?.errMessage);
+        setImageLoader(false);
+        if (imageInputRef.current) {
+          imageInputRef.current.value = "";
+        }
         return;
       }
     }

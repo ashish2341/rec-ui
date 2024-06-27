@@ -322,10 +322,17 @@ export default function Profile() {
             } else {
               toast.error(res?.errMessage);
               setDocLoader(false);
+              if (documentInputRef.current) {
+                documentInputRef.current.value = "";
+              }
               return false;
             }
           } catch (error) {
             toast.error("Error occurred while converting image.");
+            setDocLoader(false);
+            if (documentInputRef.current) {
+              documentInputRef.current.value = "";
+            }
             return false;
           }
         })
@@ -393,10 +400,17 @@ export default function Profile() {
             } else {
               toast.error(res?.errMessage);
               setImageLoader(false);
+              if (imageInputRef.current) {
+                imageInputRef.current.value = "";
+              }
               return false;
             }
           } catch (error) {
             toast.error("Error occurred while converting image.");
+            setImageLoader(false);
+            if (imageInputRef.current) {
+              imageInputRef.current.value = "";
+            }
             return false;
           }
         })
@@ -524,6 +538,9 @@ export default function Profile() {
       } else {
         toast.error(res?.errMessage);
         setLogoLoader(false);
+        if (logoInputRef.current) {
+          logoInputRef.current.value = "";
+        }
         return;
       }
     }

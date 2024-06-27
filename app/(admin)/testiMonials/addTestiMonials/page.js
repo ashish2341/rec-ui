@@ -30,7 +30,6 @@ export default function AddTestiMonials() {
     setDesignation(e.target.value);
   };
   const handleEnabledChange = (e) => {
-    console.log("isEnabled Value", e.target.value);
     setIsEnabled(e.target.value === "true");
   };
 
@@ -52,9 +51,8 @@ export default function AddTestiMonials() {
       Image: image,
       IsEnabled: IsEnabled,
     };
-    console.log("testiMonialsDetails", testiMonialsDetails);
     let res = await AddTestimonial(testiMonialsDetails);
-    console.log("AddTestimonialres", res);
+  
     if (res?.resData?.success == true) {
       router.push("/testiMonials");
       toast.success(res?.resData?.message);
@@ -69,7 +67,7 @@ export default function AddTestiMonials() {
     const file = event.target.files[0]; // Get the first file only
     const formData = new FormData();
     formData.append("profilePic", file);
-    console.log("image File", file);
+    
 
     // Check file type
     if (!acceptedFileTypes.includes(file?.type)) {
@@ -87,6 +85,10 @@ export default function AddTestiMonials() {
         setImageLoader(false);
       } else {
         toast.error(res?.errMessage);
+        setImageLoader(false);
+        if (imageInputRef.current) {
+          imageInputRef.current.value = "";
+        }
         return;
       }
     }

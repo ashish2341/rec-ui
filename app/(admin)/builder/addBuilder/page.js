@@ -166,11 +166,18 @@ export default function AddBuilder() {
             } else {
               setDocLoader(false)
               toast.error(res.errMessage);
+              if (documentInputRef.current) {
+                documentInputRef.current.value = "";
+              }
               return false;
             }
           } catch (error) {
             console.error("Error occurred while converting image:", error);
             toast.error("Error occurred while converting image.");
+            if (documentInputRef.current) {
+              documentInputRef.current.value = "";
+            }
+            setDocLoader(false)
             return false;
           }
         })
@@ -239,11 +246,18 @@ export default function AddBuilder() {
             } else {
               setImageLoader(false);
               toast.error(res?.errMessage);
+              if (imageInputRef.current) {
+                imageInputRef.current.value = "";
+              }
               return false;
             }
           } catch (error) {
             console.error("Error occurred while converting image:", error);
             toast.error("Error occurred while converting image.");
+            setImageLoader(false);
+            if (imageInputRef.current) {
+              imageInputRef.current.value = "";
+            }
             return false;
           }
         })
@@ -366,6 +380,9 @@ export default function AddBuilder() {
       } else {
         setLogoLoader(false)
         toast.error(res?.errMessage);
+        if (logoInputRef.current) {
+          logoInputRef.current.value = "";
+        }
         return;
       }
     }

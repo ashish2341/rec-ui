@@ -27,7 +27,7 @@ const BuilderHomePage = (params) => {
   const [EnquiryData, setEnquiryData] = useState("");
   const [EnquiryType, setEnquiryType] = useState("ContactUs");
   const [loaderIsLoading, setLoaderIsLoading] = useState(false);
-const [developData,setDevelopData]=useState("")
+  const [developData, setDevelopData] = useState("");
   const currentDate = new Date().toISOString().slice(0, 10);
 
   const addEnquiryData = async () => {
@@ -90,33 +90,30 @@ const [developData,setDevelopData]=useState("")
   // } = useFetch(
   //   `${API_BASE_URL}/developer/developer/${params?.params?.builderId}`
   // );
-useEffect(()=>{
-  getBuilderDatabyId()
-},[])
-const getBuilderDatabyId = async () => {
-  setLoaderIsLoading(true)
-  const id=params?.params?.builderId
-  let builder = await GetBuilderById(id);
-  if (builder?.resData?.success == true) {
-    setDevelopData(builder?.resData)
-    setLoaderIsLoading(false)
-  
-  } else {
-    toast.error(builder?.errMessage);
-    setLoaderIsLoading(false)
-  
-  }
-};
-
+  useEffect(() => {
+    getBuilderDatabyId();
+  }, []);
+  const getBuilderDatabyId = async () => {
+    setLoaderIsLoading(true);
+    const id = params?.params?.builderId;
+    let builder = await GetBuilderById(id);
+    if (builder?.resData?.success == true) {
+      setDevelopData(builder?.resData);
+      setLoaderIsLoading(false);
+    } else {
+      toast.error(builder?.errMessage);
+      setLoaderIsLoading(false);
+    }
+  };
 
   const date = new Date(developData?.data?.EstablishDate);
   const year = date.getFullYear();
   useEffect(() => {
     initFlowbite();
-}, []);
+  }, []);
   return (
     <>
-    {loaderIsLoading && <CommonLoader />}
+      {loaderIsLoading && <CommonLoader />}
       <Navbar />
       <div className={` ${styles.divideDetailPage} divideDetailPage`}>
         {/* <div className={` ${styles.builderTop} mb-5`}>
@@ -136,18 +133,21 @@ const getBuilderDatabyId = async () => {
             <div className={` ${styles.builderBox} mb-4`}>
               <div className={` ${styles.builderInputField}`}>
                 <div>
-                {developData?.data?.Logo ? ( <img
-                    width="180"
-                    height="180"
-                    className={` ${styles.builderLogoImg}`}
-                    src={`${imgApiUrl}/${developData?.data?.Logo}`}
-                  />):( <img
-                    width="180"
-                    height="180"
-                    className={` ${styles.builderLogoImg}`}
-                    src="https://tse2.explicit.bing.net/th?id=OIP.9AeFX9VvFYTXrL5IwhGhYwHaHa&pid=Api&P=0&h=180"
-                  />)}
-                 
+                  {developData?.data?.Logo ? (
+                    <img
+                      width="180"
+                      height="180"
+                      className={` ${styles.builderLogoImg}`}
+                      src={`${imgApiUrl}/${developData?.data?.Logo}`}
+                    />
+                  ) : (
+                    <img
+                      width="180"
+                      height="180"
+                      className={` ${styles.builderLogoImg}`}
+                      src="https://tse2.explicit.bing.net/th?id=OIP.9AeFX9VvFYTXrL5IwhGhYwHaHa&pid=Api&P=0&h=180"
+                    />
+                  )}
                 </div>
                 <div className={` ${styles.builderAfterImg}`}>
                   <div className="text-md font-semibold blueText text-nowrap mt-2">
@@ -178,7 +178,9 @@ const getBuilderDatabyId = async () => {
                       <Link
                         href={
                           developData?.data?.SocialMediaProfileLinks?.Instagram
-                          ? developData?.data?.SocialMediaProfileLinks?.Instagram : ""
+                            ? developData?.data?.SocialMediaProfileLinks
+                                ?.Instagram
+                            : ""
                         }
                         target="_blank"
                         rel="noopener noreferrer"
@@ -188,7 +190,9 @@ const getBuilderDatabyId = async () => {
                       <Link
                         href={
                           developData?.data?.SocialMediaProfileLinks?.LinkedIn
-                          ? developData?.data?.SocialMediaProfileLinks?.LinkedIn : ""
+                            ? developData?.data?.SocialMediaProfileLinks
+                                ?.LinkedIn
+                            : ""
                         }
                         target="_blank"
                         rel="noopener noreferrer"
@@ -198,7 +202,9 @@ const getBuilderDatabyId = async () => {
                       <Link
                         href={
                           developData?.data?.SocialMediaProfileLinks?.Twitter
-                          ? developData?.data?.SocialMediaProfileLinks?.Twitter : ""
+                            ? developData?.data?.SocialMediaProfileLinks
+                                ?.Twitter
+                            : ""
                         }
                         target="_blank"
                         rel="noopener noreferrer"
@@ -280,17 +286,21 @@ const getBuilderDatabyId = async () => {
         </div>
         <div className={` ${styles.builderDetailPageRight}`}>
           {developData ? (
-            developData?.data?.properties.length > 0 ? (developData?.data?.properties.map((item, index) => (
-                <Link key={index} href={`/propertyDetail/${item._id}`}>
-                  <div
-                    className={` ${styles.builderRightMainBox} flex mb-6 p-4 `}
+            developData?.data?.properties.length > 0 ? (
+              developData?.data?.properties.map((item, index) => (
+                <div
+                  key={index}
+                  className={` ${styles.builderRightMainBox} flex mb-6 p-4 `}
+                >
+                  <Link
+                    href={`/propertyDetail/${item._id}`}
+                    className={` ${styles.builderRightImg} mr-3`}
                   >
-                    <img
-                      src={`${imgApiUrl}/${item.Images[0].URL}`}
-                      className={` ${styles.builderRightImg} mr-3`}
-                    />
-                    <div className={` ${styles.builderRightBox}`}>
-                      <div className={` ${styles.cardImgBottom}`}>
+                    <img src={`${imgApiUrl}/${item.Images[0].URL}`}  className="h-full rounded-lg " alt="property Image"/>
+                  </Link>
+                  <div className={` ${styles.builderRightBox}`}>
+                    <div className={` ${styles.cardImgBottom}`}>
+                      <Link href={`/propertyDetail/${item._id}`}>
                         <div
                           className={` ${styles.populerPropertiesLocationMain} flex text-md pt-4`}
                         >
@@ -303,42 +313,50 @@ const getBuilderDatabyId = async () => {
                           >
                             {item?.Title}
                           </h2>
-                            <div
-                              className={` ${styles.populerPropertiesBoxDetail} flex mt-2`}
-                            >
-                              {item?.ProeprtyType}
-                            </div>
+                          <div
+                            className={` ${styles.populerPropertiesBoxDetail} flex mt-2 text-gray-500 font-bold`}
+                          >
+                            {item?.ProeprtyType}
+                          </div>
                         </div>
-                        <h2
-                          className={` ${styles.populerPropertiesBoxHead} text-sm pt-2`}
-                        >
-                          <ReadMore text={item?.Description} maxLength={100} />
-                        </h2>
+                      </Link>
+
+                      <h2
+                        className={` ${styles.populerPropertiesBoxHead} text-sm pt-2`}
+                      >
+                        <ReadMore text={item?.Description} maxLength={100} />
+                      </h2>
+                      <Link href={`/propertyDetail/${item._id}`}>
+                        {" "}
                         <div
                           className={`${styles.populerPropertiesBoxPriceMain} flex mt-2 justify-between`}
                         >
                           <div>
-                          <p className={`font-bold text-gray-500 ${styles.populerPropertiesBoxPrice}`}>
-                            {item?.TotalPrice?.DisplayValue}
-                          </p>
+                            <p
+                              className={`font-bold text-gray-500 ${styles.populerPropertiesBoxPrice}`}
+                            >
+                              {item?.TotalPrice?.DisplayValue}
+                            </p>
                           </div>
                           <div>
-                          <Link href={`/propertyDetail/${item._id}`}>
-                            <button
-                              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                              type="button"
-                            >
-                              More Details
-                            </button>
-                          </Link>
+                            <Link href={`/propertyDetail/${item._id}`}>
+                              <button
+                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                type="button"
+                              >
+                                More Details
+                              </button>
+                            </Link>
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     </div>
                   </div>
-                </Link>
-              ))):(<h1 className={` ${styles.bigNotFound}`}>No Properties Found</h1>)
-            
+                </div>
+              ))
+            ) : (
+              <h1 className={` ${styles.bigNotFound}`}>No Properties Found</h1>
+            )
           ) : (
             <LoadingSideImg />
           )}

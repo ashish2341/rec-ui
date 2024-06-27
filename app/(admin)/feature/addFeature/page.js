@@ -85,6 +85,7 @@ export default function AddFeature() {
         setImageLoader(false);
       } else {
         toast.error(res?.errMessage);
+        setImageLoader(false);
         return;
       }
     }

@@ -73,7 +73,7 @@ export default function UpdateBuilder(params) {
           setBuilderEmail(builderData?.resData?.data?.EmailId || "");
           setBuilderWhatsapp(builderData?.resData?.data?.WhatsApp || "");
           setEstablishDate(
-            builderData?.resData?.data?.EstablishDate.slice(0, 10) || ""
+            builderData?.resData?.data?.EstablishDate?.slice(0, 10) || ""
           );
           setDescription(builderData?.resData?.data?.Description || "");
           setBuilderLogo(builderData?.resData?.data?.Logo || "");
@@ -211,10 +211,17 @@ export default function UpdateBuilder(params) {
             } else {
               setDocLoader(false)
               toast.error(res?.errMessage);
+              if (documentInputRef.current) {
+                documentInputRef.current.value = "";
+              }
               return false;
             }
           } catch (error) {
             toast.error("Error occurred while converting image.");
+            setDocLoader(false)
+            if (documentInputRef.current) {
+              documentInputRef.current.value = "";
+            }
             return false;
           }
         })
@@ -282,12 +289,19 @@ export default function UpdateBuilder(params) {
               imageString.push(res?.successMessage?.imageUrl);
             } else {
               toast.error(res?.errMessage);
+              setImageLoader(false)
+              if (imageInputRef.current) {
+                imageInputRef.current.value = "";
+              }
               return false;
             }
           } catch (error) {
             setImageLoader(false)
             console.error("Error occurred while converting image:", error);
             toast.error("Error occurred while converting image.");
+            if (imageInputRef.current) {
+              imageInputRef.current.value = "";
+            }
             return false;
           }
         })
@@ -412,6 +426,9 @@ export default function UpdateBuilder(params) {
       } else {
         setLogoLoader(false)
         toast.error(res?.errMessage);
+        if (logoInputRef.current) {
+          logoInputRef.current.value = "";
+        }
         return;
       }
     }

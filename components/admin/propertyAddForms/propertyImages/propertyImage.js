@@ -82,11 +82,19 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
               imageString.push(res.successMessage.imageUrl);
             } else {
               toast.error(res.errMessage);
+              setImageLoader(false);
+              if (imageInputRef.current) {
+                imageInputRef.current.value = "";
+              }
               return false;
             }
           } catch (error) {
             console.error("Error occurred while converting image:", error);
             toast.error("Error occurred while converting image.");
+            setImageLoader(false);
+            if (imageInputRef.current) {
+              imageInputRef.current.value = "";
+            }
             return false;
           }
         })
@@ -165,10 +173,18 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
               videoString.push(res.successMessage.imageUrl);
             } else {
               toast.error(res.errMessage);
+              setVideoLoader(false);
+              if (VideoInputRef.current) {
+                VideoInputRef.current.value = "";
+              }
               return false;
             }
           } catch (error) {
             toast.error("Error occurred while converting image.");
+            setVideoLoader(false);
+            if (VideoInputRef.current) {
+              VideoInputRef.current.value = "";
+            }
             return false;
           }
         })

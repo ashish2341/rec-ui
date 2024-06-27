@@ -112,7 +112,11 @@ export default function PossessionDetailsPage({
         setDocumentLoader(false);
       } else {
         toast.error(res?.errMessage);
-        return;
+        setDocumentLoader(false);
+        if (brochureInputRef.current) {
+          brochureInputRef.current.value = "";
+        }
+        return false;
       }
     }
   };
@@ -210,6 +214,10 @@ export default function PossessionDetailsPage({
       } else {
         toast.error(res?.errMessage);
         setPaymentPlanLoader(false);
+        if (paymentPlanInputRef.current) {
+          paymentPlanInputRef.current.value = "";
+        }
+        return false
       }
     }
   };
@@ -246,6 +254,10 @@ export default function PossessionDetailsPage({
       } else {
         toast.error(res?.errMessage);
         setFloorPlanLoader(false);
+        if (floorPlanInputRef.current) {
+          floorPlanInputRef.current.value = "";
+        }
+        return false
       }
     }
   };

@@ -106,6 +106,9 @@ export default function PossessionDetailsPage({
       } else {
         toast.error(res.errMessage);
         setDocumentLoader(false);
+        if (brochureInputRef.current) {
+          brochureInputRef.current.value = "";
+        }
         return;
       }
     }
@@ -198,6 +201,9 @@ export default function PossessionDetailsPage({
       } else {
         toast.error(res.errMessage);
         setPaymentPlanLoader(false);
+        if (paymentPlanInputRef.current) {
+          paymentPlanInputRef.current.value = "";
+        }
       }
     }
   };
@@ -237,6 +243,9 @@ export default function PossessionDetailsPage({
       } else {
         toast.error(res.errMessage);
         setFloorPlanLoader(false);
+        if (floorPlanInputRef.current) {
+          floorPlanInputRef.current.value = "";
+        }
       }
     }
   };

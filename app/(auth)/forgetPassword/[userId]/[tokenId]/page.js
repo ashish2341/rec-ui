@@ -5,6 +5,7 @@ import Styles from "./forgetPassword.module.css";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { resetPassword } from "@/api-functions/auth/resetPasssword";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 
 export default function passwordReset({params}) {
   const router = useRouter();
@@ -12,6 +13,7 @@ export default function passwordReset({params}) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordsMatch, setPasswordsMatch] = useState(true);
 const [passwordShow,setPasswordShow]=useState(false)
+const [isLoading, setIsLoading] = useState(false);
 
 //   const handleEmail = useCallback((value) => {
 //     setEmail(() => value.target.value);
@@ -58,12 +60,15 @@ const submitForm = async () => {
         toast.error("Passwords do not match");
         return;
       }
+      setIsLoading(true)
     let res = await  resetPassword(params?.userId, params?.tokenId, { password: NewPassword });
     if (res.successMessage?.success == true) {
       toast.success(res.successMessage.message)
+      setIsLoading(false)
       router.push("/login")
     } else {
       toast.error(res.errMessage.message);
+      setIsLoading(false)
       return;
     }
   };
@@ -72,6 +77,7 @@ const submitForm = async () => {
     <section
       className={` ${Styles.loginMain} bg-gray-50 dark:bg-gray-900 h-100`}
     >
+      {isLoading && <CommonLoader />}
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a
           href="#"

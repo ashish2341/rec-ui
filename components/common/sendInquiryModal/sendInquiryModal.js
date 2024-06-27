@@ -5,6 +5,8 @@ import { UpdateInquiryApi } from "@/api-functions/enquiry/updateInquiry";
 import { ToastContainer, toast } from "react-toastify";
 import styles from "./sendinquiry.module.css";
 import { add } from "date-fns";
+import CommonLoader from "../commonLoader/commonLoader";
+
 export default function SendInquiryModal({
   isOpen,
   title,
@@ -16,6 +18,7 @@ export default function SendInquiryModal({
   setIsSubmitClicked,
   selectedInquiryId,
   setIsPopupOpenforInquiry,
+  setIsLoading
 }) {
   if (!isOpen) return null;
   const [page, setPage] = useState(1);
@@ -28,6 +31,7 @@ export default function SendInquiryModal({
   );
   const [searchData, setSearchData] = useState("");
   const [activeTab, setActiveTab] = useState("send");
+
   const sendUserList = userLlistData?.data?.filter((item) =>
     allowedUSerList.includes(item._id)
   );
@@ -41,13 +45,15 @@ export default function SendInquiryModal({
     getAllUser();
   }, [page, searchData]);
   const getAllUser = async () => {
+    setIsLoading(true);
     let users = await GetUserApi(page, searchData);
     if (users?.resData?.success == true) {
       setUserLlistData(users?.resData);
-      toast.success(users?.resData?.message);
+      setIsLoading(false);
       return false;
     } else {
       toast.error(users?.errMessage);
+      setIsLoading(false);
       return false;
     }
   };
@@ -66,6 +72,7 @@ export default function SendInquiryModal({
     }
   };
   const sendInquiry = async () => {
+    setIsLoading(true);
     const payload = {
       AllowedUser: addedUSerList,
     };
@@ -75,8 +82,10 @@ export default function SendInquiryModal({
       toast.success("Inquiry sent Successfully");
       setIsPopupOpenforInquiry(false);
       setIsSubmitClicked((prev) => prev + 1);
+      setIsLoading(false);
     } else {
       toast.error(res.errMessage);
+      setIsLoading(false);
       return false;
     }
   };

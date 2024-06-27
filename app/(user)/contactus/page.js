@@ -6,6 +6,7 @@ import { initFlowbite } from "flowbite";
 import styles from "./contactus.module.css";
 import { addEnquiry } from "@/api-functions/enquiry/addEnquiry";
 import {  toast } from "react-toastify";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 
 
 const ContactUs = () => {
@@ -17,7 +18,13 @@ const ContactUs = () => {
     const [EnquiryType, setEnquiryType] = useState("ContactUs");
 
     const currentDate = new Date().toISOString().slice(0, 10);
-
+    const [loaderIsLoading, setLoaderIsLoading] = useState(false);
+    useEffect(() => {
+      setLoaderIsLoading(true);
+      setTimeout(() => {
+        setLoaderIsLoading(false);
+      }, 1000);
+    }, []);
     const addEnquiryData = async () => {
         if (Name === "") {
           toast.error("Name  is required");
@@ -74,6 +81,7 @@ const ContactUs = () => {
 
     return (
         <>
+          {loaderIsLoading && <CommonLoader />}
         <Navbar />
         <div className={`${styles.contactMain}`}>
             <div className={`${styles.contactImg} h-screen bg-cover bg-center text-white border-b-1 border-b-solid border-x-neutral-50`}>
@@ -159,9 +167,9 @@ const ContactUs = () => {
                 </iframe>
                 </div>
                 <div className={`${styles.contactLeftAddress}`}>
-                    <p className={`${styles.contactBoxText} mt-24`}>HAVE ANY QUESTIONS?</p>
+                    <p className={`${styles.contactBoxText} `}>HAVE ANY QUESTIONS?</p>
                     <h1 className={`${styles.contactBoxHead} mt-4 mb-4`}>Let's start a conversation</h1>
-                    <p className={`${styles.contactBoxText} mt-24`}>Address</p>
+                    <p className={`${styles.contactBoxText} `}>Address</p>
                     <h1 className={`${styles.contactBoxHead} mt-4 mb-4`}>Let's start a conversation</h1>
                 </div>
             </div>

@@ -6,40 +6,43 @@
   padding-top: 4rem;
   min-height: 100vh;
 }
-.banner{
-  height: 35rem;
+.banner {
+  height: 35rem !important;
 }
-.crousalItemContentMain{
-  display: flex;
+.crousalItemContentMain {
+  display: flex !important;
   height: 100%;
 }
-.crousalItemLeftMain{
-   width: 64%;
-   background-color: #2A4AC8;
+.crousalItemContent {
+  height: 100%;
 }
-.crousalItemLeftContent{
+.crousalItemLeftMain {
+  width: 64%;
+  background-color: #2a4ac8;
+}
+.crousalItemLeftContent {
   margin-left: 26%;
   margin-top: 3rem;
 }
-.crousalItemLeftMainHeading{
+.crousalItemLeftMainHeading {
   color: white;
-    font-weight: 600;
-    font-size: 3.5rem;
-    line-height: 5rem;
+  font-weight: 600;
+  font-size: 3.5rem;
+  line-height: 5rem;
 }
-.crousalItemLeftMainPara{
+.crousalItemLeftMainPara {
   width: 100%;
-    color: white;
-    font-size: 0.80rem;
-    margin-top: 1rem;
+  color: white;
+  font-size: 0.8rem;
+  margin-top: 1rem;
 }
-.buydropDownList{
-    left: -1rem !important;
+.buydropDownList {
+  left: -1rem !important;
 }
-.crousalItemRightMain{
-   width: 36%;
+.crousalItemRightMain {
+  width: 36%;
 }
-.crousalItemSearchMain{
+.crousalItemSearchMain {
   position: absolute;
   top: 27rem;
   width: 66%;
@@ -48,47 +51,47 @@
   margin-left: auto;
   margin-right: auto;
 }
-.crousalItemSearchInput{
+.crousalItemSearchInput {
   height: 3rem;
   z-index: 3;
   position: relative;
 }
 
-.crousalSearchBuyType{
+.crousalSearchBuyType {
   inset-inline-end: 22rem;
   height: 100%;
   width: 11rem;
   justify-content: center;
   padding-right: 2rem;
 }
-.crousalSearchBudgetType{
+.crousalSearchBudgetType {
   inset-inline-end: 16rem;
   height: 100%;
   width: 9rem;
   justify-content: center;
 }
-.crousalSearchPropertyType{
+.crousalSearchPropertyType {
   inset-inline-end: 7rem;
   height: 100%;
   width: 9.3rem;
   justify-content: center;
 }
-.crousalItemAdvMain{
+.crousalItemAdvMain {
   margin-top: 3rem;
 }
-.crousalItemAdvContent{
+.crousalItemAdvContent {
   margin-right: 2rem;
 }
-.crousalItemAdvNumber{
+.crousalItemAdvNumber {
   color: white;
   font-weight: 500;
-  font-size: 1.50rem;
+  font-size: 1.5rem;
 }
-.crousalItemAdvText{
+.crousalItemAdvText {
   color: white;
   font-size: 0.75rem;
 }
-.crousalItemSearchButton{
+.crousalItemSearchButton {
   inset-inline-end: 1rem;
   height: 3rem;
   width: 7.3rem;
@@ -98,111 +101,137 @@
   margin-top: 0.25rem;
   z-index: 5;
 }
-.crousalItemSearchIcon{
+.crousalItemSearchIcon {
   display: none;
 }
-.crousalItemLeftImage{
+.crousalItemLeftImage {
   height: 100%;
+
 }
-.crousalItemLeftArrowBtn{
+.crousalItemLeftArrowBtn {
   inset-inline-end: 4rem;
 }
-.crousalItemLeftArrowSpan{
+.crousalItemLeftArrowSpan {
   color: white;
-    border-radius: 3px;
-    width: 3rem;
-    height: 2rem;
-    border: 1px solid #2A4AC8;
-    background-color: #2A4AC8;
-    margin-bottom: 1rem;
+  border-radius: 3px;
+  width: 3rem;
+  height: 2rem;
+  border: 1px solid #2a4ac8;
+  background-color: #2a4ac8;
+  margin-bottom: 1rem;
 }
-.crousalItemRightArrowSpan{
+.crousalItemRightArrowSpan {
   color: white;
-    border-radius: 3px;
-    width: 3rem;
-    height: 2rem;
-    border: 1px solid #2A4AC8;
-    background-color: transparent;
-    margin-bottom: 1rem;
+  border-radius: 3px;
+  width: 3rem;
+  height: 2rem;
+  border: 1px solid #2a4ac8;
+  background-color: transparent;
+  margin-bottom: 1rem;
+}
+.crousalItemArrowIcon {
+  align-self: center;
+}
+.crousalItemArrowIconRight {
+  color: #2a4ac8;
+  align-self: center;
+}
+@media screen and (max-width: 320px) {
+  .outerCampass {
+    height: 88%;
+    width: 90%;
+    right: 1.5rem;
+    top: 0.5rem;
   }
-  .crousalItemArrowIcon{
-  align-self: center;
-}
-  .crousalItemArrowIconRight{
-  color: #2A4AC8;
-  align-self: center;
+  .innerCampass {
+    right: 2.5rem;
+  }
+  .campassMain {
+    margin-right: 0rem;
+  }
 }
 
+@media screen and (max-width: 426px) {
+  .banner {
+    height: 24rem !important;
+  }
+}
 @media screen and (max-width: 1100px) {
-  .crousalItemLeftMain{
+  .crousalItemLeftMain {
     width: 100%;
   }
-  .crousalItemRightMain{
+  .crousalItemRightMain {
     display: none;
- }
+  }
 }
 @media screen and (max-width: 850px) {
- .crousalSearchBuyType{
-  display:none !important;
+  .crousalSearchBuyType {
+    display: none !important;
+  }
+  .crousalSearchBudgetType {
+    display: none !important;
+  }
+  .crousalSearchPropertyType {
+    display: none !important;
+  }
 }
-.crousalSearchBudgetType{
- display:none !important;
-}
-.crousalSearchPropertyType{
-  display:none !important;
-}
-}
+
 @media screen and (max-width: 750px) {
-  .banner{
+  .banner {
     height: 26rem;
   }
-  .crousalItemLeftMainHeading{
-      font-weight: 500;
-      font-size: 2rem;
-      line-height: 3rem;
+  .crousalItemLeftMainHeading {
+    font-weight: 500;
+    font-size: 2rem;
+    line-height: 3rem;
   }
-  .crousalItemLeftContent{
+  .crousalItemLeftContent {
     margin-left: 2rem;
     margin-right: 2rem;
     text-align: center;
   }
-  .crousalItemAdvMain{
+  .crousalItemAdvMain {
     justify-content: center;
   }
-  .crousalItemSearchMain{
+  .crousalItemSearchMain {
     position: relative;
     top: 2rem;
     margin-left: auto;
     margin-right: auto;
     width: 66%;
   }
-  .crousalItemSearchButton{
+  .crousalItemSearchButton {
     display: none;
   }
-  .crousalItemSearchIcon{
+  .crousalItemSearchIcon {
     display: block;
   }
 }
 
 /* campassDirection */
 
-.campassMain{
+.campassMain {
   /* background-color: blue; */
-  background: rgb(56,92,203);
-background: linear-gradient(90deg, rgba(56,92,203,1) 0%, rgba(77,117,207,1) 48%, rgba(101,146,211,1) 100%);
-    height: 21rem;
-    margin-top: 6rem;
-    width: 25% !important;
-    border-top-right-radius: 13rem;
-    border-bottom-right-radius: 13rem;
-    position: relative;
+  background: rgb(56, 92, 203);
+  background: linear-gradient(
+    90deg,
+    rgba(56, 92, 203, 1) 0%,
+    rgba(77, 117, 207, 1) 48%,
+    rgba(101, 146, 211, 1) 100%
+  );
+  height: 21rem;
+  margin-top: 6rem;
+  width: 25% !important;
+  border-top-right-radius: 13rem;
+  border-bottom-right-radius: 13rem;
+  position: relative;
 }
-.outerCampass{
+.outerCampass {
   position: absolute;
   height: 20rem;
   margin-left: 1rem;
 }
-.innerCampass{
+.innerCampass {
   position: absolute;
   height: 15rem;
   margin-left: 3.4rem;
@@ -243,166 +272,161 @@ background: linear-gradient(90deg, rgba(56,92,203,1) 0%, rgba(77,117,207,1) 48%,
   -o-animation: innerCampass 3s linear infinite;
   animation: innerCampass 3s linear infinite;
 }
-.campassMainRight{
+.campassMainRight {
   margin-top: 3rem;
   margin-left: 9rem;
 }
-.campassMainRightHead{
+.campassMainRightHead {
   font-weight: 600;
   font-size: 2rem;
 }
-.campassMainRightText{
+.campassMainRightText {
   font-size: 0.75rem;
-
 }
-.campassRightBox{
+.campassRightBox {
   border: 1px solid;
-    padding: 1rem;
-    width: 13rem;
-    margin-top: 2rem;
-    margin-right: 1rem;
-   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
+  padding: 1rem;
+  width: 13rem;
+  margin-top: 2rem;
+  margin-right: 1rem;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.campassRightBoxImg{
+.campassRightBoxImg {
   aspect-ratio: 3/2;
   object-fit: fill;
 }
-.campassRightBoxHead{
+.campassRightBoxHead {
   text-transform: uppercase;
   font-weight: 600;
   margin-top: 1rem;
 }
-.campassRightBoxText{
+.campassRightBoxText {
   font-size: 0.75rem;
   font-weight: 500;
 }
 
 /* properties byArea */
 
-.propertiesByAreaMain{
+.propertiesByAreaMain {
   margin-top: 3rem;
   margin-left: 14rem;
   margin-right: 14rem;
 }
-.propertiesByAreaMainHead{
+.propertiesByAreaMainHead {
   font-weight: 600;
   font-size: 2rem;
 }
-.propertiesByAreaMainTextMain{
- display: flex;
- justify-content: space-between;
+.propertiesByAreaMainTextMain {
+  display: flex;
+  justify-content: space-between;
 }
-.propertiesByAreaMainText{
+.propertiesByAreaMainText {
   font-size: 0.75rem;
-
 }
-.propertiesByAreaBox{
+.propertiesByAreaBox {
   margin-top: 2rem;
   margin-right: 1.5rem;
   width: 100%;
   border: none;
 }
-.propertiesByAreaBoxImg{
+.propertiesByAreaBoxImg {
   aspect-ratio: 3/2;
   width: 95%;
 }
-.propertiesByAreaBoxHead{
+.propertiesByAreaBoxHead {
   font-weight: 700;
   font-size: 1rem;
   margin-top: 0.5rem;
 }
-.propertiesByAreaBoxText{
+.propertiesByAreaBoxText {
   font-size: 0.75rem;
   font-weight: 500;
 }
 
-.sliderr{
+.sliderr {
   width: 100%;
 }
 
-.smallText{
+.smallText {
   font-size: 0.5rem;
 }
 
-
 /* apartmentType */
 
-.apartmentTypeMain{
+.apartmentTypeMain {
   margin-top: 6rem;
-    margin-left: 14rem;
-    margin-right: 14rem;
+  margin-left: 14rem;
+  margin-right: 14rem;
 }
-.apartmentTypeMainHead{
+.apartmentTypeMainHead {
   font-weight: 600;
   font-size: 2rem;
 }
-.apartmentTypeMainTextMain{
+.apartmentTypeMainTextMain {
   display: flex;
   justify-content: space-between;
- }
-
-.apartmentTypeMainText{
-  font-size: 0.75rem;
-
 }
-.apartmentTypeBox{
+
+.apartmentTypeMainText {
+  font-size: 0.75rem;
+}
+.apartmentTypeBox {
   border: 1px solid;
   padding: 1rem;
   margin-right: 1rem;
-    /* margin-top: 2rem; */
+  /* margin-top: 2rem; */
 }
-.apartmentTypeBoxImg{
+.apartmentTypeBoxImg {
   border-radius: 5px;
   aspect-ratio: 3/2;
 }
-.apartmentTypeBoxHead{
+.apartmentTypeBoxHead {
   font-weight: 600;
   margin-top: 1rem;
 }
-.apartmentTypeBoxText{
+.apartmentTypeBoxText {
   font-size: 0.75rem;
   font-weight: 500;
 }
-.apartmentTypeLeftArrowBtn{
+.apartmentTypeLeftArrowBtn {
   inset-inline-end: 4rem;
 }
-.apartmentTypeLeftArrowSpan{
+.apartmentTypeLeftArrowSpan {
   color: white;
-    border-radius: 3px;
-    width: 2.5rem;
-    height: 1.7rem;
-    border: 1px solid #2A4AC8;
-    background-color: #2A4AC8;
-    margin-bottom: 1rem;
+  border-radius: 3px;
+  width: 2.5rem;
+  height: 1.7rem;
+  border: 1px solid #2a4ac8;
+  background-color: #2a4ac8;
+  margin-bottom: 1rem;
 }
-.apartmentTypeRightArrowSpan{
+.apartmentTypeRightArrowSpan {
   color: white;
-    border-radius: 3px;
-    width: 2.5rem;
-    height: 1.7rem;
-    border: 1px solid #2A4AC8;
-    background-color: transparent;
-    margin-bottom: 1rem;
-  }
-  .apartmentTypeArrowIcon{
+  border-radius: 3px;
+  width: 2.5rem;
+  height: 1.7rem;
+  border: 1px solid #2a4ac8;
+  background-color: transparent;
+  margin-bottom: 1rem;
+}
+.apartmentTypeArrowIcon {
   align-self: center;
 }
-  .apartmentTypeArrowIconRight{
-  color: #2A4AC8;
+.apartmentTypeArrowIconRight {
+  color: #2a4ac8;
   align-self: center;
 }
 
 /* megamenu */
 
-.listBoard{
+.listBoard {
   display: grid;
   grid-template-columns: auto auto auto;
   text-wrap: nowrap;
   column-gap: 50px;
 }
 
-.listBoardBack{
+.listBoardBack {
   width: 50%;
   z-index: 10;
   position: absolute !important;
@@ -412,189 +436,182 @@ background: linear-gradient(90deg, rgba(56,92,203,1) 0%, rgba(77,117,207,1) 48%,
 }
 
 /* buyingOpetionWithZodic */
-.buyingOptionWithZodic{
-margin-top: 6rem;
-    margin-left: 14rem;
-    margin-right: 14rem;
+.buyingOptionWithZodic {
+  margin-top: 6rem;
+  margin-left: 14rem;
+  margin-right: 14rem;
 }
-.buyingWithZodicMain{
+.buyingWithZodicMain {
   display: flex;
 }
-.buyingZodicLeft{
+.buyingZodicLeft {
   width: 50%;
 }
-.buyingZodicHead{
+.buyingZodicHead {
   font-size: 2.6rem;
-    font-weight: 600;
-    line-height: 3rem;
+  font-weight: 600;
+  line-height: 3rem;
 }
-.buyingZodicText{
+.buyingZodicText {
   font-size: 0.75rem;
   margin-top: 0.5rem;
 }
-.buyingZodicInputMain{
+.buyingZodicInputMain {
   margin-top: 2rem;
-
 }
-.buyingZodicRight{
+.buyingZodicRight {
   width: 50%;
 }
 
 /* populerPropreties */
-.cardImgTop{
+.cardImgTop {
   height: 12rem;
   width: 100%;
   border-radius: 0.5rem 0.5rem 0rem 0rem;
 }
 
-.cardImgBottom{
+.cardImgBottom {
   background-color: white;
   padding: 1rem;
-  border-radius: 0rem 0rem 0.5rem 0.5rem ;
-
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
 }
-.cardImg{
+.cardImg {
   padding: 0;
   margin: 0;
 }
 
-.populerPropertiesMain{
+.populerPropertiesMain {
   margin-top: 6rem;
   margin-left: 14rem;
   margin-right: 14rem;
 }
-.populerPropertiesBox{
+.populerPropertiesBox {
   margin-top: 2rem;
   margin-right: 1rem;
   width: 31.33%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.populerPropertiesLocationMain{
+.populerPropertiesLocationMain {
   font-size: 0.8rem;
   font-weight: 500;
   margin-top: 0.4rem;
-
 }
-.populerPropertiesBoxHead{
+.populerPropertiesBoxHead {
   font-size: 1.2rem;
   font-weight: 600;
   margin-top: 0.4rem;
-
 }
-.populerPropertiesBoxText{
+.populerPropertiesBoxText {
   font-size: 0.75rem;
   font-weight: 500;
   text-wrap: nowrap;
 }
-.populerPropertiesBoxImg{
+.populerPropertiesBoxImg {
   height: 12rem;
   width: 100%;
 }
-.populerPropertiesBoxDetail{
+.populerPropertiesBoxDetail {
   justify-content: space-between;
   margin-top: 0.4rem;
-
 }
-.populerPropertiesBoxPriceMain{
+.populerPropertiesBoxPriceMain {
   display: flex;
-    justify-content: space-between;
-    margin-top: 0.4rem;
+  justify-content: space-between;
+  margin-top: 0.4rem;
 }
-.populerPropertiesBoxPrice{
+.populerPropertiesBoxPrice {
   font-weight: 500;
 }
 
 /* agent */
 
-.agentMain{
+.agentMain {
   margin-top: 6rem;
   margin-left: 14rem;
   margin-right: 14rem;
   display: flex;
 }
-.agentLeftMain{
+.agentLeftMain {
   width: 50%;
 }
-.agentImage{
+.agentImage {
   height: 28rem;
   width: 80%;
-  border-radius:10px;
+  border-radius: 10px;
 }
-.agentRightMain{
+.agentRightMain {
   width: 50%;
   padding-left: 4rem;
 }
-.agentRightMainHead{
+.agentRightMainHead {
   font-size: 2rem;
   font-weight: 600;
 }
-.agentRightMainText{
+.agentRightMainText {
   font-size: 0.8rem;
 }
-.agentRightMainContentMain{
+.agentRightMainContentMain {
   margin-top: 1rem;
 }
-.agentRightMainContent{
+.agentRightMainContent {
   margin-left: 1rem;
 }
-.agentRightMainContentHead{
+.agentRightMainContentHead {
   font-weight: 600;
 }
-.agentRightMainContentText{
+.agentRightMainContentText {
   font-size: 0.9rem;
 }
-.agentRightMainContenBtn{
+.agentRightMainContenBtn {
   margin-top: 1rem;
   width: 10rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.agentRightMainFormContext{
-    display: flex;
-    flex-direction: column;
+.agentRightMainFormContext {
+  display: flex;
+  flex-direction: column;
 }
-
 
 /* faq */
 
-.faq{
+.faq {
   margin-top: 6rem;
   margin-right: 14rem;
   margin-left: 14rem;
 }
 
-.faqMain{
+.faqMain {
   text-align: center;
-
 }
-.faqHead{
-font-size: 2rem;
-font-weight: 600;
+.faqHead {
+  font-size: 2rem;
+  font-weight: 600;
 }
-.faqHeadText{
-font-size: 0.8rem;
+.faqHeadText {
+  font-size: 0.8rem;
 }
-.faqLeftRightMain{
+.faqLeftRightMain {
   display: flex;
 }
-.faqLeft{
+.faqLeft {
   width: 50%;
   margin-top: 2rem;
 }
-.faqItemMain{
+.faqItemMain {
   margin-top: 1rem;
   border-radius: 20px !important;
 }
-.faqItemMainAnswer{
+.faqItemMainAnswer {
   border-radius: 20px !important;
 }
-.faqRight{
+.faqRight {
   width: 50%;
   margin-top: 2rem;
   margin-left: 1rem;
 }
-.faqRightHead{
+.faqRightHead {
   font-size: 1rem;
   margin-bottom: 1rem;
   margin-top: 0.8rem;
@@ -602,27 +619,27 @@ font-size: 0.8rem;
 }
 
 /* testimonial */
-.testimonial{
+.testimonial {
   margin-top: 6rem;
   margin-left: 14rem;
   margin-right: 14rem;
 }
-.testimonialMain{
+.testimonialMain {
   text-align: center;
 }
-.testimonialHead{
+.testimonialHead {
   font-size: 2rem;
   font-weight: 600;
 }
-.testimonialText{
+.testimonialText {
   font-size: 0.75rem;
 }
-.testimonialcontent{
+.testimonialcontent {
   margin-top: 2rem;
-  background-color: #6592D3;
+  background-color: #6592d3;
   display: flex !important;
 }
-.testimonialLeft{
+.testimonialLeft {
   display: flex !important;
   padding: 1rem;
   color: white;
@@ -630,68 +647,68 @@ font-size: 0.8rem;
   align-items: center;
   flex-direction: column;
 }
-.testimonialImg{
+.testimonialImg {
   margin-left: 4.7rem;
   /* height: 8rem; */
   width: 50%;
-  aspect-ratio:2/2;
+  aspect-ratio: 2/2;
 }
 
-.testimonialLeftHead{
+.testimonialLeftHead {
   font-size: 1.5rem;
   font-weight: 500;
   margin-bottom: 1rem;
 }
-.testimonialLeftText{
+.testimonialLeftText {
   margin-bottom: 1rem;
 }
-.testimoniaText{
+.testimoniaText {
   font-size: 0.75rem;
   margin-top: 0.5rem;
 }
-.testimonialImg{
+.testimonialImg {
   border-radius: 50%;
 }
 
 /* blogs */
 
-.blogContentText{
+.blogContentText {
   margin-top: 1rem;
   font-size: 0.75rem;
 }
 
 /* dream */
 
-.dream{
+.dream {
   margin-top: 9rem;
   margin-left: 14rem;
   margin-right: 14rem;
   margin-bottom: 2rem;
 }
-.dreamMain{
-  background: #6592D3;
+.dreamMain {
+  background: #6592d3;
   display: flex;
   border-radius: 0.6rem;
   color: white;
 }
-.blogContentMain{
+.blogContentMain {
   padding: 3rem;
   width: 80%;
 }
-.blogContentHead{
+.blogContentHead {
   font-size: 2rem;
   font-weight: 600;
 }
-.blogContentText{
+.blogContentText {
   font-size: 0.75rem;
 }
-.blogContentImg{
+.blogContentImg {
   height: 120%;
 }
-.dreamRight{
+.dreamRight {
   width: 20%;
 }
-.blogMainContenBtn{
+.blogMainContenBtn {
   color: blue;
   margin-top: 2rem;
   background-color: white !important;
@@ -700,19 +717,19 @@ font-size: 0.8rem;
   display: flex;
 }
 
-.ModalContent{
+.ModalContent {
   display: flex;
   justify-content: space-evenly;
 }
 
-.cardBoxPopularTop{
+.cardBoxPopularTop {
   margin-right: 1rem;
 }
 
-.LoaderHeight{
-    margin-top: 17rem;
+.LoaderHeight {
+  margin-top: 17rem;
 }
-.bigNotFound{
+.bigNotFound {
   font-weight: 600;
   margin: 0.5rem;
   color: grey;
@@ -720,234 +737,399 @@ font-size: 0.8rem;
   font-size: 2rem;
 }
 
-
 @media screen and (max-width: 750px) {
-  .propertiesByAreaBox{
+  .propertiesByAreaBox {
     width: 100%;
   }
-  .cardBoxPopularTop{
+  .cardBoxPopularTop {
     width: 100%;
     margin-right: 1rem;
   }
 }
-@media screen and (min-width: 900px ) and (max-width: 1420px) {
-  .campassMainRight{
+@media screen and (min-width: 900px) and (max-width: 1420px) {
+  .campassMainRight {
     width: 50%;
-   }
-   .campassRightBoxMain{
+  }
+  .campassRightBoxMain {
     flex-wrap: nowrap !important;
     overflow-x: scroll;
     width: 100%;
   }
-  .campassMain{
-    width: 28% !important;
+  .campassMain {
+    width: 35% !important;
+  }
+  .campassMainRight {
+    margin-left: 3rem;
+  }
+  .propertiesByAreaMain {
+    margin-top: 3rem;
+    margin-left: 6rem;
+    margin-right: 6rem;
+  }
+  .apartmentTypeMain {
+    margin-top: 6rem;
+    margin-left: 6rem;
+    margin-right: 5rem;
+  }
+  .buyingOptionWithZodic {
+    margin-top: 6rem;
+    margin-left: 6rem;
+    margin-right: 6rem;
+  }
+  /* .buyingZodicRight{
+  display: none;
+} */
+  .populerPropertiesMain {
+    margin-top: 6rem;
+    margin-left: 6rem;
+    margin-right: 6rem;
+  }
+  .agentMain {
+    margin-top: 6rem;
+    margin-left: 6rem;
+    margin-right: 6rem;
+    display: flex;
+  }
+  /* .agentLeftMain{
+  display: none;
+} */
+  .agentRightMain {
+    width: 100%;
+    padding-left: 0;
+  }
+  .faq {
+    margin-top: 6rem;
+    margin-right: 6rem;
+    margin-left: 6rem;
+  }
+  .buyingZodicLeft {
+    width: 100%;
+  }
+  .testimonial {
+    margin-top: 6rem;
+    margin-left: 6rem;
+    margin-right: 6rem;
+  }
+  .dream {
+    margin-left: 6rem;
+    margin-right: 6rem;
+  }
+  .crousalItemLeftContent {
+    margin-left: 10%;
+    margin-top: 3rem;
+    margin-right: 10%;
   }
 }
 @media screen and (min-width: 1000px) {
-  .buyingZodicLeft{
+  /* .buyingZodicLeft{
     margin-top: 7rem;
-  }
-  .cardImgTop{
+  } */
+  .cardImgTop {
     aspect-ratio: 3/2;
     width: 100%;
   }
-  .cardBoxPopularTop{
+  .cardBoxPopularTop {
     width: 95%;
     /* margin-right: 1rem; */
   }
-  .campassDirection{
+  /* .campassDirection{
    flex-wrap: nowrap !important;
- }
+ } */
+}
+@media screen and (min-width: 700px) and (max-width: 1023px) {
+  .campassMain {
+    width: 48% !important;
+  }
+  .campassMainRight {
+    width: 76% !important;
+  }
+  .campassRightBoxMain {
+    flex-wrap: nowrap !important;
+    overflow-x: scroll;
+    width: 100%;
+  }
+  .campassMainRight {
+    margin-left: 6rem;
+  }
+  .propertiesByAreaMain {
+    margin-top: 3rem;
+    margin-left: 6rem;
+    margin-right: 6rem;
+  }
+  .apartmentTypeMain {
+    margin-top: 6rem;
+    margin-left: 6rem;
+    margin-right: 5rem;
+  }
+  .buyingOptionWithZodic {
+    margin-top: 6rem;
+    margin-left: 6rem;
+    margin-right: 6rem;
+  }
+  .buyingZodicRight {
+    display: none;
+  }
+  .populerPropertiesMain {
+    margin-top: 6rem;
+    margin-left: 6rem;
+    margin-right: 6rem;
+  }
+  .agentMain {
+    margin-top: 6rem;
+    margin-left: 6rem;
+    margin-right: 6rem;
+    display: flex;
+  }
+  .agentLeftMain {
+    display: none;
+  }
+  .agentRightMain {
+    width: 100%;
+    padding-left: 0;
+  }
+  .faq {
+    margin-top: 6rem;
+    margin-right: 6rem;
+    margin-left: 6rem;
+  }
+  .buyingZodicLeft {
+    width: 100%;
+  }
+  .testimonial {
+    margin-top: 6rem;
+    margin-left: 6rem;
+    margin-right: 6rem;
+  }
+  .dream {
+    margin-left: 6rem;
+    margin-right: 6rem;
+  }
+  .crousalItemLeftContent {
+    margin-left: 10%;
+    margin-top: 3rem;
+    margin-right: 10%;
+  }
+}
+@media screen and (width: 912px) {
+  .campassMain {
+    width: 42% !important;
+  }
 }
 
-
 @media screen and (max-width: 750px) {
-   .crousalItemSearchIcon{
-       z-index: 8;
-   }
-    .bannerHidden{
-        overflow-x: hidden;
-    }
-  .propertiesByAreaBox{
+  .crousalItemSearchIcon {
+    z-index: 8;
+  }
+  .buyingZodicHead {
+    font-size: 1.6rem;
+  }
+  .bannerHidden {
+    overflow-x: hidden;
+  }
+  .propertiesByAreaBox {
     width: 80%;
   }
-  .propertiesByAreaBoxImg{
+  .propertiesByAreaBoxImg {
     aspect-ratio: 3/2;
     width: 100%;
   }
-  .listBoardBack{
-      margin-top: 1.5rem !important;
+  .listBoardBack {
+    margin-top: 1.5rem !important;
   }
-  .listBoard{
-      height: 200px;
-      overflow-y: scroll;
-      display: flex;
-      flex-direction: column;
+  .listBoard {
+    height: 200px;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
   }
-  .propertiesByAreaBoxHead{
+  .propertiesByAreaBoxHead {
     font-weight: 600;
     font-size: 1rem;
     margin-top: 0.5rem;
     text-wrap: nowrap;
   }
-  .crousalItemLeftImage{
-      height: 100%;
-      object-fit: cover;
+  .crousalItemLeftImage {
+    height: 100%;
+    object-fit: cover;
   }
-  .crousalItemLeftImageS{
-     aspect-ratio: 3/2;
-      object-fit: cover;
+  .crousalItemLeftImageS {
+    aspect-ratio: 3/2;
+    object-fit: cover;
   }
-  .smallText{
-      font-size: 0.75rem;
-      text-wrap: nowrap;
-      display : flex;
+  .smallText {
+    font-size: 0.75rem;
+    text-wrap: nowrap;
+    display: flex;
   }
-  .apartmentTypeBox{
+  .apartmentTypeBox {
     display: flex;
     flex-flow: column;
   }
-  .crousalItemLeftContent{
+  .crousalItemLeftContent {
     margin-left: 1rem;
     margin-right: 1rem;
   }
-  .crousalItemAdvMain{
+  .crousalItemAdvMain {
     margin-top: 1rem;
   }
-  .crousalItemLeftMainHeading{
+  .crousalItemLeftMainHeading {
     font-size: 1rem;
     line-height: 1rem;
   }
-  .crousalItemSearchInput{
+  .crousalItemSearchInput {
     height: 2rem;
   }
-  .crousalItemSearchMain{
+  .crousalItemSearchMain {
     width: 90%;
   }
-  .crousalItemArrowIconRight{
+  .crousalItemArrowIconRight {
     color: white;
   }
-  .propertiesByAreaMain{
+  .propertiesByAreaMain {
     margin-left: 1rem;
     margin-right: 1rem;
   }
-  .campassMainRight{
+  .campassMainRight {
     margin-left: 1rem;
     margin-right: 1rem;
   }
-  .campassMainRightHead{
+  .campassMain {
+    width: 100% !important;
+  }
+  .campassMainRightHead {
     text-align: center;
   }
-  .campassMainRightText{
+  .campassMainRightText {
     text-align: center;
   }
-  .campassRightBoxMain{
+  .campassRightBoxMain {
     justify-content: center;
   }
-  .campassRightBox{
+  .campassRightBox {
     width: 9rem;
   }
-  .propertiesByAreaMain{
+  .propertiesByAreaMain {
     margin-left: 1rem;
     margin-right: 1rem;
   }
-  .propertiesByAreaMainHead{
+  .propertiesByAreaMainHead {
     font-size: 1.5rem;
   }
-  .propertiesByAreaMainTextMain a{
-    white-space: nowrap
+  .propertiesByAreaMainTextMain a {
+    white-space: nowrap;
   }
-  .propertiesByAreaBoxMain{
+  .propertiesByAreaBoxMain {
     justify-content: center;
   }
-  .apartmentTypeMain{
+  .apartmentTypeMain {
     margin-left: 1rem;
     margin-right: 1rem;
   }
-  .apartmentTypeMainHead{
+  .apartmentTypeMainHead {
     font-size: 1.5rem;
   }
-  .buyingOptionWithZodic{
+  .buyingOptionWithZodic {
     margin-left: 1rem;
     margin-right: 1rem;
   }
-  .buyingZodicLeft{
+  .buyingZodicLeft {
     width: 100%;
   }
-  .buyingZodicRight{
+  .buyingZodicRight {
     display: none;
   }
-  .populerPropertiesMain{
+  .populerPropertiesMain {
     margin-left: 1rem;
     margin-right: 1rem;
   }
-  .populerPropertiesBoxMain{
+  .populerPropertiesBoxMain {
     justify-content: center;
   }
-  .populerPropertiesBox{
+  .populerPropertiesBox {
     width: 100%;
   }
-  .agentMain{
+  .agentMain {
     margin-left: 1rem;
     margin-right: 1rem;
   }
-  .agentRightMainHead{
+  .agentRightMainHead {
     font-size: 1.5rem;
   }
-  .agentLeftMain{
+  .agentLeftMain {
     display: none;
   }
-  .agentRightMain{
+  .agentRightMain {
     width: 100%;
     padding-left: 0;
   }
-  .faq{
+  .faq {
     margin-right: 1rem;
     margin-left: 1rem;
   }
-  .faqHead{
+  .faqHead {
     font-size: 1.5rem;
   }
-  .faqLeftRightMain{
+  .faqLeftRightMain {
     display: block;
   }
-  .faqLeft{
+  .faqLeft {
     width: 100%;
   }
-  .faqRight{
+  .faqRight {
     width: 100%;
     margin-left: 0;
   }
-   .testimonial{
+  .testimonial {
     margin-left: 1rem;
     margin-right: 1rem;
   }
-  .testimonialHead{
+  .testimonialHead {
     font-size: 1.5rem;
   }
-  .testimonialLeft{
+  .testimonialLeft {
     width: 100%;
   }
-  .testimonialRight{
+  .testimonialRight {
     display: none;
   }
-  .dream{
+  .dream {
     margin-left: 1rem;
     margin-right: 1rem;
   }
-  .blogContentMain{
+  .blogContentMain {
     width: 100%;
   }
-  .dreamRight{
+  .dreamRight {
     display: none;
   }
-  .campassMainRight{
+  .campassMainRight {
     margin-right: 1rem;
-      margin-left: 1rem;
-      display: flex;
-      flex-direction: column;
+    margin-left: 1rem;
+    display: flex;
+    flex-direction: column;
   }
+  .campassMain {
+    /* margin-right: 2rem; */
+  }
+}
+
+
+@media screen and (min-width: 2560px) {
   .campassMain{
-    margin-right: 2rem;
+    width: 15% !important;
+  }
+  .ImageResponsive{
+    height: 60%;
+  }
+  .buyingOptionWithZodic{
+    height: 30rem;
+  }
+  .buyingZodicLeft {
+    margin-top: 4rem;
+    padding-right: 10%;
+  }
+  .crousalItemLeftImage {
+    width: 100% !important;
+  
   }
 }

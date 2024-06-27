@@ -6,12 +6,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import { loginUser } from "@/api-functions/auth/authAction";
-
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 export default function Login() {
   const router = useRouter();
   const [Mobile, setMobile] = useState("");
   const [Password, setPassword] = useState("");
 const [passwordShow,setPasswordShow]=useState(false)
+const [isLoading, setIsLoading] = useState(false);
+
   const handleMobile = useCallback((value) => {
     setMobile(() => value.target.value);
   }, []);
@@ -26,6 +28,7 @@ const [passwordShow,setPasswordShow]=useState(false)
     }
   };
   const login = async () => {
+    
     // Check if the field is empty
     if (Mobile === "") {
       toast.error("Phone number cannot be empty");
@@ -48,13 +51,16 @@ const [passwordShow,setPasswordShow]=useState(false)
       toast.error("Password must be at least 5 characters long");
       return false;
     }
+    setIsLoading(true)
     let res = await loginUser({ Mobile, Password });
 
     if (res?.token) {
       router.push("/dashboard");
       toast.success("LogIn Successfully");
+      setIsLoading(false)
     } else {
       toast.error(res?.errMessage);
+      setIsLoading(false)
       return;
     }
   };
@@ -70,6 +76,7 @@ const [passwordShow,setPasswordShow]=useState(false)
     <section
       className={` ${Styles.loginMain} bg-gray-50 dark:bg-gray-900 h-100`}
     >
+      {isLoading && <CommonLoader />}
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a
           href="#"

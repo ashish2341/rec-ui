@@ -16,7 +16,6 @@ export const getAminityById = async (id,setLoading=()=>{}) => {
       },
     });
     const resIdData = await res.json();
-    console.log('resIdData',resData)
 
     if (resIdData?.statusCode==200) {
       
@@ -30,6 +29,6 @@ export const getAminityById = async (id,setLoading=()=>{}) => {
   } catch (error) {
     setLoading(false);
     toast.error("someting went wrong");
-    console.log("error message ", error);
+     
   }
 };

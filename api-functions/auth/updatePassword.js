@@ -18,7 +18,6 @@ export const updatePassword = async (userId,payload,setLoading=()=>{}) => {
       body: JSON.stringify(payload),
     });
     const resData = await res.json();
-    console.log('resData',resData)
 
     if (resData?.statusCode==200) {
 
@@ -32,6 +31,5 @@ export const updatePassword = async (userId,payload,setLoading=()=>{}) => {
   } catch (error) {
     setLoading(false);
     toast.error("someting went wrong");
-    console.log("error message ", error);
   }
 }

@@ -15,6 +15,9 @@ import Cookies from "js-cookie";
 import "flowbite/dist/flowbite.min.css";
 import SendInquiryModal from "@/components/common/sendInquiryModal/sendInquiryModal";
 import DateRange from "@/components/common/dateRange/dateRange";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
+import SearchInput from "@/components/admin/debounceSearchInput";
+
 export default function ProjectInquiry(params) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
@@ -40,6 +43,8 @@ export default function ProjectInquiry(params) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [adminExcelData, setadminExcelData] = useState([]);
   const [builderExcelData, setBuilderExcelData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const dropdownRef = useRef(null);
   useEffect(() => {
     initFlowbite(); // Call initCarousels() when component mounts
@@ -53,9 +58,15 @@ export default function ProjectInquiry(params) {
       }
       getAllEnquiryByBuilder(typeOnButton);
     }
-  }, [page, searchData, isSubmitClicked, isDeleted, toDate, params]);
+  }, [page, searchData, isSubmitClicked, isDeleted, params]);
 
+  useEffect(()=>{
+if(fromDate && toDate){
+  getAllEnquiry(typeOnButton);
+}
+  },[fromDate,toDate])
   const getAllEnquiry = async (filterType) => {
+    setIsLoading(true);
     const todayEnquiry = params.searchParams.todayEnquiry;
     let enquiries = await GetEnquiryApi(
       page,
@@ -67,17 +78,18 @@ export default function ProjectInquiry(params) {
     );
     if (enquiries?.resData?.success == true) {
       setListData(enquiries?.resData);
-      toast.success(enquiries?.resData?.message);
+      setIsLoading(false);
       return false;
     } else {
       toast.error(enquiries?.errMessage);
+      setIsLoading(false);
       return false;
     }
   };
 
   const getAllEnquiryByBuilder = async (filterType) => {
+    setIsLoading(true);
     const todayEnquiry = params.searchParams.todayEnquiry;
-
     let enquiries = await GetEnquiryByBuilderApi(
       page,
       searchData,
@@ -86,15 +98,16 @@ export default function ProjectInquiry(params) {
     );
     if (enquiries?.resData?.success == true) {
       setListData(enquiries?.resData);
-      toast.success(enquiries?.resData?.message);
+      setIsLoading(false);
       return false;
     } else {
       toast.error(enquiries?.errMessage);
+      setIsLoading(false);
       return false;
     }
   };
   const searchInputChange = (e) => {
-    setSearchData(e.target.value);
+    setSearchData(e);
   };
   const handleDelete = async () => {
     // Perform delete operation
@@ -249,6 +262,7 @@ useEffect(() => {
 }, []);
   return (
     <section>
+      {isLoading && <CommonLoader />}
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3">
         <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
           Project Enquiry
@@ -331,30 +345,11 @@ useEffect(() => {
               </li>
             )}
           </div>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
-              <svg
-                className="w-5 h-5 text-gray-500 dark:text-gray-400"
-                aria-hidden="true"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-            </div>
-            <input
-              type="text"
-              id="table-search"
-              className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Search for Inquiry"
-              onChange={searchInputChange}
-            />
-          </div>
+          <div>
+            <SearchInput
+             setSearchData={searchInputChange} 
+             />
+             </div>
         </div>
 
         {listData ? (
@@ -642,6 +637,7 @@ useEffect(() => {
           setIsSubmitClicked={setIsSubmitClicked}
           selectedInquiryId={inquiryId}
           setIsPopupOpenforInquiry={setIsPopupOpenforInquiry}
+          setIsLoading={setIsLoading}
         />
       )}
     </section>

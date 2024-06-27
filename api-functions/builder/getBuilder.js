@@ -8,7 +8,7 @@ export const GetBuilderApi = async (page,searchData,todayBuilder,setLoading=()=>
   const token = Cookies.get("token");
   setLoading(true);
   try {
-    const res = await fetch(`${API_BASE_URL}/developer/allDeveloper?page=${page=="undefined" ? page:1}&pageSize=${PAGE_LIMIT}&search=${searchData=="undefined" ? searchData:""}${todayBuilder ? `&todayBuilder=${todayBuilder}` : ""}`, {
+    const res = await fetch(`${API_BASE_URL}/developer/allDeveloper?page=${page=="undefined" ? page:1}&pageSize=${PAGE_LIMIT}${searchData ? `&search=${searchData}` : ""}${todayBuilder ? `&todayBuilder=${todayBuilder}` : ""}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -16,7 +16,6 @@ export const GetBuilderApi = async (page,searchData,todayBuilder,setLoading=()=>
       },
     });
     const resData = await res.json();
-    console.log('resData',resData)
 
     if (resData?.statusCode==200) {
       
@@ -30,6 +29,5 @@ export const GetBuilderApi = async (page,searchData,todayBuilder,setLoading=()=>
   } catch (error) {
     setLoading(false);
     toast.error("someting went wrong");
-    console.log("error message ", error);
   }
 };

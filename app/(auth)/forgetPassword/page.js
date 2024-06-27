@@ -6,11 +6,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import {  UserForgoPassword } from "@/api-functions/auth/authAction";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 
 export default function OtpVarify() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [isValid, setIsValid] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -29,14 +31,15 @@ export default function OtpVarify() {
       toast.error('Invalid Email');
       return false;
     }
+    setIsLoading(true)
     let res = await  UserForgoPassword({ email });
-    console.log("res",res)
     if (res.successMessage?.success == true) {
-    console.log("resi",res)
       toast.success(res?.successMessage?.message);
+      setIsLoading(false)
       router.push("/login")
     } else {
       toast.error(res?.errMessage?.message);
+      setIsLoading(false)
       return;
     }
   };
@@ -44,6 +47,7 @@ export default function OtpVarify() {
     <section
       className={` ${Styles.loginMain} bg-gray-50 dark:bg-gray-900 h-100`}
     >
+      {isLoading && <CommonLoader />}
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a
           href="#"

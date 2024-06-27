@@ -11,7 +11,6 @@ export const GetEnquiryApi = async (
   todayEnquiry,
   setLoading = () => {}
 ) => {
-  console.log("filterType",typeof(filterType))
   const token = Cookies.get("token");
   setLoading(true);
   try {
@@ -42,6 +41,6 @@ export const GetEnquiryApi = async (
   } catch (error) {
     setLoading(false);
     toast.error("someting went wrong");
-    console.log("error message ", error);
+    
   }
 };

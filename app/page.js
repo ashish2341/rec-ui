@@ -27,9 +27,12 @@ import SearchBar from "./search";
 import AreaMultiCarousel from "../components/common/areapropertyCarousel";
 import { AddZodaic } from "@/api-functions/zodiac/addZodiac";
 import NotifyUserModal from "@/components/common/notifyUserModal";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 // import Skeleton from 'react-loading-skeleton';
 // import 'react-loading-skeleton/dist/skeleton.css'
-
+import "flowbite";
+import { Carousel } from "flowbite-react";
+import { data } from "autoprefixer";
 export default function Home() {
   const sliderTestimonial = useRef(null);
   const [Name, setName] = useState("");
@@ -43,6 +46,7 @@ export default function Home() {
   const [EnquiryData, setEnquiryData] = useState("");
   const [EnquiryType, setEnquiryType] = useState("Project");
   const [openModal, setOpenModal] = useState(false);
+  // const [loaderIsLoading, setLoaderIsLoading] = useState(false);
 
   const facingImage = ["img/3.png", "img/4.png", "img/1.png", "img/2.png"];
 
@@ -53,16 +57,22 @@ export default function Home() {
     "Southern Serenity: Find Tranquility in Homes Embracing the South",
   ];
 
+  // useEffect(() => {
+  //   setLoaderIsLoading(true);
+  //   setTimeout(() => {
+  //     setLoaderIsLoading(false);
+  //   }, 2000);
+  // }, []);
   // fetching Data for facing
   const {
     data: facingData,
-    loading: facingDataLoading,
+    loading: loaderIsLoading,
     error: facingDataError,
   } = useFetch(`${API_BASE_URL_FOR_MASTER}/facing`);
 
   const {
     data: propertyByAreaData,
-    loading,
+    loading: propertyByAreaDataLoading,
     error,
   } = useFetch(`${API_BASE_URL}/properties/propertyByArea`);
 
@@ -94,7 +104,6 @@ export default function Home() {
     loading: testimonialDataLoading,
     error: testimonialDataError,
   } = useFetch(`${API_BASE_URL}/testimonial/allTestimonial?page=1&pageSize=5`);
-  console.log("propertyByPopularProperty", propertyByPopularProperty);
   const {
     data: faqData,
     loading: faqLoading,
@@ -112,7 +121,27 @@ export default function Home() {
     loading: bannerDataLoading,
     error: bannerDataError,
   } = useFetch(`${API_BASE_URL}/banner/allbanner?page=1&pageSize=5`);
+  useEffect(() => {
+    // Function to reinitialize Flowbite carousel
+    const initCarousels = () => {
+      // Check if the Flowbite Carousel class is available in the window object
+      if (window.Carousel) {
+        document.querySelectorAll("[data-carousel]").forEach((carousel) => {
+          new window.Carousel(carousel, {
+            interval: 3000, // Example option, customize as needed
+            pause: false, // Example option, customize as needed
+          });
+        });
+      } else {
+        console.error(
+          "Flowbite Carousel class is not available in the window object."
+        );
+      }
+    };
 
+    // Call the function to initialize the carousel
+    initCarousels();
+  }, [bannerData]);
   const ShowApartmentProperties = () => {
     return propertyByapartmentType?.data?.map((item, index) => (
       <Link
@@ -210,17 +239,18 @@ export default function Home() {
       >
         <div className={`${styles.testimonialLeft}`}>
           <div className={`${styles.testimonialLeftBoxDetails} text-center`}>
-            {item.Image ? 
-            <img
-              className={` ${styles.testimonialImg}  mb-3`}
-              src={`${imgApiUrl}/${item.Image}`}
-              alt="test"
-            /> :
-            <img
-            className={` ${styles.testimonialImg}  mb-3`}
-            src="../img/no-image@2x.png"
-             /> 
-             }
+            {item.Image ? (
+              <img
+                className={` ${styles.testimonialImg}  mb-3`}
+                src={`${imgApiUrl}/${item.Image}`}
+                alt="test"
+              />
+            ) : (
+              <img
+                className={` ${styles.testimonialImg}  mb-3`}
+                src="../img/no-image@2x.png"
+              />
+            )}
             <h2 className={`${styles.testimonialLeftHead} justify-center`}>
               {item.MemberName}
             </h2>
@@ -401,7 +431,6 @@ export default function Home() {
     };
     let res = await AddZodaic(ZodiacData);
     if (res?.resData?.success == true) {
-      console.log("res", res);
       setName("");
       setPhone("");
       setMessage("");
@@ -418,8 +447,9 @@ export default function Home() {
     setDob("");
     setZodaicPhone("");
   };
-  var totalSlides =propertyByapartmentType? propertyByapartmentType?.data?.length :"";
-  console.log("totalSlides",totalSlides)
+  var totalSlides = propertyByapartmentType
+    ? propertyByapartmentType?.data?.length
+    : "";
   var slidesToShow = totalSlides < 5 ? totalSlides : 5;
 
   var settings = {
@@ -467,145 +497,84 @@ export default function Home() {
   useEffect(() => {
     initFlowbite(); // Call initCarousels() when component mounts
   }, []);
-
   return (
     <main className={styles.main}>
+      {bannerDataLoading && <CommonLoader />}
       <Navbar />
       {/* {isLoading && <Spinner />} */}
+
       <div
-        id="controls-carousel"
-        className={`${styles.banner} relative w-full`}
-        data-carousel="static"
+        className={`${styles.banner} relative h-56 overflow-hidden rounded-lg md:h-96`}
       >
-        <div className={`${styles.bannerHidden} relative h-full rounded-lg`}>
-          <div
-            className="crousalItem hidden duration-700 ease-in-out"
-            data-carousel-item="active"
-          >
-            <div className={`${styles.crousalItemContentMain}`}>
-              <div className={`${styles.crousalItemLeftMain}`}>
-                <div className={`${styles.crousalItemLeftContent}`}>
-                  <h2 className={`${styles.crousalItemLeftMainHeading}`}>
-                    Looking for a home is always easier
-                  </h2>
-                  <p className={`${styles.crousalItemLeftMainPara}`}>
-                    Welcome to REC.in, your trusted partner in the journey of
-                    finding the perfect home. At REC.in, we understand that
-                    finding the right home is more than just a transaction -
-                    it's about finding a place where memories are made, dreams
-                    are realized, and futures are built.
-                  </p>
-                  <div className={`${styles.crousalItemAdvMain} flex`}>
-                    <div className={`${styles.crousalItemAdvContent}`}>
-                      <h2 className={`${styles.crousalItemAdvNumber}`}>
-                        1500+
-                      </h2>
-                      <p className={`${styles.crousalItemAdvText}`}>
-                        Premium Product
-                      </p>
+        {bannerData ? (
+          <Carousel indicators={false} slide={false}>
+            <div className={`${styles.crousalItemContent}`}>
+              <div className={`${styles.crousalItemContentMain}`}>
+                <div className={`${styles.crousalItemLeftMain}`}>
+                  <div className={`${styles.crousalItemLeftContent}`}>
+                    <h2 className={`${styles.crousalItemLeftMainHeading}`}>
+                      Looking for a home is always easier
+                    </h2>
+                    <p className={`${styles.crousalItemLeftMainPara}`}>
+                      Welcome to REC.in, your trusted partner in the journey of
+                      finding the perfect home. At REC.in, we understand that
+                      finding the right home is more than just a transaction -
+                      it's about finding a place where memories are made, dreams
+                      are realized, and futures are built.
+                    </p>
+                    <div className={`${styles.crousalItemAdvMain} flex`}>
+                      <div className={`${styles.crousalItemAdvContent}`}>
+                        <h2 className={`${styles.crousalItemAdvNumber}`}>
+                          1500+
+                        </h2>
+                        <p className={`${styles.crousalItemAdvText}`}>
+                          Premium Product
+                        </p>
+                      </div>
+                      <div className={`${styles.crousalItemAdvContent}`}>
+                        <h2 className={`${styles.crousalItemAdvNumber}`}>
+                          5500+
+                        </h2>
+                        <p className={`${styles.crousalItemAdvText}`}>
+                          Happy Customer
+                        </p>
+                      </div>
                     </div>
-                    <div className={`${styles.crousalItemAdvContent}`}>
-                      <h2 className={`${styles.crousalItemAdvNumber}`}>
-                        5500+
-                      </h2>
-                      <p className={`${styles.crousalItemAdvText}`}>
-                        Happy Customer
-                      </p>
-                    </div>
+                    <SearchBar />
                   </div>
-                  <SearchBar />
+                </div>
+                <div
+                  className={`${styles.crousalItemRightMain} overflow-hidden  `}
+                >
+                  {bannerData ? (
+                    <img
+                      src={`${imgApiUrl}/${bannerData?.data[0].Url}`}
+                      className={`${styles.crousalItemLeftImage} `}
+                      alt="...a"
+                    />
+                  ) : (
+                    <div className={`${styles.LoaderHeight}  `}>
+                      <Spinner className="mt-70" />
+                    </div>
+                  )}
                 </div>
               </div>
-              <div
-                className={`${styles.crousalItemRightMain} overflow-hidden  `}
-              >
-                {bannerData ? (
-                  <img
-                    src={`${imgApiUrl}/${bannerData?.data[0].Url}`}
-                    className={`${styles.crousalItemLeftImage} block`}
-                    alt="...a"
-                  />
-                ) : (
-                  <div className={`${styles.LoaderHeight}  `}>
-                    <Spinner className="mt-70" />
-                  </div>
-                )}
-              </div>
             </div>
-          </div>
-          <div
-            className="overflow-hidden duration-700 ease-in-out"
-            data-carousel-item
-          >
-            {/* <SearchBar id="2" /> */}
 
-            <img
-              src={`${imgApiUrl}/${bannerData?.data[1].Url}`}
-              className={`${styles.crousalItemLeftImageS} absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
-              alt="...a"
-            />
-          </div>
-          {/*
-               {bannerData?.data.map(item => (
-               <div className="overflow-hidden duration-700 ease-in-out" data-carousel-item>
-            <img
-              src={item.Url}
-              className= {`${styles.crousalItemLeftImageS} absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
-              alt="...a"
-            />
-          </div>
-            ))}
-          */}
-          <div
-            className="overflow-hidden duration-700 ease-in-out"
-            data-carousel-item
-          >
-            <img
-              src={`${imgApiUrl}/${bannerData?.data[2].Url}`}
-              className={`${styles.crousalItemLeftImageS} absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
-              alt="...a"
-            />
-          </div>
-          <div
-            className="overflow-hidden duration-700 ease-in-out"
-            data-carousel-item
-          >
-            <img
-              src={`${imgApiUrl}/${bannerData?.data[3].Url}`}
-              className={`${styles.crousalItemLeftImageS} absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2`}
-              alt="...a"
-            />
-          </div>
-        </div>
-        <button
-          type="button"
-          className={` ${styles.crousalItemLeftArrowBtn} absolute bottom-0 h-16 z-30 flex items-end justify-center px-4 cursor-pointer group focus:outline-none`}
-          data-carousel-prev
-        >
-          <span
-            className={` ${styles.crousalItemLeftArrowSpan} inline-flex items-end justify-center dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none `}
-          >
-            <i
-              className={` ${styles.crousalItemArrowIcon} bi bi-arrow-left `}
-            ></i>
-            <span className="sr-only">Previous</span>
-          </span>
-        </button>
-        <button
-          type="button"
-          className={`  absolute bottom-0 end-0 z-30 flex items-end justify-center h-16 px-4 cursor-pointer group focus:outline-none`}
-          data-carousel-next
-        >
-          <span
-            className={` ${styles.crousalItemRightArrowSpan} inline-flex items-end justify-center dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none `}
-          >
-            <i
-              className={` ${styles.crousalItemArrowIconRight} bi bi-arrow-right `}
-            ></i>
-            <span className="sr-only">Next</span>
-          </span>
-        </button>
+            {bannerData?.data
+              ?.slice(1)
+              .map((banneritem, index) => (
+                <img
+                  key={index}
+                  src={`${imgApiUrl}/${banneritem?.Url}`}
+                  className="absolute block w-full h-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                  alt={`Slide ${index}`}
+                />
+              ))}
+          </Carousel>
+        ) : null}
       </div>
+
       <NotifyUserModal />
       <div className={`${styles.campassDirection} flex flex-wrap`}>
         <div className={styles.campassMain}>
@@ -678,7 +647,7 @@ export default function Home() {
           </div>
         </div>
         <div className={` ${styles.propertiesByAreaBoxMain} flex flex-wrap `}>
-        {propertyByAreaData ? (
+          {propertyByAreaData ? (
             propertyByAreaData?.data?.length > 0 ? (
               <AreaMultiCarousel UI={showAreaType} />
             ) : (
@@ -687,7 +656,6 @@ export default function Home() {
           ) : (
             <SkeletonLoader />
           )}
-          
         </div>
       </div>
 
@@ -703,7 +671,7 @@ export default function Home() {
           </div>
         </div>
         <div className={`flex mt-2`}>
-        {propertyByapartmentType ? (
+          {propertyByapartmentType ? (
             propertyByapartmentType?.data?.length > 0 ? (
               <MultiCarousel UI={ShowApartmentProperties} />
             ) : (
@@ -712,7 +680,6 @@ export default function Home() {
           ) : (
             <SkeletonLoader />
           )}
-          
         </div>
       </div>
 
@@ -801,7 +768,11 @@ export default function Home() {
             </div>
           </div>
           <div className={`${styles.buyingZodicRight}`}>
-            <img src="/img/bestBuyImg.png" alt="" />
+            <img
+              src="/img/bestBuyImg.png"
+              className={`${styles.ImageResponsive}`}
+              alt=""
+            />
           </div>
         </div>
       </div>
@@ -962,15 +933,15 @@ export default function Home() {
                   key={index}
                 >
                   <Accordion.Title
-                    className={` ${styles.faqItemMain} rounded-t-md text-white bg-blue-700 hover:bg-blue-700
+                    className={` ${styles.faqItemMain} rounded-t-md text-black text-sm font-bold bg-white hover:bg-white
                       focus:border-none focus:ring-grey-0 focus:ring-0`}
                   >
                     {item?.Subject}
                   </Accordion.Title>
                   <Accordion.Content
-                    className={` ${styles.faqItemMainAnswer} bg-blue-700 text-white`}
+                    className={` ${styles.faqItemMainAnswer} bg-white text-black`}
                   >
-                    <p className=" mb-2 text-white dark:text-white-400">
+                    <p className=" mb-2 text-black leading-[1.5rem] dark:text-black-400">
                       {item?.Answer}
                     </p>
                   </Accordion.Content>

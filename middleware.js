@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 import jwt from "@tsndr/cloudflare-worker-jwt";
 import { PROD_URL, UI_URL } from "./utils/constants";
 import { jwtVerify } from "jose";
-const builderRoute = ["/property", "/dashboard", "/projectInquiry", "/profile"];
+const builderRoute = ["/property","/dashboard", "/projectInquiry", "/profile"];
 export const config = {
   matcher: [
-    "/property/:path*",
+    "/property",
     "/projectInquiry",
     "/dashboard",
     "/amenity/:path*",
@@ -20,9 +20,11 @@ export const config = {
     "/profile",
   ],
 };
+
 const navUrl = process.env.NODE_ENV == "development" ? UI_URL : PROD_URL;
 console.log("navUrl", navUrl);
 export default async function middleware(req) {
+
   try {
     const token = req.cookies.get("token");
     const roleData = req.cookies.get("roles") ?? "";

@@ -275,8 +275,6 @@ const getBuilderDatabyId = async () => {
             <iframe
               className={` ${styles.builderMapDetails}`}
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d227749.05321034128!2d75.62574624184872!3d26.885115144905566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396c4adf4c57e281%3A0xce1c63a0cf22e09!2sJaipur%2C%20Rajasthan!5e0!3m2!1sen!2sin!4v1715061916080!5m2!1sen!2sin"
-              width="305"
-              height="200"
             ></iframe>
           </div>
         </div>
@@ -297,41 +295,34 @@ const getBuilderDatabyId = async () => {
                           className={` ${styles.populerPropertiesLocationMain} flex text-md pt-4`}
                         >
                           <i className="bi bi-geo-alt-fill"></i>
-                          <p className={`text-gray-700`}>{item.Address}</p>
+                          <p className={`text-gray-700`}>Jaipur</p>
                         </div>
                         <div className="flex justify-between">
                           <h2
                             className={` ${styles.populerPropertiesBoxHead} font-semibold text-2xl pt-2`}
                           >
-                            {item.Title}
+                            {item?.Title}
                           </h2>
-                          {item.LocationHub ? (
                             <div
-                              className={` ${styles.populerPropertiesBoxDetail} flex`}
+                              className={` ${styles.populerPropertiesBoxDetail} flex mt-2`}
                             >
-                              {item.LocationHub == "Others"
-                                ? item.CustomLocationHub
-                                : item.LocationHub}
+                              {item?.ProeprtyType}
                             </div>
-                          ) : (
-                            <div
-                              className={` ${styles.populerPropertiesBoxDetail} flex`}
-                            >
-                              {item.ProeprtyType}
-                            </div>
-                          )}
                         </div>
                         <h2
                           className={` ${styles.populerPropertiesBoxHead} text-sm pt-2`}
                         >
-                          <ReadMore text={item.Description} maxLength={100} />
+                          <ReadMore text={item?.Description} maxLength={100} />
                         </h2>
                         <div
                           className={`${styles.populerPropertiesBoxPriceMain} flex mt-2 justify-between`}
                         >
-                          <p className={`${styles.populerPropertiesBoxPrice}`}>
-                            {item.TotalPrice.DisplayValue}
+                          <div>
+                          <p className={`font-bold text-gray-500 ${styles.populerPropertiesBoxPrice}`}>
+                            {item?.TotalPrice?.DisplayValue}
                           </p>
+                          </div>
+                          <div>
                           <Link href={`/propertyDetail/${item._id}`}>
                             <button
                               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -340,6 +331,7 @@ const getBuilderDatabyId = async () => {
                               More Details
                             </button>
                           </Link>
+                          </div>
                         </div>
                       </div>
                     </div>

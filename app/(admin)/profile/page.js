@@ -156,6 +156,7 @@ export default function Profile() {
   const [builderArea, setBuilderArea] = useState("");
   const [establishDate, setEstablishDate] = useState("");
   const [description, setDescription] = useState("");
+  const [builderId, setBuilderId] = useState("");
   const [builderLogo, setBuilderLogo] = useState("");
   const [imageLoader, setImageLoader] = useState(false);
   const [docLoader, setDocLoader] = useState(false);
@@ -168,6 +169,7 @@ export default function Profile() {
     const getAllBuilders = async () => {
       let builderData = await GetBuilderByUserId();
       if (builderData?.resData?.success == true) {
+        setBuilderId(builderData?.resData?.data?._id)
         setBuilderData(builderData?.resData?.data || "");
         setBuilderName(builderData?.resData?.data?.Name || "");
         setDetailNote(builderData?.resData?.data?.DetailNote || "");
@@ -442,7 +444,7 @@ export default function Profile() {
       SocialMediaProfileLinks: socialMediaProfileLinks,
       DetailNote: detailNote,
       Logo: builderLogo,
-      Area: builderArea?._id,
+      // Area: builderArea?._id,
       Mobile: builderMobile,
       EmailId: builderEmail,
       WhatsApp: builderWhatsapp,
@@ -527,6 +529,7 @@ export default function Profile() {
     }
   };
 
+  console.log("userID",userId);
   return (
     <>
       {isLoading && <CommonLoader />}
@@ -566,17 +569,17 @@ export default function Profile() {
             />
           </div>
         </form>
-        {roles.includes("Developer") ? (
-          <div className="flex justify-center">
-            <QRCodeFunction id={userId} />
-          </div>
-          ): null}
         <button
           onClick={submitUserForm}
           className="text-white mb-4 mt-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           Update
         </button>
+        {roles.includes("Developer") ? (
+          <div className="flex justify-center">
+            <QRCodeFunction id={builderId} />
+          </div>
+          ): null}
       </section>
       {roles.includes("Developer") && (
         <section>
@@ -613,7 +616,7 @@ export default function Profile() {
                   required
                 />
               </div>
-              <div>
+              {/* <div>
                 <label
                   htmlFor="area"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white "
@@ -645,7 +648,7 @@ export default function Profile() {
                     required={true}
                   />
                 )}
-              </div>
+              </div> */}
               <div>
                 <label
                   htmlFor="builderEmail"
@@ -714,6 +717,7 @@ export default function Profile() {
                   required
                 />
               </div>
+              <div></div>
               <div>
                 <label
                   htmlFor="DetailNote"

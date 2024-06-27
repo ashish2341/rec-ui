@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Pagination from "@/components/common/pagination";
 import Popup from "@/components/common/popup";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
 import { DeleteBuilderApi } from "@/api-functions/builder/deleteBuilder";
@@ -10,7 +10,8 @@ import { imgApiUrl } from "@/utils/constants";
 import CommonLoader from "@/components/common/commonLoader/commonLoader";
 import QRCode from "qrcode";
 import { jsPDF } from "jspdf";
-
+import SearchInput from "@/components/admin/debounceSearchInput";
+import { Modal } from "flowbite-react";
 
 export default function Builder(params) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -19,6 +20,37 @@ export default function Builder(params) {
   const [page, setPage] = useState(1);
   const [searchData, setSearchData] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [userId, setUserId] = useState(false);
+
+  const qrCanvasRef = useRef(null);
+
+  const QRCodeFunction = (id) => {
+
+    useEffect(() => {
+      const generateQRCode = async () => {
+        try {
+          const url = "http://recadmin-001-site2.etempurl.com/builderFE/" + userId;
+          await QRCode.toCanvas(qrCanvasRef.current, url, { width: 200 });
+        } catch (error) {
+          console.error('Error generating QR code:', error);
+        }
+      };
+  
+      generateQRCode();
+    }, [id]);
+
+    console.log("userId",userId)
+
+    return (
+      <div className="grid justify-center">
+          <h2 className='font-bold text-gray-500 mb-2'>Scan this QR Code For Property Details </h2>
+          <canvas className='mx-auto' ref={qrCanvasRef} width="200" height="200"></canvas>
+      </div>
+    )
+  }
+  
+
 
   const todayBuilder = params.searchParams.todayBuilder;
 
@@ -27,7 +59,7 @@ export default function Builder(params) {
   }, [page, searchData, params]);
 
   const searchInputChange = (e) => {
-    setSearchData(e.target.value);
+    setSearchData(e);
   };
   
   const getAllBuilder = async () => {
@@ -71,7 +103,6 @@ export default function Builder(params) {
 
   };
 
-  console.log(listData);
   const generatePDF = async () => {
     const doc = new jsPDF();
     let yOffset = 20; // Initial Y offset
@@ -110,12 +141,16 @@ export default function Builder(params) {
     // Save the PDF document with all QR codes
     doc.save("coupons.pdf");
   };
-  
+
+  const modalButton = (e) => {
+    setUserId(e.target.value)
+    setOpenModal(true);
+  };
 
   return (
     <section>
       {isLoading && <CommonLoader />}
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-3">
       <h1 className="text-2xl text-black-600 underline mb-3 font-bold">
        Builder
       </h1>
@@ -133,36 +168,10 @@ export default function Builder(params) {
           </div>
           <div className="flex justify-between">
           <div>
-          <button
-                className="py-2.5 ml-2 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                type="button"
-                onClick={generatePDF}
-              >
-                Generate QRCode
-              </button>
-          </div>
-            <div className="relative inset-y-0 left-8 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
-              <svg
-                className="w-5 h-5 text-gray-500 dark:text-gray-400"
-                aria-hidden="true"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-            </div>
-            <input
-              type="text"
-              id="table-search"
-              className="block p-1 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Search builder"
-              onChange={searchInputChange}
-            />
+            <SearchInput
+             setSearchData={searchInputChange} 
+             />
+             </div>
           </div>
           
          
@@ -178,6 +187,9 @@ export default function Builder(params) {
               </th>
               <th scope="col" className="px-6 py-3">
                 Email
+              </th>
+              <th scope="col" className="px-6 py-3">
+                QR Code
               </th>
               {/* <th scope="col" className="px-6 py-3">
               Establish Date
@@ -202,6 +214,16 @@ export default function Builder(params) {
                  {item.Name}
                 </td>
                 <td className="px-6 py-4">{item?.EmailId}</td>
+                <td className="">
+                <button
+                    type="button"
+                    value={item._id}
+                    onClick={modalButton}
+                    className="text-blue-500 underline hover:text-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  >
+                    view
+                  </button>
+                </td>
                 {/* <td className="px-6 py-4">{item?.EstablishDate?.slice(0,10)}</td> */}
                 <td className="px-6 py-4 text-blue-600 dark:text-blue-500">
                   {item.logo ? ( <img
@@ -257,6 +279,18 @@ export default function Builder(params) {
         onCancel={handleCancel}
       />
       </div>
+      <Modal
+        dismissible
+        className={`bg-transparent/[.8] `}
+        size="lg"
+        show={openModal}
+        onClose={() => setOpenModal(false)}
+      >
+        <Modal.Body>
+          <QRCodeFunction />
+        </Modal.Body>
+      </Modal>
     </section>
+    
   );
 }

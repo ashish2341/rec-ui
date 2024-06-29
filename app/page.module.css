@@ -44,8 +44,8 @@
 }
 .crousalItemSearchMain {
   position: absolute;
-  top: 27rem;
-  width: 66%;
+  top: 30rem;
+  width: 70%;
   right: 0;
   left: 0;
   margin-left: auto;
@@ -151,11 +151,7 @@
   }
 }
 
-@media screen and (max-width: 426px) {
-  .banner {
-    height: 24rem !important;
-  }
-}
+
 @media screen and (max-width: 1100px) {
   .crousalItemLeftMain {
     width: 100%;
@@ -180,32 +176,16 @@
   .banner {
     height: 26rem;
   }
-  .crousalItemLeftMainHeading {
-    font-weight: 500;
-    font-size: 2rem;
-    line-height: 3rem;
-  }
+  
   .crousalItemLeftContent {
     margin-left: 2rem;
     margin-right: 2rem;
     text-align: center;
   }
-  .crousalItemAdvMain {
-    justify-content: center;
-  }
-  .crousalItemSearchMain {
-    position: relative;
-    top: 2rem;
-    margin-left: auto;
-    margin-right: auto;
-    width: 66%;
-  }
-  .crousalItemSearchButton {
-    display: none;
-  }
-  .crousalItemSearchIcon {
-    display: block;
-  }
+  
+  
+  
+  
 }
 
 /* campassDirection */
@@ -836,6 +816,13 @@
    flex-wrap: nowrap !important;
  } */
 }
+@media screen and  (max-width: 767px) {
+   .crousalItemAdvMain {
+    justify-content: center;
+    margin-top: 3rem;
+  }
+
+}
 @media screen and (min-width: 700px) and (max-width: 1023px) {
   .campassMain {
     width: 48% !important;
@@ -965,23 +952,11 @@
     display: flex;
     flex-flow: column;
   }
-  .crousalItemLeftContent {
-    margin-left: 1rem;
-    margin-right: 1rem;
-  }
-  .crousalItemAdvMain {
-    margin-top: 1rem;
-  }
-  .crousalItemLeftMainHeading {
-    font-size: 1rem;
-    line-height: 1rem;
-  }
-  .crousalItemSearchInput {
-    height: 2rem;
-  }
-  .crousalItemSearchMain {
-    width: 90%;
-  }
+  
+  
+ 
+  
+
   .crousalItemArrowIconRight {
     color: white;
   }
@@ -993,9 +968,7 @@
     margin-left: 1rem;
     margin-right: 1rem;
   }
-  .campassMain {
-    width: 100% !important;
-  }
+ 
   .campassMainRightHead {
     text-align: center;
   }
@@ -1131,5 +1104,69 @@
   .crousalItemLeftImage {
     width: 100% !important;
   
+  }
+}
+@media screen and (max-width: 600px) {
+
+  .crousalItemAdvMain {
+    justify-content: center;
+    margin-top: 3rem;
+  }
+  
+  .crousalItemLeftContent {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  .crousalItemLeftMainHeading {
+    font-weight: 500;
+    font-size: 2rem;
+    line-height: 3rem;
+  }
+
+}
+@media screen and (min-width: 430px)  and (max-width: 700px) {
+  .campassMain {
+    width: 80% !important;
+  }
+}
+@media screen and (max-width: 426px) {
+  .campassMain {
+    width: 100% !important;
+    margin-right: 1rem;
+  }
+  .banner {
+    height: 24rem !important;
+  }
+  .crousalItemSearchMain {
+    width: 90%;
+  }
+  .crousalItemSearchIcon {
+    display: block;
+  }
+  .crousalItemSearchButton {
+    display: none;
+  }
+  .crousalItemSearchInput {
+    height: 2rem;
+  }
+  .crousalItemAdvMain {
+    justify-content: center;
+  }
+  .crousalItemAdvMain {
+    margin-top: 1rem;
+  }
+  .crousalItemLeftContent {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  .crousalItemLeftMainHeading {
+    font-weight: bolder;
+    font-size: 1rem;
+    line-height: 0.5rem;
+
+  }
+ 
+  .crousalItemSearchMain{
+    top: 23rem;
   }
 }

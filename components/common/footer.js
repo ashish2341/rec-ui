@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className={` w-full ${styles.footerMain}`}>
       <div className="mx-auto w-full ">
         <div
-          className={` grid grid-cols-2 gap-8 px-4 py-6 lg:py-8 md:grid-cols-4 ${styles.footerPart1Main}`}
+          className={` grid grid-cols-2 gap-8 px-4 py-6 lg:py-8 md:grid-cols-3 m-2 ${styles.footerPart1Main}`}
         >
           <div>
             <Link
@@ -22,7 +22,7 @@ export default function Footer() {
                   REC
                 </span> */}
             </Link>{" "}
-            <ul className="text-gray-500 dark:text-gray-400 font-medium">
+            {/* <ul className="text-gray-500 dark:text-gray-400 font-medium">
               <li className="mb-4">
                 <Link href="#" className="hover:underline">
                   Discord Server
@@ -43,37 +43,54 @@ export default function Footer() {
                   Contact Us
                 </Link>
               </li>
-            </ul>
+            </ul> */}
+            <p className="text-gray-500 dark:text-gray-400 font-medium">
+              Welcome to REC.in, your trusted partner in the journey of
+              finding the perfect home. At REC.in, we understand that
+              finding the right home is more than just a transaction -
+              it's about finding a place where memories are made, dreams
+              are realized, and futures are built.
+            </p>
           </div>
-          <div>
+          <div className={`${styles.footerComapnyMain}`}>
             <h2 className="mb-6 text-sm font-semibold text-white uppercase dark:text-white">
               Company
             </h2>
-            <ul className="text-gray-500 dark:text-gray-400 font-medium">
-              <li className="mb-4">
-                <Link href="#" className=" hover:underline">
-                  About
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link href="#" className="hover:underline">
-                  Careers
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link href="#" className="hover:underline">
-                  Brand Center
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link href="#" className="hover:underline">
-                  Blog
-                </Link>
-              </li>
-            </ul>
+            <div className="grid grid-cols-2 gap-12">
+              <ul className="text-gray-500 dark:text-gray-400 font-medium">
+                <li className="mb-4">
+                  <Link href="/aboutus" className=" hover:underline">
+                    About
+                  </Link>
+                </li>
+                <li className="mb-4">
+                  <Link href="/builderFE" className="hover:underline">
+                    Builder
+                  </Link>
+                </li>
+                <li className="mb-4">
+                  <Link href="#" className="hover:underline">
+                    Blog
+                  </Link>
+                </li>
+              </ul>
+              <ul className="text-gray-500 dark:text-gray-400 font-medium">
+                <li className="mb-4">
+                  <Link href="/contactus" className=" hover:underline">
+                    Contact Us
+                  </Link>
+                </li>
+                <li className="mb-4">
+                  <Link href="#" className="hover:underline">
+                    Careers
+                  </Link>
+                </li>
+               
+              </ul>
+            </div>
           </div>
 
-          <div>
+          <div className={`${styles.footerComapnyMain}`}>
             <h2 className="mb-6 text-sm font-semibold text-white uppercase dark:text-white">
               Legal
             </h2>
@@ -96,31 +113,6 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h2 className="mb-6 text-sm font-semibold text-white uppercase dark:text-white">
-              Download
-            </h2>
-            <ul className="text-gray-500 dark:text-gray-400 font-medium">
-              <li className="mb-4">
-                <Link href="#" className="hover:underline">
-                  iOS
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link href="#" className="hover:underline">
-                  Android
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link href="#" className="hover:underline">
-                  Windows
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link href="#" className="hover:underline">
-                  MacOS
-                </Link>
-              </li>
-            </ul>
           </div>
         </div>
         <div className="px-4 py-6   md:flex md:items-center md:justify-between">

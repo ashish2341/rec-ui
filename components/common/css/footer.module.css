@@ -1,7 +1,17 @@
 .footerMain {
-    background-color: #191a1f !important;
+  background-color: #191a1f !important;
+}
+.footerPart1Main {
+  justify-items: center;
+  
+}
+
+@media screen and (max-width: 430px) {
+  .footerPart1Main{
+    display: block !important;
+    padding-bottom: 1rem !important;
   }
-  .footerPart1Main {
-    justify-items: center;
-    
+  .footerComapnyMain{
+    margin-top: 1rem;
   }
+}

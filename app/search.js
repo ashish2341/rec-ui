@@ -63,7 +63,6 @@ const SearchBar = (props) => {
     loading: propertyByAllPropertiesLoading,
     error: propertyByAllPropertiesError,
   } = useFetch(`${API_BASE_URL}/properties/allProperties?page=1&pageSize=5&search=${search}`);
-  console.log("propertyByAllPropertiesProperty", propertyByAllPropertiesProperty)
   const handleSearch = (e) => {
     setSearch(e.target.value)
     setPayload({
@@ -81,7 +80,6 @@ const SearchBar = (props) => {
   //   budget: budgetValue ? [budgetValue] : []
   // });
 
-  console.log("payload", payload)
 
   return (
     <>
@@ -111,7 +109,7 @@ const SearchBar = (props) => {
               aria-haspopup="true"
               aria-expanded={isDropdownOpenB ? "true" : "false"}
               className={`absolute top-0 ${styles.crousalSearchBuyType}
-                          flex-shrink-0 z-10 inline-flex items-center mr-3 py-2.5 pr-8 pl-4 text-sm font-medium text-center text-gray-600 bg-gray-100 border border-gray-300`}
+                          flex-shrink-0 z-10 inline-flex items-center mr-3 py-2.5 pr-8 pl-4 text-sm font-bold text-center text-gray-600 bg-gray-100 border border-gray-300`}
               type="button"
             >
               {
@@ -136,7 +134,7 @@ const SearchBar = (props) => {
             <div
               //ref={dropdownRefBudget}
               id="buy-dropdown"
-              className={`z-1000 ${isDropdownOpenB ? 'block' : 'hidden'} ${styles.buydropDownList}  overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
+              className={`z-10 ${isDropdownOpenB ? 'block' : 'hidden'} ${styles.buydropDownList}  overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
               style={{ maxHeight: "200px", width: "15%"}}
             >
               <ul
@@ -164,7 +162,7 @@ const SearchBar = (props) => {
               aria-expanded={isDropdownOpen ? "true" : "false"}
               data-dropdown-toggle="budget-dropdown"
               className={`absolute top-0 ${styles.crousalSearchBudgetType}
-                          flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-600 bg-gray-100 border border-gray-300 `}
+                          flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-bold text-center text-gray-600 bg-gray-100 border border-gray-300 `}
               type="button"
             >
               {loactionValue ? loactionDisplayValue : "Location"}
@@ -186,7 +184,7 @@ const SearchBar = (props) => {
             </button>
             <div
               id="budget-dropdown"
-              className={`z-1000 ${isDropdownOpen ? 'block' : 'hidden'} overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
+              className={`z-10 ${isDropdownOpen ? 'block' : 'hidden'} overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
               style={{ maxHeight: "200px", width: "15%" }} // Adjust the max height as per your requirement
             >
               <ul
@@ -218,11 +216,11 @@ const SearchBar = (props) => {
               aria-haspopup="true"
               aria-expanded={isDropdownOpenP ? "true" : "false"}
               className={`absolute top-0 ${styles.crousalSearchPropertyType}
-                        flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-600 bg-gray-100 border border-gray-300`}
+                        flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-bold text-center text-gray-600 bg-gray-100 border border-gray-300`}
               type="button"
             >
               {
-                propertyValue ? propertyDisplayValue : "Property Type"
+                propertyValue ? propertyDisplayValue : "Property"
               }
               <svg
                 className="w-2.5 h-2.5 ms-2.5"
@@ -243,7 +241,7 @@ const SearchBar = (props) => {
             <div
               //ref={dropdownRefProperty}
               id="dropdown"
-              className={`z-1000 ${isDropdownOpenP ? 'block' : 'hidden'} overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
+              className={`z-10 ${isDropdownOpenP ? 'block' : 'hidden'} overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
               style={{ maxHeight: "200px", width: "17%" }}
             >
               <ul

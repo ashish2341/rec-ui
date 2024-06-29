@@ -275,7 +275,7 @@ const PropertyDetail = ({ params }) => {
   };
 
   const GetPropertyId = async () => {
-    setLoaderIsLoading(true)
+    setLoaderIsLoading(true);
     let properties = await GetPropertyById(params?.property);
     if (properties?.resData?.success == true) {
       setListPropertiesData(properties?.resData?.data);
@@ -285,13 +285,13 @@ const PropertyDetail = ({ params }) => {
       setAminityData(properties?.resData?.data?.Aminities);
       setBrochureData(properties?.resData?.data?.Brochure);
       setPaymentPlanData(properties?.resData?.data?.PaymentPlan);
-      setLoaderIsLoading(false)
+      setLoaderIsLoading(false);
       setIsLoading(false);
       toast.success(properties?.resData?.message);
       return false;
     } else {
       toast.error(properties?.errMessage);
-      setLoaderIsLoading(false)
+      setLoaderIsLoading(false);
       return false;
     }
   };
@@ -495,7 +495,7 @@ const PropertyDetail = ({ params }) => {
 
   return (
     <>
-    {loaderIsLoading && <CommonLoader />}
+      {loaderIsLoading && <CommonLoader />}
       <Navbar />
       <div className={`${styles.heroSection} heroSection`}>
         <div className={`${styles.heroSectionMain}`}>
@@ -634,10 +634,15 @@ const PropertyDetail = ({ params }) => {
                   <h2 className={`${styles.heroSectionBottomBoxHead} text-2xl`}>
                     {listPropertiesData.Title}
                   </h2>
-                  <p className={`${styles.heroSectionBottomBoxText}`}>
+                  <p className={`flex ${styles.heroSectionBottomBoxText}`}>
                     {" "}
                     <i className="bi bi-geo-alt-fill"></i>
-                    {listPropertiesData.Address}
+                    <span className={`ml-1`}>
+                      <ReadMore
+                        text={listPropertiesData?.Address}
+                        maxLength={20}
+                      />
+                    </span>
                   </p>
                 </div>
                 {listPropertiesData.Builder ? (
@@ -997,25 +1002,30 @@ const PropertyDetail = ({ params }) => {
                             </ol>
                           )}
                         </div>
-                        <div className={`${styles.configureImg}`}>
-                          {isImage(listPropertiesData.FloorPlan) ? (
-                            <>
+
+                        {isImage(listPropertiesData.FloorPlan) ? (
+                          <>
+                            <div className={`${styles.configureImg}`}>
+                              {" "}
                               <img
                                 src={`${imgApiUrl}/${listPropertiesData.FloorPlan}`}
                                 className="h-48 w-64 border border-black rounded-lg"
                                 alt="Selected Floor Plan"
                               />
-                            </>
-                          ) : (
-                            <>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className={`${styles.configureDoc}`}>
+                              {" "}
                               <iframe
                                 src={`${imgApiUrl}/${listPropertiesData.FloorPlan}`}
-                                className="h-48 w-64 border border-black rounded-lg"
+                                className={`h-48 w-64 border border-black rounded-lg ${styles.doc}`}
                                 alt="Selected Floor Plan"
                               />
-                            </>
-                          )}
-                        </div>
+                            </div>
+                          </>
+                        )}
                       </div>
                     ) : (
                       <LoadingText />
@@ -1377,10 +1387,11 @@ const PropertyDetail = ({ params }) => {
               </div>
             </div>
           </div>
-          */} 
+          */}
 
           {/* Specifications */}
-          {listPropertiesData?.ProeprtyType == "Residential" &&  listPropertiesData?.PropertySubtype?.Name !== "Plot" ? (
+          {listPropertiesData?.ProeprtyType == "Residential" &&
+          listPropertiesData?.PropertySubtype?.Name !== "Plot" ? (
             listPropertiesData?.Fitting?.Electrical == "" &&
             listPropertiesData?.Fitting?.Toilets == "" &&
             listPropertiesData?.Fitting?.Kitchen == "" &&

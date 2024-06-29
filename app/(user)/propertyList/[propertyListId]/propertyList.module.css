@@ -490,6 +490,17 @@ font-size: 1.4rem;
     margin-bottom: 1rem;
   }
 }
+@media screen and (max-width: 426px) {
+  .firstcontent{
+    flex-direction: column !important;
+  }
+  .cardStarBtn{
+    width: 6rem;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-left: 0rem !important;
+  }
+}
 @media screen and (max-width: 1200px) {
   .forSticky {
     /* position: relative; Change to relative to disable sticky behavior */
@@ -537,13 +548,11 @@ padding: 1.5rem;
     width: 100% !important;
 
     }
-    .firstcontent{
-      flex-direction: column !important;
-    }
+   
     .cardStarBtn{
       width: 6rem;
     padding-top: 5px;
     padding-bottom: 5px;
-    margin-left: 0rem !important;
+    margin-left: 1rem ;
     }
 }

@@ -64,141 +64,139 @@
   border-left: 3px solid;
   height: 100%;
 }
-.heroSectionNoLeftVideoMain{
-    border: 1px solid gray;
-    border-radius: 0.75rem;
-    display: grid;
-    place-items: center;
+.heroSectionNoLeftVideoMain {
+  border: 1px solid gray;
+  border-radius: 0.75rem;
+  display: grid;
+  place-items: center;
 }
 
-.loaderSize{
-    margin-left: 1rem;
+.loaderSize {
+  margin-left: 1rem;
 }
 
-.loaderfaqSize{
-    padding: 2rem;
+.loaderfaqSize {
+  padding: 2rem;
 }
 /* detailSectionBar */
-.detailSectionBar{
-   /* margin-top: 6rem; */
-   background-color: white;
-   padding: 0 14rem 0 14rem;
-   position: sticky;
-   z-index: 3;
-   top: 5rem;
-
+.detailSectionBar {
+  /* margin-top: 6rem; */
+  background-color: white;
+  padding: 0 14rem 0 14rem;
+  position: sticky;
+  z-index: 3;
+  top: 5rem;
 }
 
-.formDetails{
+.formDetails {
   position: sticky;
   z-index: 1;
   top: 9rem;
 }
 
 /* divideDetailPage */
-.divideDetailPage{
+.divideDetailPage {
   display: flex;
   margin-left: 14rem;
   margin-right: 14rem;
   margin-top: 3rem;
 }
-.divideDetailPageLeft{
+.divideDetailPageLeft {
   padding-right: 1rem;
   width: 70%;
 }
-.divideDetailPageRight{
+.divideDetailPageRight {
   width: auto;
 }
 
-
 /* general details box */
-.GeneralDetailsContainer{
+.GeneralDetailsContainer {
   display: flex;
 }
 /* generalDetails */
 
-.GeneralDetailsMainHead{
+.GeneralDetailsMainHead {
   font-weight: 600;
   margin: 1rem;
   color: grey;
 }
-.noDataHead{
+.noDataHead {
   font-weight: 600;
   margin: 1rem;
   color: grey;
   text-align: center;
   font-size: 2rem;
 }
-.GeneralDetailsBox{
-   padding: 1rem 2rem 1rem 2rem;
-   border-radius: 0.35rem;
-   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
+.GeneralDetailsBox {
+  padding: 1rem 2rem 1rem 2rem;
+  border-radius: 0.35rem;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.GeneralDetailsBoxName{
+.GeneralDetailsBoxName {
   font-size: 0.75rem;
   font-weight: 500;
 }
-.GeneralDetailsBoxValue{
+.GeneralDetailsBoxValue {
   font-size: 0.75rem;
   font-weight: 600;
 }
-.GeneralDetailsBoxExtra{
+.GeneralDetailsBoxExtra {
   font-size: 0.75rem;
   font-weight: 500;
 }
-.GeneralDetailsBoxBottomHead{
+.GeneralDetailsBoxBottomHead {
   font-size: 0.85rem;
   font-weight: 600;
   margin-top: 2rem;
 }
-.GeneralDetailsBoxBottomText{
+.GeneralDetailsBoxBottomText {
   font-size: 0.85rem;
 }
-.GeneralDetailsBoxBottomSeeMore{
+.GeneralDetailsBoxBottomSeeMore {
   color: #2a4ac8;
   font-weight: 600;
 }
-.GeneralDetailsBoxMoreContent{
+.GeneralDetailsBoxMoreContent {
   font-size: 0.85rem;
 }
 /* configure */
 
-.configure{
+.configure {
   margin-top: 3rem;
 }
-.configureMainHead{
+.configureMainHead {
   font-weight: 600;
   margin: 1rem;
   color: grey;
 }
-.configureBox{
-   padding: 1rem 2rem 1rem 2rem;
-   border-radius: 0.35rem;
-   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
+.configureBox {
+  padding: 1rem 2rem 1rem 2rem;
+  border-radius: 0.35rem;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .configureOl {
   width: 60%;
   list-style: disc;
 }
-.configureOl li{
+.configureOl li {
   font-size: 0.85rem;
   font-weight: 500;
   text-wrap: nowrap;
 }
-.configureLiHead{
+.configureLiHead {
   font-weight: 700 !important;
   margin-bottom: 1rem;
 }
-.configureImg{
+.configureImg {
   width: 50%;
 }
-.configureImg img{
+.configureImg img {
   width: 100%;
 }
-
-.configureFloorPlanImg{
+.configureDoc{
+  width: 50%;
+}
+.configureFloorPlanImg {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -206,22 +204,23 @@
 
 /* overview */
 
-.overview{
+.overview {
   margin-top: 3rem;
 }
-.overviewMainHead{
+.overviewMainHead {
   font-weight: 600;
   margin: 1rem;
   color: grey;
 }
-.overviewBox{
-   padding: 1rem 2rem 1rem 2rem;
-   border-radius: 0.35rem;
-   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+.overviewBox {
+  padding: 1rem 2rem 1rem 2rem;
+  border-radius: 0.35rem;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .overviewBoxMain {
   display: flex;
   flex-wrap: wrap;
+  /* justify-content: center; */
 }
 
 .overviewBoxMainContent {
@@ -237,27 +236,25 @@
   font-weight: 600;
   word-wrap: normal;
 }
-.overviewBoxBottomMain{
+.overviewBoxBottomMain {
   display: flex;
   justify-content: space-between;
 }
 
-
 /* amenities */
 
-.amenities{
+.amenities {
   margin-top: 3rem;
 }
-.amenitiesMainHead{
+.amenitiesMainHead {
   font-weight: 600;
   margin: 1rem;
   color: grey;
 }
-.amenitiesBox{
-   /* padding: 1.5rem 0.5rem 1.5rem 0.5rem; */
-   border-radius: 0.35rem;
-   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
+.amenitiesBox {
+  /* padding: 1.5rem 0.5rem 1.5rem 0.5rem; */
+  border-radius: 0.35rem;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .amenitiesBoxMain {
   display: flex;
@@ -275,13 +272,13 @@
   text-wrap: nowrap;
 }
 
-.amenitiesBoxMainContentTextList{
+.amenitiesBoxMainContentTextList {
   color: black;
   font-weight: 500;
   text-wrap: nowrap;
 }
 
-.amenitiesIconBox{
+.amenitiesIconBox {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -293,206 +290,203 @@
 
 /* bank */
 
-.bank{
+.bank {
   margin-top: 3rem;
 }
-.bankMainHead{
+.bankMainHead {
   font-weight: 600;
   margin: 1rem;
   color: grey;
 }
-.bankBox{
-   padding: 1rem 2rem 1rem 2rem;
-   border-radius: 0.35rem;
-   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+.bankBox {
+  padding: 1rem 2rem 1rem 2rem;
+  border-radius: 0.35rem;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.bankBoxMain{
+.bankBoxMain {
   padding: 1rem;
 }
 
-
-.bankBoxImg{
-  border-radius: .5rem;
+.bankBoxImg {
+  border-radius: 0.5rem;
   aspect-ratio: 3/2;
   object-fit: contain;
 }
 
-.bankBoxHead{
+.bankBoxHead {
   font-weight: 500;
-  font-size: .90rem;
+  font-size: 0.9rem;
   margin-top: 1rem;
 }
 
-.bankBoxText{
+.bankBoxText {
   font-size: 0.75rem;
   font-weight: 500;
 }
 
+/* Location */
 
- /* Location */
-
-.location{
+.location {
   margin-top: 3rem;
 }
-.locationMainHead{
+.locationMainHead {
   font-weight: 600;
   margin: 1rem;
   color: grey;
 }
-.locationBox{
-   padding: 1rem 2rem 1rem 2rem;
-   border-radius: 0.35rem;
-   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+.locationBox {
+  padding: 1rem 2rem 1rem 2rem;
+  border-radius: 0.35rem;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.locationMapSize{
+.locationMapSize {
   width: 100%;
 }
 
+/* similar */
 
- /* similar */
-
-.similar{
+.similar {
   margin-top: 1rem;
 }
-.similarMainHead{
+.similarMainHead {
   font-weight: 600;
   margin: 1rem;
   color: grey;
 }
-.similarBox{
-   /* border: 1px solid grey; */
-   /* padding: 1rem 3rem 1rem 3rem; */
-   border-radius: 0.35rem;
+.similarBox {
+  /* border: 1px solid grey; */
+  /* padding: 1rem 3rem 1rem 3rem; */
+  border-radius: 0.35rem;
 }
-.smilarBox{
+.smilarBox {
   margin-right: 1rem;
   margin-bottom: 1rem;
   width: 47.33%;
 }
-.smilarLocationMain{
+.smilarLocationMain {
   font-size: 0.8rem;
   font-weight: 500;
   margin-top: 0.4rem;
-
 }
-.smilarBoxHead{
+.smilarBoxHead {
   font-size: 1.2rem;
   font-weight: 600;
-
 }
-.smilarBoxText{
+.smilarBoxText {
   font-size: 0.75rem;
   font-weight: 500;
 }
-.smilarBoxImg{
+.smilarBoxImg {
   height: 12rem;
   width: 100%;
 }
-.smilarBoxDetail{
+.smilarBoxDetail {
   justify-content: space-between;
   margin-top: 0.4rem;
-
 }
-.smilarBoxPriceMain{
+.smilarBoxPriceMain {
   display: flex;
-    justify-content: space-between;
-    margin-top: 0.4rem;
+  justify-content: space-between;
+  margin-top: 0.4rem;
 }
-.smilarBoxPrice{
+.smilarBoxPrice {
   font-weight: 500;
 }
 
-.similarMainType{
-      margin-left: 14rem;
-      margin-right: 11.3rem;
+.similarMainType {
+  margin-left: 14rem;
+  margin-right: 11.3rem;
 }
 
-.cardImgTop{
+.cardImgTop {
   height: 12rem;
   width: 100%;
   border-radius: 0.5rem 0.5rem 0rem 0rem;
 }
 
-.cardImgBottom{
+.cardImgBottom {
   background-color: white;
   padding: 1rem;
-  border-radius: 0rem 0rem 0.5rem 0.5rem ;
-
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
 }
-.cardImg{
+.cardImg {
   padding: 0;
   margin: 0;
 }
 
-.populerPropertiesMain{
+.populerPropertiesMain {
   margin-top: 6rem;
   margin-left: 14rem;
   margin-right: 14rem;
 }
-.populerPropertiesBox{
+.populerPropertiesBox {
   margin-top: 2rem;
   margin-right: 1rem;
   width: 31.33%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.populerPropertiesLocationMain{
+.populerPropertiesLocationMain {
   font-size: 0.8rem;
   font-weight: 500;
   margin-top: 0.4rem;
-
 }
-.populerPropertiesBoxHead{
+.populerPropertiesBoxHead {
   font-size: 1.2rem;
   font-weight: 600;
   margin-top: 0.4rem;
-
 }
-.populerPropertiesBoxText{
+.populerPropertiesBoxText {
   font-size: 0.75rem;
   font-weight: 500;
   text-wrap: nowrap;
 }
-.populerPropertiesBoxImg{
+.populerPropertiesBoxImg {
   height: 12rem;
   width: 100%;
 }
-.populerPropertiesBoxDetail{
+.populerPropertiesBoxDetail {
   justify-content: space-between;
   margin-top: 0.4rem;
-
 }
-.populerPropertiesBoxPriceMain{
+.populerPropertiesBoxPriceMain {
   display: flex;
-    justify-content: space-between;
-    margin-top: 0.4rem;
+  justify-content: space-between;
+  margin-top: 0.4rem;
 }
-.populerPropertiesBoxPrice{
+.populerPropertiesBoxPrice {
   font-weight: 500;
 }
 
-.AccordionContent{
+.AccordionContent {
   display: flex;
   flex-wrap: wrap;
 }
-
+@media screen and (max-width: 600px) {
+.configureFlex {
+  flex-direction: column;
+  margin-left: 2rem;
+}
+.doc {
+  width: 13rem !important
+}
+}
 @media screen and (min-width: 2560px) {
-  .AccordionContentInner{
-    grid-template-columns: auto auto auto  auto auto auto  auto auto  !important;
+  .AccordionContentInner {
+    grid-template-columns: auto auto auto auto auto auto auto auto !important;
   }
-  .AccordionContentInner2{
-    grid-template-columns: auto auto auto auto auto auto  auto auto !important;
+  .AccordionContentInner2 {
+    grid-template-columns: auto auto auto auto auto auto auto auto !important;
   }
 }
 @media screen and (min-width: 700px) and (max-width: 1100px) {
-
   .divideDetailPage {
     display: flex;
     margin-left: 2rem;
     margin-right: 2rem;
     margin-top: 3rem;
   }
-  .heroSectionMain{
+  .heroSectionMain {
     margin-left: 2rem;
     margin-right: 2rem;
   }
@@ -503,8 +497,51 @@
   .detailSectionBar {
     padding: 0 2rem 0 2rem;
   }
+}
+@media screen and (max-width: 500px) {
+  .BottomBoxcontenet {
+    flex-direction: column;
+    justify-content: start !important;
   }
-@media screen and (max-width: 768px) {
+  .heroSectionBottomBox {
+    height: 100%;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    display: grid;
+    grid-template-columns: auto auto;
+    text-wrap: nowrap;
+    justify-content: center; /* Centers the grid items horizontally */
+    align-items: center;
+    gap: 20px;
+  }
+  .overviewBoxMain {
+    display: grid;
+    grid-template-columns: auto auto;
+    text-wrap: nowrap;
+    justify-content: center; /* Centers the grid items horizontally */
+    align-items: center;
+    gap: 20px;
+    padding-left: 1rem;
+    padding-right: 1rem;;
+  }
+  .heroSectionVL {
+    display: none;
+  }
+  .overviewBoxBottomMain {
+    display: block;
+  }
+}
+@media screen and (min-width: 1102px) and (max-width: 1400px)  {
+  .divideDetailPage{
+    margin-left: 6rem;
+    margin-right: 6rem;
+  }
+  .heroSectionMain{
+    margin-left: 6rem;
+    margin-right: 6rem;
+  }
+}
+@media screen and (max-width: 930px) {
   .heroSection {
     height: auto;
   }
@@ -515,114 +552,95 @@
     display: flex;
     flex-flow: column;
   }
-  .heroSectionBottomBox {
-    height: 100%;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    padding: 1rem;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
-  }
-  .BottomBoxcontenet{
+
+  .BottomBoxcontenet {
     margin-bottom: 1rem;
     margin-right: 0.5rem;
     margin-left: 0.5rem;
-
   }
-  .configureBoxSize{
+  .configureBoxSize {
     flex-wrap: nowrap !important;
     overflow-x: scroll;
     text-wrap: nowrap;
   }
-  .configureFlex{
-    /* flex-direction: column; */
+  .configureFlex {
+   
     margin-left: 2rem;
   }
-  .configureFlexInner{
+  .configureFlexInner {
     margin-bottom: 1rem;
   }
-  .overviewBoxMain {
-    display: grid;
+
+  .AccordionContentInner {
     grid-template-columns: auto auto;
-    text-wrap: nowrap;
   }
-  .AccordionContentInner{
-    grid-template-columns: auto auto  ;
+  .AccordionContentInner2 {
+    grid-template-columns: auto auto;
   }
-  .AccordionContentInner2{
-    grid-template-columns: auto auto  ;
-  }
-  .AccordionContent{
+  .AccordionContent {
     padding-left: 0 !important;
   }
-  .BottomBoxcontenet{
+  /* .BottomBoxcontenet{
     flex-direction: column;
     justify-content: start !important;
-  }
+  } */
   .heroSectionBottomBoxHead,
   .heroSectionBottomBoxText {
     text-align: start;
     font-size: 0.75rem; /* Adjust font sizes */
   }
-  .heroSectionVL{
-    display: none;
-  }
-  .heroSectionBottomBox{
-    display: grid;
-    grid-template-columns: auto auto;
-    margin: 0rem;
-  }
-  .heroSectionBottomBoxText{
+ 
+
+  .heroSectionBottomBoxText {
     margin-bottom: 1rem;
   }
 
-  .GeneralDetailsBox{
+  .GeneralDetailsBox {
     padding: 1rem 1rem 1rem 1rem;
- }
+  }
 
- .similarMainType{
-       margin-left: 0.5rem;
-       margin-right: 0.5rem;
- }
+  .similarMainType {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
 
-  .detailSectionBar{
+  .detailSectionBar {
     padding: 0 1rem 0 1rem;
     position: sticky;
     z-index: 10;
     top: 5rem;
   }
-  .divideDetailPageLeft{
+  .divideDetailPageLeft {
     width: 100%;
     padding-right: 0rem;
   }
-  .divideDetailPageRight{
+  .divideDetailPageRight {
     width: 100%;
   }
-  .divideDetailPage{
+  .divideDetailPage {
     margin-left: 1rem;
     margin-right: 1rem;
     margin-bottom: 1rem;
     display: block;
   }
-  .configureBox{
+  .configureBox {
     padding: 0;
   }
-  .smilarBox{
+  .smilarBox {
     margin-right: 0rem;
     margin-bottom: 1rem;
     width: 100%;
   }
-  .locationBox{
+  .locationBox {
     padding: 1rem 1rem 1rem 1rem;
- }
+  }
   .locationMapSize {
-    width:100%;
+    width: 100%;
     height: 50%;
   }
-  .amenitiesBox{
+  .amenitiesBox {
     padding: 1rem 1rem 1rem 1rem;
- }
+  }
   .amenitiesBoxMainContent {
     width: 50%;
   }
@@ -631,20 +649,18 @@
     font-weight: 300;
   }
 
-  .overviewBox{
+  .overviewBox {
     padding: 1rem;
   }
-  .overviewBoxBottomMain{
-    display: block;
-  }
-  .overviewBoxBottomMain button{
-    margin-right: 1rem;
+  
+  .overviewBoxBottomMain button {
+    margin-right: 0.5rem;
     margin-bottom: 1rem;
   }
-  .populerPropertiesBoxMain{
+  .populerPropertiesBoxMain {
     margin-left: 1rem;
   }
-  .cardBoxPopularTop{
+  .cardBoxPopularTop {
     width: 96%;
   }
 }

@@ -25,8 +25,11 @@ import Link from "next/link";
 import LoadingSideImg from "@/components/common/sideImgLoader";
 import LoadingSideSmallImg from "@/components/common/sideSmallImgLoader";
 import CommonLoader from "@/components/common/commonLoader/commonLoader";
+import Pagination from "@/components/common/pagination";
+import SearchInput from "@/components/admin/debounceSearchInput";
 
 const BuilderPage = () => {
+  const PAGE_SIZE = 8;
   const [search, setSearch] = useState("");
   const { data: areaData } = useFetch(`${API_BASE_URL_FOR_MASTER}/areas`);
   const {
@@ -38,6 +41,7 @@ const BuilderPage = () => {
   );
 
   const [builderData, setBuilderData] = useState("");
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [loaderIsLoading, setLoaderIsLoading] = useState(false);
 
@@ -64,15 +68,31 @@ const BuilderPage = () => {
     }
   };
 
+  useEffect(() => {
+    setPage(1); // Reset page to 1 whenever developData changes
+  }, [developData]);
+
+  // Calculate total pages based on developData count and PAGE_SIZE
+  const totalPages = Math.ceil(developData?.count / PAGE_SIZE);
+
+  // Slice data based on currentPage
+  const startIndex = (page - 1) * PAGE_SIZE;
+  const endIndex = startIndex + PAGE_SIZE;
+  const paginatedData = developData?.data?.slice(startIndex, endIndex) || [];
+
+  const handlePageChange = (pageNumber) => {
+    setPage(pageNumber);
+  };
+
   const handleSearch = (e) => {
-    setSearch(e.target.value);
+    setSearch(e);
   };
   useEffect(() => {
     initFlowbite();
-}, []);
+  }, []);
   return (
     <>
-    {loaderIsLoading && <CommonLoader />}
+      {loaderIsLoading && <CommonLoader />}
       <Navbar />
       <div className={` ${styles.divideDetailPage} divideDetailPage`}>
         <div className={` ${styles.builderTop} mb-10`}>
@@ -86,15 +106,9 @@ const BuilderPage = () => {
         <div className={` ${styles.builderDetailPageLeft} mb-10`}>
           <div className={` ${styles.builderBox} mb-4`}>
             <div className={` ${styles.builderInputField}`}>
-              <input
-                type="search"
-                value={search}
-                onChange={handleSearch}
-                id="search-dropdown"
-                className={` ${styles.crousalItemSearchInput} rounded`}
-                placeholder="Search for Builder"
-                required
-              />
+            <SearchInput
+             setSearchData={handleSearch} 
+             />
             </div>
             <div className={` ${styles.builderline}`}></div>
             {/*
@@ -133,7 +147,7 @@ const BuilderPage = () => {
                     <Link href={`/builderFE/${item._id}`}>
                       <Avatar
                         key={index}
-                        img={item.Logo ?`${imgApiUrl}/${item.Logo}`: "https://tse2.explicit.bing.net/th?id=OIP.9AeFX9VvFYTXrL5IwhGhYwHaHa&pid=Api&P=0&h=180"}
+                        img={item.Logo ? `${imgApiUrl}/${item.Logo}` : "https://tse2.explicit.bing.net/th?id=OIP.9AeFX9VvFYTXrL5IwhGhYwHaHa&pid=Api&P=0&h=180"}
                         size="md"
                         className="mr-2 ml-1 justify-start p-4"
                         rounded
@@ -159,96 +173,98 @@ const BuilderPage = () => {
           </div>
         </div>
         <div className={` ${styles.builderDetailPageRight}`}>
-          <div
-            className={` ${styles.builderTopRight} mb-4 flex justify-between mt-2`}
-          >
+          <div className={` ${styles.builderTopRight} mb-4 flex justify-between mt-2`}>
             <div>
               {developData?.count > 0 ? (
                 <h1>
-                  Showing {developData?.count} of {builderData.totalCount}
+                  Showing {paginatedData.length} of {developData.count}
                 </h1>
               ) : null}
             </div>
           </div>
+
           {developLoading ? (
             <LoadingSideImg />
           ) : developData?.count > 0 ? (
-            developData?.data?.map((item, index) => (
-              <div className={` ${styles.hoverEffect} mb-4 hover:bg-white`}>
-                <Link href={`/builderFE/${item._id}`}>
-                  <div
-                    key={index}
-                    className={` ${styles.builderDetailBuilderRight} `}
-                  >
-                    <img
-                      src={item.Logo ?`${imgApiUrl}/${item.Logo}`: "https://tse2.explicit.bing.net/th?id=OIP.9AeFX9VvFYTXrL5IwhGhYwHaHa&pid=Api&P=0&h=180"}
-                      className={` ${styles.builderImgBuilder} mr-5`}
-                    />
-                    <div>
-                      <h5 className="text-lg font-bold  text-gray-900 dark:text-white blueText">
-                        {item.Name}
-                      </h5>
-                      <p className="text-sm text-gray-500 dark:text-white mb-4">
-                        Year estd.{" "}
-                        {item.CreatedDate
-                          ? String(item.CreatedDate).substring(0, 4)
-                          : "N/A"}
-                      </p>
-                      <p className="text-sm text-gray-700 dark:text-black-400">
-                        {item.Description}
-                      </p>
-                    </div>
-                  </div>
-                </Link>
-
-                <div className={` ${styles.builderDetailPageDown}`}>
-                  <div className={` ${styles.builderSocialLine}`}>
-                    {item?.SocialMediaProfileLinks ? (
-                      <div
-                        className={` ${styles.builderSocialIcon} text-gray-700`}
-                      >
-                        <Link
-                          href={item?.SocialMediaProfileLinks?.Facebook}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <i className="bi bi-facebook"></i>
-                        </Link>
-                        <Link
-                          href={item?.SocialMediaProfileLinks?.Instagram}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <i className="bi bi-instagram ml-3"></i>
-                        </Link>
-                        <Link
-                          href={item?.SocialMediaProfileLinks?.LinkedIn}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <i className="bi bi-linkedin ml-3"></i>
-                        </Link>
-                        <Link
-                          href={item?.SocialMediaProfileLinks?.Twitter}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <i className="bi bi-twitter ml-3"></i>
-                        </Link>
+            <>
+              {paginatedData.map((item, index) => (
+                <div key={index} className={`${styles.hoverEffect} mb-4 hover:bg-white`}>
+                  <Link href={`/builderFE/${item._id}`}>
+                    <div key={index} className={`${styles.builderDetailBuilderRight}`}>
+                      <img
+                        src={item.Logo ? `${imgApiUrl}/${item.Logo}` : "https://tse2.explicit.bing.net/th?id=OIP.9AeFX9VvFYTXrL5IwhGhYwHaHa&pid=Api&P=0&h=180"}
+                        className={`${styles.builderImgBuilder} mr-5`}
+                      />
+                      <div>
+                        <h5 className="text-lg font-bold text-gray-900 dark:text-white blueText">
+                          {item.Name}
+                        </h5>
+                        <p className="text-sm text-gray-500 dark:text-white mb-4">
+                          Year estd.{" "}
+                          {item.CreatedDate
+                            ? String(item.CreatedDate).substring(0, 4)
+                            : "N/A"}
+                        </p>
+                        <p className="text-sm text-gray-700 dark:text-black-400">
+                          {item.Description}
+                        </p>
                       </div>
-                    ) : (
-                      <p> </p>
-                    )}
-                    <div>
-                      <p>{item.PropertiesLength} properties listed</p>
+                    </div>
+                  </Link>
+
+                  <div className={`${styles.builderDetailPageDown}`}>
+                    <div className={`${styles.builderSocialLine}`}>
+                      {item?.SocialMediaProfileLinks ? (
+                        <div className={`${styles.builderSocialIcon} text-gray-700`}>
+                          <Link
+                            href={item?.SocialMediaProfileLinks?.Facebook}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <i className="bi bi-facebook"></i>
+                          </Link>
+                          <Link
+                            href={item?.SocialMediaProfileLinks?.Instagram}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <i className="bi bi-instagram ml-3"></i>
+                          </Link>
+                          <Link
+                            href={item?.SocialMediaProfileLinks?.LinkedIn}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <i className="bi bi-linkedin ml-3"></i>
+                          </Link>
+                          <Link
+                            href={item?.SocialMediaProfileLinks?.Twitter}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <i className="bi bi-twitter ml-3"></i>
+                          </Link>
+                        </div>
+                      ) : (
+                        <p> </p>
+                      )}
+                      <div>
+                        <p>{item.PropertiesLength} properties listed</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))
+              ))}
+
+              <Pagination
+                data={{ totalPages: totalPages, totalCount: developData.count }}
+                pageNo={handlePageChange}
+                pageVal={page}
+              />
+            </>
           ) : (
             <h1 className="text-2xl font-semibold text-gray-300 text-center">
-              No data Found{" "}
+              No data Found
             </h1>
           )}
         </div>

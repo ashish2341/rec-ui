@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 import { GetBuilderById } from "@/api-functions/builder/getBuilderById";
 import CommonLoader from "@/components/common/commonLoader/commonLoader";
 import Pagination from "@/components/common/pagination";
+import AccordionBuilder from "@/components/common/accodionBuilder";
 const BuilderHomePage = (params) => {
   const [Name, setName] = useState("");
   const [Email, setEmail] = useState("");
@@ -45,8 +46,13 @@ const BuilderHomePage = (params) => {
       toast.error("Message is required");
       return false;
     }
+
     if (MolileNumber === "") {
       toast.error("Number is required");
+      return false;
+    }
+    if (!/^(\+\d{1,3}[- ]?)?\d{10}$/.test(MolileNumber)) {
+      toast.error("Please enter a valid 10-digit mobile number");
       return false;
     }
 
@@ -71,6 +77,7 @@ const BuilderHomePage = (params) => {
     }
     console.log(payload);
   };
+  console.log("developData",developData);
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -141,219 +148,221 @@ const BuilderHomePage = (params) => {
         </div>
       </div>
       <div className={` ${styles.builderDetailPage}`}>
-      <div className={` ${styles.builderDetailPageLeft}`}>
-        {developData ? (
-          <div className={` ${styles.builderBox} mb-4`}>
-            <div className={` ${styles.builderInputField}`}>
-              <div>
-                {developData?.data?.Logo ? (
-                  <img
-                    width="180"
-                    height="180"
-                    className={` ${styles.builderLogoImg}`}
-                    src={`${imgApiUrl}/${developData?.data?.Logo}`}
-                    alt="Builder Logo"
-                  />
-                ) : (
-                  <img
-                    width="180"
-                    height="180"
-                    className={` ${styles.builderLogoImg}`}
-                    src="https://tse2.explicit.bing.net/th?id=OIP.9AeFX9VvFYTXrL5IwhGhYwHaHa&pid=Api&P=0&h=180"
-                    alt="Default Logo"
-                  />
-                )}
-              </div>
-              <div className={` ${styles.builderAfterImg}`}>
-                <div className="text-md font-semibold blueText text-nowrap mt-2">
-                  {developData?.data?.Name}
-                </div>
-                <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                  Joined in {new Date(developData?.data?.CreatedDate).getFullYear()}
-                </div>
-                <div className="text-xs text-gray-500 dark:text-gray-400 mt-4">
-                  {developData?.data?.Description}
-                </div>
-                <div className={` ${styles.builderSocialIcon} text-gray-700 mt-2`}>
-                  <Link
-                    href={developData?.data?.SocialMediaProfileLinks?.Facebook || ''}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <i className="bi bi-facebook"></i>
-                  </Link>
-                  <Link
-                    href={developData?.data?.SocialMediaProfileLinks?.Instagram || ''}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <i className="bi bi-instagram ml-3"></i>
-                  </Link>
-                  <Link
-                    href={developData?.data?.SocialMediaProfileLinks?.LinkedIn || ''}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <i className="bi bi-linkedin ml-3"></i>
-                  </Link>
-                  <Link
-                    href={developData?.data?.SocialMediaProfileLinks?.Twitter || ''}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <i className="bi bi-twitter ml-3"></i>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className={` ${styles.loaderImg}`}>
-            <SkeletonLoader />
-          </div>
-        )}
-        <div className={` ${styles.builderBox} mb-4`}>
-          <h1 className="ml-6 mt-4 font-semibold">Contact Builder</h1>
-          <div className={` ${styles.builderHunter} p-4`}>
-            {/* Your contact form inputs */}
-            <div className="mb-6 mt-3">
-              <input
-                type="text"
-                value={Name}
-                onChange={handleNameChange}
-                id="Name"
-                placeholder="Name"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-gray-400 focus:border-gray-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required
-              />
-            </div>
-            <div className="mb-6">
-              <input
-                type="email"
-                value={Email}
-                onChange={handleEmailChange}
-                id="email"
-                placeholder="Email"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-gray-400 focus:border-gray-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required
-              />
-            </div>
-            <div className="mb-6">
-              <input
-                type="text"
-                value={MolileNumber}
-                onChange={handlePhoneChange}
-                id="Phone"
-                placeholder="Phone"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-gray-400 focus:border-gray-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required
-              />
-            </div>
-            <div className="mb-6">
-              <textarea
-                type="text"
-                value={Message}
-                onChange={handleMessageChange}
-                id="Message"
-                placeholder="Message"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-gray-400 focus:border-gray-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required
-              />
-            </div>
-            <button
-              className={` ${styles.agentRightMainContenBtn} text-white bg-blue-700 h-12 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium  text-sm w-full sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-              type="button"
-              onClick={addEnquiryData}
-            >
-              Send
-            </button>
-          </div>
-        </div>
-        <div className={` ${styles.builderBox} mb-4`}>
-          <iframe
-            className={` ${styles.builderMapDetails}`}
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d227749.05321034128!2d75.62574624184872!3d26.885115144905566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396c4adf4c57e281%3A0xce1c63a0cf22e09!2sJaipur%2C%20Rajasthan!5e0!3m2!1sen!2sin!4v1715061916080!5m2!1sen!2sin"
-          ></iframe>
-        </div>
-      </div>
-      <div className={` ${styles.builderDetailPageRight}`}>
-        {developData ? (
-          developData?.data?.properties.length > 0 ? (
-            developData?.data?.properties
-              .slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
-              .map((item, index) => (
-                <div key={index} className={` ${styles.builderRightMainBox} flex mb-6 p-4 `}>
-                  <Link
-                    href={`/propertyDetail/${item._id}`}
-                    className={` ${styles.builderRightImg} mr-3`}
-                  >
+        <div className={` ${styles.builderDetailPageLeft}`}>
+          {developData ? (
+            <div className={` ${styles.builderBox} mb-4`}>
+              <div className={` ${styles.builderInputField}`}>
+                <div>
+                  {developData?.data?.Logo ? (
                     <img
-                      src={`${imgApiUrl}/${item.Images[0].URL}`}
-                      className="h-full rounded-lg"
-                      alt="Property Image"
+                      width="180"
+                      height="180"
+                      className={` ${styles.builderLogoImg}`}
+                      src={`${imgApiUrl}/${developData?.data?.Logo}`}
+                      alt="Builder Logo"
                     />
-                  </Link>
-                  <div className={` ${styles.builderRightBox}`}>
-                    <div className={` ${styles.cardImgBottom}`}>
-                      <Link href={`/propertyDetail/${item._id}`}>
-                        <div className={` ${styles.populerPropertiesLocationMain} flex text-md pt-4`}>
-                          <i className="bi bi-geo-alt-fill"></i>
-                          <p className={`text-gray-700`}>Jaipur</p>
-                        </div>
-                        <div className="flex justify-between">
-                          <h2 className={` ${styles.populerPropertiesBoxHead} font-semibold text-2xl pt-2`}>
-                            {item?.Title}
-                          </h2>
-                          <div className={` ${styles.populerPropertiesBoxDetail} flex mt-2 text-gray-500 font-bold`}>
-                            {item?.ProeprtyType}
-                          </div>
-                        </div>
-                      </Link>
-                      <h2 className={` ${styles.populerPropertiesBoxHead} text-sm pt-2`}>
-                        {/* Description, use ReadMore component if needed */}
-                        <ReadMore text={item?.Description} maxLength={150} />
-                      </h2>
-                      <Link href={`/propertyDetail/${item._id}`}>
-                        <div className={`${styles.populerPropertiesBoxPriceMain} flex mt-2 justify-between`}>
-                          <div>
-                            <p className={`font-bold text-gray-500 ${styles.populerPropertiesBoxPrice}`}>
-                              {item?.TotalPrice?.DisplayValue}
-                            </p>
-                          </div>
-                          <div>
-                            <button
-                              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                              type="button"
-                            >
-                              More Details
-                            </button>
-                          </div>
-                        </div>
-                      </Link>
-                    </div>
+                  ) : (
+                    <img
+                      width="180"
+                      height="180"
+                      className={` ${styles.builderLogoImg}`}
+                      src="https://tse2.explicit.bing.net/th?id=OIP.9AeFX9VvFYTXrL5IwhGhYwHaHa&pid=Api&P=0&h=180"
+                      alt="Default Logo"
+                    />
+                  )}
+                </div>
+                <div className={` ${styles.builderAfterImg}`}>
+                  <div className="text-md font-semibold blueText text-nowrap mt-2">
+                    {developData?.data?.Name}
+                  </div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                    Joined in {new Date(developData?.data?.CreatedDate).getFullYear()}
+                  </div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-4">
+                    {developData?.data?.Description}
+                  </div>
+                  <div className={` ${styles.builderSocialIcon} text-gray-700 mt-2`}>
+                    <Link
+                      href={developData?.data?.SocialMediaProfileLinks?.Facebook || ''}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <i className="bi bi-facebook"></i>
+                    </Link>
+                    <Link
+                      href={developData?.data?.SocialMediaProfileLinks?.Instagram || ''}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <i className="bi bi-instagram ml-3"></i>
+                    </Link>
+                    <Link
+                      href={developData?.data?.SocialMediaProfileLinks?.LinkedIn || ''}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <i className="bi bi-linkedin ml-3"></i>
+                    </Link>
+                    <Link
+                      href={developData?.data?.SocialMediaProfileLinks?.Twitter || ''}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <i className="bi bi-twitter ml-3"></i>
+                    </Link>
                   </div>
                 </div>
-              ))
+              </div>
+            </div>
           ) : (
-            <h1 className={` ${styles.bigNotFound}`}>No Properties Found</h1>
-          )
-        ) : (
-          <SkeletonLoader />
-        )}
-        {/* Pagination component */}
-        {developData?.data?.properties.length > 0 && (
-          <Pagination
-            data={{
-              totalPages: Math.ceil(developData?.data?.properties.length / PAGE_SIZE),
-              totalCount: developData?.data?.properties.length,
-            }}
-            pageNo={handlePageChange}
-            pageVal={page}
-          />
-        )}
+            <div className={` ${styles.loaderImg}`}>
+              <SkeletonLoader />
+            </div>
+          )}
+          <div className={` ${styles.builderBox} mb-4`}>
+            <h1 className="ml-6 mt-4 font-semibold">Contact Builder</h1>
+            <div className={` ${styles.builderHunter} p-4`}>
+              {/* Your contact form inputs */}
+              <div className="mb-6 mt-3">
+                <input
+                  type="text"
+                  value={Name}
+                  onChange={handleNameChange}
+                  id="Name"
+                  placeholder="Name"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-gray-400 focus:border-gray-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  required
+                />
+              </div>
+              <div className="mb-6">
+                <input
+                  type="email"
+                  value={Email}
+                  onChange={handleEmailChange}
+                  id="email"
+                  placeholder="Email"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-gray-400 focus:border-gray-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  required
+                />
+              </div>
+              <div className="mb-6">
+                <input
+                  type="text"
+                  value={MolileNumber}
+                  onChange={handlePhoneChange}
+                  id="Phone"
+                  placeholder="Phone"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-gray-400 focus:border-gray-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  required
+                />
+              </div>
+              <div className="mb-6">
+                <textarea
+                  type="text"
+                  value={Message}
+                  onChange={handleMessageChange}
+                  id="Message"
+                  placeholder="Message"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-gray-400 focus:border-gray-400 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  required
+                />
+              </div>
+              <button
+                className={` ${styles.agentRightMainContenBtn} text-white bg-blue-700 h-12 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium  text-sm w-full sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                type="button"
+                onClick={addEnquiryData}
+              >
+                Send
+              </button>
+            </div>
+          </div>
+          <div className={` ${styles.builderBox} mb-4`}>
+            <iframe
+              className={` ${styles.builderMapDetails}`}
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d227749.05321034128!2d75.62574624184872!3d26.885115144905566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396c4adf4c57e281%3A0xce1c63a0cf22e09!2sJaipur%2C%20Rajasthan!5e0!3m2!1sen!2sin!4v1715061916080!5m2!1sen!2sin"
+            ></iframe>
+          </div>
+        </div>
+        <div className={` ${styles.builderDetailPageRight}`}>
+          {developData ? (
+            developData?.data?.properties.length > 0 ? (
+              developData?.data?.properties
+                .slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+                .map((item, index) => (
+                  <div key={index} className={` ${styles.builderRightMainBox} flex mb-6 p-4 `}>
+                    <Link
+                      href={`/propertyDetail/${item._id}`}
+                      className={` ${styles.builderRightImg} mr-3`}
+                    >
+                      <img
+                        src={`${imgApiUrl}/${item.Images[0].URL}`}
+                        className="h-full rounded-lg"
+                        alt="Property Image"
+                      />
+                    </Link>
+                    <div className={` ${styles.builderRightBox}`}>
+                      <div className={` ${styles.cardImgBottom}`}>
+                        <Link href={`/propertyDetail/${item._id}`}>
+                          <div className={` ${styles.populerPropertiesLocationMain} flex text-md pt-4`}>
+                            <i className="bi bi-geo-alt-fill"></i>
+                            <p className={`text-gray-700`}>Jaipur</p>
+                          </div>
+                          <div className="flex justify-between">
+                            <h2 className={` ${styles.populerPropertiesBoxHead} font-semibold text-2xl pt-2`}>
+                              {item?.Title}
+                            </h2>
+                            <div className={` ${styles.populerPropertiesBoxDetail} flex mt-2 text-gray-500 font-bold`}>
+                              {item?.ProeprtyType}
+                            </div>
+                          </div>
+                        </Link>
+                        {/* <h2 className={` ${styles.populerPropertiesBoxHead} text-sm pt-2`}>
+                        <ReadMore text={item?.Description} maxLength={150} />
+                      </h2> */}
+                        <div className="mb-4">
+                          <AccordionBuilder listData={[item]} />
+                        </div>
+                        <Link href={`/propertyDetail/${item._id}`}>
+                          <div className={`${styles.populerPropertiesBoxPriceMain} flex mt-2 justify-between`}>
+                            <div>
+                              <p className={`font-bold text-gray-500 ${styles.populerPropertiesBoxPrice}`}>
+                                {item?.TotalPrice?.DisplayValue}
+                              </p>
+                            </div>
+                            <div>
+                              <button
+                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                type="button"
+                              >
+                                More Details
+                              </button>
+                            </div>
+                          </div>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                ))
+            ) : (
+              <h1 className={` ${styles.bigNotFound}`}>No Properties Found</h1>
+            )
+          ) : (
+            <SkeletonLoader />
+          )}
+          {/* Pagination component */}
+          {developData?.data?.properties.length > 0 && (
+            <Pagination
+              data={{
+                totalPages: Math.ceil(developData?.data?.properties.length / PAGE_SIZE),
+                totalCount: developData?.data?.properties.length,
+              }}
+              pageNo={handlePageChange}
+              pageVal={page}
+            />
+          )}
+        </div>
       </div>
-    </div>
-      
+
       <Footer />
     </>
   );

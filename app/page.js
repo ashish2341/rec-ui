@@ -357,6 +357,10 @@ export default function Home() {
       toast.error("Email is required");
       return false;
     }
+    if (!/^(\+\d{1,3}[- ]?)?\d{10}$/.test(MolileNumber)) {
+      toast.error("Please enter a valid 10-digit mobile number");
+      return false;
+    }
     if (Message === "") {
       toast.error("Message is required");
       return false;
@@ -365,6 +369,7 @@ export default function Home() {
       toast.error("Number is required");
       return false;
     }
+    
     let payload = {
       Name,
       Email,

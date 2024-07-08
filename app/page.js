@@ -121,27 +121,7 @@ export default function Home() {
     loading: bannerDataLoading,
     error: bannerDataError,
   } = useFetch(`${API_BASE_URL}/banner/allbanner?page=1&pageSize=5`);
-  useEffect(() => {
-    // Function to reinitialize Flowbite carousel
-    const initCarousels = () => {
-      // Check if the Flowbite Carousel class is available in the window object
-      if (window.Carousel) {
-        document.querySelectorAll("[data-carousel]").forEach((carousel) => {
-          new window.Carousel(carousel, {
-            interval: 3000, // Example option, customize as needed
-            pause: false, // Example option, customize as needed
-          });
-        });
-      } else {
-        console.error(
-          "Flowbite Carousel class is not available in the window object."
-        );
-      }
-    };
-
-    // Call the function to initialize the carousel
-    initCarousels();
-  }, [bannerData]);
+  
   const ShowApartmentProperties = () => {
     return propertyByapartmentType?.data?.map((item, index) => (
       <Link
@@ -180,7 +160,12 @@ export default function Home() {
       <div key={index} className={` ${styles.cardBoxPopularTop}`}>
         <img
           className={` ${styles.cardImgTop}`}
-          src={`${imgApiUrl}/${item.Images[0].URL}`}
+          src={
+            !item.Images[0].URL.includes("https")
+              ? `${imgApiUrl}/${item.Images[0].URL}`
+              : item.Images[0].URL
+          }
+          // src={`${imgApiUrl}/${item.Images[0].URL}`}
           alt="Nothing"
         ></img>
         <Link href={`/propertyDetail/${item._id}`}>

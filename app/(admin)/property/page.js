@@ -306,13 +306,13 @@ export default function Property(params) {
                             scope="row"
                             className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                           >
-                            {item.Title}
+                            {item?.Title}
                           </td>
                           <td
                             scope="row"
                             className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                           >
-                            {item.PropertySubtype.Name}
+                            {item?.PropertySubtype?.Name}
                           </td>
                           <td className="px-6 py-4">
                             {item?.Facing[0]?.Facing}
@@ -336,7 +336,7 @@ export default function Property(params) {
                             <td className="px-6 py-4 text-blue-600 dark:text-blue-500">
                               <i
                                 className={` ${
-                                  item.IsFeatured
+                                  item?.IsFeatured
                                     ? "bi bi-hand-thumbs-up-fill text-green-600	"
                                     : "bi bi-hand-thumbs-down-fill text-red-500"
                                 } `}
@@ -424,6 +424,7 @@ export default function Property(params) {
                               <Carousel indicators={false} slide={false}>
                                 {item?.Images?.map((itemurl, index) => (
                                   <Link
+                                  className={`${styles.linkPropertyImg}`}
                                     key={index}
                                     href={`/propertyDetail/${item?._id}`}
                                   >
@@ -442,7 +443,7 @@ export default function Property(params) {
                             className={`flex  flex-col leading-normal ml-2 w-full mr-2 mt-4 mb-2 ${styles.middleCardContent}`}
                           >
                             {/* <Link href={`/propertyDetail/${item._id}`}> */}{" "}
-                            <div className={`flex justify-between `}>
+                            <div className={`flex justify-between mb-2 ${styles.firstMiddleContent}`}>
                               <h5
                                 className={` text-2xl font-bold tracking-tight text-gray-900 dark:text-white ${styles.price}`}
                               >
@@ -523,7 +524,7 @@ export default function Property(params) {
                             </div>
                             {/* <div> */}
                             <div
-                              className={`flex flex-row  leading-normal ${styles.firstcontent}`}
+                              className={`flex flex-row  leading-normal mb-2 ${styles.firstcontent}`}
                             >
                               <p
                                 className={`font-bold text-gray-700 dark:text-gray-800 ${styles.itemTitle}`}
@@ -538,7 +539,7 @@ export default function Property(params) {
                               </button>
                             </div>
                             {/* </div> */}
-                            <p className=" flex font-normal text-gray-700 dark:text-gray-400">
+                            <p className=" flex font-normal text-gray-700 dark:text-gray-400 mb-2">
                               <i className="bi bi-geo-alt-fill"></i>
                               <span
                                 className={`ml-1 ${styles.textCapitalized}`}
@@ -659,9 +660,9 @@ export default function Property(params) {
                             </div>
                             {/* <Link href={`/propertyDetail/${item._id}`}></Link> */}
                             <div
-                              className={`flex justify-between items-center `}
+                              className={`flex justify-between items-center ${styles.lastContent}`}
                             >
-                              <div className="w-1/2">
+                              <div className={`w-1/2 ${styles.propertyScore}`}>
                                 <span className="text-lg font-bold leading-tight text-gray-400  ">
                                   Your Property Score
                                 </span>

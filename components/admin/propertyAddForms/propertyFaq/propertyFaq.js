@@ -102,6 +102,9 @@ export default function PropertyFaqForm({
   return (
     <>
       <div>
+        <h2 className="block mb-2 text-xl font-lg underline font-bold text-gray-500 dark:text-white">
+          Faq Details
+        </h2>
         <form>
           {faqFields.length != 0
             ? faqFields.map((field, index) => (

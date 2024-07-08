@@ -25,7 +25,7 @@ const Accordion = ({ listData }) => {
                     <p className={`${styles.heroSectionBottomBoxText}`}>
                       {" "}
                       {/* <i className="bi bi-house-door-fill"></i> */}
-                      <span className="ml-1">{item.ProeprtyType}</span>
+                      <span className="ml-1">{item?.ProeprtyType}</span>
                     </p>
                   </div>
                   <div className={`${styles.accordionItem}`}>
@@ -34,20 +34,20 @@ const Accordion = ({ listData }) => {
                     </h2>
                     <p className={`${styles.heroSectionBottomBoxText}`}>
                       {" "}
-                      <span className="ml-1">{item.PropertySubtype.Name}</span>
+                      <span className="ml-1">{item?.PropertySubtype?.Name}</span>
                     </p>
                   </div>
                   <div className={`${styles.accordionItem}`}>
                     <h2 className={` ${styles.heroSectionBottomBoxHead}`}>
-                      {item.PropertySubtype.Name !== "Plot"
+                      {item?.PropertySubtype?.Name !== "Plot"
                         ? "Property Status"
                         : "OwnerShip Type"}
                     </h2>
                     <p className={` ${styles.heroSectionBottomBoxText}`}>
-                      {item.PropertySubtype.Name !== "Plot" ? (
+                      {item?.PropertySubtype?.Name !== "Plot" ? (
                         <span>{item?.PropertyStatus?.Status}</span>
                       ) : (
-                        <span>{item?.OwnershipType.Ownership}</span>
+                        <span>{item?.OwnershipType?.Ownership}</span>
                       )}
                     </p>
                   </div>
@@ -94,7 +94,7 @@ const Accordion = ({ listData }) => {
                         Posession Date
                       </h2>
                       <p className={`${styles.heroSectionBottomBoxText}`}>
-                        {item.PosessionDate.slice(0, 10)}
+                        {item?.PosessionDate?.slice(0, 10)}
                       </p>
                     </div>
                     {/* <div className={`${styles.heroSectionVL}`}></div> */}

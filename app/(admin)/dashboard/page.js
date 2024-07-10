@@ -16,6 +16,7 @@ import {
 } from "@/api-functions/dashboard/graphApi";
 import { getPrevious12Months } from "@/utils/commonHelperFn";
 import Link from "next/link";
+import CommonLoader from "@/components/common/commonLoader/commonLoader";
 
 export default function Dashboard() {
   const roleData = Cookies.get("roles") ?? "";
@@ -25,6 +26,8 @@ export default function Dashboard() {
   const [adminGraphData, setAdminGraphData] = useState("");
   const [builderDashboardData, setBuilderDashboardData] = useState("");
   const [builderGraphData, setBuilderGraphData] = useState("");
+  const [loaderIsLoading, setLoaderIsLoading] = useState(false);
+
 
   useEffect(() => {
 
@@ -40,12 +43,15 @@ export default function Dashboard() {
   }, []);
 
   const getPropertiesAdminDashboard = async () => {
+    setLoaderIsLoading(true)
     let adminData = await GetAdminDashboardApi();
     if (adminData?.resData?.success == true) {
       setAdminDashboardData(adminData?.resData);
+      setLoaderIsLoading(false)
       return false;
     } else {
       toast.error(adminData?.errMessage);
+      setLoaderIsLoading(false)
       return false;
     }
   };
@@ -62,13 +68,15 @@ export default function Dashboard() {
   };
 
   const getPropertiesBuilderDashboard = async () => {
+    setLoaderIsLoading(true)
     let builderData = await GetBuilderDashboardApi();
     if (builderData?.resData?.success == true) {
       setBuilderDashboardData(builderData?.resData);
-
+      setLoaderIsLoading(false)
       return false;
     } else {
       toast.error(builderData?.errMessage);
+      setLoaderIsLoading(false)
       return false;
     }
   };
@@ -212,6 +220,7 @@ export default function Dashboard() {
 
   return (
     <>
+    {loaderIsLoading && <CommonLoader />}
       <div className={`${styles.dashboardContainer}`}>
         <div className={`${styles.ALLConatiner}`}>
           {roles.includes("Admin") && (

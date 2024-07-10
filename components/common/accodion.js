@@ -25,7 +25,7 @@ const Accordion = ({ listData }) => {
                     <p className={`${styles.heroSectionBottomBoxText}`}>
                       {" "}
                       {/* <i className="bi bi-house-door-fill"></i> */}
-                      <span className="ml-1">{item.ProeprtyType}</span>
+                      <span className="ml-1">{item?.ProeprtyType}</span>
                     </p>
                   </div>
                   <div className={`${styles.accordionItem}`}>
@@ -34,20 +34,20 @@ const Accordion = ({ listData }) => {
                     </h2>
                     <p className={`${styles.heroSectionBottomBoxText}`}>
                       {" "}
-                      <span className="ml-1">{item.PropertySubtype.Name}</span>
+                      <span className="ml-1">{item?.PropertySubtype?.Name}</span>
                     </p>
                   </div>
                   <div className={`${styles.accordionItem}`}>
                     <h2 className={` ${styles.heroSectionBottomBoxHead}`}>
-                      {item.PropertySubtype.Name !== "Plot"
+                      {item?.PropertySubtype?.Name !== "Plot"
                         ? "Property Status"
                         : "OwnerShip Type"}
                     </h2>
                     <p className={` ${styles.heroSectionBottomBoxText}`}>
-                      {item.PropertySubtype.Name !== "Plot" ? (
+                      {item?.PropertySubtype?.Name !== "Plot" ? (
                         <span>{item?.PropertyStatus?.Status}</span>
                       ) : (
-                        <span>{item?.OwnershipType.Ownership}</span>
+                        <span>{item?.OwnershipType?.Ownership}</span>
                       )}
                     </p>
                   </div>
@@ -55,7 +55,7 @@ const Accordion = ({ listData }) => {
 
                   {/* <div className={`${styles.heroSectionVL}`}></div> */}
                 </div>
-                <svg
+                {/* <svg
                   className={`w-4 h-full transition-transform transform ${
                     activeIndex === index
                       ? "rotate-180 bg-blue-500"
@@ -70,7 +70,8 @@ const Accordion = ({ listData }) => {
                     d="M10 2.5a.75.75 0 01.75.75v12.5a.75.75 0 01-1.5 0V3.25a.75.75 0 01.75-.75zM5.75 7.75a.75.75 0 011.5 0v1.5a.75.75 0 01-1.5 0v-1.5zM14.25 7.75a.75.75 0 00-1.5 0v1.5a.75.75 0 001.5 0v-1.5zM4.5 11.25a.75.75 0 111.5 0 .75.75 0 01-1.5 0zm10.5 0a.75.75 0 111.5 0 .75.75 0 01-1.5 0z"
                     clipRule="evenodd"
                   />
-                </svg>
+                </svg> */}
+              <i className={`fa fa-chevron-down w-4 h-full transition-transform transform ${activeIndex === index ? "rotate-180" : ""}`} aria-hidden="true"></i>
               </button>
               <div className={` ${activeIndex === index ? "block" : "hidden"}`}>
                 <button
@@ -94,7 +95,7 @@ const Accordion = ({ listData }) => {
                         Posession Date
                       </h2>
                       <p className={`${styles.heroSectionBottomBoxText}`}>
-                        {item.PosessionDate.slice(0, 10)}
+                        {item?.PosessionDate?.slice(0, 10)}
                       </p>
                     </div>
                     {/* <div className={`${styles.heroSectionVL}`}></div> */}

@@ -595,13 +595,14 @@ useEffect(() => {
                   ))}
                 </tbody>
               ) : (
-                <tbody>
-                  <div className="my-20">
-                    <h1 className={` bigNotFound`}>No Data Found</h1>
-                  </div>
-                </tbody>
+                null
               )}
             </table>
+            {listData?.data?.length === 0 && (
+              <div className="mt-4 mb-4 ">
+               <h1 className={` bigNotFound`}>No Data Found</h1>
+              </div>
+            )}
             <Pagination
               data={listData}
               pageNo={handlePageChange}

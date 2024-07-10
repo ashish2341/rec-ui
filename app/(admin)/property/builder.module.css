@@ -13,8 +13,9 @@
   padding: 1rem 1rem 1rem 1rem;
   border-radius: 0.35rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  width: 80%;
+  /* width: 80%; */
   margin-left: 7.5rem;
+  margin-right: 7.5rem;
 }
 .GeneralDetailsBox {
   padding: 0rem;
@@ -127,15 +128,35 @@
     opacity: 0;
     transition: opacity 0.3s;
   }
-  
+  .linkPropertyImg{
+    height: 100%;
+  }
+.listPropertyImg{
+  height: 100%;
+
+}
   .previewIconContainer:hover .hoverText {
     visibility: visible;
     opacity: 1;
   }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 900px) {
   .GeneralDetailsBox {
     padding: 1.5rem;
+    
+      margin-left: 0rem;
+      margin-right:0rem;
+    
   }
+  .heroSectionBottomBoxHead{
+    font-size: 0.7rem;
+    }
+    .heroSectionBottomBoxText{
+      font-size: 0.65rem;
+    }
+    .BottomBoxcontenet{
+  /* padding-right: 5px; */
+  padding-left: 5px;
+}
   .cardContent{
     flex-direction: column;
   }
@@ -167,7 +188,7 @@
     margin-left: 0rem !important;
     }
 }
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 701px) {
 
   .BottomBoxcontenet{
     margin-bottom: 1rem;
@@ -180,9 +201,11 @@
     margin-left: 1rem;
     margin-right: 1rem;
     padding: 1rem;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: auto auto !important;
+  }
+  .heroSectionVL{
+    display: none;
   }
   .BottomBoxcontenet{
     margin-bottom: 1rem;
@@ -194,5 +217,56 @@
   .heroSectionBottomBoxText {
     text-align: center;
     font-size: 0.75rem; /* Adjust font sizes */
+  }
+}
+@media screen and (min-width: 769px) and (max-width: 1269px) {
+  .GeneralDetailsBox {
+ 
+    margin-left: 0rem;
+    margin-right:0rem;
+  }
+ 
+/* .BottomBoxcontenet{
+  padding-right: 5px;
+  padding-left: 5px;
+} */
+.heroSectionBottomBoxHead{
+font-size: 0.8rem;
+}
+.heroSectionBottomBoxText{
+  font-size: 0.65rem;
+}
+}
+@media screen and (min-width: 1026px) and (max-width: 1440px) {
+  .GeneralDetailsBox {
+ 
+    margin-left: 2rem !important;
+    margin-right:2rem !important;
+  }
+ 
+    .heroSectionBottomBoxText{
+      font-size: 0.65rem !important;
+    }
+}
+@media screen and (max-width: 426px) {
+
+  .middleCardContent{
+    margin-top: 0;
+    padding-top: 0;
+  }
+  .firstMiddleContent{
+    flex-direction: column-reverse ;
+    margin-bottom: 1rem !important;
+  }
+  .GeneralDetailsBoxIcon button {
+    padding-left: 0;
+    margin-bottom: 0;
+  }
+  .lastContent{
+    flex-direction: column;
+  }
+  .propertyScore{
+    width: 100% !important;
+    margin-bottom: 1rem;
   }
 }

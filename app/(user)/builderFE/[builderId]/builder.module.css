@@ -102,7 +102,7 @@
   
   .builderRightImg {
     aspect-ratio: 3 / 2;
-    /* width: 40%; */
+    width: 50%;
     border-radius: 0.35rem;
   }
   
@@ -137,8 +137,8 @@
 }
   @media screen and (min-width: 1024px) and (max-width: 1039px) {
     .builderDetailPage {
-      margin-left: 5rem !important;
-      margin-right: 5rem !important;
+      margin-left: 2rem !important;
+      margin-right: 2rem !important;
     }
     .builderLogoImg{
         margin-left: 1.2rem;

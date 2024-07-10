@@ -219,7 +219,7 @@ const PropertyDetail = ({ params }) => {
       <SkeletonLoader />
     ) : (
       listDataConst?.data?.map((item, index) => (
-        <div key={index} className={` ${styles.cardBoxPopularTop}`}>
+        <div key={index} className={`mr-3 ${styles.cardBoxPopularTop}`}>
           <img
             className={` ${styles.cardImgTop}`}
             src={`${imgApiUrl}/${item.Images[0].URL}`}
@@ -482,7 +482,8 @@ const PropertyDetail = ({ params }) => {
     }
   }
   const isImage = (url) => {
-    return url.match(/\.(jpeg|jpg|png)$/);
+    
+    return url ? url.match(/\.(jpeg|jpg|png)$/) : "";
   };
   const checkIfAllEmpty = (obj) => {
     const allEmpty = Object.values(obj).every((value) => value === "");
@@ -1019,7 +1020,12 @@ const PropertyDetail = ({ params }) => {
                             <div className={`${styles.configureDoc}`}>
                               {" "}
                               <iframe
-                                src={`${imgApiUrl}/${listPropertiesData.FloorPlan}`}
+                               src={
+                                !listPropertiesData ? listPropertiesData.FloorPlan.includes("https")
+                                  ? `${imgApiUrl}/${listPropertiesData.FloorPlan}`
+                                  : listPropertiesData.FloorPlan : ""
+                              }
+                                // src={`${imgApiUrl}/${listPropertiesData.FloorPlan}`}
                                 className={`h-48 w-64 border border-black rounded-lg ${styles.doc}`}
                                 alt="Selected Floor Plan"
                               />
@@ -1040,7 +1046,12 @@ const PropertyDetail = ({ params }) => {
                     <div className={`${styles.configureFloorPlanImg}`}>
                       <div>
                         <iframe
-                          src={`${imgApiUrl}/${BrochureData}`}
+                         src={
+                          !BrochureData.includes("https")
+                            ? `${imgApiUrl}/${BrochureData}`
+                            : BrochureData
+                        }
+                          // src={`${imgApiUrl}/${BrochureData}`}
                           className="h-48 w-64 border border-black rounded-lg"
                         />
                       </div>

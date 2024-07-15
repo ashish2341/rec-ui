@@ -29,7 +29,18 @@ export default function Sidebar({ children }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const dropdownRef = useRef(null);
+  const buttonRef = useRef(null);
 
+  const handleClickOutside = (event) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target) &&
+      buttonRef.current &&
+      !buttonRef.current.contains(event.target)
+    ) {
+      setIsDropdownOpen(false);
+    }
+  };
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -37,12 +48,7 @@ export default function Sidebar({ children }) {
   const closeDropdown = () => {
     setIsDropdownOpen(false);
   };
-  // Function to handle clicks outside the dropdown
-  const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setIsDropdownOpen(false);
-    }
-  };
+ 
   useEffect(() => {
     // Attach event listener when the component mounts
     document.addEventListener("mousedown", handleClickOutside);
@@ -641,6 +647,7 @@ export default function Sidebar({ children }) {
               </span>
               <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                 <button
+                ref={buttonRef}
                   type="button"
                   className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                   id="user-menu-button"

@@ -46,6 +46,26 @@ export default function ProjectInquiry(params) {
   const [isLoading, setIsLoading] = useState(false);
 
   const dropdownRef = useRef(null);
+  const buttonRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target) &&
+      buttonRef.current &&
+      !buttonRef.current.contains(event.target)
+    ) {
+      setIsDropdownOpen(false);
+    }
+  };
+  useEffect(() => {
+    // Attach event listener when the component mounts
+    document.addEventListener("mousedown", handleClickOutside);
+    // Clean up the event listener when the component unmounts
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   useEffect(() => {
     initFlowbite(); // Call initCarousels() when component mounts
   }, []);
@@ -60,11 +80,11 @@ export default function ProjectInquiry(params) {
     }
   }, [page, searchData, isSubmitClicked, isDeleted, params]);
 
-  useEffect(()=>{
-if(fromDate && toDate){
-  getAllEnquiry(typeOnButton);
-}
-  },[fromDate,toDate])
+  useEffect(() => {
+    if (fromDate && toDate) {
+      getAllEnquiry(typeOnButton);
+    }
+  }, [fromDate, toDate]);
   const getAllEnquiry = async (filterType) => {
     setIsLoading(true);
     const todayEnquiry = params.searchParams.todayEnquiry;
@@ -246,20 +266,7 @@ if(fromDate && toDate){
       }
     }
   }, [listData]);
- // Function to handle clicks outside the dropdown
- const handleClickOutside = (event) => {
-  if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-    setIsDropdownOpen(false);
-  }
-};
-useEffect(() => {
-  // Attach event listener when the component mounts
-  document.addEventListener('mousedown', handleClickOutside);
-  // Clean up the event listener when the component unmounts
-  return () => {
-    document.removeEventListener('mousedown', handleClickOutside);
-  };
-}, []);
+
   return (
     <section>
       {isLoading && <CommonLoader />}
@@ -296,7 +303,7 @@ useEffect(() => {
                 {" "}
                 {/* Ensure relative positioning */}
                 <button
-                
+                  ref={buttonRef}
                   id="dropdownPossessionButton"
                   onClick={toggleDropdown}
                   className="text-black bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:ring-gray-100 focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
@@ -320,7 +327,7 @@ useEffect(() => {
                   </svg>
                 </button>
                 <div
-                 ref={dropdownRef}
+                  ref={dropdownRef}
                   id="dropdownPossession"
                   className={`z-10 ${
                     isDropdownOpen ? "block" : "hidden"
@@ -346,10 +353,8 @@ useEffect(() => {
             )}
           </div>
           <div>
-            <SearchInput
-             setSearchData={searchInputChange} 
-             />
-             </div>
+            <SearchInput setSearchData={searchInputChange} />
+          </div>
         </div>
 
         {listData ? (
@@ -594,13 +599,11 @@ useEffect(() => {
                     </tr>
                   ))}
                 </tbody>
-              ) : (
-                null
-              )}
+              ) : null}
             </table>
             {listData?.data?.length === 0 && (
               <div className="mt-4 mb-4 ">
-               <h1 className={` bigNotFound`}>No Data Found</h1>
+                <h1 className={` bigNotFound`}>No Data Found</h1>
               </div>
             )}
             <Pagination

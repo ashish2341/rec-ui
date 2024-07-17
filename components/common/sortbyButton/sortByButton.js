@@ -4,25 +4,39 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 const SortByButton = ({ arrayItem, updatePayload }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [buttonKeyName, setButtonKeyName] = useState("");
   const dropdownRef = useRef(null);
- // Function to handle clicks outside the dropdown
- const handleClickOutside = (event) => {
-  if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-    setIsDropdownOpen(false);
-  }
-};
-useEffect(() => {
-  // Attach event listener when the component mounts
-  document.addEventListener('mousedown', handleClickOutside);
-  // Clean up the event listener when the component unmounts
-  return () => {
-    document.removeEventListener('mousedown', handleClickOutside);
+  // Function to handle clicks outside the dropdown
+  const buttonRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target) &&
+      buttonRef.current &&
+      !buttonRef.current.contains(event.target)
+    ) {
+      setIsDropdownOpen(false);
+    }
   };
-}, []);
+
+  useEffect(() => {
+    // Attach event listener when the component mounts
+    document.addEventListener("mousedown", handleClickOutside);
+    // Clean up the event listener when the component unmounts
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+    if (isDropdownOpen === true) {
+      setIsDropdownOpen(false);
+    } else {
+      setIsDropdownOpen(true);
+    }
   };
   const propertiesBySort = (itemkey, sortItem1, sortitem2) => {
+    setButtonKeyName(itemkey)
     const newPayload = {
       sortBy:
         itemkey === "Low to High"
@@ -54,12 +68,13 @@ useEffect(() => {
       <div>
         <li className="me-2 mt-2 list-none">
           <button
-           onClick={toggleDropdown}
+            ref={buttonRef}
+            onClick={toggleDropdown}
             id="dropdownSortByButton"
             className={`text-black bg-lightgrey border border-black hover:bg-lightgrey-800 focus:ring-4 focus:outline-none focus:ring-lightgrey-300 font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center dark:bg-lightgrey-600 dark:hover:bg-lightgrey-700 dark:focus:ring-lightgrey-800 ${styles.GeneralDetailsSortDropdown}`}
             type="button"
           >
-            Sort By
+            {buttonKeyName ? `${buttonKeyName}` : "Sort By"} 
             <svg
               className="w-2.5 h-2.5 ms-3"
               aria-hidden="true"
@@ -78,7 +93,7 @@ useEffect(() => {
           </button>
 
           <div
-           ref={dropdownRef}
+            ref={dropdownRef}
             id="dropdownSortBy"
             className={`${
               isDropdownOpen ? "block" : "hidden"
@@ -87,24 +102,26 @@ useEffect(() => {
             <ul
               className="py-2 text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownSortByButton"
-            >{arrayItem.length > 0 ?(arrayItem?.map((item,index) => (
-                <li key={index}>
-                  <p
-                    href=""
-                    className="flex items-center p-2 ml-2 mr-2 rounded hover:bg-white dark:hover:bg-gray-600 cursor-pointer"
-                    onClick={() =>
-                      propertiesBySort(
-                        item.itemName,
-                        item.urlItem1,
-                        item.urlItem2
-                      )
-                    }
-                  >
-                    {item.itemName}
-                  </p>
-                </li>
-              ))):(null)}
-              
+            >
+              {arrayItem.length > 0
+                ? arrayItem?.map((item, index) => (
+                    <li key={index}>
+                      <p
+                        href=""
+                        className="flex items-center p-2 ml-2 mr-2 rounded hover:bg-white dark:hover:bg-gray-600 cursor-pointer"
+                        onClick={() =>
+                          propertiesBySort(
+                            item.itemName,
+                            item.urlItem1,
+                            item.urlItem2
+                          )
+                        }
+                      >
+                        {item.itemName}
+                      </p>
+                    </li>
+                  ))
+                : null}
             </ul>
           </div>
         </li>

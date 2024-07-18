@@ -1,9 +1,9 @@
- export const API_BASE_URL = " http://recadmin-001-site1.ctempurl.com/v1";
-export const API_BASE_URL_FOR_MASTER = "http://recadmin-001-site1.ctempurl.com/v1/masters";
+export const API_BASE_URL = "https://api.therec.in/v1";
+export const API_BASE_URL_FOR_MASTER = "https://api.therec.in/v1/masters";
 export const UI_URL = 'http://localhost:3000'
-export const PROD_URL = "http://recadmin-001-site2.etempurl.com"
+export const PROD_URL = "https://www.therec.in"
 export const PAGE_LIMIT = 10;
-  export const imgApiUrl = "http://recadmin-001-site1.ctempurl.com/uploads"
+  export const imgApiUrl = "https://api.therec.in/uploads"
 //  export const imgApiUrl = "http://localhost:8000/uploads"
 //  export const API_BASE_URL = "http://localhost:8000/v1";
 //  export const API_BASE_URL_FOR_MASTER = "http://localhost:8000/v1/masters"

@@ -482,7 +482,7 @@ const PropertyDetail = ({ params }) => {
     }
   }
   const isImage = (url) => {
-    
+
     return url ? url.match(/\.(jpeg|jpg|png)$/) : "";
   };
   const checkIfAllEmpty = (obj) => {
@@ -493,7 +493,6 @@ const PropertyDetail = ({ params }) => {
 
     // Check if all values in the object are empty strings
   };
-
   return (
     <>
       {loaderIsLoading && <CommonLoader />}
@@ -530,9 +529,11 @@ const PropertyDetail = ({ params }) => {
           {videoData ? (
             videoData == "" ? (
               <div className={`${styles.heroSectionNoLeftVideoMain}`}>
-                <p className="text-gray-400 text-xl font-semibold">
-                  No video available
-                </p>
+                <img
+                  className="h-full"
+                  src={`${imgApiUrl}/${listPropertiesData?.Images[0].URL}`}
+                  alt="..."
+                />
               </div>
             ) : (
               listPropertiesData?.Videos?.map((videoDatas) => (
@@ -597,7 +598,7 @@ const PropertyDetail = ({ params }) => {
               listPropertiesData?.ProeprtyType == "Commercial") ||
               ((listPropertiesData?.Fitting &&
                 checkIfAllEmpty(listPropertiesData?.Fitting)) ||
-              listPropertiesData?.PropertySubtype?.Name === "Plot" ? null : (
+                listPropertiesData?.PropertySubtype?.Name === "Plot" ? null : (
                 <li className="me-2">
                   <Link href="#specifications" className="nonActiveBar">
                     Specifications
@@ -877,7 +878,7 @@ const PropertyDetail = ({ params }) => {
                       </button>
                     </li>
                     {listPropertiesData?.PropertySubtype?.Name ==
-                    "Plot" ? null : (
+                      "Plot" ? null : (
                       <li className="me-2" role="presentation">
                         <button
                           className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
@@ -892,19 +893,35 @@ const PropertyDetail = ({ params }) => {
                         </button>
                       </li>
                     )}
-                    <li className="me-2" role="presentation">
-                      <button
-                        className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-                        id="Payment-tab"
-                        data-tabs-target="#Payment"
-                        type="button"
-                        role="tab"
-                        aria-controls="Payment"
-                        aria-selected="false"
-                      >
-                        Payment Plan
-                      </button>
-                    </li>
+                    {listPropertiesData?.PaymentPlan ?
+                      <li className="me-2" role="presentation">
+                        <button
+                          className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          id="Payment-tab"
+                          data-tabs-target="#Payment"
+                          type="button"
+                          role="tab"
+                          aria-controls="Payment"
+                          aria-selected="false"
+                        >
+                          Payment Plan
+                        </button>
+                      </li>
+                      :
+                      <li className={`${styles.displayNone}`} role="presentation">
+                        <button
+                          className={`${styles.displayNone}`}
+                          id="Payment-tab"
+                          data-tabs-target="#Payment"
+                          type="button"
+                          role="tab"
+                          aria-controls="Payment"
+                          aria-selected="false"
+                        >
+                          Plan
+                        </button>
+                      </li>
+                    }
                   </ul>
                 </div>
                 <div id="default-tab-content">
@@ -1016,21 +1033,7 @@ const PropertyDetail = ({ params }) => {
                             </div>
                           </>
                         ) : (
-                          <>
-                            <div className={`${styles.configureDoc}`}>
-                              {" "}
-                              <iframe
-                               src={
-                                !listPropertiesData ? listPropertiesData.FloorPlan.includes("https")
-                                  ? `${imgApiUrl}/${listPropertiesData.FloorPlan}`
-                                  : listPropertiesData.FloorPlan : ""
-                              }
-                                // src={`${imgApiUrl}/${listPropertiesData.FloorPlan}`}
-                                className={`h-48 w-64 border border-black rounded-lg ${styles.doc}`}
-                                alt="Selected Floor Plan"
-                              />
-                            </div>
-                          </>
+                          null
                         )}
                       </div>
                     ) : (
@@ -1046,11 +1049,11 @@ const PropertyDetail = ({ params }) => {
                     <div className={`${styles.configureFloorPlanImg}`}>
                       <div>
                         <iframe
-                         src={
-                          !BrochureData.includes("https")
-                            ? `${imgApiUrl}/${BrochureData}`
-                            : BrochureData
-                        }
+                          src={
+                            !BrochureData.includes("https")
+                              ? `${imgApiUrl}/${BrochureData}`
+                              : BrochureData
+                          }
                           // src={`${imgApiUrl}/${BrochureData}`}
                           className="h-48 w-64 border border-black rounded-lg"
                         />
@@ -1402,12 +1405,12 @@ const PropertyDetail = ({ params }) => {
 
           {/* Specifications */}
           {listPropertiesData?.ProeprtyType == "Residential" &&
-          listPropertiesData?.PropertySubtype?.Name !== "Plot" ? (
+            listPropertiesData?.PropertySubtype?.Name !== "Plot" ? (
             listPropertiesData?.Fitting?.Electrical == "" &&
-            listPropertiesData?.Fitting?.Toilets == "" &&
-            listPropertiesData?.Fitting?.Kitchen == "" &&
-            listPropertiesData?.Fitting?.Doors == "" &&
-            listPropertiesData?.Fitting?.Windows == "" ? null : (
+              listPropertiesData?.Fitting?.Toilets == "" &&
+              listPropertiesData?.Fitting?.Kitchen == "" &&
+              listPropertiesData?.Fitting?.Doors == "" &&
+              listPropertiesData?.Fitting?.Windows == "" ? null : (
               <div
                 id="specifications"
                 className={` ${styles.faq} faq mt-16 page`}

@@ -287,6 +287,9 @@
 .rdp {
   --rdp-cell-size: 35px;
 }
+.displayNone{
+  display: none !important;
+}
 
 /* bank */
 

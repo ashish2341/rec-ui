@@ -1,7 +1,7 @@
  export const API_BASE_URL = " https://api.therec.co.in/v1";
 export const API_BASE_URL_FOR_MASTER = "https://api.therec.co.in/v1/masters";
 export const UI_URL = 'http://localhost:3000'
-export const PROD_URL = "https://www.therec.co.in"
+export const PROD_URL = "https://www.therec.in"
 export const PAGE_LIMIT = 10;
   export const imgApiUrl = "https://api.therec.co.in/uploads"
 //  export const imgApiUrl = "http://localhost:8000/uploads"

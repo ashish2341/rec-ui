@@ -1,4 +1,4 @@
- export const API_BASE_URL = "https://api.therec.in/v1";
+export const API_BASE_URL = "https://api.therec.in/v1";
 export const API_BASE_URL_FOR_MASTER = "https://api.therec.in/v1/masters";
 export const UI_URL = 'http://localhost:3000'
 export const PROD_URL = "https://www.therec.in"

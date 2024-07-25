@@ -7,21 +7,21 @@ import Cookies from "js-cookie";
 import Styles from "../featurepage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
 import ArrayButtons from "@/components/common/admin/arrayButtons/arrayButtons";
+import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
 export default function AmenityPage({
   setPropertyPageValue,
-  setPropertyBackvalue,
+  setPropertyBackvalue,setFeaturesPageNameArray
 }) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
   const roles = roleData && JSON.parse(roleData);
   const userId = Cookies.get("userId");
   // fetching Data for Amenities
-  const { data: aminitiesData } = useFetch(
+  const { data: aminitiesData ,loading: DataLoading,} = useFetch(
     `${API_BASE_URL_FOR_MASTER}/aminities`
   );
 
   const [selectedAmenities, setSelectedAmenities] = useState([]);
-
   useEffect(() => {
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
@@ -46,11 +46,19 @@ export default function AmenityPage({
     const localStorageData = JSON.parse(sessionStorage.getItem("propertyData"));
     const newProjectData = { ...localStorageData, ...AmenityData };
     sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
+    
+    setFeaturesPageNameArray(prev => {
+      // Check if the newPage already exists in the array
+      if (!prev.includes("Amenities")) {
+        return [...prev, "Amenities"];
+      }
+      return prev; // If it already exists, return the previous state
+    });
     setPropertyPageValue((prev) => prev + 1);
     setPropertyBackvalue((prev) => prev + 1);
   };
   return (
-    <>
+    <>{DataLoading && <LoaderForMedia />}
       {aminitiesData && (
         <>
           <ArrayButtons

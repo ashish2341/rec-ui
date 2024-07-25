@@ -213,8 +213,8 @@
       width: 100%;
     }
     .populerPropertiesBoxHead {
-      font-size: 1.3rem !important;
-      text-wrap: nowrap;
+      font-size: 1.1rem !important;
+      /* text-wrap: nowrap; */
       width: 100% !important;
     }
     .populerPropertiesBoxDetail {

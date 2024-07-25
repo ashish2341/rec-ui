@@ -10,13 +10,24 @@ import {
   conditionalArray,
   lookingToArray,
   propertyTypeArray,
-  currentPage
+  currentPage,
 } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import Cookies from "js-cookie";
 import NextButton from "@/components/common/admin/nextButton/nextButton";
 import EditedTag from "@/components/common/admin/editedTag/editedTag";
-export default function BasicDetailsForm({ valueForNext, valueForNextPage,  editedKeys, pageName}) {
+import { UpdateStepsStatus, findNextStep } from "@/utils/commonHelperFn";
+
+export default function BasicDetailsForm({
+  valueForNext,
+  valueForNextPage,
+  editedKeys,
+  pageName,
+  setFormPageNumberArray,
+  propertyallPagesName,setSubTypeChangedValue,subTypechangesValue,setInsidePropertyPageNameArray,
+  setFeaturesPageNameArray, setPageStatusArray,
+  pageStatusData,
+}) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
   const roles = roleData && JSON.parse(roleData);
@@ -79,10 +90,23 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage,  edit
       propertTypWithSubTypeValue !== "" &&
       propertyTypeWithSubtype.Name != propertTypWithSubTypeValue
     ) {
-     
       setTitle("");
       setDescription("");
       setFacing("");
+      const updateSteps = (data) => {
+        const updatedSteps = data.map((step, index) => {
+          if (index !== 0) {
+            return { ...step, complete: false };
+          }
+          return step;
+        });
+        setPageStatusArray(updatedSteps) ;
+        
+      };if( propertTypWithSubTypeValue &&
+        propertTypWithSubTypeValue != propertyTypeWithSubtype?.Name){
+          
+          updateSteps(pageStatusData)
+      }
       if (roles.includes("Admin")) {
         setIsEnabled(true);
         setIsFeatured(true);
@@ -191,8 +215,13 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage,  edit
           basicDetailsData._id = propertyId;
         }
         sessionStorage.removeItem("EditPropertyData");
+        setFormPageNumberArray([]);
+        setInsidePropertyPageNameArray([])
+        setFeaturesPageNameArray([])
+        setSubTypeChangedValue(true)
+       
       }
-     
+
       const updatedProjectData = {
         ...JSON.parse(sessionStorage.getItem("EditPropertyData")),
         ...basicDetailsData,
@@ -201,8 +230,30 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage,  edit
         "EditPropertyData",
         JSON.stringify(updatedProjectData)
       );
+      setFormPageNumberArray((prev) => {
+        // Check if the newPage already exists in the array
+        if (!prev.includes("Basic details")) {
+          return [...prev, "Basic details"];
+        }
+        return prev; // If it already exists, return the previous state
+      });
+      const subTypeChangeValue=propertTypWithSubTypeValue &&
+      propertTypWithSubTypeValue != propertyTypeWithSubtype?.Name ? true :subTypechangesValue
 
-      valueForNext(valueForNextPage + 1);
+      setPageStatusArray(UpdateStepsStatus(pageStatusData, valueForNextPage));
+
+      const finalIndexValue = findNextStep(pageStatusData, valueForNextPage);
+
+      if (
+        (finalIndexValue.finalIndex <= valueForNextPage &&
+        finalIndexValue.currentStepStatus === false) ||
+      (finalIndexValue.finalIndex <= valueForNextPage && subTypeChangeValue)
+      ) {
+        valueForNext(finalIndexValue.finalIndex + 1);
+      } else {
+        valueForNext(finalIndexValue.finalIndex);
+      }
+      
     } else {
       toast.error("Please fill in all required fields!");
     }
@@ -254,7 +305,6 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage,  edit
                 showPageName={pageName}
                 currentPageName={currentPage}
                 specifiedKey={"PropertySubtype"}
-                
               />
             )}
             <div>
@@ -263,7 +313,9 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage,  edit
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
               >
                 Property Name
-               { (editedKeys?.includes("Title") && pageName===currentPage) && (<EditedTag/>) } 
+                {editedKeys?.includes("Title") && pageName === currentPage && (
+                  <EditedTag />
+                )}
               </label>
               <input
                 type="text"
@@ -327,7 +379,8 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage,  edit
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
               >
                 Description
-                { (editedKeys?.includes("Description") && pageName===currentPage) && (<EditedTag/>) } 
+                {editedKeys?.includes("Description") &&
+                  pageName === currentPage && <EditedTag />}
               </label>
               <textarea
                 type="text"

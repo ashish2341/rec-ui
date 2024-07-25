@@ -11,11 +11,16 @@ import { FormatNumber } from "@/utils/commonHelperFn";
 import Styles from "../propertypage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
 import NextButton from "@/components/common/admin/nextButton/nextButton";
+import { UpdateStepsStatus, findNextStep } from "@/utils/commonHelperFn";
 
 export default function FacilitiesPage({
   valueForNextfromSix,
   valueForNextPagefromSix,
   setPropertyBackvalue,
+  setFormPageNumberArray,
+  setInsidePropertyPageNameArray,
+  setPageStatusArray,
+  mainFormPageStatusData,
 }) {
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("propertyData")
@@ -92,8 +97,38 @@ export default function FacilitiesPage({
       );
       const newProjectData = { ...localStorageData, ...sixthPropertyData };
       sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
-      valueForNextfromSix(valueForNextPagefromSix + 1);
-      setPropertyBackvalue((prev) => prev - 1);
+
+      setFormPageNumberArray((prev) => {
+        // Check if the newPage already exists in the array
+        if (!prev.includes("Property details")) {
+          return [...prev, "Property details"];
+        }
+        return prev; // If it already exists, return the previous state
+      });
+      setInsidePropertyPageNameArray((prev) => {
+        // Check if the newPage already exists in the array
+        if (!prev.includes("Facilities")) {
+          return [...prev, "Facilities"];
+        }
+        return prev; // If it already exists, return the previous state
+      });
+      setPageStatusArray(
+        UpdateStepsStatus(mainFormPageStatusData, valueForNextPagefromSix)
+      );
+      const finalIndexValue = findNextStep(
+        mainFormPageStatusData,
+        valueForNextPagefromSix
+      );
+      if (
+        finalIndexValue.finalIndex <= valueForNextPagefromSix &&
+        finalIndexValue.currentStepStatus === false
+      ) {
+        valueForNextfromSix(finalIndexValue.finalIndex + 1);
+      } else {
+        valueForNextfromSix(finalIndexValue.finalIndex);
+      }
+      // valueForNextfromSix(valueForNextPagefromSix + 1);
+      // setPropertyBackvalue((prev) => prev - 1);
     } else {
       toast.error("Please fill in all required fields!");
     }

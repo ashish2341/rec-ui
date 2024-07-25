@@ -5,11 +5,38 @@ import { ToastContainer, toast } from "react-toastify";
 import Styles from "../propertyAdd.module.css";
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
 import ApiButtons from "@/components/common/admin/propertyapiButtons/ApiButtons";
-import { API_BASE_URL_FOR_MASTER ,conditionalArray, lookingToArray ,propertyTypeArray } from "@/utils/constants";
+import {
+  API_BASE_URL_FOR_MASTER,
+  conditionalArray,
+  lookingToArray,
+  propertyTypeArray,
+} from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import Cookies from "js-cookie";
-import NextButton from "@/components/common/admin/nextButton/nextButton"
-export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
+import NextButton from "@/components/common/admin/nextButton/nextButton";
+import { UpdateStepsStatus, findNextStep } from "@/utils/commonHelperFn";
+export default function BasicDetailsForm({
+  valueForNext,
+  valueForNextPage,
+  setFormPageNumberArray,
+  pageArray,
+  setFeaturesPageNameArray,
+  setInsidePropertyPageNameArray,
+  setPageStatusArray,
+  pageStatusData,
+  statusIntialStage,
+  setSubTypeChangedValue,
+  subTypechangesValue,
+}) {
+  const initialStateStatus = [
+    { complete: true, stepIndex: 1 },
+    { complete: false, stepIndex: 2 },
+    { complete: false, stepIndex: 3 },
+    { complete: false, stepIndex: 4 },
+    { complete: false, stepIndex: 5 },
+    { complete: false, stepIndex: 6 },
+  ];
+  // renderCountValue.current += 1;
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
   const roles = roleData && JSON.parse(roleData);
@@ -35,10 +62,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
   const [propertTypWithSubTypeValue, setPropertTypWithSubTypeValue] =
     useState("");
 
-
-
   let propertySubTypeArray = { data: "" };
- 
 
   if (
     propertySubTypeData &&
@@ -62,18 +86,34 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
       (item) => item.Type == "Commercial"
     );
   }
-
+ 
   useEffect(() => {
     if (propertyTypeWithSubtype.Name != propertTypWithSubTypeValue) {
       setTitle("");
       setDescription("");
       setFacing("");
+      
+      const updateSteps = (data) => {
+        const updatedSteps = data.map((step, index) => {
+          if (index !== 0) {
+            return { ...step, complete: false };
+          }
+          return step;
+        });
+        setPageStatusArray(updatedSteps) ;
+        
+      };if( propertTypWithSubTypeValue &&
+        propertTypWithSubTypeValue != propertyTypeWithSubtype?.Name){
+          
+          updateSteps(pageStatusData)
+      }
+    
       if (roles.includes("Admin")) {
         setIsEnabled(true);
         setIsFeatured(true);
       }
     }
-  }, [propertyTypeWithSubtype]);
+  }, [propertyTypeWithSubtype?.Name]);
   useEffect(() => {
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("propertyData")
@@ -151,6 +191,7 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
 
     return !isEmpty;
   };
+ 
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
 
@@ -174,6 +215,20 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
         propertTypWithSubTypeValue != propertyTypeWithSubtype?.Name
       ) {
         sessionStorage.removeItem("propertyData");
+        sessionStorage.removeItem("insidepropertyPageArray");
+        sessionStorage.removeItem("featurespropertyPageArray");
+        sessionStorage.removeItem("propertyPageArray");
+       
+ 
+   
+        setFormPageNumberArray([]);
+
+        setFeaturesPageNameArray([]);
+        setInsidePropertyPageNameArray([]);
+       
+       
+          
+        setSubTypeChangedValue(true);
       }
 
       const updatedProjectData = {
@@ -184,8 +239,33 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
         "propertyData",
         JSON.stringify(updatedProjectData)
       );
+      setFormPageNumberArray((prev) => {
+        // Check if the newPage already exists in the array
+        if (!prev.includes("Basic details")) {
+          return [...prev, "Basic details"];
+        }
+        return prev; // If it already exists, return the previous state
+      });
 
-      valueForNext(valueForNextPage + 1);
+      setPageStatusArray(UpdateStepsStatus(pageStatusData, valueForNextPage));
+
+      const finalIndexValue = findNextStep(pageStatusData, valueForNextPage);
+
+      const changedValue =
+        propertTypWithSubTypeValue &&
+        propertTypWithSubTypeValue != propertyTypeWithSubtype?.Name
+          ? true
+          : subTypechangesValue;
+      if (
+        (finalIndexValue.finalIndex <= valueForNextPage &&
+        finalIndexValue.currentStepStatus === false) ||
+      (finalIndexValue.finalIndex <= valueForNextPage && changedValue)
+      ) {
+        valueForNext(finalIndexValue.finalIndex + 1);
+      } else {
+        valueForNext(finalIndexValue.finalIndex);
+      }
+      // valueForNext(valueForNextPage + 1);
     } else {
       toast.error("Please fill in all required fields!");
     }
@@ -298,7 +378,10 @@ export default function BasicDetailsForm({ valueForNext, valueForNextPage }) {
             </div>
           </div>
         </form>
-       <NextButton onSubmit={SubmitForm} butonSubName={"add Location Details"}/>
+        <NextButton
+          onSubmit={SubmitForm}
+          butonSubName={"add Location Details"}
+        />
       </div>
     </>
   );

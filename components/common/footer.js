@@ -14,8 +14,8 @@ export default function Footer() {
               className="mb-4 flex items-center space-x-3 rtl:space-x-reverse"
             >
               <img
-                src="/img/recLogoPng2.png"
-                className="h-8"
+                src="/img/recLogo.png"
+                className="h-12 w-12"
                 alt="Flowbite Logo"
               />
               {/* <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">

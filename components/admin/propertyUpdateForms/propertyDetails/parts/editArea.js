@@ -7,7 +7,7 @@ import {
   staticAreaUnitArray,
   wallTypesArray,
   fencingArray,
-  flooringArray,currentPage
+  flooringArray,currentPage,setInsidePropertyPageNameArray
 } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
@@ -21,7 +21,7 @@ import PropertyBigButtons from "@/components/common/admin/propertyBigButton/prop
 import TextInput from "@/components/common/admin/textInput/textInput";
 import EditedTag from "@/components/common/admin/editedTag/editedTag";
 export default function AreaDetailPage({ setPropertyPageValue,editedKeysfromMain,
-  pageNamefromMain, }) {
+  pageNamefromMain,valueForNextfromSix ,changedSubtypeValue,setInsidePropertyPageNameArray}) {
   // fetching Data for furnishedesData
   const { data: furnishedesData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/furnishedes`
@@ -218,7 +218,19 @@ export default function AreaDetailPage({ setPropertyPageValue,editedKeysfromMain
         "EditPropertyData",
         JSON.stringify(newProjectData)
       );
-      setPropertyPageValue((prev) => prev + 1);
+      setInsidePropertyPageNameArray(prev => {
+        // Check if the newPage already exists in the array
+        if (!prev.includes("Area")) {
+          return [...prev, "Area"];
+        }
+        return prev; // If it already exists, return the previous state
+      });
+      if ( changedSubtypeValue) {
+        setPropertyPageValue((prev) => prev + 1);
+        
+      } else {
+        setPropertyPageValue((prev) => prev + 1);
+      }
     } else {
       toast.error("Please fill in all required fields!");
     }

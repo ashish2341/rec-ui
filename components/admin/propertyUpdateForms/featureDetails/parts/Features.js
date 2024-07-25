@@ -8,14 +8,19 @@ import Styles from "../featurepage.module.css";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
 import ArrayButtons from "@/components/common/admin/arrayButtons/arrayButtons";
 import NextButton from "@/components/common/admin/nextButton/nextButton";
+import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
+import { UpdateStepsStatus ,findNextStep } from "@/utils/commonHelperFn";
 
 export default function FeaturePage({
   valueForNextfromSix,
   valueForNextPagefromSix,editedKeysfromMain,
-  pageNamefromMain,
+  pageNamefromMain,valueForFaqPage, changedSubtypeValue,
+  setFeaturesPageNameArray,
+  setFormPageNumberArray,setPageStatusArray,
+  mainFormPageStatusData
 }) {
   // fetching Data for Features
-  const { data: featuresData } = useFetch(
+  const { data: featuresData ,loading: DataLoading, } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/features`
   );
 
@@ -47,10 +52,32 @@ export default function FeaturePage({
     );
     const newProjectData = { ...localStorageData, ...featureData };
     sessionStorage.setItem("EditPropertyData", JSON.stringify(newProjectData));
-    valueForNextfromSix(valueForNextPagefromSix + 1);
+    setFormPageNumberArray(prev => {
+      // Check if the newPage already exists in the array
+      if (!prev.includes("Amenity/Feature")) {
+        return [...prev, "Amenity/Feature"];
+      }
+      return prev; // If it already exists, return the previous state
+    });
+    setFeaturesPageNameArray(prev => {
+      // Check if the newPage already exists in the array
+      if (!prev.includes("Features")) {
+        return [...prev, "Features"];
+      }
+      return prev; // If it already exists, return the previous state
+    });
+    setPageStatusArray(UpdateStepsStatus(mainFormPageStatusData,valueForNextPagefromSix))
+    const finalIndexValue=findNextStep(mainFormPageStatusData,valueForNextPagefromSix)
+    if(finalIndexValue.finalIndex <= valueForNextPagefromSix && finalIndexValue.currentStepStatus===false){
+      valueForNextfromSix(finalIndexValue.finalIndex + 1);
+    }else{
+      
+      valueForNextfromSix(finalIndexValue.finalIndex);
+    }
   };
   return (
     <>
+    {DataLoading && <LoaderForMedia />}
       {featuresData && selectedFeatures && ( 
         <> <ArrayButtons
         itemArray={featuresData}

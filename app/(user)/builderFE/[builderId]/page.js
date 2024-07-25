@@ -296,7 +296,7 @@ const BuilderHomePage = (params) => {
                     >
                       <img
                         src={`${imgApiUrl}/${item.Images[0].URL}`}
-                        className="h-full rounded-lg"
+                        className="h-full w-full rounded-lg"
                         alt="Property Image"
                       />
                     </Link>
@@ -307,8 +307,8 @@ const BuilderHomePage = (params) => {
                             <i className="bi bi-geo-alt-fill"></i>
                             <p className={`text-gray-700`}>Jaipur</p>
                           </div>
-                          <div className="flex justify-between">
-                            <h2 className={` ${styles.populerPropertiesBoxHead} font-semibold text-2xl pt-2`}>
+                          <div className="flex justify-between mb-2">
+                            <h2 className={` ${styles.populerPropertiesBoxHead} font-semibold text-xl pt-2 `}>
                               {item?.Title}
                             </h2>
                             <div className={` ${styles.populerPropertiesBoxDetail} flex mt-2 text-gray-500 font-bold`}>

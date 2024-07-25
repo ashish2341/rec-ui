@@ -22,7 +22,6 @@ export const config = {
 };
 
 const navUrl = process.env.NODE_ENV == "development" ? UI_URL : PROD_URL;
-console.log("navUrl", navUrl);
 export default async function middleware(req) {
 
   try {

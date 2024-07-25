@@ -19,7 +19,7 @@ import ContinueButton from "@/components/common/propertyContinueButton/continueB
 import ApiButtons from "@/components/common/admin/propertyapiButtons/ApiButtons";
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
 import TextInput from "@/components/common/admin/textInput/textInput";
-export default function AreaDetailPage({ setPropertyPageValue }) {
+export default function AreaDetailPage({ setPropertyPageValue ,setInsidePropertyPageNameArray}) {
   // fetching Data for furnishedesData
   const { data: furnishedesData } = useFetch(
     `${API_BASE_URL_FOR_MASTER}/furnishedes`
@@ -212,6 +212,13 @@ export default function AreaDetailPage({ setPropertyPageValue }) {
       );
       const newProjectData = { ...localStorageData, ...thirdPropertyData };
       sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
+      setInsidePropertyPageNameArray(prev => {
+        // Check if the newPage already exists in the array
+        if (!prev.includes("Area")) {
+          return [...prev, "Area"];
+        }
+        return prev; // If it already exists, return the previous state
+      });
       setPropertyPageValue((prev) => prev + 1);
     } else {
       toast.error("Please fill in all required fields!");

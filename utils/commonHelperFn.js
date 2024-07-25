@@ -565,3 +565,34 @@ export const GetPropertyScore = (obj, type) => {
   
   return result;
 }
+//Update the Complete status of page
+export const  UpdateStepsStatus = (steps,currentPage) => {
+  const condition = (item) => item.stepIndex  === currentPage;
+
+  const updatedSteps = steps.map(item => {
+    if (condition(item)) {
+      return { ...item, complete: true };
+    }
+    return item;
+  });
+return updatedSteps
+
+};
+//TO redirect to another page in property section
+
+export const findNextStep = (data, currentPage) => {
+  const currentStep = data.find(item => item.complete === false);
+  const currentStepStatus = currentStep ? currentStep.complete : true;
+  const currentIndex = currentStep ? currentStep.stepIndex : 0;
+
+  const index = data.findIndex(item => item.complete === false);
+  let finalIndex = 0;
+
+  if (index === -1) {
+    finalIndex = currentPage+1;
+  } else {
+    finalIndex = currentStepStatus === false ? index + 1 : index;
+  }
+
+  return  {finalIndex ,currentStepStatus} ;
+};

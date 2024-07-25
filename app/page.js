@@ -121,7 +121,7 @@ export default function Home() {
     loading: bannerDataLoading,
     error: bannerDataError,
   } = useFetch(`${API_BASE_URL}/banner/allbanner?page=1&pageSize=5`);
-  
+
   const ShowApartmentProperties = () => {
     return propertyByapartmentType?.data?.map((item, index) => (
       <Link
@@ -178,7 +178,7 @@ export default function Home() {
               <h2 className={` ${styles.populerPropertiesBoxHead}`}>
                 {item.Title}
               </h2>
-              {item.Facing ? (
+              {/* {item.Facing ? (
                 <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
                   {item?.Facing[0].Facing}
                 </div>
@@ -186,19 +186,21 @@ export default function Home() {
                 <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
                   {item.ProeprtyType}
                 </div>
-              )}
+              )} */}
             </div>
 
             <div className={`${styles.populerPropertiesBoxPriceMain}`}>
-              <p className={`${styles.populerPropertiesBoxPrice}`}>
+              <p className={`text-md ${styles.populerPropertiesBoxPrice}`}>
                 {item.TotalPrice?.DisplayValue}
               </p>
-              <p className={`font-bold${styles.populerPropertiesBoxPrice}`}>
+              {/* <p className={`font-bold${styles.populerPropertiesBoxPrice}`}>
                 {item?.ProeprtyFor}
-              </p>
+              </p> */}
             </div>
             <div className="flex justify-between mt-2">
-              <p className={`font-bold${styles.populerPropertiesBoxPrice}`}>
+              <p
+                className={`font-semibold text-sm text-gray-500 ${styles.populerPropertiesBoxPrice}`}
+              >
                 {item?.ProeprtyType}
               </p>
               <Link href={`/propertyDetail/${item._id}`}>
@@ -354,7 +356,7 @@ export default function Home() {
       toast.error("Number is required");
       return false;
     }
-    
+
     let payload = {
       Name,
       Email,
@@ -539,7 +541,7 @@ export default function Home() {
                     {bannerData ? (
                       <img
                         src={`${imgApiUrl}/${bannerData?.data[0].Url}`}
-                        className={`${styles.crousalItemLeftImage} `}
+                        className={`w-full ${styles.crousalItemLeftImage} `}
                         alt="...a"
                       />
                     ) : (
@@ -635,7 +637,7 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <div className={` ${styles.propertiesByAreaBoxMain} flex flex-wrap `}>
+        <div className={` ${styles.propertiesByAreaBoxMain} flex `}>
           {propertyByAreaData ? (
             propertyByAreaData?.data?.length > 0 ? (
               <AreaMultiCarousel UI={showAreaType} />
@@ -1012,105 +1014,10 @@ export default function Home() {
             Testimonials from Our Satisfied Customers
           </p>
         </div>
-        {/* <Slider ref={sliderTestimonial} {...settingsTestimonials}>
-          {testimonialData?.data?.map((item, index) => (
-            <div key={index} className={`${styles.testimonialcontent} flex justify-center`}>
-              <div className={`${styles.testimonialLeft}`}>
-                <div className={`${styles.testimonialLeftBoxDetails}`}>
-                  <img
-                    height="100"
-                    width="150"
-                    className={` ${styles.testimonialImg}  mb-3`}
-                    src="../img/black-wallpaper-1.jpg"
-                    alt="test"
-                  />
-                  <h2 className={`${styles.testimonialLeftHead} justify-center`}>
-                    {item.MemberName}
-                  </h2>
-                  <div className="flex justify-center">
-                  <p className={`${styles.testimonialLeftText}`}>
-                    {item.Description}
-                  </p>
-                  </div>
-                  <div>
-                    <div className={`${styles.testimonialStars} flex justify-center`}>
-                      <svg
-                        className="w-4 h-4 text-yellow-300 ms-1"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 22 20"
-                      >
-                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                      </svg>
-                      <svg
-                        className="w-4 h-4 text-yellow-300 ms-1"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 22 20"
-                      >
-                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                      </svg>
-                      <svg
-                        className="w-4 h-4 text-yellow-300 ms-1"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 22 20"
-                      >
-                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                      </svg>
-                      <svg
-                        className="w-4 h-4 text-yellow-300 ms-1"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 22 20"
-                      >
-                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                      </svg>
-                      <svg
-                        className="w-4 h-4 ms-1 text-gray-300 dark:text-gray-500"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 22 20"
-                      >
-                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                      </svg>
-                    </div>
-                    <div className="flex mt-4 justify-center">
-                    <button
-                        type="button"
-                        onClick={() => sliderTestimonial?.current?.slickPrev()}
-                        className={` ${styles.apartmentTypeLeftArrowBtn}  z-30 flex justify-center px-4 cursor-pointer group focus:outline-none`}
-                      >
-                          <i
-                            className={` ${styles.apartmentTypeArrowIcon} bi bi-arrow-left `}
-                          ></i>
-                          <span className="sr-only">Previous</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => sliderTestimonial?.current?.slickNext()}
-                        className={` ${styles.apartmentTypeLeftArrowBtn}  z-30 flex justify-center px-4 cursor-pointer group focus:outline-none`}
-                        data-carousel-next
-                      >
-                          <i
-                            className={` ${styles.apartmentTypeArrowIcon} bi bi-arrow-right `}
-                          ></i>
-                          <span className="sr-only">Next</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </Slider> */}
         {testimonialData?.data?.length > 0 ? (
-          <MultiCarousel UI={Testimonial} />
+          <div className="flex justify-center">
+            <MultiCarousel UI={Testimonial} />
+          </div>
         ) : null}
       </div>
 
@@ -1195,29 +1102,31 @@ export default function Home() {
               Your Dream Home Journey Begins Now: Dive Into Our Wealth of
               Options and Turn Your Dreams into Reality
             </p>
-            <button
-              className={` ${styles.blogMainContenBtn} text-blue bg-white-700 h-12 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-              type="button"
-            >
-              Get Started
-              <svg
-                className="w-4 h-4 ms-2"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
+            <Link href={`/featuredProperty?isFeatured=yes`}>
+              <button
+                className={` ${styles.blogMainContenBtn} text-blue bg-white-700 h-12 w-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                type="button"
               >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
-                />
-              </svg>
-            </button>
+                Get Started
+                <svg
+                  className="w-4 h-4 ms-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778"
+                  />
+                </svg>
+              </button>
+            </Link>
           </div>
           <div className={`${styles.dreamRight} relative`}>
             <img

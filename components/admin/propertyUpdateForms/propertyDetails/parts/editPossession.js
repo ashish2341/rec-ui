@@ -19,6 +19,7 @@ import PropertyBigButtons from "@/components/common/admin/propertyBigButton/prop
 import NextButton from "@/components/common/admin/nextButton/nextButton";
 import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
 import EditedTag from "@/components/common/admin/editedTag/editedTag";
+import { UpdateStepsStatus, findNextStep } from "@/utils/commonHelperFn";
 
 export default function PossessionDetailsPage({
   setPropertyPageValue,
@@ -27,6 +28,11 @@ export default function PossessionDetailsPage({
   setPropertyBackvalue,
   editedKeysfromMain,
   pageNamefromMain,
+  changedSubtypeValue,
+  setFormPageNumberArray,
+  setInsidePropertyPageNameArray,
+  setPageStatusArray,
+  mainFormPageStatusData,
 }) {
   // fetching Data for posessionStatusData
   const { data: posessionStatusData } = useFetch(
@@ -122,17 +128,12 @@ export default function PossessionDetailsPage({
   };
 
   const checkRequiredFields = () => {
-    var requiredFields = [posessionStatus, posessionDate, brochure];
+    var requiredFields = [posessionStatus, posessionDate];
     if (
       sessionStoragePropertyData?.PropertyStatus &&
       PropertyStatusValue.Status != "Under Contruction"
     ) {
-      var requiredFields = [
-        posessionStatus,
-        posessionDate,
-        brochure,
-        ageofProperty,
-      ];
+      var requiredFields = [posessionStatus, posessionDate, ageofProperty];
     }
 
     // Check if any required field is empty
@@ -144,6 +145,7 @@ export default function PossessionDetailsPage({
   };
   const SubmitForm = () => {
     const allFieldsFilled = checkRequiredFields();
+
     if (allFieldsFilled) {
       const fifthPropertyData = {
         PosessionStatus: posessionStatus,
@@ -167,14 +169,51 @@ export default function PossessionDetailsPage({
         "EditPropertyData",
         JSON.stringify(newProjectData)
       );
+     
+      setInsidePropertyPageNameArray((prev) => {
+        // Check if the newPage already exists in the array
+        if (!prev.includes("Possession")) {
+          return [...prev, "Possession"];
+        }
+        return prev; // If it already exists, return the previous state
+      });
       if (
         propertTypeValue == "Commercial" &&
         propertTypWithSubTypeValue != "Plot"
       ) {
-        setPropertyPageValue((prev) => prev + 1);
+        if (changedSubtypeValue) {
+          setPropertyPageValue((prev) => prev + 1);
+        } else {
+          if (changedSubtypeValue) {
+            setPropertyPageValue((prev) => prev + 1);
+          } else {
+            setPropertyPageValue((prev) => prev + 1);
+          }
+        }
       } else {
-        valueForNextfromSix(valueForNextPagefromSix + 1);
-        setPropertyBackvalue((prev) => prev - 1);
+        setFormPageNumberArray((prev) => {
+          // Check if the newPage already exists in the array
+          if (!prev.includes("Property details")) {
+            return [...prev, "Property details"];
+          }
+          return prev; // If it already exists, return the previous state
+        });
+        setPageStatusArray(
+          UpdateStepsStatus(mainFormPageStatusData, valueForNextPagefromSix)
+        );
+        const finalIndexValue = findNextStep(
+          mainFormPageStatusData,
+          valueForNextPagefromSix
+        );
+        if (
+          finalIndexValue.finalIndex <= valueForNextPagefromSix &&
+          finalIndexValue.currentStepStatus === false
+        ) {
+          valueForNextfromSix(finalIndexValue.finalIndex + 1);
+        } else {
+          valueForNextfromSix(finalIndexValue.finalIndex);
+        }
+      
       }
     } else {
       toast.error("Please fill in all required fields!");
@@ -217,7 +256,7 @@ export default function PossessionDetailsPage({
         if (paymentPlanInputRef.current) {
           paymentPlanInputRef.current.value = "";
         }
-        return false
+        return false;
       }
     }
   };
@@ -257,7 +296,7 @@ export default function PossessionDetailsPage({
         if (floorPlanInputRef.current) {
           floorPlanInputRef.current.value = "";
         }
-        return false
+        return false;
       }
     }
   };
@@ -365,9 +404,12 @@ export default function PossessionDetailsPage({
         <div>
           <label
             htmlFor="document"
-            className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
+            className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
           >
             Brochure
+            <span className="text-xs font-bold ml-1 pb-2 text-red-600">
+              (Optional)
+            </span>
             {editedKeysfromMain?.includes("Brochure") &&
               pageNamefromMain === currentPage && <EditedTag />}
           </label>
@@ -407,7 +449,10 @@ export default function PossessionDetailsPage({
               htmlFor="Payement"
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
             >
-              Payement Plan
+              Payement Plan{" "}
+              <span className="text-xs font-bold ml-1 pb-2 text-red-600">
+                (Optional)
+              </span>
               {editedKeysfromMain?.includes("PaymentPlan") &&
                 pageNamefromMain === currentPage && <EditedTag />}
             </label>
@@ -476,7 +521,10 @@ export default function PossessionDetailsPage({
               htmlFor="floor"
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
             >
-              Floor Plan
+              Floor Plan{" "}
+              <span className="text-xs font-bold ml-1 pb-2 text-red-600">
+                (Optional)
+              </span>
               {editedKeysfromMain?.includes("FloorPlan") &&
                 pageNamefromMain === currentPage && <EditedTag />}
             </label>

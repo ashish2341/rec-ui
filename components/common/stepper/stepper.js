@@ -1,19 +1,24 @@
-
-
 import { Link } from "react-scroll";
 import Styles from "./stepper.module.css";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "react-day-picker/dist/style.css";
-const Stepper = ({ steppers, pageNumber, setPageValue ,setValueForBack,propertyScoreValue,returnPageValue ,headingValue}) => {
+const Stepper = ({
+  steppers,
+  pageNumber,
+  setPageValue,
+  setValueForBack,
+  propertyScoreValue,
+  returnPageValue,
+  headingValue,allPropertyPageNameArray
+}) => {
   const [activePage, setActivePage] = useState(pageNumber);
 
   const router = useRouter();
 
- 
   const returnPreviousPage = (previousPagevalue) => {
     setPageValue(previousPagevalue);
-    setValueForBack(0)
+    setValueForBack(0);
   };
   const returnPage = () => {
     router.push(`${returnPageValue}`);
@@ -31,7 +36,7 @@ const Stepper = ({ steppers, pageNumber, setPageValue ,setValueForBack,propertyS
             <span>
               <i className="bi bi-arrow-left"></i>
             </span>
-            
+
             <span>Return to Property</span>
           </button>
           {/* <div className="text-sm font-medium leading-tight text-black-600 mb-2 " >
@@ -39,13 +44,16 @@ const Stepper = ({ steppers, pageNumber, setPageValue ,setValueForBack,propertyS
           </div> */}
 
           <span className="text-2xl font-bold leading-tight text-black-600  ">
-          {headingValue===1 ? "Update Your Property" : "Post Your Property"} 
+            {headingValue === 1 ? "Update Your Property" : "Post Your Property"}
           </span>
           <div className="w-full bg-blue-200 rounded-full dark:bg-blue-200 mt-2">
             <div
               className="bg-blue-700 text-xs font-bold text-blue-100 text-center p-0.5 leading-none rounded-full"
-              
-              style={propertyScoreValue ?{ width: `${propertyScoreValue}%` }:{ width: "0%" }}
+              style={
+                propertyScoreValue
+                  ? { width: `${propertyScoreValue}%` }
+                  : { width: "0%" }
+              }
             >
               {propertyScoreValue ? propertyScoreValue : "0"}%
             </div>
@@ -61,14 +69,14 @@ const Stepper = ({ steppers, pageNumber, setPageValue ,setValueForBack,propertyS
               <li key={index} className="mb-10 ms-8">
                 <span
                   className={`absolute flex items-center justify-center w-8 h-8 bg-#2a4acb-200 rounded-full -start-4 ring-4 ring-white dark:ring-gray-900 dark:bg-green-900 ${
-                    pageNumber == index + 1
+                    pageNumber == index + 1 
                       ? Styles.actiivetab
-                      : pageNumber > index + 1
-                      ? Styles.completeTab
+                      : allPropertyPageNameArray?.includes(item.matchName)  || (headingValue === 1 &&  allPropertyPageNameArray?.includes(item?.matchName))
+                      ? Styles.completeTab 
                       : "bg-blue-400"
                   } `}
                 >
-                  {pageNumber == index + 1 ? (
+                  {pageNumber == index + 1  ? (
                     <svg
                       width="23"
                       height="100"
@@ -84,7 +92,7 @@ const Stepper = ({ steppers, pageNumber, setPageValue ,setValueForBack,propertyS
                         fill="#6592d3"
                       />
                     </svg>
-                  ) : pageNumber > index + 1 ? (
+                  ) : allPropertyPageNameArray?.includes(item.matchName)   || (headingValue === 1 &&  allPropertyPageNameArray?.includes(item?.matchName)) ? (
                     <svg
                       className={`"w-3 h-3 text-white-500 dark:text-white-400" ${Styles.rightMark}`}
                       aria-hidden="true"
@@ -118,20 +126,38 @@ const Stepper = ({ steppers, pageNumber, setPageValue ,setValueForBack,propertyS
                     </svg>
                   )}
                 </span>
-                {pageNumber == index + 1 ? (
-                  <h3 className={`text-sm italic font-bold leading-tight text-blue-600  cursor-pointer ${Styles.progressText}`}>
+                {pageNumber == index + 1  ? (
+                  <h3
+                    className={`text-sm italic font-bold leading-tight text-blue-600  cursor-pointer ${Styles.progressText}`}
+                  >
                     {item.name}{" "}
-                    <button className={`inline-flex items-center px-1.5 py-0.5 ml-2 border border-transparent text-xs font-medium rounded-full text-white bg-green-600 hover:bg-green-700 focus:outline-none cursor-pointer opacity-75 hover:opacity-100 ${Styles.InprogressBtn}`}>
+                    <button
+                      className={`inline-flex items-center px-1.5 py-0.5 ml-2 border border-transparent text-xs font-medium rounded-full text-white bg-green-600 hover:bg-green-700 focus:outline-none cursor-pointer opacity-75 hover:opacity-100 ${Styles.InprogressBtn}`}
+                    >
                       In Progress
                     </button>
                   </h3>
-                ) : item.value < pageNumber ? (
+                ) : headingValue === 1 && allPropertyPageNameArray?.includes(item?.matchName)? (
                   <h3
                     onClick={() => returnPreviousPage(item.value)}
                     className={`text-sm font-bold leading-tight text-blue-600 cursor-pointer ${Styles.completedText}`}
                   >
                     {item.name}
-                    <button className={`inline-flex items-center px-1.5 py-0.5 ml-2 border border-transparent text-xs font-medium rounded-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none  cursor-pointer  hover:opacity-100 ${Styles.completedBtn}`}>
+                    <button
+                      className={`inline-flex items-center px-1.5 py-0.5 ml-2 border border-transparent text-xs font-medium rounded-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none  cursor-pointer  hover:opacity-100 ${Styles.completedBtn}`}
+                    >
+                      Completed
+                    </button>
+                  </h3>
+                ) : allPropertyPageNameArray?.includes(item.matchName)  ? (
+                  <h3
+                    onClick={() => returnPreviousPage(item.value)}
+                    className={`text-sm font-bold leading-tight text-blue-600 cursor-pointer ${Styles.completedText}`}
+                  >
+                    {item.name}
+                    <button
+                      className={`inline-flex items-center px-1.5 py-0.5 ml-2 border border-transparent text-xs font-medium rounded-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none  cursor-pointer  hover:opacity-100 ${Styles.completedBtn}`}
+                    >
                       Completed
                     </button>
                   </h3>

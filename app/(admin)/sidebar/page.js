@@ -48,7 +48,7 @@ export default function Sidebar({ children }) {
   const closeDropdown = () => {
     setIsDropdownOpen(false);
   };
- 
+
   useEffect(() => {
     // Attach event listener when the component mounts
     document.addEventListener("mousedown", handleClickOutside);
@@ -76,6 +76,10 @@ export default function Sidebar({ children }) {
       );
       if (sessionStoragePropertyData) {
         sessionStorage.removeItem("propertyData");
+        sessionStorage.removeItem("proertyPageStatusData");
+        sessionStorage.removeItem("insidepropertyPageArray");
+        sessionStorage.removeItem("featurespropertyPageArray");
+        sessionStorage.removeItem("propertyPageArray");
       }
       localStorage.removeItem("token");
       Cookies.remove("token");
@@ -83,6 +87,7 @@ export default function Sidebar({ children }) {
       Cookies.remove("userId");
       Cookies.remove("roles");
       Cookies.remove("profilePhoto");
+     
       router.push("/login");
     }
   };
@@ -647,7 +652,7 @@ export default function Sidebar({ children }) {
               </span>
               <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                 <button
-                ref={buttonRef}
+                  ref={buttonRef}
                   type="button"
                   className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                   id="user-menu-button"

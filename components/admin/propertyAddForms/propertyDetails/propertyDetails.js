@@ -19,6 +19,8 @@ export default function PropertyDetailsForm({
   valueForNext,
   valueForNextPage,
   setPageValueInsidePropertyForm,
+  setFormPageNumberArray,
+  setInsidePropertyPageNameArray,insidePropertyNames,setPageStatusArray,pageStatusData
 }) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
@@ -34,8 +36,14 @@ export default function PropertyDetailsForm({
 
   const [propertyPageValue, setPropertyPageValue] = useState(1);
 
+
   useEffect(() => {
+   
     setPageValueInsidePropertyForm(propertyPageValue);
+    sessionStorage.setItem(
+      "insidepropertyPageArray",
+      JSON.stringify(insidePropertyNames)
+    );
   }, [propertyPageValue]);
   const handelBack = (value) => {
     setPropertyPageValue(propertyPageValue - 1);
@@ -50,20 +58,20 @@ export default function PropertyDetailsForm({
   let stepperArray = "";
   if (propertTypeValue == "Commercial") {
     stepperArray = [
-      { name: "Basic", number: 1 },
-      { name: "Rooms", number: 2 },
-      { name: "Area", number: 3 },
-      { name: "Financial", number: 4 },
-      { name: "Possession", number: 5 },
-      { name: "Facilities", number: 6 },
+      { name: "Basic", number: 1 ,matchName:"Basic" },
+      { name: "Rooms", number: 2 ,matchName:"Rooms"},
+      { name: "Area", number: 3 ,matchName:"Area" },
+      { name: "Financial", number: 4 ,matchName:"Financial"},
+      { name: "Possession", number: 5 ,matchName:"Possession"},
+      { name: "Facilities", number: 6 ,matchName:"Facilities"},
     ];
   }
   if (propertTypWithSubTypeValue && propertTypWithSubTypeValue == "Plot") {
     stepperArray = [
-      { name: "Basic", number: 1 },
-      { name: "Area", number: 2 },
-      { name: "Financial", number: 3 },
-      { name: "Possession", number: 4 },
+      { name: "Basic", number: 1 ,matchName:"Basic" },
+      { name: "Area", number: 2 ,matchName:"Area"},
+      { name: "Financial", number: 3 ,matchName:"Financial"},
+      { name: "Possession", number: 4 ,matchName:"Possession"},
       // {name:"Loan",number:6}
     ];
   }
@@ -73,11 +81,11 @@ export default function PropertyDetailsForm({
     propertTypWithSubTypeValue != "Plot"
   ) {
     stepperArray = [
-      { name: "Basic", number: 1 },
-      { name: "Rooms", number: 2 },
-      { name: "Area", number: 3 },
-      { name: "Financial", number: 4 },
-      { name: "Possession", number: 5 },
+      { name: "Basic", number: 1 ,matchName:"Basic" },
+      { name: "Rooms", number: 2 ,matchName:"Rooms"},
+      { name: "Area", number: 3 ,matchName:"Area" },
+      { name: "Financial", number: 4 ,matchName:"Financial"},
+      { name: "Possession", number: 5 ,matchName:"Possession"},
       // {name:"Loan",number:6}
     ];
   }
@@ -88,6 +96,7 @@ export default function PropertyDetailsForm({
           setPropertyPageValue={setPropertyPageValue}
           forStepper={stepperArray}
           forpageValue={propertyPageValue}
+          pageNameArray={insidePropertyNames}
         />
       </div>
       {propertTypeValue &&
@@ -98,17 +107,25 @@ export default function PropertyDetailsForm({
               <BasicPage
                 setPropertyPageValue={setPropertyPageValue}
                 setPropertyBackvalue={setPropertyBackvalue}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
               />
             )}
             {propertyPageValue == 2 ? (
-              <RoomDetailPage setPropertyPageValue={setPropertyPageValue} />
+              <RoomDetailPage
+                setPropertyPageValue={setPropertyPageValue}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+              />
             ) : null}
             {propertyPageValue == 3 ? (
-              <AreaDetailPage setPropertyPageValue={setPropertyPageValue} />
+              <AreaDetailPage
+                setPropertyPageValue={setPropertyPageValue}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+              />
             ) : null}
             {propertyPageValue == 4 && (
               <FinancialDetailsPage
                 setPropertyPageValue={setPropertyPageValue}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
               />
             )}
             {propertyPageValue == 5 && (
@@ -116,6 +133,10 @@ export default function PropertyDetailsForm({
                 valueForNextfromSix={handelvalueForNextfromSix}
                 valueForNextPagefromSix={valueForNextPage}
                 setPropertyBackvalue={setPropertyBackvalue}
+                setFormPageNumberArray={setFormPageNumberArray}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+                setPageStatusArray={setPageStatusArray}
+                mainFormPageStatusData={pageStatusData}
               />
             )}
             {/* {propertyPageValue == 6 && (
@@ -135,17 +156,25 @@ export default function PropertyDetailsForm({
               <BasicPage
                 setPropertyPageValue={setPropertyPageValue}
                 setPropertyBackvalue={setPropertyBackvalue}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
               />
             )}
             {propertyPageValue == 2 ? (
-              <RoomDetailPage setPropertyPageValue={setPropertyPageValue} />
+              <RoomDetailPage
+                setPropertyPageValue={setPropertyPageValue}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+              />
             ) : null}
             {propertyPageValue == 3 ? (
-              <AreaDetailPage setPropertyPageValue={setPropertyPageValue} />
+              <AreaDetailPage
+                setPropertyPageValue={setPropertyPageValue}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+              />
             ) : null}
             {propertyPageValue == 4 && (
               <FinancialDetailsPage
                 setPropertyPageValue={setPropertyPageValue}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
               />
             )}
             {propertyPageValue == 5 && (
@@ -154,6 +183,10 @@ export default function PropertyDetailsForm({
                 valueForNextfromSix={handelvalueForNextfromSix}
                 valueForNextPagefromSix={valueForNextPage}
                 setPropertyBackvalue={setPropertyBackvalue}
+                setFormPageNumberArray={setFormPageNumberArray}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+                setPageStatusArray={setPageStatusArray}
+                mainFormPageStatusData={pageStatusData}
               />
             )}
             {propertyPageValue == 6 && (
@@ -161,6 +194,10 @@ export default function PropertyDetailsForm({
                 valueForNextfromSix={handelvalueForNextfromSix}
                 valueForNextPagefromSix={valueForNextPage}
                 setPropertyBackvalue={setPropertyBackvalue}
+                setFormPageNumberArray={setFormPageNumberArray}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+                setPageStatusArray={setPageStatusArray}
+                mainFormPageStatusData={pageStatusData}
               />
             )}
           </>
@@ -171,20 +208,31 @@ export default function PropertyDetailsForm({
             <BasicPage
               setPropertyPageValue={setPropertyPageValue}
               setPropertyBackvalue={setPropertyBackvalue}
+              setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
             />
           )}
 
           {propertyPageValue == 2 ? (
-            <AreaDetailPage setPropertyPageValue={setPropertyPageValue} />
+            <AreaDetailPage
+              setPropertyPageValue={setPropertyPageValue}
+              setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+            />
           ) : null}
           {propertyPageValue == 3 && (
-            <FinancialDetailsPage setPropertyPageValue={setPropertyPageValue} />
+            <FinancialDetailsPage
+              setPropertyPageValue={setPropertyPageValue}
+              setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+            />
           )}
           {propertyPageValue == 4 && (
             <PossessionDetailsPage
               valueForNextfromSix={handelvalueForNextfromSix}
               valueForNextPagefromSix={valueForNextPage}
               setPropertyBackvalue={setPropertyBackvalue}
+              setFormPageNumberArray={setFormPageNumberArray}
+              setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+              setPageStatusArray={setPageStatusArray}
+                mainFormPageStatusData={pageStatusData}
             />
           )}
           {/* {propertyPageValue == 5 && (

@@ -465,6 +465,40 @@
   display: flex;
   flex-wrap: wrap;
 }
+
+/* In your CSS file or style block */
+.stickyButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  z-index: 1000; /* Ensure it stays above other elements */
+  font-size: 2rem;
+  font-weight: bolder;
+}
+
+.buttonImage {
+  width: 80%; /* Adjust this percentage as needed */
+  height: 80%; /* Adjust this percentage as needed */
+  object-fit: cover; /* Ensures the image covers the entire button area without distortion */
+  border-radius: 50%; /* Ensures the image is rounded within the button */
+}
+
+.stickyButton:hover {
+  background-color: #0056b3; /* Change this to a darker shade if desired */
+}
+
 @media screen and (max-width: 600px) {
 .configureFlex {
   flex-direction: column;

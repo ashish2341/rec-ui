@@ -102,7 +102,7 @@
 /* divideDetailPage */
 .divideDetailPage {
   display: flex;
-  /* margin-left: 14rem; */
+  margin-left: 4rem;
   /* margin-right: 14rem; */
   margin-top: 2rem;
 }
@@ -142,10 +142,10 @@ margin: 0rem;
   color: grey;
 }
 .price{
-  font-size: 1.1rem !important;
+  font-size: 1rem !important;
 }
 .itemTitle{
-font-size: 1.4rem;
+font-size: 1.2rem;
 }
 
 .noDataHead{

@@ -20,7 +20,7 @@ export default function EditProperty(params) {
   const name = Cookies.get("name");
   const loginUserId = Cookies.get("userId");
   const roles = roleData && JSON.parse(roleData);
-
+const page="Property"
   const [pageValue, setPageValue] = useState(1);
   const [activePage, setActivePage] = useState();
   const [selectedAmenities, setSelectedAmenities] = useState([]);
@@ -37,8 +37,38 @@ export default function EditProperty(params) {
   const [oldPropertyData, setOldPropertyData] = useState("");
   const [editedItemsArray, setEditedItemsArray] = useState([]);
   const [oldEditedItemArray, setOldEditedItemArray] = useState([]);
+  const [formPageNumberArray, setFormPageNumberArray] = useState([
+    "Basic details",
+    "Location details",
+    "Property details",
+    "Amenity/Feature",
+    "Property Images",
+    "Faq details",
+  ]);
+  const [insidePropertyPageNameArray, setInsidePropertyPageNameArray] =
+    useState([
+      "Basic",
+      "Rooms",
+      "Area",
+      "Financial",
+      "Possession",
+      "Facilities",
+    ]);
+  const [featuresPageNameArray, setFeaturesPageNameArray] = useState([
+    "Amenities",
+    "Features",
+  ]);
+  const [pageStatusArray, setPageStatusArray] = useState([
+    { complete: true, stepIndex: 1 },
+    { complete: true, stepIndex: 2 },
+    { complete: true, stepIndex: 3 },
+    { complete: true, stepIndex: 4 },
+    { complete: true, stepIndex: 5 },
+    { complete: true, stepIndex: 6 },
+  ]);
+  const [subTypeChangedValue, setSubTypeChangedValue] = useState(false);
   const router = useRouter();
-
+  
   useEffect(() => {
     if (isRender) {
       const sessionStoragePropertyData = JSON.parse(
@@ -112,7 +142,7 @@ export default function EditProperty(params) {
             "EditPropertyData",
             JSON.stringify(data?.data)
           );
-          setOldEditedItemArray(data?.data.EditedItems)
+          setOldEditedItemArray(data?.data.EditedItems);
           setOldPropertyData(data?.data);
           setLoading(false);
           setIsRender(true);
@@ -430,7 +460,6 @@ export default function EditProperty(params) {
       };
     }
 
-    
     if (EditPropertyData) {
       const finalizePropertyData = {
         Title: EditPropertyData?.Title,
@@ -606,15 +635,13 @@ export default function EditProperty(params) {
       };
 
       if (roles.includes("Developer")) {
-        const editedKeys= findDifferentKeys(
+        const editedKeys = findDifferentKeys(
           finalizePropertyData,
           formatedPropertyData
         );
-        console.log("editedKeys", editedKeys);
         finalizePropertyData.EditedItems = editedKeys;
       }
 
-      console.log("finalizePropertyData", finalizePropertyData);
       const propertyId = params?.params?.editProperty;
       let res = await UpdatePropertyApi(finalizePropertyData, propertyId);
       if (res?.resData?.success == true) {
@@ -631,61 +658,45 @@ export default function EditProperty(params) {
   };
   let stepperArray = "";
 
+  //Note :Dont change matchname
   stepperArray = [
     {
       name: "Basic details",
       value: 1,
+      matchName:"Basic details"
     },
 
     {
       name: "Location details",
       value: 2,
+      matchName: "Location details",
     },
     {
       name: "Property details",
       value: 3,
+      matchName: "Property details",
     },
     {
       name: "Amenity/Feature",
       value: 4,
+      matchName: "Amenity/Feature",
     },
 
     {
       name: "Property Images",
       value: 5,
+      matchName: "Property Images",
     },
     {
       name: "Faq details",
       value: 6,
+      matchName: "Faq details",
     },
   ];
   // }
-
   return (
     <section>
-      {/* <div className="flex">
-        {pageValue > 1 ? (
-          pageValue == 1 ? null : (pageValue == 3 && propertyBackvalue == 0) ||
-            (pageValue == 4 && propertyBackvalue == 0) ? (
-            <button
-              onClick={handelBackPage}
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  ml-70"
-            >
-              Back
-            </button>
-          ) : pageValue == 1 || pageValue == 3 || pageValue == 4 ? null : (
-            <button
-              onClick={handelBackPage}
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  ml-70"
-            >
-              Back
-            </button>
-          )
-        ) : null}
-      </div> */}
-
+     
       <div className={`${Styles.propertyContainer}`}>
         <div className={`${Styles.column1}`}>
           {stepperArray && (
@@ -697,6 +708,7 @@ export default function EditProperty(params) {
               propertyScoreValue={propertyScoreinPercentage}
               returnPageValue={"/property"}
               headingValue={1}
+              allPropertyPageNameArray={formPageNumberArray}
             />
           )}
         </div>
@@ -707,7 +719,15 @@ export default function EditProperty(params) {
               valueForNext={handelNextBtnValue}
               valueForNextPage={pageValue}
               editedKeys={editedItemsArray}
-              pageName={"Property"}
+              pageName={page}
+              setFormPageNumberArray={setFormPageNumberArray}
+              propertyallPagesName={formPageNumberArray}
+              setSubTypeChangedValue={setSubTypeChangedValue}
+              subTypechangesValue={subTypeChangedValue}
+              setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+              setFeaturesPageNameArray={setFeaturesPageNameArray}
+              setPageStatusArray={setPageStatusArray}
+              pageStatusData={pageStatusArray}
             />
           )}
           {pageValue === 2 && (
@@ -715,7 +735,12 @@ export default function EditProperty(params) {
               valueForNext={handelNextBtnValue}
               valueForNextPage={pageValue}
               editedKeys={editedItemsArray}
-              pageName={"Property"}
+              pageName={page}
+              setFormPageNumberArray={setFormPageNumberArray}
+              setSubTypeChangedValue={setSubTypeChangedValue}
+              subTypechangesValue={subTypeChangedValue}
+              setPageStatusArray={setPageStatusArray}
+              pageStatusData={pageStatusArray}
             />
           )}
           {pageValue === 3 && (
@@ -725,7 +750,14 @@ export default function EditProperty(params) {
               valueForNextPage={pageValue}
               setPageValueInsidePropertyForm={setPageValueInsidePropertyForm}
               editedKeys={editedItemsArray}
-              pageName={"Property"}
+              pageName={page}
+              setFormPageNumberArray={setFormPageNumberArray}
+              insidepropertyPagesName={insidePropertyPageNameArray}
+              setSubTypeChangedValue={setSubTypeChangedValue}
+              subTypechangesValue={subTypeChangedValue}
+              setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+              setPageStatusArray={setPageStatusArray}
+              pageStatusData={pageStatusArray}
             />
           )}
           {pageValue === 4 && (
@@ -736,7 +768,12 @@ export default function EditProperty(params) {
               valueForNext={handelNextBtnValue}
               valueForNextPage={pageValue}
               editedKeys={editedItemsArray}
-              pageName={"Property"}
+              pageName={page}
+              setFormPageNumberArray={setFormPageNumberArray}
+              featurePagesNames={featuresPageNameArray}
+              subTypechangesValue={subTypeChangedValue}
+              setPageStatusArray={setPageStatusArray}
+              pageStatusData={pageStatusArray} setFeaturesPageNameArray={setFeaturesPageNameArray}
             />
           )}
 
@@ -745,7 +782,10 @@ export default function EditProperty(params) {
               valueForNext={handelNextBtnValue}
               valueForNextPage={pageValue}
               editedKeys={editedItemsArray}
-              pageName={"Property"}
+              pageName={page}
+              setFormPageNumberArray={setFormPageNumberArray}
+              setPageStatusArray={setPageStatusArray}
+              pageStatusData={pageStatusArray}
             />
           )}
           {pageValue === 6 && (
@@ -754,7 +794,13 @@ export default function EditProperty(params) {
               valueForBack={handelBackValue}
               mainBackPageValue={valueForBack}
               editedKeys={editedItemsArray}
-              pageName={"Property"}
+              pageName={page}
+              setFormPageNumberArray={setFormPageNumberArray}
+              setPageStatusArray={setPageStatusArray}
+              pageStatusData={pageStatusArray}
+              setSubTypeChangedValue={setSubTypeChangedValue}
+              subTypechangesValue={subTypeChangedValue}
+              
             />
           )}
           {valueForBack === 1 && (

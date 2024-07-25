@@ -26,6 +26,7 @@ export default function BasicPage({
   setPropertyBackvalue,
   editedKeysfromMain,
   pageNamefromMain,
+  valueForNextfromSix,changedSubtypeValue,setInsidePropertyPageNameArray
 }) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
@@ -257,10 +258,20 @@ export default function BasicPage({
         "EditPropertyData",
         JSON.stringify(newProjectData)
       );
-
-      setPropertyPageValue((prev) => prev + 1);
-
-      setPropertyBackvalue((prev) => prev + 1);
+      setInsidePropertyPageNameArray(prev => {
+        // Check if the newPage already exists in the array
+        if (!prev.includes("Basic")) {
+          return [...prev, "Basic"];
+        }
+        return prev; // If it already exists, return the previous state
+      });
+      if ( changedSubtypeValue) {
+        setPropertyPageValue((prev) => prev + 1);
+        
+      } else {
+        setPropertyPageValue((prev) => prev + 1);
+      }
+     
     } else {
       toast.error("Please fill in all required fields!");
     }

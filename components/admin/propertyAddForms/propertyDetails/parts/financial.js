@@ -13,7 +13,7 @@ import { conditionalArray } from "@/utils/constants";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
 import NumberInput from "@/components/common/admin/numberInput/numberInput";
-export default function FinancialDetailsPage({ setPropertyPageValue }) {
+export default function FinancialDetailsPage({ setPropertyPageValue,setInsidePropertyPageNameArray }) {
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("propertyData")
   );
@@ -216,6 +216,13 @@ export default function FinancialDetailsPage({ setPropertyPageValue }) {
       );
       const newProjectData = { ...localStorageData, ...fourthPropertyData };
       sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
+      setInsidePropertyPageNameArray(prev => {
+        // Check if the newPage already exists in the array
+        if (!prev.includes("Financial")) {
+          return [...prev, "Financial"];
+        }
+        return prev; // If it already exists, return the previous state
+      });
       setPropertyPageValue((prev) => prev + 1);
     } else {
       toast.error("Please fill in all required fields!");

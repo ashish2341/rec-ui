@@ -21,7 +21,7 @@ import ApiButtons from "@/components/common/admin/propertyapiButtons/ApiButtons"
 import TextInput from "@/components/common/admin/textInput/textInput";
 export default function BasicPage({
   setPropertyPageValue,
-  setPropertyBackvalue,
+  setPropertyBackvalue,setInsidePropertyPageNameArray
 }) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
@@ -249,7 +249,13 @@ export default function BasicPage({
       );
       const newProjectData = { ...localStorageData, ...firstPropertyData };
       sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
-
+      setInsidePropertyPageNameArray(prev => {
+        // Check if the newPage already exists in the array
+        if (!prev.includes("Basic")) {
+          return [...prev, "Basic"];
+        }
+        return prev; // If it already exists, return the previous state
+      });
       setPropertyPageValue((prev) => prev + 1);
 
       setPropertyBackvalue((prev) => prev + 1);

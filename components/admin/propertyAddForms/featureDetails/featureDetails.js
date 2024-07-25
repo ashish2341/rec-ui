@@ -11,10 +11,17 @@ export default function FeaturesDetailsForm({
   onFeaturesChange,
   valueForNext,
   valueForNextPage,
-  setPropertyBackvalue,
+  setPropertyBackvalue,setFormPageNumberArray,setFeaturesPageNameArray,
+  featuresPageNames,setPageStatusArray,pageStatusData
 }) {
   const [propertyPageValue, setPropertyPageValue] = useState(1);
-
+  useEffect(() => {
+    
+    sessionStorage.setItem(
+      "featurespropertyPageArray",
+      JSON.stringify(featuresPageNames)
+    );
+  }, [propertyPageValue]);
   const handelBack = (value) => {
     setPropertyPageValue(propertyPageValue - 1);
     if (propertyPageValue == 2) {
@@ -26,8 +33,8 @@ export default function FeaturesDetailsForm({
     valueForNext(value);
   };
   const stepperArray = [
-    { name: "Amenities", number: 1 },
-    { name: "Features", number: 2 },
+    { name: "Amenities", number: 1 ,matchName:"Amenities" },
+    { name: "Features", number: 2 ,matchName:"Features" },
   ];
   return (
     <>
@@ -36,6 +43,7 @@ export default function FeaturesDetailsForm({
           forStepper={stepperArray}
           forpageValue={propertyPageValue}
           setPropertyPageValue={setPropertyPageValue}
+          pageNameArray={featuresPageNames}
         />
       </div>
 
@@ -45,12 +53,17 @@ export default function FeaturesDetailsForm({
         <AmenityPage
           setPropertyPageValue={setPropertyPageValue}
           setPropertyBackvalue={setPropertyBackvalue}
+          setFeaturesPageNameArray={setFeaturesPageNameArray}
         />
       )}
       {propertyPageValue == 2 && (
         <FeaturePage
           valueForNextfromSix={handelvalueForNextfromSix}
           valueForNextPagefromSix={valueForNextPage}
+          setFormPageNumberArray={setFormPageNumberArray}
+          setFeaturesPageNameArray={setFeaturesPageNameArray}
+          setPageStatusArray={setPageStatusArray}
+                mainFormPageStatusData={pageStatusData}
         />
       )}
       {/* {propertyPageValue == 3 && (

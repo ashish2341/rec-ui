@@ -18,6 +18,7 @@ export default function FinancialDetailsPage({
   setPropertyPageValue,
   editedKeysfromMain,
   pageNamefromMain,
+  valueForNextfromSix,changedSubtypeValue,setInsidePropertyPageNameArray
 }) {
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("EditPropertyData")
@@ -227,7 +228,19 @@ export default function FinancialDetailsPage({
         "EditPropertyData",
         JSON.stringify(newProjectData)
       );
-      setPropertyPageValue((prev) => prev + 1);
+      setInsidePropertyPageNameArray(prev => {
+        // Check if the newPage already exists in the array
+        if (!prev.includes("Financial")) {
+          return [...prev, "Financial"];
+        }
+        return prev; // If it already exists, return the previous state
+      });
+      if ( changedSubtypeValue) {
+        setPropertyPageValue((prev) => prev + 1);
+        
+      } else {
+        setPropertyPageValue((prev) => prev + 1);
+      }
     } else {
       toast.error("Please fill in all required fields!");
     }

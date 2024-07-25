@@ -30,7 +30,37 @@ export default function EditProperty(params) {
   const [loading, setLoading] = useState(false);
   const [isRender, setIsRender] = useState(false);
   const [editedItemsArray, setEditedItemsArray] = useState([]);
-  const [page, setPage] = "Review";
+  const [page, setPage] = useState("Review") ;
+  const [formPageNumberArray, setFormPageNumberArray] = useState([
+    "Basic details",
+    "Location details",
+    "Property details",
+    "Amenity/Feature",
+    "Property Images",
+    "Faq details",
+  ]);
+  const [insidePropertyPageNameArray, setInsidePropertyPageNameArray] =
+    useState([
+      "Basic",
+      "Rooms",
+      "Area",
+      "Financial",
+      "Possession",
+      "Facilities",
+    ]);
+  const [featuresPageNameArray, setFeaturesPageNameArray] = useState([
+    "Amenities",
+    "Features",
+  ]);
+  const [subTypeChangedValue, setSubTypeChangedValue] = useState(false);
+  const [pageStatusArray, setPageStatusArray] = useState([
+    { complete: true, stepIndex: 1 },
+    { complete: true, stepIndex: 2 },
+    { complete: true, stepIndex: 3 },
+    { complete: true, stepIndex: 4 },
+    { complete: true, stepIndex: 5 },
+    { complete: true, stepIndex: 6 },
+  ]);
   const router = useRouter();
 
   useEffect(() => {
@@ -147,7 +177,7 @@ export default function EditProperty(params) {
     setValueForBack(value);
   };
   function processArray(arr) {
-   console.log("processArray function is called ")
+  
     if (arr.length === 0) {
       return arr;
     }
@@ -339,7 +369,6 @@ export default function EditProperty(params) {
           : "",
           EditedItems: [],
       };
-      console.log("finalizePropertyData", finalizePropertyData);
       const propertyId = params?.params?.reviewEditProperty;
       let res = await UpdatePropertyApi(finalizePropertyData, propertyId);
       if (res?.resData?.success == true) {
@@ -353,170 +382,50 @@ export default function EditProperty(params) {
         return false;
       }
     }
-    // if (EditPropertyData) {
-    //   const finalizePropertyData = {
-    //     Title: EditPropertyData?.Title,
-    //     Description: EditPropertyData?.Description ,
-    //     Facing: EditPropertyData?.Facing?.map((item) => {
-    //       return item._id;
-    //     }) ,
-    //     IsEnabled: EditPropertyData?.IsEnabled,
-    //     IsFeatured: EditPropertyData?.IsFeatured,
-    //     ProeprtyFor: EditPropertyData?.ProeprtyFor,
-    //     PropertySubtype: EditPropertyData?.PropertySubtype?._id,
-    //     ProeprtyType: EditPropertyData?.ProeprtyType,
-    //     Bedrooms: EditPropertyData?.Bedrooms,
-    //     Bathrooms: EditPropertyData?.Bathrooms,
-    //     Fencing: EditPropertyData?.Fencing,
-    //     Flooring: EditPropertyData?.Flooring,
-    //     Furnished: EditPropertyData?.Furnished?._id,
-    //     LandArea: EditPropertyData?.LandArea,
-    //     CarpetArea: EditPropertyData?.CarpetArea,
-    //     TotalPrice: EditPropertyData?.TotalPrice,
-    //     IsNegotiable: EditPropertyData?.IsNegotiable,
-    //     PosessionStatus: EditPropertyData?.PosessionStatus?._id,
-    //     PosessionDate: EditPropertyData?.PosessionDate,
-    //     FloorNumber: EditPropertyData?.FloorNumber,
-    //     TotalFloors: EditPropertyData?.TotalFloors,
-    //     OwnershipType: EditPropertyData?.OwnershipType?._id,
-    //     PropertyStatus: EditPropertyData?.PropertyStatus?._id,
-    //     Features: EditPropertyData?.Features|| [],
-    //     Aminities: EditPropertyData?.Aminities|| [],
-    //     City: EditPropertyData?.City,
-    //     Address: EditPropertyData?.Address,
-    //     Area: EditPropertyData?.Area?._id,
-    //     Location: {
-    //       Latitude: undefined,
-    //       Longitude: undefined,
-    //     },
-    //     Images: EditPropertyData?.Images?.map((item) => ({ URL: item.URL })),
-    //     Videos:
-    //       EditPropertyData?.Videos?.Videos == ""
-    //         ? []
-    //         : EditPropertyData?.Videos?.map((item) => ({ URL: item.URL })),
-    //     AreaUnits: EditPropertyData?.AreaUnits?._id,
-    //     BhkType: EditPropertyData?.BhkType?._id,
-    //     Fitting: EditPropertyData?.Fitting|| {
-    //       Electrical: undefined,
-    //       Toilets: undefined,
-    //       Kitchen: undefined,
-    //       Doors: undefined,
-    //       Windows: undefined,
-    //     },
-    //     Faq: EditPropertyData?.Faq.map((item) => {
-    //       return { Question: item.Question, Answer: item.Answer };
-    //     }),
-    //     Brochure: EditPropertyData?.Brochure,
-    //     Builder: EditPropertyData?.Builder?._id,
-    //     OwnerName: EditPropertyData?.OwnerName,
-    //     SuitableFor: EditPropertyData?.SuitableFor,
-    //     ZoneType: EditPropertyData?.ZoneType,
-    //     LocationHub: EditPropertyData?.LocationHub,
-    //     CustomLocationHub: EditPropertyData?.CustomLocationHub,
-    //     CustomSuitable: EditPropertyData?.CustomSuitable,
-    //     CustomZoneType: EditPropertyData?.CustomZoneType,
-    //     BuiltUpArea: EditPropertyData?.BuiltUpArea,
-    //     PlotArea: EditPropertyData?.PlotArea,
-    //     PlotLength: EditPropertyData?.PlotLength,
-    //     Plotwidth: EditPropertyData?.Plotwidth,
-    //     WallType: EditPropertyData?.WallType,
-    //     CellingHeight: EditPropertyData?.CellingHeight,
-    //     EntranceWidth: EditPropertyData?.EntranceWidth,
-    //     TaxCharge: EditPropertyData?.TaxCharge,
-    //     LeasedOrRented: EditPropertyData?.LeasedOrRented,
-    //     CurentRent: EditPropertyData?.CurentRent,
-    //     LeaseYears: EditPropertyData?.LeaseYears,
-    //     ExpectedReturn: EditPropertyData?.ExpectedReturn,
-    //     DgUpsCharge: EditPropertyData?.DgUpsCharge,
-    //     AgeofProperty: EditPropertyData?.AgeofProperty,
-    //     Staircase: EditPropertyData?.Staircase,
-    //     passengerLifts: EditPropertyData?.passengerLifts,
-    //     ServiceLifts: EditPropertyData?.ServiceLifts,
-    //     PublicParking: EditPropertyData?.PublicParking,
-    //     PrivateParking: EditPropertyData?.PrivateParking,
-    //     PublicWashroom: EditPropertyData?.PublicWashroom,
-    //     PrivateWashroom: EditPropertyData?.PrivateWashroom,
-    //     CompletePercentage: EditPropertyData?.CompletePercentage,
-    //     LandAreaUnit: EditPropertyData?.LandAreaUnit,
-    //     CustomFencing:EditPropertyData?.CustomFencing,
-    //     CustomFlooring:EditPropertyData?.CustomFlooring,
-    //     CustomWallType:EditPropertyData?.CustomWallType,
-    //     FloorPlan:EditPropertyData?.FloorPlan,
-    //     PaymentPlan:EditPropertyData?.PaymentPlan|| ""
-    //     PaymentPlan:EditPropertyData?.PaymentPlan|| ""
-    //   };
-    //   console.log("finalizePropertyData", finalizePropertyData);
-    //   const propertyId = params?.params?.reviewEditProperty;
-    //   let res = await UpdatePropertyApi(finalizePropertyData, propertyId);
-    //   if (res?.resData?.success == true) {
-    //     if (typeof window !== "undefined") {
-    //       sessionStorage.removeItem("EditPropertyData");
-    //       router.push("/reviewProperty");
-    //     }
-    //     toast.success(res?.resData?.message);
-    //   } else {
-    //     toast.error(res.errMessage);
-    //     return false;
-    //   }
-    // }
+    
   };
   let stepperArray = "";
 
-  stepperArray = [
-    {
-      name: "Basic details",
-      value: 1,
-    },
+//Note :Dont change matchname
+stepperArray = [
+  {
+    name: "Basic details",
+    value: 1,
+    matchName:"Basic details"
+  },
 
-    {
-      name: "Location details",
-      value: 2,
-    },
-    {
-      name: "Property details",
-      value: 3,
-    },
-    {
-      name: "Amenity/Feature",
-      value: 4,
-    },
+  {
+    name: "Location details",
+    value: 2,
+    matchName: "Location details",
+  },
+  {
+    name: "Property details",
+    value: 3,
+    matchName: "Property details",
+  },
+  {
+    name: "Amenity/Feature",
+    value: 4,
+    matchName: "Amenity/Feature",
+  },
 
-    {
-      name: "Property Images",
-      value: 5,
-    },
-    {
-      name: "Faq details",
-      value: 6,
-    },
-  ];
+  {
+    name: "Property Images",
+    value: 5,
+    matchName: "Property Images",
+  },
+  {
+    name: "Faq details",
+    value: 6,
+    matchName: "Faq details",
+  },
+];
   // }
 
   return (
     <section>
-      {/* <div className="flex">
-        {pageValue > 1 ? (
-          pageValue == 1 ? null : (pageValue == 3 && propertyBackvalue == 0) ||
-            (pageValue == 4 && propertyBackvalue == 0) ? (
-            <button
-              onClick={handelBackPage}
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  ml-70"
-            >
-              Back
-            </button>
-          ) : pageValue == 1 || pageValue == 3 || pageValue == 4 ? null : (
-            <button
-              onClick={handelBackPage}
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-yellow-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800  ml-70"
-            >
-              Back
-            </button>
-          )
-        ) : null}
-      </div> */}
-
+     
       <div className={`${Styles.propertyContainer}`}>
         <div className={`${Styles.column1}`}>
           {stepperArray && (
@@ -526,8 +435,9 @@ export default function EditProperty(params) {
               setPageValue={setPageValue}
               setValueForBack={setValueForBack}
               propertyScoreValue={propertyScoreinPercentage}
-              returnPageValue={"/reviewProperty"}
+              returnPageValue={"/property"}
               headingValue={1}
+              allPropertyPageNameArray={formPageNumberArray}
             />
           )}
         </div>
@@ -538,7 +448,15 @@ export default function EditProperty(params) {
               valueForNext={handelNextBtnValue}
               valueForNextPage={pageValue}
               editedKeys={editedItemsArray}
-              pageName={"Review"}
+              pageName={page}
+              setFormPageNumberArray={setFormPageNumberArray}
+              propertyallPagesName={formPageNumberArray}
+              setSubTypeChangedValue={setSubTypeChangedValue}
+              subTypechangesValue={subTypeChangedValue}
+              setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+              setFeaturesPageNameArray={setFeaturesPageNameArray}
+              setPageStatusArray={setPageStatusArray}
+              pageStatusData={pageStatusArray}
             />
           )}
           {pageValue === 2 && (
@@ -546,7 +464,12 @@ export default function EditProperty(params) {
               valueForNext={handelNextBtnValue}
               valueForNextPage={pageValue}
               editedKeys={editedItemsArray}
-              pageName={"Review"}
+              pageName={page}
+              setFormPageNumberArray={setFormPageNumberArray}
+              setSubTypeChangedValue={setSubTypeChangedValue}
+              subTypechangesValue={subTypeChangedValue}
+              setPageStatusArray={setPageStatusArray}
+              pageStatusData={pageStatusArray}
             />
           )}
           {pageValue === 3 && (
@@ -556,7 +479,14 @@ export default function EditProperty(params) {
               valueForNextPage={pageValue}
               setPageValueInsidePropertyForm={setPageValueInsidePropertyForm}
               editedKeys={editedItemsArray}
-              pageName={"Review"}
+              pageName={page}
+              setFormPageNumberArray={setFormPageNumberArray}
+              insidepropertyPagesName={insidePropertyPageNameArray}
+              setSubTypeChangedValue={setSubTypeChangedValue}
+              subTypechangesValue={subTypeChangedValue}
+              setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+              setPageStatusArray={setPageStatusArray}
+              pageStatusData={pageStatusArray}
             />
           )}
           {pageValue === 4 && (
@@ -567,7 +497,12 @@ export default function EditProperty(params) {
               valueForNext={handelNextBtnValue}
               valueForNextPage={pageValue}
               editedKeys={editedItemsArray}
-              pageName={"Review"}
+              pageName={page}
+              setFormPageNumberArray={setFormPageNumberArray}
+              featurePagesNames={featuresPageNameArray}
+              subTypechangesValue={subTypeChangedValue}
+              setPageStatusArray={setPageStatusArray}
+              pageStatusData={pageStatusArray} setFeaturesPageNameArray={setFeaturesPageNameArray}
             />
           )}
 
@@ -576,7 +511,10 @@ export default function EditProperty(params) {
               valueForNext={handelNextBtnValue}
               valueForNextPage={pageValue}
               editedKeys={editedItemsArray}
-              pageName={"Review"}
+              pageName={page}
+              setFormPageNumberArray={setFormPageNumberArray}
+              setPageStatusArray={setPageStatusArray}
+              pageStatusData={pageStatusArray}
             />
           )}
           {pageValue === 6 && (
@@ -585,7 +523,13 @@ export default function EditProperty(params) {
               valueForBack={handelBackValue}
               mainBackPageValue={valueForBack}
               editedKeys={editedItemsArray}
-              pageName={"Review"}
+              pageName={page}
+              setFormPageNumberArray={setFormPageNumberArray}
+              setPageStatusArray={setPageStatusArray}
+              pageStatusData={pageStatusArray}
+              setSubTypeChangedValue={setSubTypeChangedValue}
+              subTypechangesValue={subTypeChangedValue}
+              
             />
           )}
           {valueForBack === 1 && (

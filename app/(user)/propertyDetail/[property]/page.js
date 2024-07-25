@@ -482,7 +482,6 @@ const PropertyDetail = ({ params }) => {
     }
   }
   const isImage = (url) => {
-
     return url ? url.match(/\.(jpeg|jpg|png)$/) : "";
   };
   const checkIfAllEmpty = (obj) => {
@@ -504,7 +503,7 @@ const PropertyDetail = ({ params }) => {
               className={`grid h-56 grid-cols-1 gap-4 sm:h-96 xl:h-96 1xl:h-80 ${styles.leftCarousel}`}
             >
               {listPropertiesData ? (
-                <Carousel indicators={false} slide={false}>
+                <Carousel indicators={false} slide={false} swipeable>
                   {listPropertiesData?.Images?.map((itemurl, index) => (
                     <img
                       className="h-full"
@@ -565,7 +564,7 @@ const PropertyDetail = ({ params }) => {
         id="nav"
         ref={menuRef}
       >
-        <div className="text-sm font-medium text-center text-black-500 border-b border-black-900 dark:text-gray-400 dark:border-gray-700 content">
+        <div className="text-md font-bold text-center text-black-500 border-b border-black-900 dark:text-gray-400 dark:border-gray-700 content">
           <ul className="flex flex-nowrap overflow-x-auto -mb-px">
             <li className="me-2">
               <Link href="#general" className="nonActiveBar">
@@ -598,7 +597,7 @@ const PropertyDetail = ({ params }) => {
               listPropertiesData?.ProeprtyType == "Commercial") ||
               ((listPropertiesData?.Fitting &&
                 checkIfAllEmpty(listPropertiesData?.Fitting)) ||
-                listPropertiesData?.PropertySubtype?.Name === "Plot" ? null : (
+              listPropertiesData?.PropertySubtype?.Name === "Plot" ? null : (
                 <li className="me-2">
                   <Link href="#specifications" className="nonActiveBar">
                     Specifications
@@ -878,7 +877,7 @@ const PropertyDetail = ({ params }) => {
                       </button>
                     </li>
                     {listPropertiesData?.PropertySubtype?.Name ==
-                      "Plot" ? null : (
+                    "Plot" ? null : (
                       <li className="me-2" role="presentation">
                         <button
                           className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
@@ -893,7 +892,7 @@ const PropertyDetail = ({ params }) => {
                         </button>
                       </li>
                     )}
-                    {listPropertiesData?.PaymentPlan ?
+                    {listPropertiesData?.PaymentPlan ? (
                       <li className="me-2" role="presentation">
                         <button
                           className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
@@ -907,8 +906,11 @@ const PropertyDetail = ({ params }) => {
                           Payment Plan
                         </button>
                       </li>
-                      :
-                      <li className={`${styles.displayNone}`} role="presentation">
+                    ) : (
+                      <li
+                        className={`${styles.displayNone}`}
+                        role="presentation"
+                      >
                         <button
                           className={`${styles.displayNone}`}
                           id="Payment-tab"
@@ -921,7 +923,7 @@ const PropertyDetail = ({ params }) => {
                           Plan
                         </button>
                       </li>
-                    }
+                    )}
                   </ul>
                 </div>
                 <div id="default-tab-content">
@@ -1032,9 +1034,7 @@ const PropertyDetail = ({ params }) => {
                               />
                             </div>
                           </>
-                        ) : (
-                          null
-                        )}
+                        ) : null}
                       </div>
                     ) : (
                       <LoadingText />
@@ -1405,12 +1405,12 @@ const PropertyDetail = ({ params }) => {
 
           {/* Specifications */}
           {listPropertiesData?.ProeprtyType == "Residential" &&
-            listPropertiesData?.PropertySubtype?.Name !== "Plot" ? (
+          listPropertiesData?.PropertySubtype?.Name !== "Plot" ? (
             listPropertiesData?.Fitting?.Electrical == "" &&
-              listPropertiesData?.Fitting?.Toilets == "" &&
-              listPropertiesData?.Fitting?.Kitchen == "" &&
-              listPropertiesData?.Fitting?.Doors == "" &&
-              listPropertiesData?.Fitting?.Windows == "" ? null : (
+            listPropertiesData?.Fitting?.Toilets == "" &&
+            listPropertiesData?.Fitting?.Kitchen == "" &&
+            listPropertiesData?.Fitting?.Doors == "" &&
+            listPropertiesData?.Fitting?.Windows == "" ? null : (
               <div
                 id="specifications"
                 className={` ${styles.faq} faq mt-16 page`}
@@ -1762,6 +1762,22 @@ const PropertyDetail = ({ params }) => {
       <PersonalLoanCalculator/>
       </div> */}
       <Footer />
+      {listPropertiesData.Builder ? (
+        <Link href={`/builderFE/${listPropertiesData.Builder._id}`}>
+          <button className={styles.stickyButton}>
+            <img
+              className={styles.buttonImage}
+              src={
+                listPropertiesData?.Builder?.Logo
+                  ? `${imgApiUrl}/${listPropertiesData?.Builder?.Logo}`
+                  : "https://tse2.explicit.bing.net/th?id=OIP.9AeFX9VvFYTXrL5IwhGhYwHaHa&pid=Api&P=0&h=180"
+              }
+              alt="Button Image"
+            />
+          </button>
+        </Link>
+      ) : null}
+
       <Modal
         dismissible
         className={`bg-transparent/[.8] `}

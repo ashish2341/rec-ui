@@ -6,16 +6,17 @@ import { API_BASE_URL_FOR_MASTER } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import Styles from "../propertyDetails/propertypage.module.css"
 import NextButton from "@/components/common/admin/nextButton/nextButton"
+import { UpdateStepsStatus ,findNextStep } from "@/utils/commonHelperFn";
 export default function LocationDetailsForm({
   valueForNext,
-  valueForNextPage,
+  valueForNextPage,setFormPageNumberArray,setPageStatusArray,pageStatusData
 }) {
   // fetching Data for Area
   const { data: areaData } = useFetch(`${API_BASE_URL_FOR_MASTER}/areas`);
 
 
   const defaultOption = [{ value: "", label: "no data found" }];
-
+  const CityArray = [{ value: "Jaipur", label: "Jaipur" }];
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [country, setCountry] = useState("");
@@ -27,8 +28,9 @@ export default function LocationDetailsForm({
   //   Latitude: "",
   //   Longitude: "",
   // });
-
   useEffect(() => {
+
+    
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("propertyData")
@@ -36,7 +38,7 @@ export default function LocationDetailsForm({
   
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
-      setCity(sessionStoragePropertyData?.City || "");
+      setCity({value:sessionStoragePropertyData?.City || "" ,label:sessionStoragePropertyData?.City || "" }  );
       setState(sessionStoragePropertyData?.State || "");
       setCountry(sessionStoragePropertyData?.Country || "");
       setAddress(sessionStoragePropertyData?.Address || "");
@@ -103,7 +105,7 @@ export default function LocationDetailsForm({
     }
 
     const locationDetailsData = {
-      City: city.trim(),
+      City: city.value.trim(),
       Address: address.trim(),
       // Location: locationDetails,
       Area: area,
@@ -112,7 +114,23 @@ export default function LocationDetailsForm({
     const localStorageData = JSON.parse(sessionStorage.getItem("propertyData"));
     const newProjectData = { ...localStorageData, ...locationDetailsData };
     sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
-    valueForNext(valueForNextPage + 1);
+    
+    setFormPageNumberArray(prev => {
+      // Check if the newPage already exists in the array
+      if (!prev.includes("Location details")) {
+        return [...prev, "Location details"];
+      }
+      return prev; // If it already exists, return the previous state
+    });
+    setPageStatusArray(UpdateStepsStatus(pageStatusData,valueForNextPage))
+      const finalIndexValue=findNextStep(pageStatusData,valueForNextPage)
+      if(finalIndexValue.finalIndex <= valueForNextPage && finalIndexValue.currentStepStatus===false){
+        valueForNext(finalIndexValue.finalIndex + 1);
+      }else{
+        
+        valueForNext(finalIndexValue.finalIndex);
+      }
+    // valueForNext(valueForNextPage + 1);
   };
 
   return (
@@ -138,57 +156,7 @@ export default function LocationDetailsForm({
                 required=""
               />
             </div>
-            {/* <div>
-              <label
-                htmlFor="area"
-                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"              >
-                Area
-              </label>
-              <input
-                type="text"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Area"
-                required=""
-                value={area.Area}
-                disabled={true}
-              />
-              {areaData ? (
-                <div
-                  className={`flex flex-wrap space-x-2 mt-4 ${
-                    areaData?.data?.length > 8
-                      ? `${Styles.scrollable}`
-                      : ""
-                  }`}
-                >
-                  {areaData?.data?.map((item) => (
-                    <button
-                      key={item._id}
-                      onClick={(event) => {
-                        event.preventDefault();  // Prevent the default form submission behavior
-                        setArea({
-                          _id: item._id,
-                          Area: item.Area,
-                        });
-                      }}
-                      className={` rounded text-white px-4 py-2 ${
-                        Styles.optionButton
-                      } ${
-                        area._id === item._id
-                          ? "bg-[#2a4acb] border-2 border-[#2a4acb]"
-                          : "bg-[#6592d3]  border-2 border-[#6592d3]"
-                      }`}
-                    >
-                      {item.Area}
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <div className="flex flex-wrap space-x-2">
-             <h1 className={`${Styles.noDataHead}`}>No Data Found</h1>
-            </div>
-              )}
-             
-            </div> */}
+        
             <div>
               <label
                 htmlFor="area"
@@ -226,7 +194,23 @@ export default function LocationDetailsForm({
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"              >
                 City
               </label>
-              <input
+              <Select
+                  options={CityArray.map((element) => ({
+                    value: element.value,
+                    label: element.label,
+                  }))}
+                  placeholder="Select One"
+                  onChange={(e) =>
+                    setCity({
+                      value: e.value,
+                      label: e.label,
+                    })
+                  }
+                  required={true}
+                  value={city}
+                 
+                />
+              {/* <input
                 type="text"
                 name="city"
                 id="city"
@@ -235,44 +219,9 @@ export default function LocationDetailsForm({
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="City"
                 required=""
-              />
+              /> */}
             </div>
-            {/* <div>
-              <label
-                htmlFor="latitude"
-                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required" 
-                >             
-                Latitude
-              </label>
-              <input
-                type="number"
-                name="Latitude"
-                id="latitude"
-                value={locationDetails.Latitude}
-                onChange={handleLocationChange}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Latitude"
-                required=""
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="longitude"
-                className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"              >
-                Longitude
-              </label>
-              <input
-                type="number"
-                name="Longitude"
-                id="longitude"
-                value={locationDetails.Longitude}
-                onChange={handleLocationChange}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Longitude"
-                required=""
-              />
-            </div> */}
+            
           </div>
          
         </form>

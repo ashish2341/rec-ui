@@ -5,13 +5,17 @@ import Select from "react-select";
 import { API_BASE_URL_FOR_MASTER, currentPage } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import NextButton from "@/components/common/admin/nextButton/nextButton";
+import Popup from "@/components/common/popup";
+import { UpdateStepsStatus ,findNextStep } from "@/utils/commonHelperFn";
 
 export default function PropertyFaqForm({
   valueForNextPage,
   mainBackPageValue,
   valueForBack,
   editedKeys,
-  pageName,
+  pageName,setFormPageNumberArray,setPageStatusArray,
+  pageStatusData,setSubTypeChangedValue,
+  subTypechangesValue,
 }) {
   const initialFieldState = [
     {
@@ -35,8 +39,9 @@ export default function PropertyFaqForm({
         "Simple improvements like fresh paint, landscaping, minor repairs, and deep cleaning can significantly enhance your home's appeal and value.",
     },
   ];
-
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [faqFields, setFaqFields] = useState(initialFieldState);
+  const [percentageValue,setPercentageValue]=useState(0)
   const [btnShowonInputChange, setBtnShowonInputChange] = useState(false);
   useEffect(() => {
     // Retrieve data from localStorage
@@ -47,6 +52,7 @@ export default function PropertyFaqForm({
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
       setFaqFields(sessionStoragePropertyData?.Faq || initialFieldState);
+      setPercentageValue(sessionStoragePropertyData?.CompletePercentage || 0)
     }
   }, []);
 
@@ -77,32 +83,56 @@ export default function PropertyFaqForm({
     setFaqFields(updatedFields);
   };
 
+  
   const SubmitForm = () => {
-    let newErrors = [];
+    if(percentageValue<100){
+      setIsPopupOpen(true)
+    }else(
+      handlesubmitData()
+    )
+        
+        
+      };
+      const handleCancel = () => {
+        setIsPopupOpen(false);
+      };
+      const handlesubmitData = async () => {
+        let newErrors = [];
 
-    // Check if any field is empty
-    faqFields.forEach((field, index) => {
-      if (!field.Question.trim() || !field.Answer.trim()) {
-        newErrors.push({ index, message: "Question and Answer are required." });
-      }
-    });
-
-    if (newErrors.length > 0) {
-      toast.error("Question and Answer are required");
-      return false;
-    }
-    const faqDetailsData = {
-      Faq: faqFields,
-    };
-    const localStorageData = JSON.parse(
-      sessionStorage.getItem("EditPropertyData")
-    );
-    const newPropertyData = { ...localStorageData, ...faqDetailsData };
-    sessionStorage.setItem("EditPropertyData", JSON.stringify(newPropertyData));
-    valueForBack(mainBackPageValue + 1);
-    setBtnShowonInputChange(true);
-  };
-
+        // Check if any field is empty
+        faqFields.forEach((field, index) => {
+          if (!field.Question.trim() || !field.Answer.trim()) {
+            newErrors.push({ index, message: "Question and Answer are required." });
+          }
+        });
+    
+        if (newErrors.length > 0) {
+          toast.error("Question and Answer are required");
+          return false;
+        }
+        const faqDetailsData = {
+          Faq: faqFields,
+        };
+        const localStorageData = JSON.parse(
+          sessionStorage.getItem("EditPropertyData")
+        );
+        const newPropertyData = { ...localStorageData, ...faqDetailsData };
+        sessionStorage.setItem("EditPropertyData", JSON.stringify(newPropertyData));
+        setFormPageNumberArray((prev) => {
+          // Check if the newPage already exists in the array
+          if (!prev.includes("Faq details")) {
+            return [...prev, "Faq details"];
+          }
+          return prev; // If it already exists, return the previous state
+        });
+        setPageStatusArray(UpdateStepsStatus(pageStatusData, valueForNextPage));
+        if(subTypechangesValue){
+          setSubTypeChangedValue(false)
+        }
+        setIsPopupOpen(false)
+        valueForBack(mainBackPageValue + 1);
+        setBtnShowonInputChange(true);
+      };
   return (
     <>
       <div>
@@ -182,6 +212,14 @@ export default function PropertyFaqForm({
           <NextButton onSubmit={SubmitForm} butonSubName={"save"} />
         ) : null}
       </div>
+      <Popup
+        isOpen={isPopupOpen}
+        title="Properties with 100% scores are prioritized in search results please fill remaining fields."
+        confirmLabel="Skip"
+        cancelLabel="Cancel"
+        onConfirm={handlesubmitData}
+        onCancel={handleCancel}
+      />
     </>
   );
 }

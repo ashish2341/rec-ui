@@ -14,12 +14,13 @@ import ApiButtons from "@/components/common/admin/propertyapiButtons/ApiButtons"
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
 import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
 import NextButton from "@/components/common/admin/nextButton/nextButton";
-
+import { UpdateStepsStatus ,findNextStep } from "@/utils/commonHelperFn";
 export default function PossessionDetailsPage({
   setPropertyPageValue,
   valueForNextfromSix,
   valueForNextPagefromSix,
-  setPropertyBackvalue,
+  setPropertyBackvalue,setFormPageNumberArray,setInsidePropertyPageNameArray,setPageStatusArray,
+  mainFormPageStatusData
 }) {
   // fetching Data for posessionStatusData
   const { data: posessionStatusData } = useFetch(
@@ -115,7 +116,7 @@ export default function PossessionDetailsPage({
   };
 
   const checkRequiredFields = () => {
-    var requiredFields = [posessionStatus, posessionDate, brochure];
+    var requiredFields = [posessionStatus, posessionDate];
     if (
       sessionStoragePropertyData?.PropertyStatus &&
       PropertyStatusValue.Status != "Under Contruction"
@@ -123,7 +124,6 @@ export default function PossessionDetailsPage({
       var requiredFields = [
         posessionStatus,
         posessionDate,
-        brochure,
         ageofProperty,
       ];
     }
@@ -157,10 +157,42 @@ export default function PossessionDetailsPage({
         propertTypeValue == "Commercial" &&
         propertTypWithSubTypeValue != "Plot"
       ) {
-        setPropertyPageValue((prev) => prev + 1);
+     
+        
+        setInsidePropertyPageNameArray(prev => {
+          // Check if the newPage already exists in the array
+          if (!prev.includes("Possession")) {
+            return [...prev, "Possession"];
+          }
+          return prev; // If it already exists, return the previous state
+        });
+         setPropertyPageValue((prev) => prev + 1);
       } else {
-        valueForNextfromSix(valueForNextPagefromSix + 1);
-        setPropertyBackvalue((prev) => prev - 1);
+        setFormPageNumberArray(prev => {
+          // Check if the newPage already exists in the array
+          if (!prev.includes("Property details")) {
+            return [...prev, "Property details"];
+          }
+          return prev; // If it already exists, return the previous state
+        });
+        setInsidePropertyPageNameArray(prev => {
+          // Check if the newPage already exists in the array
+          if (!prev.includes("Possession")) {
+          
+            return [...prev, "Possession"];
+          }
+          return prev; // If it already exists, return the previous state
+        });
+        setPageStatusArray(UpdateStepsStatus(mainFormPageStatusData,valueForNextPagefromSix))
+      const finalIndexValue=findNextStep(mainFormPageStatusData,valueForNextPagefromSix)
+      if(finalIndexValue.finalIndex <= valueForNextPagefromSix && finalIndexValue.currentStepStatus===false){
+        valueForNextfromSix(finalIndexValue.finalIndex + 1);
+      }else{
+        
+        valueForNextfromSix(finalIndexValue.finalIndex);
+      }
+        // valueForNextfromSix(valueForNextPagefromSix + 1);
+        // setPropertyBackvalue((prev) => prev - 1);
       }
     } else {
       toast.error("Please fill in all required fields!");
@@ -341,10 +373,12 @@ export default function PossessionDetailsPage({
         <div>
           <label
             htmlFor="document"
-            className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
+            className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
           >
-            Brochure
-          </label>
+            Brochure <span className="text-xs font-bold ml-1 pb-2 text-red-600">
+                  (Optional)
+                </span>
+          </label> 
           <input
             type="file"
             name="Document"
@@ -381,7 +415,9 @@ export default function PossessionDetailsPage({
               htmlFor="Payement"
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
             >
-              Payement Plan
+              Payement Plan <span className="text-xs font-bold ml-1 pb-2 text-red-600">
+                  (Optional)
+                </span>
             </label>
             <input
               type="file"
@@ -448,7 +484,9 @@ export default function PossessionDetailsPage({
               htmlFor="floor"
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
             >
-              Floor Plan
+              Floor Plan <span className="text-xs font-bold ml-1 pb-2 text-red-600">
+                  (Optional)
+                </span>
             </label>
             <input
               type="file"

@@ -13,7 +13,7 @@ import ContinueButton from "@/components/common/propertyContinueButton/continueB
 import ApiButtons from "@/components/common/admin/propertyapiButtons/ApiButtons";
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
 
-export default function RoomDetailPage({ setPropertyPageValue }) {
+export default function RoomDetailPage({ setPropertyPageValue,setInsidePropertyPageNameArray }) {
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("propertyData")
   );
@@ -93,6 +93,13 @@ export default function RoomDetailPage({ setPropertyPageValue }) {
       );
       const newProjectData = { ...localStorageData, ...secondPropertyData };
       sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
+      setInsidePropertyPageNameArray(prev => {
+        // Check if the newPage already exists in the array
+        if (!prev.includes("Rooms")) {
+          return [...prev, "Rooms"];
+        }
+        return prev; // If it already exists, return the previous state
+      });
       setPropertyPageValue((prev) => prev + 1);
     } else {
       toast.error("Please fill in all required fields!");

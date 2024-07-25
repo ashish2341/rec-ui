@@ -12,7 +12,16 @@ export default function PropertyDetailsForm({
   setPropertyBackvalue,
   valueForNext,
   valueForNextPage,
-  setPageValueInsidePropertyForm,editedKeys, pageName
+  setPageValueInsidePropertyForm,
+  editedKeys,
+  pageName,
+  setFormPageNumberArray,
+  insidepropertyPagesName,
+  setSubTypeChangedValue,
+  subTypechangesValue,
+  setInsidePropertyPageNameArray,
+  setPageStatusArray,
+  pageStatusData,
 }) {
   const roleData = Cookies.get("roles") ?? "";
   const name = Cookies.get("name");
@@ -43,20 +52,20 @@ export default function PropertyDetailsForm({
   let stepperArray = "";
   if (propertTypeValue == "Commercial") {
     stepperArray = [
-      { name: "Basic", number: 1 },
-      { name: "Rooms", number: 2 },
-      { name: "Area", number: 3 },
-      { name: "Financial", number: 4 },
-      { name: "Possession", number: 5 },
-      { name: "Facilities", number: 6 },
+      { name: "Basic", number: 1, matchName: "Basic" },
+      { name: "Rooms", number: 2, matchName: "Rooms" },
+      { name: "Area", number: 3, matchName: "Area" },
+      { name: "Financial", number: 4, matchName: "Financial" },
+      { name: "Possession", number: 5, matchName: "Possession" },
+      { name: "Facilities", number: 6, matchName: "Facilities" },
     ];
   }
   if (propertTypWithSubTypeValue && propertTypWithSubTypeValue == "Plot") {
     stepperArray = [
-      { name: "Basic", number: 1 },
-      { name: "Area", number: 2 },
-      { name: "Financial", number: 3 },
-      { name: "Possession", number: 4 },
+      { name: "Basic", number: 1 ,matchName:"Basic" },
+      { name: "Area", number: 2 ,matchName:"Area"},
+      { name: "Financial", number: 3 ,matchName:"Financial"},
+      { name: "Possession", number: 4 ,matchName:"Possession"},
       // {name:"Loan",number:6}
     ];
   }
@@ -66,11 +75,11 @@ export default function PropertyDetailsForm({
     propertTypWithSubTypeValue != "Plot"
   ) {
     stepperArray = [
-      { name: "Basic", number: 1 },
-      { name: "Rooms", number: 2 },
-      { name: "Area", number: 3 },
-      { name: "Financial", number: 4 },
-      { name: "Possession", number: 5 },
+      { name: "Basic", number: 1 ,matchName:"Basic" },
+      { name: "Rooms", number: 2 ,matchName:"Rooms"},
+      { name: "Area", number: 3 ,matchName:"Area" },
+      { name: "Financial", number: 4 ,matchName:"Financial"},
+      { name: "Possession", number: 5 ,matchName:"Possession"},
       // {name:"Loan",number:6}
     ];
   }
@@ -79,9 +88,11 @@ export default function PropertyDetailsForm({
       <div className="mb-5 ">
         {stepperArray && (
           <ButtonStepper
-          setPropertyPageValue={setPropertyPageValue}
+            setPropertyPageValue={setPropertyPageValue}
             forStepper={stepperArray}
             forpageValue={propertyPageValue}
+            type={"update"}
+            pageNameArray={insidepropertyPagesName}
           />
         )}
       </div>
@@ -108,20 +119,39 @@ export default function PropertyDetailsForm({
                 setPropertyBackvalue={setPropertyBackvalue}
                 editedKeysfromMain={editedKeys}
                 pageNamefromMain={pageName}
+                valueForNextfromSix={handelvalueForNextfromSix}
+                changedSubtypeValue={subTypechangesValue}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
               />
             )}
             {propertyPageValue == 2 ? (
-              <RoomDetailPage setPropertyPageValue={setPropertyPageValue}editedKeysfromMain={editedKeys}
-              pageNamefromMain={pageName} />
+              <RoomDetailPage
+                setPropertyPageValue={setPropertyPageValue}
+                editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName}
+                valueForNextfromSix={handelvalueForNextfromSix}
+                changedSubtypeValue={subTypechangesValue}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+              />
             ) : null}
             {propertyPageValue == 3 ? (
-              <AreaDetailPage setPropertyPageValue={setPropertyPageValue}editedKeysfromMain={editedKeys}
-              pageNamefromMain={pageName} />
+              <AreaDetailPage
+                setPropertyPageValue={setPropertyPageValue}
+                editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName}
+                valueForNextfromSix={handelvalueForNextfromSix}
+                changedSubtypeValue={subTypechangesValue}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+              />
             ) : null}
             {propertyPageValue == 4 && (
               <FinancialDetailsPage
-                setPropertyPageValue={setPropertyPageValue}editedKeysfromMain={editedKeys}
+                setPropertyPageValue={setPropertyPageValue}
+                editedKeysfromMain={editedKeys}
                 pageNamefromMain={pageName}
+                valueForNextfromSix={handelvalueForNextfromSix}
+                changedSubtypeValue={subTypechangesValue}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
               />
             )}
             {propertyPageValue == 5 && (
@@ -131,6 +161,12 @@ export default function PropertyDetailsForm({
                 setPropertyBackvalue={setPropertyBackvalue}
                 editedKeysfromMain={editedKeys}
                 pageNamefromMain={pageName}
+                changedSubtypeValue={subTypechangesValue}
+                setSubTypeChangedValue={setSubTypeChangedValue}
+                setFormPageNumberArray={setFormPageNumberArray}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+                setPageStatusArray={setPageStatusArray}
+                mainFormPageStatusData={pageStatusData}
               />
             )}
             {/* {propertyPageValue == 6 && (
@@ -152,23 +188,39 @@ export default function PropertyDetailsForm({
                 setPropertyBackvalue={setPropertyBackvalue}
                 editedKeysfromMain={editedKeys}
                 pageNamefromMain={pageName}
+                valueForNextfromSix={handelvalueForNextfromSix}
+                changedSubtypeValue={subTypechangesValue}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
               />
             )}
             {propertyPageValue == 2 ? (
-              <RoomDetailPage setPropertyPageValue={setPropertyPageValue} 
-              editedKeysfromMain={editedKeys}
-                pageNamefromMain={pageName} />
+              <RoomDetailPage
+                setPropertyPageValue={setPropertyPageValue}
+                editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName}
+                valueForNextfromSix={handelvalueForNextfromSix}
+                changedSubtypeValue={subTypechangesValue}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+              />
             ) : null}
             {propertyPageValue == 3 ? (
-              <AreaDetailPage setPropertyPageValue={setPropertyPageValue}
-              editedKeysfromMain={editedKeys}
-                pageNamefromMain={pageName} />
+              <AreaDetailPage
+                setPropertyPageValue={setPropertyPageValue}
+                editedKeysfromMain={editedKeys}
+                pageNamefromMain={pageName}
+                valueForNextfromSix={handelvalueForNextfromSix}
+                changedSubtypeValue={subTypechangesValue}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+              />
             ) : null}
             {propertyPageValue == 4 && (
               <FinancialDetailsPage
                 setPropertyPageValue={setPropertyPageValue}
                 editedKeysfromMain={editedKeys}
                 pageNamefromMain={pageName}
+                valueForNextfromSix={handelvalueForNextfromSix}
+                changedSubtypeValue={subTypechangesValue}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
               />
             )}
             {propertyPageValue == 5 && (
@@ -179,6 +231,11 @@ export default function PropertyDetailsForm({
                 setPropertyBackvalue={setPropertyBackvalue}
                 editedKeysfromMain={editedKeys}
                 pageNamefromMain={pageName}
+                changedSubtypeValue={subTypechangesValue}
+                setFormPageNumberArray={setFormPageNumberArray}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+                setPageStatusArray={setPageStatusArray}
+                mainFormPageStatusData={pageStatusData}
               />
             )}
             {propertyPageValue == 6 && (
@@ -188,6 +245,11 @@ export default function PropertyDetailsForm({
                 setPropertyBackvalue={setPropertyBackvalue}
                 editedKeysfromMain={editedKeys}
                 pageNamefromMain={pageName}
+                changedSubtypeValue={subTypechangesValue}
+                setFormPageNumberArray={setFormPageNumberArray}
+                setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+                setPageStatusArray={setPageStatusArray}
+                mainFormPageStatusData={pageStatusData}
               />
             )}
           </>
@@ -199,19 +261,32 @@ export default function PropertyDetailsForm({
               setPropertyPageValue={setPropertyPageValue}
               setPropertyBackvalue={setPropertyBackvalue}
               editedKeysfromMain={editedKeys}
-                pageNamefromMain={pageName}
+              pageNamefromMain={pageName}
+              valueForNextfromSix={handelvalueForNextfromSix}
+              changedSubtypeValue={subTypechangesValue}
+              setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
             />
           )}
 
           {propertyPageValue == 2 ? (
-            <AreaDetailPage setPropertyPageValue={setPropertyPageValue}
-            editedKeysfromMain={editedKeys}
-                pageNamefromMain={pageName} />
+            <AreaDetailPage
+              setPropertyPageValue={setPropertyPageValue}
+              editedKeysfromMain={editedKeys}
+              pageNamefromMain={pageName}
+              valueForNextfromSix={handelvalueForNextfromSix}
+              changedSubtypeValue={subTypechangesValue}
+              setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+            />
           ) : null}
           {propertyPageValue == 3 && (
-            <FinancialDetailsPage setPropertyPageValue={setPropertyPageValue}
-            editedKeysfromMain={editedKeys}
-                pageNamefromMain={pageName} />
+            <FinancialDetailsPage
+              setPropertyPageValue={setPropertyPageValue}
+              editedKeysfromMain={editedKeys}
+              pageNamefromMain={pageName}
+              valueForNextfromSix={handelvalueForNextfromSix}
+              changedSubtypeValue={subTypechangesValue}
+              setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+            />
           )}
           {propertyPageValue == 4 && (
             <PossessionDetailsPage
@@ -219,7 +294,12 @@ export default function PropertyDetailsForm({
               valueForNextPagefromSix={valueForNextPage}
               setPropertyBackvalue={setPropertyBackvalue}
               editedKeysfromMain={editedKeys}
-                pageNamefromMain={pageName}
+              pageNamefromMain={pageName}
+              changedSubtypeValue={subTypechangesValue}
+              setFormPageNumberArray={setFormPageNumberArray}
+              setInsidePropertyPageNameArray={setInsidePropertyPageNameArray}
+              setPageStatusArray={setPageStatusArray}
+              mainFormPageStatusData={pageStatusData}
             />
           )}
           {/* {propertyPageValue == 5 && (

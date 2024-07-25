@@ -8,6 +8,7 @@ import Footer from "@/components/common/footer";
 import { addEnquiry } from "@/api-functions/enquiry/addEnquiry";
 import { toast } from "react-toastify";
 import CommonLoader from "@/components/common/commonLoader/commonLoader";
+import { Link } from "react-scroll";
 
 
 const AstrologerPage = () => {
@@ -94,20 +95,20 @@ const AstrologerPage = () => {
                         </div>
                         <div className={`${styles.buyingZodicInputMain}`}>
                             <div className={`${styles.zodaicButtons} grid gap-6 mb-6 md:grid-cols-2`}>
-                                <div>
+                                <Link href={"contact"}>
                                     <button
                                         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium  text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                     >
                                         Chat with Astrologer
                                     </button>
-                                </div>
-                                <div>
+                                </Link>
+                                {/* <div>
                                     <button
                                         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium  text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                     >
                                         Talk with Astrologer
                                     </button>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
@@ -159,7 +160,7 @@ const AstrologerPage = () => {
                         </div>
                     </div>
                 </div>
-                <div className={` ${styles.divideDetailPageRight}`}>
+                <div className={` ${styles.divideDetailPageRight}`} id="contact">
                     <div id="general" className={`${styles.formDetails} mb-4`}>
                         <div className="GeneralDetailsMain">
                             <h2 className={`${styles.GeneralDetailsMainHead}`}>

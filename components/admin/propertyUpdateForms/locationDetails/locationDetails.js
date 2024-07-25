@@ -7,17 +7,20 @@ import useFetch from "@/customHooks/useFetch";
 import Styles from "../propertyDetails/propertypage.module.css";
 import NextButton from "@/components/common/admin/nextButton/nextButton";
 import EditedTag from "@/components/common/admin/editedTag/editedTag";
+import { UpdateStepsStatus ,findNextStep } from "@/utils/commonHelperFn";
+
 export default function LocationDetailsForm({
   valueForNext,
   valueForNextPage,
   editedKeys,
-  pageName,
+  pageName,setFormPageNumberArray,subTypechangesValue,
+  setPageStatusArray,pageStatusData
 }) {
   // fetching Data for Area
   const { data: areaData } = useFetch(`${API_BASE_URL_FOR_MASTER}/areas`);
 
   const defaultOption = [{ value: "", label: "no data found" }];
-
+  const CityArray = [{ value: "Jaipur", label: "Jaipur" }];
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [country, setCountry] = useState("");
@@ -38,7 +41,7 @@ export default function LocationDetailsForm({
 
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
-      setCity(sessionStoragePropertyData?.City || "");
+      setCity({value:sessionStoragePropertyData?.City || "" ,label:sessionStoragePropertyData?.City || "" }  );
       setState(sessionStoragePropertyData?.State || "");
       setCountry(sessionStoragePropertyData?.Country || "");
       setAddress(sessionStoragePropertyData?.Address || "");
@@ -99,7 +102,7 @@ export default function LocationDetailsForm({
     }
 
     const locationDetailsData = {
-      City: city.trim(),
+      City: city.value.trim(),
       Address: address.trim(),
       // Location: locationDetails,
       Area: area,
@@ -109,7 +112,27 @@ export default function LocationDetailsForm({
     );
     const newProjectData = { ...localStorageData, ...locationDetailsData };
     sessionStorage.setItem("EditPropertyData", JSON.stringify(newProjectData));
-    valueForNext(valueForNextPage + 1);
+    setFormPageNumberArray((prev) => {
+      // Check if the newPage already exists in the array
+      if (!prev.includes("Location details")) {
+        return [...prev, "Location details"];
+      }
+      return prev; // If it already exists, return the previous state
+    });
+    setPageStatusArray(UpdateStepsStatus(pageStatusData,valueForNextPage))
+      const finalIndexValue=findNextStep(pageStatusData,valueForNextPage)
+      if(finalIndexValue.finalIndex <= valueForNextPage && finalIndexValue.currentStepStatus===false){
+        valueForNext(finalIndexValue.finalIndex + 1);
+      }else{
+        
+        valueForNext(finalIndexValue.finalIndex);
+      }
+    // if ( subTypechangesValue) {
+    //   valueForNext(valueForNextPage + 1);
+      
+    // } else {
+    //   valueForNext(6);
+    // }
   };
 
   return (
@@ -185,7 +208,23 @@ export default function LocationDetailsForm({
                   <EditedTag />
                 )}
               </label>
-              <input
+              <Select
+                  options={CityArray.map((element) => ({
+                    value: element.value,
+                    label: element.label,
+                  }))}
+                  placeholder="Select One"
+                  onChange={(e) =>
+                    setCity({
+                      value: e.value,
+                      label: e.label,
+                    })
+                  }
+                  required={true}
+                  value={city}
+                 
+                />
+              {/* <input
                 type="text"
                 name="city"
                 id="city"
@@ -194,7 +233,7 @@ export default function LocationDetailsForm({
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="City"
                 required=""
-              />
+              /> */}
             </div>
             {/* <div>
               <label

@@ -1,0 +1,121 @@
+.custom-right-arrow {
+    position: absolute !important;
+    right: 30px;
+    z-index: 1;
+    border: 1px solid grey;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 6px;
+    opacity: 0.8;
+    cursor: pointer;
+    transform: rotate(-45deg);
+  }
+  .custom-right-arrow:hover {
+    opacity: 1;
+  }
+  .custom-left-arrow {
+    position: absolute !important;
+    left: 30px;
+    z-index: 1;
+    border: 1px solid red;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 6px;
+    opacity: 0.8;
+    cursor: pointer;
+    transform: rotate(135deg);
+  }
+  .custom-left-arrow {
+    opacity: 1;
+  }
+  .container {
+    margin-top: 10%;
+  }
+  #root {
+    padding: 0 80px;
+  }
+  .container-with-dots {
+    margin-top: 10%;
+    padding-bottom: 20px;
+  }
+  .custom-button-group {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    right: 0;
+  }
+  .container-padding-bottom {
+    padding-bottom: 20px;
+  }
+
+  .customButtons{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .customCarousel{
+    width: 90%;
+    /* / display: flex; / */
+  }
+
+  .customCarouselCenter{
+    justify-content: center;
+    display: flex;
+  }
+
+  .customLeftbutton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ccc;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease; 
+  }
+  
+  .customLeftbutton:hover {
+    background-color: #007bff  ; 
+  }
+  @media screen and (max-width: 1025px) {
+    .customCarousel{
+      width: 90%;
+      /* / display: flex; / */
+    }
+
+    .customLeftbutton {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  @media screen and (min-width: 425px) and (max-width: 769px) {
+    .customCarousel{
+      width: 90%;
+      /* / display: flex; / */
+    }
+
+    .customLeftbutton {
+      width: 25px;
+      height: 25px;
+    }
+  }
+
+  @media screen and (min-width: 320px) and (max-width: 425px) {
+    .customCarousel{
+      width: 83%;
+      /* / display: flex; / */
+    }
+
+    .customLeftbutton {
+      width: 20px;
+      height: 20px;
+    }
+  }

@@ -4,10 +4,20 @@ import { ToastContainer, toast } from "react-toastify";
 import { ImageString } from "@/api-functions/auth/authAction";
 import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
 import NextButton from "@/components/common/admin/nextButton/nextButton";
-import { imgApiUrl,currentPage } from "@/utils/constants";
+import { imgApiUrl, currentPage } from "@/utils/constants";
 import EditedTag from "@/components/common/admin/editedTag/editedTag";
+import { UpdateStepsStatus ,findNextStep } from "@/utils/commonHelperFn";
 
-export default function PropertyImagesForm({ valueForNext, valueForNextPage,  editedKeys, pageName }) {
+export default function PropertyImagesForm({
+  valueForNext,
+  valueForNextPage,
+  editedKeys,
+  pageName,
+  setFormPageNumberArray,
+  setPageStatusArray,
+  pageStatusData,
+  
+}) {
   const [image, setImage] = useState([]);
   const [video, setVideo] = useState([]);
   const imageInputRef = useRef(null);
@@ -16,6 +26,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage,  ed
   const [videoLoader, setVideoLoader] = useState(false);
 
   useEffect(() => {
+    
     // Retrieve data from localStorage
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("EditPropertyData")
@@ -40,7 +51,10 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage,  ed
       toast.error("Image is required.");
       return false;
     }
-
+    if (image.length < 5) {
+      toast.error("Atleast 5 Image is required.");
+      return false;
+    }
     const mediaData = {
       Images: image.map((item) => {
         return { URL: item };
@@ -59,7 +73,24 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage,  ed
         "EditPropertyData",
         JSON.stringify(newProjectData)
       );
-      valueForNext(valueForNextPage + 1);
+      setFormPageNumberArray((prev) => {
+        // Check if the newPage already exists in the array
+        if (!prev.includes("Property Images")) {
+          return [...prev, "Property Images"];
+        }
+        return prev; // If it already exists, return the previous state
+      });
+      setPageStatusArray(UpdateStepsStatus(pageStatusData, valueForNextPage));
+      const finalIndexValue = findNextStep(pageStatusData, valueForNextPage);
+      if (
+        finalIndexValue.finalIndex <= valueForNextPage &&
+        finalIndexValue.currentStepStatus === false
+      ) {
+        valueForNext(finalIndexValue.finalIndex + 1);
+      } else {
+        valueForNext(finalIndexValue.finalIndex);
+      }
+      // valueForNext(valueForNextPage + 1);
     }
   };
 
@@ -301,8 +332,9 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage,  ed
                 className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
               >
                 Upload Image
-                { (editedKeys?.includes("Images") && pageName===currentPage) && (<EditedTag/>) } 
-
+                {editedKeys?.includes("Images") && pageName === currentPage && (
+                  <EditedTag />
+                )}
               </label>
               <input
                 type="file"
@@ -358,8 +390,9 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage,  ed
                 <span className="text-xs font-bold ml-1 pb-2 text-red-600">
                   (Optional)
                 </span>
-                { (editedKeys?.includes("Videos") && pageName===currentPage) && (<EditedTag/>) } 
-
+                {editedKeys?.includes("Videos") && pageName === currentPage && (
+                  <EditedTag />
+                )}
               </label>
               <input
                 type="file"

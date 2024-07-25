@@ -222,13 +222,14 @@ export default function Dashboard() {
     <>
     {loaderIsLoading && <CommonLoader />}
       <div className={`${styles.dashboardContainer}`}>
-        <div className={`${styles.ALLConatiner}`}>
+        <div className="flex justify-center mb-4 w-full">
+        <div className={`grid  gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2  item-center justify-center ${styles.ALLConatiner}`}>
           {roles.includes("Admin") && (
             <>
               {/* User card */}
               {adminDashboardData ? (
-                <div className={` flex ${styles.showResponsive1}`}>
-                  <Card className={`text-nowrap rounded-xl p-0 ${styles.showCard1} mr-1 mb-6`}>
+                <div className={`w-full flex ${styles.showResponsive1}`}>
+                  <Card className={` text-nowrap rounded-xl p-0 ${styles.showCard1} mr-1 mb-6`}>
                     <Link href="/users">
                       <div className="text-start">
                         <h2
@@ -254,8 +255,8 @@ export default function Dashboard() {
                     </Link>
                   </Card>
 
-                  <div className="flex ">
-                    <Card href={`/users?todayUser=yes`} className={`text-nowrap rounded-xl mr-1 mb-1 pr-4 ${styles.showBuilderCardInner1}`}>
+                  <div className="flex w-full">
+                    <Card href={`/users?todayUser=yes`} className={`w-full text-nowrap rounded-xl mr-1 mb-1 pr-4 ${styles.showBuilderCardInner1}`}>
                       <div>
                         <img
                           src="../../../img/town.png"
@@ -272,7 +273,7 @@ export default function Dashboard() {
                         </p>
                       </div>
                     </Card>
-                    <Card href={`/users?type=builder`} className={`text-nowrap rounded-xl mr-1 mb-1 ${styles.showBuilderCardInnerNEXT} pr-24`}>
+                    <Card href={`/users?type=builder`} className={` w-full text-nowrap rounded-xl mr-1 mb-1 ${styles.showBuilderCardInnerNEXT} pr-24`}>
                       <div>
                         <img
                           src="../../../img/town.png"
@@ -296,8 +297,8 @@ export default function Dashboard() {
               )}
               {/* Builder card */}
               {adminDashboardData ? (
-                <div className={` flex ${styles.showResponsive2}`}>
-                  <Card className={`text-nowrap rounded-xl col-span-1 ${styles.showCard2} mr-1 mb-3`}>
+                <div className={`w-full flex ${styles.showResponsive2}`}>
+                  <Card className={`w-full text-nowrap rounded-xl col-span-1 ${styles.showCard2} mr-1 mb-3`}>
                     <Link href="/builder">
                       <div className="text-start">
                         <h2
@@ -323,7 +324,7 @@ export default function Dashboard() {
                     </Link>
                   </Card>
                   <div className="flex">
-                    <Card href={`/builder?todayBuilder=yes`} className={`text-nowrap rounded-xl p-0 mb-2 mr-1 ${styles.showBuilderCardinner2}`}>
+                    <Card href={`/builder?todayBuilder=yes`} className={`w-full text-nowrap rounded-xl p-0 mb-2 mr-1 ${styles.showBuilderCardinner2}`}>
                       <div>
                         <img
                           src="../../../img/technician.png"
@@ -340,7 +341,7 @@ export default function Dashboard() {
                         </p>
                       </div>
                     </Card>
-                    <Card href={`/property?type=builder`} className={`text-nowrap rounded-xl p-0 ${styles.showBuilderCardinner2}`}>
+                    <Card href={`/property?type=builder`} className={`w-full text-nowrap rounded-xl p-0 ${styles.showBuilderCardinner2}`}>
                       <div>
                         <img
                           src="../../../img/technician.png"
@@ -368,17 +369,17 @@ export default function Dashboard() {
 
           {/* Property Card */}
           {adminDashboardData || builderDashboardData ? (
-            <div className={` ${styles.showResponsive3}`}>
+            <div className={`w-full ${styles.showResponsive3}`}>
               {roles.includes("Admin") ?
-                <div className="flex">
-                    <Card className={`text-nowrap rounded-xl ${styles.showAdminCard3} mr-1 mb-8`}>
+                <div className="flex h-full">
+                    <Card className={` text-nowrap rounded-xl ${styles.showAdminCard3} mr-1`}>
                       <Link href="/property">
                         <div className="text-start">
                           <div>
                             <img src="../../../img/town.png" width="50" height="50" />
                           </div>
                           <div className={`${styles.propertyCard}`}>
-                            <p className="text-3xl font-bold mt-2">
+                            <p className="text-5xl font-bold mt-2">
                               {adminDashboardData?.totalProperty}
                             </p>
                             <p className="text-sm font-semibold mt-2">
@@ -397,13 +398,13 @@ export default function Dashboard() {
                   <div className={`grid grid-cols-2 gap-x-1 ${styles.showResponsiveInner3}`}>
 
                     <div className={`${styles.propertyCardInner}`}>
-                      <Card href="/property" className={`text-nowrap rounded-xl ${styles.showAdminCardinner3}`}>
+                      <Card href="/property" className={`w-full text-nowrap rounded-xl ${styles.showAdminCardinner3}`}>
                         <div className="text-start">
                           <div>
-                            <img src="../../../img/technician.png" width="50" height="50" />
+                            <img src="../../../img/technician.png" width="30" height="30" />
                           </div>
                           <div className={`${styles.propertyCard}`}>
-                            <p className="text-3xl font-bold">
+                            <p className="text-xl font-bold">
                               {adminDashboardData?.approvedProperty}
                             </p>
                             <p className="text-sm font-semibold mt-2">
@@ -415,13 +416,13 @@ export default function Dashboard() {
                     </div>
 
                     <div className={`${styles.propertyCardInner}`}>
-                      <Card href="/property?type=Admin" className={`text-nowrap rounded-xl ${styles.showAdminCardinner3}`}>
+                      <Card href="/property?type=Admin" className={`w-full text-nowrap rounded-xl ${styles.showAdminCardinner3}`}>
                         <div className="text-start">
                           <div>
-                            <img src="../../../img/technician.png" width="50" height="50" />
+                            <img src="../../../img/technician.png" width="30" height="30" />
                           </div>
                           <div className={`${styles.propertyCard}`}>
-                            <p className="text-3xl font-bold">
+                            <p className="text-xl font-bold">
                               {adminDashboardData?.TotalAdminProperty}
                             </p>
                             <p className="text-sm font-semibold mt-2">
@@ -432,14 +433,14 @@ export default function Dashboard() {
                       </Card>
                     </div>
 
-                    <div className={`${styles.propertyCardInner} mb-6`}>
-                      <Card href="/reviewProperty" className={`text-nowrap rounded-xl ${styles.showAdminCardinner3} `}>
+                    <div className={`${styles.propertyCardInner}`}>
+                      <Card href="/reviewProperty" className={`w-full text-nowrap rounded-xl ${styles.showAdminCardinner3} `}>
                         <div className="text-start">
                           <div>
-                            <img src="../../../img/technician.png" width="50" height="50" />
+                            <img src="../../../img/technician.png" width="30" height="30" />
                           </div>
                           <div className={`${styles.propertyCard}`}>
-                            <p className="text-3xl font-bold">
+                            <p className="text-xl font-bold">
                               {adminDashboardData?.underReviewProperty}
                             </p>
                             <p className="text-sm font-semibold mt-2 pr-2">
@@ -532,10 +533,10 @@ export default function Dashboard() {
           )}
           {/* Enquiry Card */}
           {adminDashboardData || builderDashboardData ? (
-            <div className={`${styles.showResponsive4}`}>
+            <div className={`w-full ${styles.showResponsive4}`}>
               {roles.includes("Admin") ?
                 <div className={`flex`}>
-                  <Card className={`text-nowrap rounded-xl p-0 ${styles.showBuilderCard4} mr-1`}>
+                  <Card className={`w-0 text-nowrap rounded-xl p-0 ${styles.showBuilderCard4} mr-1`}>
                     <Link href="/projectInquiry">
                       <div className="text-start">
                         <h2
@@ -571,8 +572,8 @@ export default function Dashboard() {
                     </Link>
                   </Card>
 
-                  <div className={`grid grid-cols-2 ${styles.showResponsiveInner3}`}>
-                    <Card href={`/projectInquiry?type=Astrology`} className={`text-nowrap rounded-xl p-0 mr-1 ${styles.showAdminCardInner4}`}>
+                  <div className={`grid grid-cols-2 gap-1 ${styles.showResponsiveInner3}`}>
+                    <Card href={`/projectInquiry?type=Astrology`} className={`w-full text-nowrap rounded-xl p-0 mr-1 ${styles.showAdminCardInner4}`}>
                       <div>
                         <img
                           src="../../../img/astrology.png"
@@ -589,7 +590,7 @@ export default function Dashboard() {
                         </p>
                       </div>
                     </Card>
-                    <Card href={`/projectInquiry?type=ContactUs`} className={`text-nowrap rounded-xl p-0 mr-1 ${styles.showAdminCardInner4}`}>
+                    <Card href={`/projectInquiry?type=ContactUs`} className={`w-full text-nowrap rounded-xl p-0 mr-1 ${styles.showAdminCardInner4}`}>
                       <div>
                         <img
                           src="../../../img/operator.png"
@@ -606,7 +607,7 @@ export default function Dashboard() {
                         </p>
                       </div>
                     </Card>
-                    <Card href={`/projectInquiry?type=Property`} className={`text-nowrap rounded-xl mr-1 mb-1 p-0 ${styles.showAdminCardInner4}`}>
+                    <Card href={`/projectInquiry?type=Property`} className={`text-nowrap rounded-xl mb-1 p-0 ${styles.showAdminCardInner4}`}>
                       <div>
                         <img
                           src="../../../img/town.png"
@@ -623,7 +624,7 @@ export default function Dashboard() {
                         </p>
                       </div>
                     </Card>
-                    <Card href={`/projectInquiry?type=Project`} className={`text-nowrap rounded-xl p-0 mr-1 mb-1 ${styles.showAdminCardInner4}`}>
+                    <Card href={`/projectInquiry?type=Project`} className={`w-full text-nowrap rounded-xl p-0 mr-1 mb-1 ${styles.showAdminCardInner4}`}>
                       <div>
                         <img
                           src="../../../img/town.png"
@@ -644,8 +645,8 @@ export default function Dashboard() {
                 </div>
                 :
                 <>
-                  <div className={`flex ${styles.showResponsive4}`}>
-                    <Card className={`text-nowrap rounded-xl p-0 ${styles.showBuilderCard4} mr-1 mb-3`}>
+                  <div className={`w-full flex ${styles.showResponsive4}`}>
+                    <Card className={` text-nowrap rounded-xl p-0 ${styles.showBuilderCard4} mr-1 mb-3`}>
                       <Link href="/projectInquiry">
                         <div className="text-start">
                           <h2
@@ -681,7 +682,7 @@ export default function Dashboard() {
                       </Link>
                     </Card>
 
-                    <div className={`grid grid-cols-2  ${styles.showResponsiveInner3}`}>
+                    <div className={`w-full grid grid-cols-2  ${styles.showResponsiveInner3}`}>
                       <Card href={`/projectInquiry?type=Astrology`} className={`text-nowrap rounded-xl pr-2 mr-1 ${styles.showBuilderCardInner4}`}>
                         <div>
                           <img
@@ -759,6 +760,8 @@ export default function Dashboard() {
             <LoadingImg />
           )}
         </div >
+        </div>
+        
         <div className={`${styles.SecondContainer}`}>
           <div className={`${styles.graphSize}`}>
             <canvas ref={chartRef} />

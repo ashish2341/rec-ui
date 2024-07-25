@@ -3,10 +3,17 @@ import { useState, useRef, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { ImageString } from "@/api-functions/auth/authAction";
 import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
-import NextButton from "@/components/common/admin/nextButton/nextButton"
+import NextButton from "@/components/common/admin/nextButton/nextButton";
 import { API_BASE_URL_FOR_MASTER, imgApiUrl } from "@/utils/constants";
+import { UpdateStepsStatus, findNextStep } from "@/utils/commonHelperFn";
 
-export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
+export default function PropertyImagesForm({
+  valueForNext,
+  valueForNextPage,
+  setFormPageNumberArray,
+  setPageStatusArray,
+  pageStatusData,
+}) {
   const [image, setImage] = useState([]);
   const [video, setVideo] = useState([]);
   const imageInputRef = useRef(null);
@@ -19,7 +26,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("propertyData")
     );
-  
+
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
       setImage(sessionStoragePropertyData?.Images || "");
@@ -30,6 +37,10 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
   const SubmitForm = async () => {
     if (image.length == 0) {
       toast.error("Image is required.");
+      return false;
+    }
+    if (image.length < 5) {
+      toast.error("Atleast 5 Image is required.");
       return false;
     }
 
@@ -44,12 +55,28 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
       );
       const newProjectData = { ...localStorageData, ...mediaData };
       sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
-      valueForNext(valueForNextPage + 1);
+      setFormPageNumberArray((prev) => {
+        // Check if the newPage already exists in the array
+        if (!prev.includes("Property Images")) {
+          return [...prev, "Property Images"];
+        }
+        return prev; // If it already exists, return the previous state
+      });
+      setPageStatusArray(UpdateStepsStatus(pageStatusData, valueForNextPage));
+      const finalIndexValue = findNextStep(pageStatusData, valueForNextPage);
+      if (
+        finalIndexValue.finalIndex <= valueForNextPage &&
+        finalIndexValue.currentStepStatus === false
+      ) {
+        valueForNext(finalIndexValue.finalIndex + 1);
+      } else {
+        valueForNext(finalIndexValue.finalIndex);
+      }
+      // valueForNext(valueForNextPage + 1);
     }
   };
 
   const handleImageInputChange = async (event) => {
-   
     const acceptedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
 
     const files = Array.from(event.target.files);
@@ -133,7 +160,6 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
   };
 
   const handleVideoInputChange = async (event) => {
-
     const acceptedFileTypes = [
       "video/mp4",
       "video/webm",
@@ -142,7 +168,6 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
     ];
 
     const files = Array.from(event.target.files);
-  
 
     // Check file types
     const invalidFiles = files.filter(
@@ -163,7 +188,6 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
       // Map each file to its corresponding image string asynchronously
       await Promise.all(
         files.map(async (item) => {
-         
           const formData = new FormData();
           formData.append("profilePic", item);
 
@@ -227,20 +251,20 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
     // Step 1: Retrieve the object from local storage
 
     const storedData = JSON.parse(sessionStorage.getItem("propertyData"));
-    if(storedData?.Videos){
+    if (storedData?.Videos) {
       const videoArray = storedData?.Videos;
       if (video?.length == videoArray?.length) {
         if (videoArray.length > 0) {
           // // Step 2: Modify the array by removing the desired item
           videoArray.splice(index, 1);
-  
+
           // // Step 3: Update the object in local storage with the modified array
           const updatedData = { ...storedData, Videos: videoArray };
           sessionStorage.setItem("propertyData", JSON.stringify(updatedData));
         }
       }
     }
-   
+
     setVideo(newArray);
 
     if (newArray.length == 0) {
@@ -259,7 +283,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
     // Step 1: Retrieve the object from local storage
 
     const storedData = JSON.parse(sessionStorage.getItem("propertyData"));
-    if(storedData?.Images){
+    if (storedData?.Images) {
       const imageArray = storedData?.Images;
       if (image?.length == imageArray?.length) {
         if (imageArray.length > 0) {
@@ -271,7 +295,6 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
         }
       }
     }
-   
 
     setImage(newArray);
     if (newArray.length == 0) {
@@ -287,7 +310,6 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
   return (
     <>
       <div>
-       
         <form>
           <div className="grid gap-4 mb-4 sm:grid-cols-1">
             <div className="border border-gray-300 p-3 rounded-lg">
@@ -321,7 +343,7 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
                     {image.map((imageUrl, index) => (
                       <div key={index} className="mr-4 mb-4 relative ">
                         <img
-                         src={`${imgApiUrl}/${imageUrl}`}
+                          src={`${imgApiUrl}/${imageUrl}`}
                           alt=""
                           className="h-20 w-20 object-cover m-2 mt-5 border border-black rounded-lg "
                         />
@@ -379,7 +401,10 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
                           controls
                           className="h-48 w-64 border border-black rounded-lg"
                         >
-                          <source  src={`${imgApiUrl}/${video}`} type="video/mp4" />
+                          <source
+                            src={`${imgApiUrl}/${video}`}
+                            type="video/mp4"
+                          />
                         </video>
                         <button
                           className="absolute top-0 right-0 p-1"
@@ -399,9 +424,8 @@ export default function PropertyImagesForm({ valueForNext, valueForNextPage }) {
           </div>
         </form>
         {imageLoader === false && videoLoader === false && (
-         <NextButton onSubmit={SubmitForm} butonSubName={"add Faq Details"}/>
+          <NextButton onSubmit={SubmitForm} butonSubName={"add Faq Details"} />
         )}
-
       </div>
     </>
   );

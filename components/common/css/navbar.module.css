@@ -19,7 +19,7 @@
 @media screen and (min-width: 320px) and (max-width: 360px) {
   .recLogo {
     height: 3rem !important;
-    width: 4rem !important;
+    width: 3rem !important;
     margin-right: 1rem !important;
   }
   .loginBtn {

@@ -34,6 +34,7 @@ const page="Property"
     useState();
   const [loading, setLoading] = useState(false);
   const [isRender, setIsRender] = useState(false);
+  const [builderId,setBuilderId]=useState("")
   const [oldPropertyData, setOldPropertyData] = useState("");
   const [editedItemsArray, setEditedItemsArray] = useState([]);
   const [oldEditedItemArray, setOldEditedItemArray] = useState([]);
@@ -144,6 +145,7 @@ const page="Property"
           );
           setOldEditedItemArray(data?.data.EditedItems);
           setOldPropertyData(data?.data);
+          setBuilderId(data?.data.Builder)
           setLoading(false);
           setIsRender(true);
         } else {
@@ -156,7 +158,6 @@ const page="Property"
 
     fetchData();
   }, [params]);
-
   const handleAmenitiesChange = (amenities) => {
     setSelectedAmenities(amenities);
   };
@@ -639,7 +640,10 @@ const page="Property"
           finalizePropertyData,
           formatedPropertyData
         );
-        finalizePropertyData.EditedItems = editedKeys;
+        finalizePropertyData.EditedItems = editedKeys,
+        finalizePropertyData.Builder= builderId?._id
+        ? builderId?._id
+        : null
       }
 
       const propertyId = params?.params?.editProperty;

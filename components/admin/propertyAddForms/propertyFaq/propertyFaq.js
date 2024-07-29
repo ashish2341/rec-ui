@@ -40,7 +40,7 @@ export default function PropertyFaqForm({
     },
   ];
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [faqFields, setFaqFields] = useState(initialFieldState);
+  const [faqFields, setFaqFields] = useState("");
   const [percentageValue, setPercentageValue] = useState(0);
   const [btnShowonInputChange, setBtnShowonInputChange] = useState(false);
   useEffect(() => {
@@ -74,13 +74,19 @@ export default function PropertyFaqForm({
       toast.error("Question and Answer are required");
       return false;
     }
-    setFaqFields([...faqFields, initialFieldState]);
+    setFaqFields((prev) => [...prev, { Question: "", Answer: "" }]);
+    if(mainBackPageValue ===  1){
+      valueForBack(mainBackPageValue - 1);
+    }
   };
 
   const handleDelete = (index) => {
     const updatedFields = [...faqFields];
     updatedFields.splice(index, 1);
     setFaqFields(updatedFields);
+    if(mainBackPageValue ===  1){
+      valueForBack(mainBackPageValue - 1);
+    }
   };
 
   const SubmitForm = () => {

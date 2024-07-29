@@ -91,7 +91,7 @@ export default function PossessionDetailsPage({
     }
   }, []);
   const handleDocumentChange = async (event) => {
-    setDocumentLoader(true);
+  
     const acceptedFileTypes = [
       "application/pdf",
       "application/doc",
@@ -106,12 +106,14 @@ export default function PossessionDetailsPage({
     // Check file type
     if (!acceptedFileTypes.includes(file.type)) {
       toast.error(
-        "Invalid image type. Please upload only JPEG or PNG or JPG files."
+        "Invalid image type. Please upload only Pdf or doc or docx or txt files."
       );
       if (brochureInputRef.current) {
         brochureInputRef.current.value = "";
       }
+     
     } else {
+      setDocumentLoader(true);
       let res = await ImageString(formData);
       if (res?.successMessage) {
         setBrochure(res?.successMessage?.imageUrl);

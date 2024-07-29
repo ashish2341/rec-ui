@@ -314,7 +314,9 @@ export default function PropertyImagesForm({
           <div className="grid gap-4 mb-4 sm:grid-cols-1">
             <div className="border border-gray-300 p-3 rounded-lg">
               <h3 className="block mb-2 text-lg font-lg underline font-bold text-gray-500 dark:text-white">
-                Property Images
+                Property Images <span className="text-xs font-bold ml-1 pb-2 text-red-600">
+                  (Atleast 5 images required)
+                </span>
               </h3>
               <label
                 htmlFor="imageInput"

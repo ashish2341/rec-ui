@@ -39,10 +39,10 @@ export default function AmenityPage({
   }, []);
 
   const SubmitForm = () => {
-    if (selectedAmenities.length == 0) {
-      toast.error("Please select a Amenity.");
-      return false;
-    }
+    // if (selectedAmenities.length == 0) {
+    //   toast.error("Please select a Amenity.");
+    //   return false;
+    // }
     const AmenityData = {
       Aminities: selectedAmenities,
     };

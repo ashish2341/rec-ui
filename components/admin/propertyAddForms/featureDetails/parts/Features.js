@@ -47,10 +47,10 @@ export default function FeaturePage({
     });
   };
   const SubmitForm = () => {
-    if (selectedFeatures.length == 0) {
-      toast.error("Please select a Feature.");
-      return false;
-    }
+    // if (selectedFeatures.length == 0) {
+    //   toast.error("Please select a Feature.");
+    //   return false;
+    // }
     const featureData = {
       Features: selectedFeatures,
     };

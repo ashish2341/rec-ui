@@ -157,25 +157,32 @@ export default function Home() {
 
   const ShowPopularProperties = () => {
     return propertyByPopularProperty?.data?.map((item, index) => (
-      <div key={index} className={` ${styles.cardBoxPopularTop}`}>
-        <img
-          className={` ${styles.cardImgTop}`}
-          src={
-            !item.Images[0].URL.includes("https")
-              ? `${imgApiUrl}/${item.Images[0].URL}`
-              : item.Images[0].URL
-          }
-          // src={`${imgApiUrl}/${item.Images[0].URL}`}
-          alt="Nothing"
-        ></img>
-        <Link href={`/propertyDetail/${item._id}`}>
+      <Link key={index} href={`/propertyDetail/${item._id}`}>
+        <div className={`cursor-pointer ${styles.cardBoxPopularTop}`}>
+          <img
+            className={` ${styles.cardImgTop}`}
+            src={
+              !item.Images[0].URL.includes("https")
+                ? `${imgApiUrl}/${item.Images[0].URL}`
+                : item.Images[0].URL
+            }
+            // src={`${imgApiUrl}/${item.Images[0].URL}`}
+            alt="Nothing"
+          ></img>
+
           <div className={` ${styles.cardImgBottom}`}>
             <div className={` ${styles.populerPropertiesLocationMain} flex`}>
               <i className="bi bi-geo-alt-fill"></i>
-              <p className={`text-gray-700 ml-1`}>{item?.Area?.Area}</p>
+         
+                <p className={`text-gray-700 ml-1`}>{item?.Area?.Area}</p> 
+               
+             
             </div>
+
             <div className="flex justify-between">
-              <h2 className={` ${styles.populerPropertiesBoxHead}`}>
+              <h2
+                className={`text-black font-bold ${styles.populerPropertiesBoxHead}`}
+              >
                 {item.Title}
               </h2>
               {/* {item.Facing ? (
@@ -198,23 +205,22 @@ export default function Home() {
               </p> */}
             </div>
             <div className="flex justify-between mt-2">
-              <p
-                className={`font-semibold text-sm text-gray-500 ${styles.populerPropertiesBoxPrice}`}
-              >
-                {item?.ProeprtyType}
-              </p>
+              
+              <p className={`text-gray-500 text-sm font-semibold`}>{ item?.PropertySubtype?.Name}</p>
+
               <Link href={`/propertyDetail/${item._id}`}>
                 <button
-                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  className={`${styles.popularPropertyMoreBtn} text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
                   type="button"
                 >
-                  More Details
+                  <span className={`${styles.btnNameforLap}`}> More Details</span>
+                  <span className={`${styles.btnNameforTab}`}> More </span>
                 </button>
               </Link>
             </div>
           </div>
-        </Link>
-      </div>
+        </div>
+      </Link>
     ));
   };
 
@@ -225,7 +231,7 @@ export default function Home() {
         className={`${styles.testimonialcontent} flex justify-center`}
       >
         <div className={`${styles.testimonialLeft}`}>
-          <div className={`${styles.testimonialLeftBoxDetails} text-center`}>
+          <div className={`${styles.testimonialLeftBoxDetails}  text-center`}>
             {item.Image ? (
               <img
                 className={` ${styles.testimonialImg}  mb-3`}
@@ -235,13 +241,13 @@ export default function Home() {
             ) : (
               <img
                 className={` ${styles.testimonialImg}  mb-3`}
-                src="../img/no-image@2x.png"
+                src="https://www.pinclipart.com/picdir/big/157-1578186_user-profile-default-image-png-clipart.png"
               />
             )}
             <h2 className={`${styles.testimonialLeftHead} justify-center`}>
               {item.MemberName}
             </h2>
-            <div className="flex justify-center">
+            <div className={`${styles.testimonialLeftTextDiv} overflow-y-auto flex justify-center`}>
               <p className={`${styles.testimonialLeftText}`}>
                 {item.Description}
               </p>
@@ -802,9 +808,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <div
-          className={` ${styles.populerPropertiesBoxMain} flex flex-wrap mt-4 `}
-        >
+        <div className={` ${styles.populerPropertiesBoxMain} flex  mt-4 `}>
           {propertyByPopularProperty ? (
             propertyByPopularProperty?.data?.length > 0 ? (
               <MultiCarousel UI={ShowPopularProperties} />

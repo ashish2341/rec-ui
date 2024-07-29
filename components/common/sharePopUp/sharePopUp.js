@@ -40,7 +40,7 @@ export function SharePopUp({ isOpenvalue, setValueDynamicState,propertyIdForUrl 
           </h1>
           </Modal.Header>
         <Modal.Body className="p-3">
-          <div className="flex items-center p-3 md:p-5  border-gray-200 rounded-b dark:border-gray-600">
+          <div className="flex flex-wrap justify-center sitems-center p-3 md:p-5  border-gray-200 rounded-b dark:border-gray-600">
           <button
             onClick={copyURL}
               type="button"

@@ -550,7 +550,9 @@ export default function AreaDetailPage({ setPropertyPageValue,editedKeysfromMain
           <>
             <h2 className="block mb-2 text-xl mt-12 font-lg underline font-bold text-gray-500 dark:text-white">
               {" "}
-              Fitting Details
+              Fitting Details <span className="text-xs font-bold ml-1 pb-2 text-red-600">
+                  (Optional)
+                </span>
             </h2>
             <div className="grid gap-4 mb-4 sm:grid-cols-2">
               <div>

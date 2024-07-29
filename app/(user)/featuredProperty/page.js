@@ -292,7 +292,7 @@ const FeaturedProperty = (params) => {
       <div className={`${styles.forSticky}`}>
         <div className={`${styles.heroSection} heroSection `}>
           <div className="text-sm font-medium text-center text-black-500 border-black-900 dark:text-gray-400 dark:border-gray-700">
-            <ul className="flex flex-wrap -mb-px ml-3">
+            <ul className="flex overflow-x-auto -mb-px ml-3">
            
               {/* Facing */}
               <li className="me-2 mt-3">
@@ -376,7 +376,7 @@ const FeaturedProperty = (params) => {
                   className="text-black bg-white border border-black hover:bg-white-800 focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
                   type="button"
                 >
-                  Property Type
+                   Type
                   <svg
                     className="w-2.5 h-2.5 ms-3"
                     aria-hidden="true"
@@ -523,7 +523,7 @@ const FeaturedProperty = (params) => {
                   className="text-black bg-white border border-black hover:bg-white-800 focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
                   type="button"
                 >
-                  Range Type
+                  Range 
                   <svg
                     className="w-2.5 h-2.5 ms-3"
                     aria-hidden="true"
@@ -588,7 +588,7 @@ const FeaturedProperty = (params) => {
                   className="text-black bg-white border border-black hover:bg-white-800 focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
                   type="button"
                 >
-                  Bhk Type
+                  Bhk 
                   <svg
                     className="w-2.5 h-2.5 ms-3"
                     aria-hidden="true"
@@ -661,7 +661,7 @@ const FeaturedProperty = (params) => {
                   className="text-black bg-white border border-black hover:bg-white-800 focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
                   type="button"
                 >
-                  Property Status
+                   Status
                   <svg
                     className="w-2.5 h-2.5 ms-3"
                     aria-hidden="true"
@@ -735,7 +735,7 @@ const FeaturedProperty = (params) => {
                   className="text-black bg-white border border-black hover:bg-white-800 focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
                   type="button"
                 >
-                  Possession Status
+                  Possession 
                   <svg
                     className="w-2.5 h-2.5 ms-3"
                     aria-hidden="true"
@@ -810,7 +810,7 @@ const FeaturedProperty = (params) => {
                   className="text-black bg-white border border-black hover:bg-white-800 focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
                   type="button"
                 >
-                  More Filter
+                  More 
                   <svg
                     className="w-2.5 h-2.5 ms-3"
                     aria-hidden="true"

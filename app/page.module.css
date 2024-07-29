@@ -136,6 +136,9 @@
   color: #2a4ac8;
   align-self: center;
 }
+.btnNameforTab{
+  display: none;
+}
 @media screen and (max-width: 320px) {
   .outerCampass {
     height: 88%;
@@ -480,6 +483,7 @@
   font-size: 1rem;
   font-weight: 600;
   margin-top: 0.4rem;
+  text-transform: capitalize;
 }
 .populerPropertiesBoxText {
   font-size: 0.75rem;
@@ -618,6 +622,10 @@
   margin-top: 2rem;
   background-color: #6592d3;
   display: flex !important;
+  justify-content: space-between;
+  /* padding-right: 1rem; */
+  margin-right: 1rem;
+  border-radius: 10px;
 }
 .testimonialLeft {
   display: flex !important;
@@ -627,20 +635,36 @@
   align-items: center;
   flex-direction: column;
 }
+.testimonialLeftBoxDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+ height: 100%; /* Adjust based on your container's height */
+  width: 100%;  /* Adjust based on your container's width */
+}
 .testimonialImg {
-  margin-left: 4.7rem;
+  /* margin-left: 4.7rem; */
   /* height: 8rem; */
-  width: 50%;
+  width: 30%;
   aspect-ratio: 2/2;
 }
 
 .testimonialLeftHead {
-  font-size: 1.5rem;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: bold;
   margin-bottom: 1rem;
+  text-transform: capitalize;
+}
+.testimonialLeftTextDiv{
+  height: 150px;
+  
 }
 .testimonialLeftText {
+  font-size: 0.6rem;
   margin-bottom: 1rem;
+  text-transform: capitalize;
 }
 .testimoniaText {
   font-size: 0.75rem;
@@ -704,6 +728,7 @@
 
 .cardBoxPopularTop {
   margin-right: 1rem;
+  width: 100%;
 }
 
 .LoaderHeight {
@@ -734,7 +759,9 @@
     flex-wrap: nowrap !important;
     overflow-x: scroll;
     width: 100%;
+   
   }
+
   .campassMain {
     width: 35% !important;
   }
@@ -821,7 +848,20 @@
     justify-content: center;
     margin-top: 3rem;
   }
+ 
 
+}
+@media screen and  (max-width: 769px) {
+  
+  .cardBoxPopularTop{
+    padding-right: 1rem;
+  }
+  .btnNameforLap{
+    display: none;
+  }
+  .btnNameforTab{
+    display: block;
+  }
 }
 @media screen and (min-width: 700px) and (max-width: 1023px) {
   .campassMain {
@@ -901,6 +941,7 @@
   .campassMain {
     width: 42% !important;
   }
+
 }
 
 @media screen and (max-width: 750px) {
@@ -978,9 +1019,9 @@
   .campassRightBoxMain {
     justify-content: center;
   }
-  .campassRightBox {
-    width: 9rem;
-  }
+  /* .campassRightBox {
+    width: 13rem;
+  } */
   .propertiesByAreaMain {
     margin-left: 1rem;
     margin-right: 1rem;
@@ -1081,9 +1122,9 @@
     display: flex;
     flex-direction: column;
   }
-  .campassMain {
-    /* margin-right: 2rem; */
-  }
+  /* .campassMain {
+    margin-right: 2rem;
+  } */
 }
 
 
@@ -1131,9 +1172,27 @@
 }
 @media screen and (max-width: 426px) {
   .campassMain {
-    width: 100% !important;
-    margin-right: 1rem;
+ display: none;
   }
+  .campassMainRight {
+    width: 90% !important;
+  }
+  .campassRightBoxMain {
+    justify-content: flex-start;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    width: 100%;
+    /* animation: scroll 1s linear infinite; */
+  }
+  /* @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-100% + 100vw));
+    }
+  } */
+ 
   .banner {
     height: 24rem !important;
   }
@@ -1168,5 +1227,40 @@
  
   .crousalItemSearchMain{
     top: 23rem;
+  }
+}
+@media screen and  (max-width: 426px) {
+  .cardBoxPopularTop{
+    padding-right: 1rem;
+  }
+  .populerPropertiesBoxHead{
+    font-size: 0.8rem;
+
+  }
+  .popularPropertyMoreBtn{
+    display: none;
+  }
+  .populerPropertiesBoxPrice{
+    font-size: 0.7rem;
+    font-weight: bold;
+  }
+  .cardImgTop{
+height: 9rem;
+  }
+  .btnNameforTab{
+    display: none;
+  }
+}
+@media screen and  (max-width: 321px) {
+  .populerPropertiesBoxHead{
+    font-size: 0.6rem;
+
+  }
+  .cardImgTop{
+    height: 7rem;
+      }
+  .populerPropertiesBoxPrice{
+    font-size: 0.5rem;
+    font-weight: bold;
   }
 }

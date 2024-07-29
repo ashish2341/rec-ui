@@ -92,7 +92,7 @@ export default function PossessionDetailsPage({
     // Check file type
     if (!acceptedFileTypes.includes(file.type)) {
       toast.error(
-        "Invalid image type. Please upload only JPEG or PNG or JPG files."
+        "Invalid image type. Please upload only Pdf or doc or docx or txt files."
       );
       if (brochureInputRef.current) {
         brochureInputRef.current.value = "";

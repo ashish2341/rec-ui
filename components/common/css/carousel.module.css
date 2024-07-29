@@ -84,6 +84,16 @@
   .customLeftbutton:hover {
     background-color: #007bff  ; 
   }
+  @media screen and (max-width: 426px) {
+    .customCarouselCenter{
+     
+      display: none;
+    }
+    .customCarousel{
+      width: 100%;
+      /* / display: flex; / */
+    }
+  }
   @media screen and (max-width: 1025px) {
     .customCarousel{
       width: 90%;

@@ -666,12 +666,15 @@ const PropertyDetail = ({ params }) => {
                 Overview
               </Link>
             </li>
-
-            <li className="me-2">
-              <Link href="#amenities" className="nonActiveBar">
-                Amenities
-              </Link>
-            </li>
+            {listPropertiesData &&
+            (listPropertiesData?.Aminities.length > 0 ||
+              listPropertiesData?.Features.length > 0) ? (
+              <li className="me-2">
+                <Link href="#amenities" className="nonActiveBar">
+                  Amenities
+                </Link>
+              </li>
+            ) : null}
 
             {/*
             <li className="me-2">
@@ -979,19 +982,38 @@ const PropertyDetail = ({ params }) => {
                         </button>
                       </li>
                     )}
-                    <li className="me-2" role="presentation">
-                      <button
-                        className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-                        id="dashboard-tab"
-                        data-tabs-target="#dashboard"
-                        type="button"
-                        role="tab"
-                        aria-controls="dashboard"
-                        aria-selected="false"
+                    {listPropertiesData?.Brochure ? (
+                      <li className="me-2" role="presentation">
+                        <button
+                          className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          id="dashboard-tab"
+                          data-tabs-target="#dashboard"
+                          type="button"
+                          role="tab"
+                          aria-controls="dashboard"
+                          aria-selected="false"
+                        >
+                          Brochure
+                        </button>
+                      </li>
+                    ) : (
+                      <li
+                        className={`${styles.displayNone}`}
+                        role="presentation"
                       >
-                        Brochure
-                      </button>
-                    </li>
+                        <button
+                          className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          id="dashboard-tab"
+                          data-tabs-target="#dashboard"
+                          type="button"
+                          role="tab"
+                          aria-controls="dashboard"
+                          aria-selected="false"
+                        >
+                          Brochure
+                        </button>
+                      </li>
+                    )}
 
                     {listPropertiesData?.PaymentPlan ? (
                       <li className="me-2" role="presentation">
@@ -1059,10 +1081,57 @@ const PropertyDetail = ({ params }) => {
                         {listPropertiesData?.PropertySubtype?.Name !==
                           "Plot" && (
                           <>
+                            {listPropertiesData?.ProeprtyType ===
+                              "Residential" && (
+                              <>
+                                <div className="">
+                                  <h1 className="font-semibold mr-2">
+                                    Bhk Type{" "}
+                                  </h1>
+                                  {listPropertiesData?.BhkType ? (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.BhkType?.Type}
+                                    </p>
+                                  ) : (
+                                    <p className="text-gray-500 font-semibold">
+                                      -
+                                    </p>
+                                  )}
+                                </div>
+                                <div className="">
+                                  <h1 className="font-semibold mr-2">
+                                    Bedroom{" "}
+                                  </h1>
+                                  {listPropertiesData?.Bedrooms ? (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.Bedrooms}
+                                    </p>
+                                  ) : (
+                                    <p className="text-gray-500 font-semibold">
+                                      -
+                                    </p>
+                                  )}
+                                </div>
+                                <div className="">
+                                  <h1 className="font-semibold mr-2">
+                                    Bathroom{" "}
+                                  </h1>
+                                  {listPropertiesData?.Bathrooms ? (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.Bathrooms}
+                                    </p>
+                                  ) : (
+                                    <p className="text-gray-500 font-semibold">
+                                      -
+                                    </p>
+                                  )}
+                                </div>
+                              </>
+                            )}
                             <div className="">
                               <h1 className="font-semibold mr-2">Fencing </h1>
                               {listPropertiesData?.Fencing === "Other" ? (
-                                <p className="text-gray-500 font-semibold">
+                                <p className="h-12 overflow-y-auto text-gray-500 font-semibold">
                                   {listPropertiesData?.CustomFencing}
                                 </p>
                               ) : (
@@ -1812,85 +1881,104 @@ const PropertyDetail = ({ params }) => {
           </div>
 
           {/* amenities */}
+          {listPropertiesData &&
+          (listPropertiesData?.Aminities.length > 0 ||
+            listPropertiesData?.Features.length > 0) ? (
+            <div
+              id="amenities"
+              className={`${styles.amenities} amenities page`}
+            >
+              <div className="amenitiesMain">
+                <h2 className={`${styles.amenitiesMainHead}`}>
+                  {listPropertiesData.Title} Amenities & Features
+                </h2>
+                <div className={`${styles.amenitiesBox}`}>
+                  <Accordion className="border-none">
+                    <AccordionPanel>
+                      <AccordionTitle>Amenities</AccordionTitle>
 
-          <div id="amenities" className={`${styles.amenities} amenities page`}>
-            <div className="amenitiesMain">
-              <h2 className={`${styles.amenitiesMainHead}`}>
-                {listPropertiesData.Title} Amenities & Features
-              </h2>
-              <div className={`${styles.amenitiesBox}`}>
-                <Accordion className="border-none">
-                  <AccordionPanel>
-                    <AccordionTitle>Amenities</AccordionTitle>
+                      <AccordionContent
+                        className={` ${styles.AccordionContent}`}
+                      >
+                        {listPropertiesData &&
+                        listPropertiesData?.Aminities.length > 0 ? (
+                          <div
+                            className={`grid gap-4 mb-4 sm:grid-cols-5 md:grid-cols-4  ${styles.AccordionContentInner}`}
+                          >
+                            {listPropertiesData?.Aminities?.map(
+                              (item, index) => (
+                                <div key={index} className=" p-4">
+                                  <img
+                                    className={`${styles.amenitiesIconBox}`}
+                                    src={
+                                      !item.Icon.includes("https")
+                                        ? `${imgApiUrl}/${item.Icon}`
+                                        : item.Icon
+                                    }
+                                    width="22"
+                                    height="22"
+                                  />
+                                  <p className="wrap text-center text-sm pt-2">
+                                    {item.Aminity}
+                                  </p>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        ) : (
+                          <h1 className={` ${styles.noDataHead}`}>
+                            No Amenities
+                          </h1>
+                        )}
+                      </AccordionContent>
+                    </AccordionPanel>
 
-                    <AccordionContent className={` ${styles.AccordionContent}`}>
-                      {listPropertiesData &&
-                      listPropertiesData?.Aminities.length > 0 ? (
-                        <div
-                          className={`grid gap-4 mb-4 sm:grid-cols-5 md:grid-cols-4  ${styles.AccordionContentInner}`}
-                        >
-                          {listPropertiesData?.Aminities?.map((item, index) => (
-                            <div key={index} className=" p-4">
-                              <img
-                                className={`${styles.amenitiesIconBox}`}
-                                src={
-                                  !item.Icon.includes("https")
-                                    ? `${imgApiUrl}/${item.Icon}`
-                                    : item.Icon
-                                }
-                                width="22"
-                                height="22"
-                              />
-                              <p className="wrap text-center text-sm pt-2">
-                                {item.Aminity}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <h1 className={` ${styles.noDataHead}`}>
-                          No Amenities
-                        </h1>
-                      )}
-                    </AccordionContent>
-                  </AccordionPanel>
+                    <AccordionPanel>
+                      <AccordionTitle>Features</AccordionTitle>
 
-                  <AccordionPanel>
-                    <AccordionTitle>Features</AccordionTitle>
-
-                    <AccordionContent className={`${styles.AccordionContent}`}>
-                      {listPropertiesData &&
-                      listPropertiesData?.Features.length > 0 ? (
-                        <div
-                          className={`grid gap-4 mb-4 sm:grid-cols-5 md:grid-cols-4  ${styles.AccordionContentInner2}`}
-                        >
-                          {listPropertiesData?.Features?.map((item, index) => (
-                            <div key={index} className="p-4 justify-between">
-                              <img
-                                className={`${styles.amenitiesIconBox}`}
-                                src={
-                                  !item.Icon.includes("https")
-                                    ? `${imgApiUrl}/${item.Icon}`
-                                    : item.Icon
-                                }
-                                width="22"
-                                height="22"
-                              />
-                              <p className="wrap text-center text-sm pt-2">
-                                {item.Feature}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <h1 className={` ${styles.noDataHead}`}>No Features</h1>
-                      )}
-                    </AccordionContent>
-                  </AccordionPanel>
-                </Accordion>
+                      <AccordionContent
+                        className={`${styles.AccordionContent}`}
+                      >
+                        {listPropertiesData &&
+                        listPropertiesData?.Features.length > 0 ? (
+                          <div
+                            className={`grid gap-4 mb-4 sm:grid-cols-5 md:grid-cols-4  ${styles.AccordionContentInner2}`}
+                          >
+                            {listPropertiesData?.Features?.map(
+                              (item, index) => (
+                                <div
+                                  key={index}
+                                  className="p-4 justify-between"
+                                >
+                                  <img
+                                    className={`${styles.amenitiesIconBox}`}
+                                    src={
+                                      !item.Icon.includes("https")
+                                        ? `${imgApiUrl}/${item.Icon}`
+                                        : item.Icon
+                                    }
+                                    width="22"
+                                    height="22"
+                                  />
+                                  <p className="wrap text-center text-sm pt-2">
+                                    {item.Feature}
+                                  </p>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        ) : (
+                          <h1 className={` ${styles.noDataHead}`}>
+                            No Features
+                          </h1>
+                        )}
+                      </AccordionContent>
+                    </AccordionPanel>
+                  </Accordion>
+                </div>
               </div>
             </div>
-          </div>
+          ) : null}
 
           {/* bank */}
           {/*

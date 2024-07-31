@@ -91,7 +91,6 @@ export default function PossessionDetailsPage({
     }
   }, []);
   const handleDocumentChange = async (event) => {
-    setDocumentLoader(true);
     const acceptedFileTypes = [
       "application/pdf",
       "application/doc",
@@ -106,12 +105,13 @@ export default function PossessionDetailsPage({
     // Check file type
     if (!acceptedFileTypes.includes(file.type)) {
       toast.error(
-        "Invalid image type. Please upload only JPEG or PNG or JPG files."
+        "Invalid image type. Please upload only Pdf or doc or docx or txt files."
       );
       if (brochureInputRef.current) {
         brochureInputRef.current.value = "";
       }
     } else {
+      setDocumentLoader(true);
       let res = await ImageString(formData);
       if (res?.successMessage) {
         setBrochure(res?.successMessage?.imageUrl);
@@ -169,7 +169,7 @@ export default function PossessionDetailsPage({
         "EditPropertyData",
         JSON.stringify(newProjectData)
       );
-     
+
       setInsidePropertyPageNameArray((prev) => {
         // Check if the newPage already exists in the array
         if (!prev.includes("Possession")) {
@@ -213,7 +213,6 @@ export default function PossessionDetailsPage({
         } else {
           valueForNextfromSix(finalIndexValue.finalIndex);
         }
-      
       }
     } else {
       toast.error("Please fill in all required fields!");
@@ -316,6 +315,12 @@ export default function PossessionDetailsPage({
     }
   };
 
+  const removeBrochure = () => {
+    setBrochure("");
+    if (brochureInputRef.current) {
+      brochureInputRef.current.value = "";
+    }
+  };
   return (
     <>
       <div className="grid gap-4 mb-4 sm:grid-cols-1">
@@ -436,6 +441,15 @@ export default function PossessionDetailsPage({
                       src={`${imgApiUrl}/${brochure}`}
                       className="h-48 w-64 border border-black rounded-lg"
                     />
+                    <button
+                      className="absolute top-0 right-0 p-1"
+                      onClick={() => removeBrochure()}
+                    >
+                      <i
+                        className="bi bi-x-circle-fill"
+                        style={{ color: "red" }}
+                      ></i>
+                    </button>
                   </div>
                 </div>
               </div>

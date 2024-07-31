@@ -56,6 +56,7 @@ const PropertyDetail = ({ params }) => {
   const [aminityData, setAminityData] = useState(false);
   const [BrochureData, setBrochureData] = useState("");
   const [PaymentPlanData, setPaymentPlanData] = useState("");
+  const [floorPlanData, setFloorPlanData] = useState("");
   const [openModal, setOpenModal] = useState(false);
 
   const [page, setPage] = useState(1);
@@ -219,23 +220,33 @@ const PropertyDetail = ({ params }) => {
       <SkeletonLoader />
     ) : (
       listDataConst?.data?.map((item, index) => (
-        <div key={index} className={`mr-3 ${styles.cardBoxPopularTop}`}>
-          <img
-            className={` ${styles.cardImgTop}`}
-            src={`${imgApiUrl}/${item.Images[0].URL}`}
-            alt="Nothing"
-          ></img>
-          <Link href={`/propertyDetail/${item._id}`}>
+        <Link key={index} href={`/propertyDetail/${item._id}`}>
+          <div className={`cursor-pointer ${styles.cardBoxPopularTop}`}>
+            <img
+              className={` ${styles.cardImgTop}`}
+              src={
+                !item.Images[0].URL.includes("https")
+                  ? `${imgApiUrl}/${item.Images[0].URL}`
+                  : item.Images[0].URL
+              }
+              // src={`${imgApiUrl}/${item.Images[0].URL}`}
+              alt="Nothing"
+            ></img>
+
             <div className={` ${styles.cardImgBottom}`}>
               <div className={` ${styles.populerPropertiesLocationMain} flex`}>
                 <i className="bi bi-geo-alt-fill"></i>
+
                 <p className={`text-gray-700 ml-1`}>{item?.Area?.Area}</p>
               </div>
+
               <div className="flex justify-between">
-                <h2 className={` ${styles.populerPropertiesBoxHead}`}>
+                <h2
+                  className={`text-black font-bold ${styles.populerPropertiesBoxHead}`}
+                >
                   {item.Title}
                 </h2>
-                {item.Facing ? (
+                {/* {item.Facing ? (
                   <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
                     {item?.Facing[0].Facing}
                   </div>
@@ -243,34 +254,92 @@ const PropertyDetail = ({ params }) => {
                   <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
                     {item.ProeprtyType}
                   </div>
-                )}
+                )} */}
               </div>
 
               <div className={`${styles.populerPropertiesBoxPriceMain}`}>
-                <p className={`${styles.populerPropertiesBoxPrice}`}>
+                <p className={`text-md ${styles.populerPropertiesBoxPrice}`}>
                   {item.TotalPrice?.DisplayValue}
                 </p>
-                <p className={`font-bold${styles.populerPropertiesBoxPrice}`}>
+                {/* <p className={`font-bold${styles.populerPropertiesBoxPrice}`}>
                   {item?.ProeprtyFor}
-                </p>
+                </p> */}
               </div>
               <div className="flex justify-between mt-2">
-                <p className={`font-bold${styles.populerPropertiesBoxPrice}`}>
-                  {item?.ProeprtyType}
+                <p className={`text-gray-500 text-sm font-semibold`}>
+                  {item?.PropertySubtype?.Name}
                 </p>
+
                 <Link href={`/propertyDetail/${item._id}`}>
                   <button
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    className={`${styles.popularPropertyMoreBtn} text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
                     type="button"
                   >
-                    More Details
+                    <span className={`${styles.btnNameforLap}`}>
+                      {" "}
+                      More Details
+                    </span>
+                    <span className={`${styles.btnNameforTab}`}> More </span>
                   </button>
                 </Link>
               </div>
             </div>
-          </Link>
-        </div>
+          </div>
+        </Link>
       ))
+      // listDataConst?.data?.map((item, index) => (
+      //   <div key={index} className={`mr-3 ${styles.cardBoxPopularTop}`}>
+      //     <img
+      //       className={` ${styles.cardImgTop}`}
+      //       src={`${imgApiUrl}/${item.Images[0].URL}`}
+      //       alt="Nothing"
+      //     ></img>
+      //     <Link href={`/propertyDetail/${item._id}`}>
+      //       <div className={` ${styles.cardImgBottom}`}>
+      //         <div className={` ${styles.populerPropertiesLocationMain} flex`}>
+      //           <i className="bi bi-geo-alt-fill"></i>
+      //           <p className={`text-gray-700 ml-1`}>{item?.Area?.Area}</p>
+      //         </div>
+      //         <div className="flex justify-between">
+      //           <h2 className={` ${styles.populerPropertiesBoxHead}`}>
+      //             {item.Title}
+      //           </h2>
+      //           {item.Facing ? (
+      //             <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
+      //               {item?.Facing[0].Facing}
+      //             </div>
+      //           ) : (
+      //             <div className={` ${styles.populerPropertiesBoxDetail} flex`}>
+      //               {item.ProeprtyType}
+      //             </div>
+      //           )}
+      //         </div>
+
+      //         <div className={`${styles.populerPropertiesBoxPriceMain}`}>
+      //           <p className={`${styles.populerPropertiesBoxPrice}`}>
+      //             {item.TotalPrice?.DisplayValue}
+      //           </p>
+      //           <p className={`font-bold${styles.populerPropertiesBoxPrice}`}>
+      //             {item?.ProeprtyFor}
+      //           </p>
+      //         </div>
+      //         <div className="flex justify-between mt-2">
+      //           <p className={`font-bold${styles.populerPropertiesBoxPrice}`}>
+      //             {item?.ProeprtyType}
+      //           </p>
+      //           <Link href={`/propertyDetail/${item._id}`}>
+      //             <button
+      //               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm sm:w-auto px-5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      //               type="button"
+      //             >
+      //               More Details
+      //             </button>
+      //           </Link>
+      //         </div>
+      //       </div>
+      //     </Link>
+      //   </div>
+      // ))
     );
   };
 
@@ -285,6 +354,7 @@ const PropertyDetail = ({ params }) => {
       setAminityData(properties?.resData?.data?.Aminities);
       setBrochureData(properties?.resData?.data?.Brochure);
       setPaymentPlanData(properties?.resData?.data?.PaymentPlan);
+      setFloorPlanData(properties?.resData?.data?.FloorPlan);
       setLoaderIsLoading(false);
       setIsLoading(false);
       toast.success(properties?.resData?.message);
@@ -332,6 +402,22 @@ const PropertyDetail = ({ params }) => {
     anchor.remove();
   };
 
+  const handleDownloadFloorPlan = () => {
+    // Construct the URL of the file
+    const fileUrl = floorPlanData; // Adjust the file path as needed
+
+    // Create an anchor element
+    const anchor = document.createElement("a");
+    anchor.href = fileUrl;
+    anchor.download = "FloorPlan.pdf";
+    anchor.rel = "noopener noreferrer"; // Set the download attribute
+
+    // Simulate a click event to trigger the download
+    anchor.click();
+
+    // Clean up
+    anchor.remove();
+  };
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -527,10 +613,9 @@ const PropertyDetail = ({ params }) => {
           </div>
           {videoData ? (
             videoData == "" ? (
-              <div className={`${styles.heroSectionNoLeftVideoMain}`}>
+              <div className={`block ${styles.heroSectionNoLeftVideoMain}`}>
                 <img
-                  className="h-full"
-                  src={`${imgApiUrl}/${listPropertiesData?.Images[0].URL}`}
+                  src={`${imgApiUrl}/${listPropertiesData?.Images[1].URL}`}
                   alt="..."
                 />
               </div>
@@ -581,11 +666,16 @@ const PropertyDetail = ({ params }) => {
                 Overview
               </Link>
             </li>
-            <li className="me-2">
-              <Link href="#amenities" className="nonActiveBar">
-                Amenities
-              </Link>
-            </li>
+            {listPropertiesData &&
+            (listPropertiesData?.Aminities.length > 0 ||
+              listPropertiesData?.Features.length > 0) ? (
+              <li className="me-2">
+                <Link href="#amenities" className="nonActiveBar">
+                  Amenities
+                </Link>
+              </li>
+            ) : null}
+
             {/*
             <li className="me-2">
               <Link href="#bank" className="nonActiveBar">
@@ -639,10 +729,7 @@ const PropertyDetail = ({ params }) => {
                     {" "}
                     <i className="bi bi-geo-alt-fill"></i>
                     <span className={`ml-1`}>
-                      <ReadMore
-                        text={listPropertiesData?.Address}
-                        maxLength={20}
-                      />
+                      {listPropertiesData?.Address}
                     </span>
                   </p>
                 </div>
@@ -712,7 +799,7 @@ const PropertyDetail = ({ params }) => {
                   <div className={`${styles.heroSectionVL}`}></div>
                   <div className={`text-center  ${styles.BottomBoxcontenet}`}>
                     <h2 className={` ${styles.heroSectionBottomBoxHead}`}>
-                      Project Type
+                      Property Type
                     </h2>
                     <p className={`${styles.heroSectionBottomBoxText}`}>
                       {listPropertiesData?.ProeprtyType}
@@ -721,10 +808,10 @@ const PropertyDetail = ({ params }) => {
                   <div className={`${styles.heroSectionVL}`}></div>
                   <div className={`text-center  ${styles.BottomBoxcontenet}`}>
                     <h2 className={`${styles.heroSectionBottomBoxHead}`}>
-                      Posession Status
+                      Property Subtype
                     </h2>
                     <p className={`${styles.heroSectionBottomBoxText}`}>
-                      {listPropertiesData?.PosessionStatus?.Possession}
+                      {listPropertiesData?.PropertySubtype?.Name}
                     </p>
                   </div>
                 </div>
@@ -743,61 +830,73 @@ const PropertyDetail = ({ params }) => {
                 {listPropertiesData.Title} General Details
               </h2>
               <div className={`${styles.GeneralDetailsBox}`}>
-                <div className="flex flex-wrap justify-between">
-                  <div>
-                    <p className={`${styles.GeneralDetailsBoxName}`}>Price:</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 gap-4 justify-center items-center">
+                  {listPropertiesData?.PropertySubtype?.Name === "Plot" && (
+                    <>
+                      <div className="mb-2">
+                        <p className={`${styles.GeneralDetailsBoxName}`}>
+                          Plot Area:
+                        </p>
+                        <p className={`${styles.GeneralDetailsBoxValue}`}>
+                          {listPropertiesData.PlotArea}{" "}
+                          {listPropertiesData.AreaUnits}
+                        </p>
+                      </div>
+                      <div className="mb-2">
+                        <p className={`${styles.GeneralDetailsBoxName}`}>
+                          Plot Length:
+                        </p>
+                        <p className={`${styles.GeneralDetailsBoxValue}`}>
+                          {listPropertiesData.PlotLength} ft.
+                        </p>
+                      </div>
+                      <div className="mb-2">
+                        <p className={`${styles.GeneralDetailsBoxName}`}>
+                          Plot Width:
+                        </p>
+                        <p className={`${styles.GeneralDetailsBoxValue}`}>
+                          {listPropertiesData.Plotwidth} ft.
+                        </p>
+                      </div>
+                    </>
+                  )}
+                  {listPropertiesData?.PropertySubtype?.Name !== "Plot" && (
+                    <>
+                      <div className="mb-2">
+                        <p className={`${styles.GeneralDetailsBoxName}`}>
+                          Built Up Area:
+                        </p>
+                        <p className={`${styles.GeneralDetailsBoxValue}`}>
+                          {listPropertiesData.BuiltUpArea}{" "}
+                          {listPropertiesData.LandAreaUnit}
+                        </p>
+                      </div>
+                      <div className="mb-2">
+                        <p className={`${styles.GeneralDetailsBoxName}`}>
+                          Floor Number:
+                        </p>
+                        <p className={`${styles.GeneralDetailsBoxValue}`}>
+                          {listPropertiesData.FloorNumber}
+                        </p>
+                      </div>
+                      <div className="mb-2">
+                        <p className={`${styles.GeneralDetailsBoxName}`}>
+                          Total Floor:
+                        </p>
+                        <p className={`${styles.GeneralDetailsBoxValue}`}>
+                          {listPropertiesData.TotalFloors}
+                        </p>
+                      </div>
+                    </>
+                  )}
+                  <div className="mb-2">
+                    <p className={`${styles.GeneralDetailsBoxName}`}>
+                      Is Negotiable:
+                    </p>
                     <p className={`${styles.GeneralDetailsBoxValue}`}>
-                      {listPropertiesData.TotalPrice?.DisplayValue}
+                      {listPropertiesData?.IsNegotiable ? "Yes" : "No"}
                     </p>
                   </div>
-                  {listPropertiesData?.LeaseYears ? (
-                    <div>
-                      <p className={`${styles.GeneralDetailsBoxName}`}>
-                        Lease Years:
-                      </p>
-                      <p className={`${styles.GeneralDetailsBoxValue}`}>
-                        {listPropertiesData.LeaseYears}
-                      </p>
-                    </div>
-                  ) : listPropertiesData.Bedrooms ? (
-                    <div>
-                      <p className={`${styles.GeneralDetailsBoxName}`}>
-                        Rooms:
-                      </p>
-                      <p className={`${styles.GeneralDetailsBoxValue}`}>
-                        {listPropertiesData.Bedrooms}
-                      </p>
-                    </div>
-                  ) : (
-                    <div>
-                      <p className={`${styles.GeneralDetailsBoxName}`}>
-                        Plot width:
-                      </p>
-                      <p className={`${styles.GeneralDetailsBoxValue}`}>
-                        {listPropertiesData.Plotwidth} ft.
-                      </p>
-                    </div>
-                  )}
-
-                  {listPropertiesData?.PlotLength ? (
-                    <div>
-                      <p className={`${styles.GeneralDetailsBoxName}`}>
-                        Plot Length:
-                      </p>
-                      <p className={`${styles.GeneralDetailsBoxValue}`}>
-                        {listPropertiesData.PlotLength} ft.
-                      </p>
-                    </div>
-                  ) : (
-                    <div>
-                      <p className={`${styles.GeneralDetailsBoxName}`}>
-                        Floor:
-                      </p>
-                      <p className={`${styles.GeneralDetailsBoxValue}`}>
-                        {listPropertiesData.TotalFloors}
-                      </p>
-                    </div>
-                  )}
                 </div>
 
                 {listPropertiesData ? (
@@ -815,19 +914,6 @@ const PropertyDetail = ({ params }) => {
                 ) : (
                   <LoadingText />
                 )}
-                {/*
-                {expanded && (
-                  <div className={`${styles.GeneralDetailsBoxMoreContent}`}>
-                    <p>{listPropertiesData?.Area?.AreaDescription}</p>
-                  </div>
-                )}
-                <div
-                  className={`${styles.GeneralDetailsBoxBottomSeeMore}`}
-                  onClick={toggleExpansion}
-                >
-                  {expanded ? "- See less" : "+ See more"}
-                </div>
-                */}
               </div>
             </div>
           </div>
@@ -863,35 +949,72 @@ const PropertyDetail = ({ params }) => {
                           : listPropertiesData?.BhkType?.Type}
                       </button>
                     </li>
-                    <li className="me-2" role="presentation">
-                      <button
-                        className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-                        id="dashboard-tab"
-                        data-tabs-target="#dashboard"
-                        type="button"
-                        role="tab"
-                        aria-controls="dashboard"
-                        aria-selected="false"
-                      >
-                        Brochure
-                      </button>
-                    </li>
-                    {listPropertiesData?.PropertySubtype?.Name ==
-                    "Plot" ? null : (
+                    {listPropertiesData?.FloorPlan ? (
                       <li className="me-2" role="presentation">
                         <button
                           className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-                          id="generall-tab"
-                          data-tabs-target="#generall"
+                          id="floorplan-tab"
+                          data-tabs-target="#floorplan"
                           type="button"
                           role="tab"
-                          aria-controls="generall"
+                          aria-controls="floorplan"
                           aria-selected="false"
                         >
-                          General
+                          Floor Plan
+                        </button>
+                      </li>
+                    ) : (
+                      <li
+                        className={`${styles.displayNone}`}
+                        role="presentation"
+                      >
+                        <button
+                          className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          id="floorplan-tab"
+                          data-tabs-target="#floorplan"
+                          type="button"
+                          role="tab"
+                          aria-controls="floorplan"
+                          aria-selected="false"
+                        >
+                          {" "}
+                          Plan
                         </button>
                       </li>
                     )}
+                    {listPropertiesData?.Brochure ? (
+                      <li className="me-2" role="presentation">
+                        <button
+                          className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          id="dashboard-tab"
+                          data-tabs-target="#dashboard"
+                          type="button"
+                          role="tab"
+                          aria-controls="dashboard"
+                          aria-selected="false"
+                        >
+                          Brochure
+                        </button>
+                      </li>
+                    ) : (
+                      <li
+                        className={`${styles.displayNone}`}
+                        role="presentation"
+                      >
+                        <button
+                          className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          id="dashboard-tab"
+                          data-tabs-target="#dashboard"
+                          type="button"
+                          role="tab"
+                          aria-controls="dashboard"
+                          aria-selected="false"
+                        >
+                          Brochure
+                        </button>
+                      </li>
+                    )}
+
                     {listPropertiesData?.PaymentPlan ? (
                       <li className="me-2" role="presentation">
                         <button
@@ -924,9 +1047,27 @@ const PropertyDetail = ({ params }) => {
                         </button>
                       </li>
                     )}
+
+                    {listPropertiesData?.ProeprtyType ===
+                    "Residential" ? null : (
+                      <li className="me-2" role="presentation">
+                        <button
+                          className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                          id="generall-tab"
+                          data-tabs-target="#generall"
+                          type="button"
+                          role="tab"
+                          aria-controls="generall"
+                          aria-selected="false"
+                        >
+                          Facilities
+                        </button>
+                      </li>
+                    )}
                   </ul>
                 </div>
                 <div id="default-tab-content">
+                  {/* profile */}
                   <div
                     className="hidden p-4 rounded-lg dark:bg-gray-800"
                     id="profile"
@@ -935,170 +1076,288 @@ const PropertyDetail = ({ params }) => {
                   >
                     {listPropertiesData ? (
                       <div
-                        className={`flex justify-between ${styles.configureFlex}`}
+                        className={`${styles.generalContent} grid md:grid-cols-2 gap-4 justify-center items-center`}
                       >
-                        <div className={`${styles.configureFlexInner}`}>
-                          {listPropertiesData?.ProeprtyType == "Commercial" ? (
-                            <ol className={`${styles.configureOl}`}>
-                              <p className={`${styles.configureLiHead}`}>
-                                Legend
-                              </p>
-                              {listPropertiesData.CarpetArea ? (
-                                <li>
-                                  {" "}
-                                  {listPropertiesData.CarpetArea} Carpet Area
-                                </li>
-                              ) : (
-                                <li>{listPropertiesData.LocationHub}</li>
-                              )}
-                              {listPropertiesData.EntranceWidth ? (
-                                <li>
-                                  {listPropertiesData.EntranceWidth} Entrance
-                                  Width
-                                </li>
-                              ) : (
-                                <li>
-                                  {listPropertiesData.ServiceLifts} Service
-                                  Lifts
-                                </li>
-                              )}
-                              {listPropertiesData.CellingHeight ? (
-                                <li>
-                                  {" "}
-                                  {listPropertiesData.CellingHeight} Celling
-                                  Height
-                                </li>
-                              ) : (
-                                <li>
-                                  {listPropertiesData.BuiltUpArea} BuiltUp Area
-                                </li>
-                              )}
-                              {listPropertiesData.PrivateParking ? (
-                                <li>
-                                  {" "}
-                                  {listPropertiesData.PrivateParking} Private
-                                  Parking
-                                </li>
-                              ) : null}
-                              {listPropertiesData.PublicParking ? (
-                                <li>
-                                  {" "}
-                                  {listPropertiesData.PublicParking} Public
-                                  Parking
-                                </li>
-                              ) : null}
-                            </ol>
-                          ) : (
-                            <ol className={`${styles.configureOl}`}>
-                              <p className={`${styles.configureLiHead}`}>
-                                Legend
-                              </p>
-                              {listPropertiesData.BhkType ? (
-                                <li>{listPropertiesData.BhkType.Type}</li>
-                              ) : (
-                                <li>
-                                  {listPropertiesData.PlotLength} ft. Plot
-                                  Length
-                                </li>
-                              )}
-                              {listPropertiesData.Bathrooms ? (
-                                <li>
-                                  {listPropertiesData.Bathrooms} Bathrooms
-                                </li>
-                              ) : (
-                                <li>
-                                  {" "}
-                                  {listPropertiesData.Plotwidth} ft. Plot Width
-                                </li>
-                              )}
-                              {listPropertiesData.Bedrooms ? (
-                                <li>{listPropertiesData.Bedrooms} Bedrooms</li>
-                              ) : (
-                                <li>
-                                  {" "}
-                                  {listPropertiesData.PlotArea} sq.ft. Plot Area
-                                </li>
-                              )}
-                            </ol>
-                          )}
-                        </div>
-
-                        {isImage(listPropertiesData.FloorPlan) ? (
+                        {listPropertiesData?.PropertySubtype?.Name !==
+                          "Plot" && (
                           <>
-                            <div className={`${styles.configureImg}`}>
-                              {" "}
-                              <img
-                                src={`${imgApiUrl}/${listPropertiesData.FloorPlan}`}
-                                className="h-48 w-64 border border-black rounded-lg"
-                                alt="Selected Floor Plan"
-                              />
+                            {listPropertiesData?.ProeprtyType ===
+                              "Residential" && (
+                              <>
+                                <div className="">
+                                  <h1 className="font-semibold mr-2">
+                                    Bhk Type{" "}
+                                  </h1>
+                                  {listPropertiesData?.BhkType ? (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.BhkType?.Type}
+                                    </p>
+                                  ) : (
+                                    <p className="text-gray-500 font-semibold">
+                                      -
+                                    </p>
+                                  )}
+                                </div>
+                                <div className="">
+                                  <h1 className="font-semibold mr-2">
+                                    Bedroom{" "}
+                                  </h1>
+                                  {listPropertiesData?.Bedrooms ? (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.Bedrooms}
+                                    </p>
+                                  ) : (
+                                    <p className="text-gray-500 font-semibold">
+                                      -
+                                    </p>
+                                  )}
+                                </div>
+                                <div className="">
+                                  <h1 className="font-semibold mr-2">
+                                    Bathroom{" "}
+                                  </h1>
+                                  {listPropertiesData?.Bathrooms ? (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.Bathrooms}
+                                    </p>
+                                  ) : (
+                                    <p className="text-gray-500 font-semibold">
+                                      -
+                                    </p>
+                                  )}
+                                </div>
+                              </>
+                            )}
+                            <div className="">
+                              <h1 className="font-semibold mr-2">Fencing </h1>
+                              {listPropertiesData?.Fencing === "Other" ? (
+                                <p className="h-12 overflow-y-auto text-gray-500 font-semibold">
+                                  {listPropertiesData?.CustomFencing}
+                                </p>
+                              ) : (
+                                <p className="text-gray-500 font-semibold">
+                                  {listPropertiesData?.Fencing}
+                                </p>
+                              )}
                             </div>
+                            <div className="">
+                              <h1 className="font-semibold mr-2">Flooring</h1>
+                              {listPropertiesData?.Flooring === "Other" ? (
+                                <p className="text-gray-500 font-semibold">
+                                  {listPropertiesData?.CustomFlooring}
+                                </p>
+                              ) : (
+                                <p className="text-gray-500 font-semibold">
+                                  {listPropertiesData?.Flooring}
+                                </p>
+                              )}
+                            </div>
+
+                            {listPropertiesData?.PropertySubtype?.Name ===
+                              "Office" &&
+                              listPropertiesData?.WallType && (
+                                <div className="">
+                                  <h1 className="font-semibold mr-2">
+                                    Wall Type
+                                  </h1>
+                                  {listPropertiesData?.WallType === "Other" ? (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.CustomWallType}
+                                    </p>
+                                  ) : (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.WallType}
+                                    </p>
+                                  )}
+                                </div>
+                              )}
+
+                            {(listPropertiesData?.PropertySubtype?.Name ===
+                              "Office" ||
+                              listPropertiesData?.PropertySubtype?.Name ===
+                                "Warehouse") &&
+                              listPropertiesData?.ZoneType && (
+                                <div className="">
+                                  <h1 className="font-semibold mr-2">
+                                    Zone Type
+                                  </h1>
+                                  {listPropertiesData?.ZoneType === "Others" ? (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.CustomZoneType}
+                                    </p>
+                                  ) : (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.ZoneType}
+                                    </p>
+                                  )}
+                                </div>
+                              )}
+
+                            {(listPropertiesData?.PropertySubtype?.Name ===
+                              "Retail Shop" ||
+                              listPropertiesData?.PropertySubtype?.Name ===
+                                "Showroom") &&
+                              listPropertiesData?.SuitableFor && (
+                                <div className="">
+                                  <h1 className="font-semibold mr-2">
+                                    Suitable for
+                                  </h1>
+                                  {listPropertiesData?.SuitableFor ===
+                                  "Others" ? (
+                                    <p>{listPropertiesData?.CustomSuitable}</p>
+                                  ) : (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.SuitableFor}
+                                    </p>
+                                  )}
+                                </div>
+                              )}
+
+                            {listPropertiesData?.ProeprtyType ===
+                              "Commercial" &&
+                              listPropertiesData?.LocationHub && (
+                                <div className="">
+                                  <h1 className="font-semibold mr-2">
+                                    Suitable for
+                                  </h1>
+                                  {listPropertiesData?.LocationHub ===
+                                  "Others" ? (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.CustomLocationHub}
+                                    </p>
+                                  ) : (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.LocationHub}
+                                    </p>
+                                  )}
+                                </div>
+                              )}
                           </>
-                        ) : null}
+                        )}
+                        {listPropertiesData?.ProeprtyType === "Commercial" &&
+                          listPropertiesData?.PropertySubtype?.Name !==
+                            "Office" && (
+                            <div className="">
+                              <h1 className="font-semibold mr-2">
+                                Owner Name{" "}
+                              </h1>
+                              {listPropertiesData?.OwnerName ? (
+                                <p className="text-gray-500 font-semibold">
+                                  {listPropertiesData?.OwnerName}
+                                </p>
+                              ) : null}
+                            </div>
+                          )}
+                        {listPropertiesData?.PropertySubtype?.Name ===
+                          "Plot" && (
+                          <div className="">
+                            <h1 className="font-semibold mr-2">Owner Name </h1>
+                            {listPropertiesData?.OwnerName ? (
+                              <p className="text-gray-500 font-semibold">
+                                {listPropertiesData?.OwnerName}
+                              </p>
+                            ) : null}
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <LoadingText />
+                    )}{" "}
+                  </div>
+                  {/* floor plan */}
+                  <div
+                    className="hidden p-4 rounded-lg dark:bg-gray-800"
+                    id="floorplan"
+                    role="tabpanel"
+                    aria-labelledby="floorplan-tab"
+                  >
+                    {listPropertiesData && listPropertiesData?.FloorPlan ? (
+                      <div className={`${styles.configureFloorPlanImg}`}>
+                        <h1 className="text-lg text-black underline font-bold mb-2">
+                          Floor Plan
+                        </h1>
+                        <div>
+                          {isImage(floorPlanData) ? (
+                            <>
+                              <img
+                                src={
+                                  !floorPlanData.includes("https")
+                                    ? `${imgApiUrl}/${floorPlanData}`
+                                    : floorPlanData
+                                }
+                                //  src={`${imgApiUrl}/${floorPlanData}`}
+                                className="h-48 w-64 border border-black rounded-lg"
+                                alt="Selected Floor Plan"
+                              />
+                            </>
+                          ) : (
+                            <>
+                              <iframe
+                                src={
+                                  !floorPlanData.includes("https")
+                                    ? `${imgApiUrl}/${floorPlanData}`
+                                    : floorPlanData
+                                }
+                                //  src={`${imgApiUrl}/${floorPlanData}`}
+                                className="h-48 w-64 border border-black rounded-lg"
+                                alt="Selected Floor Plan"
+                              />
+                              <div className="mt-4">
+                                <button
+                                  type="button"
+                                  onClick={handleDownloadFloorPlan}
+                                  className="text-grey border border-gray-600 bg-white-700 hover:text-white focus:text-white hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-500 dark:hover:bg-blue-500 dark:focus:ring-blue-500"
+                                >
+                                  Download Plan
+                                </button>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <h1 className={` ${styles.noDataHead}`}>No Brochure</h1>
                     )}
                   </div>
+                  {/* brochure tab */}
                   <div
                     className="hidden p-4 rounded-lg dark:bg-gray-800"
                     id="dashboard"
                     role="tabpanel"
                     aria-labelledby="dashboard-tab"
                   >
-                    <div className={`${styles.configureFloorPlanImg}`}>
-                      <div>
-                        <iframe
-                          src={
-                            !BrochureData.includes("https")
-                              ? `${imgApiUrl}/${BrochureData}`
-                              : BrochureData
-                          }
-                          // src={`${imgApiUrl}/${BrochureData}`}
-                          className="h-48 w-64 border border-black rounded-lg"
-                        />
-                      </div>
-                      <div className="mt-4">
-                        <button
-                          type="button"
-                          onClick={handleDownload}
-                          className="text-grey border border-gray-600 bg-white-700 hover:text-white focus:text-white hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-500 dark:hover:bg-blue-500 dark:focus:ring-blue-500"
-                        >
-                          Download Brochure
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="hidden p-4 rounded-lg dark:bg-gray-800"
-                    id="generall"
-                    role="tabpanel"
-                    aria-labelledby="generall-tab"
-                  >
-                    {" "}
-                    <div className="flex">
-                      <h1 className="font-semibold mr-2">Property Status :</h1>
-                      <div className="flex">
-                        <div className="flex mr-2">
-                          <p>{listPropertiesData?.PropertyStatus?.Status}</p>
+                    {listPropertiesData && listPropertiesData?.Brochure ? (
+                      <div className={`${styles.configureFloorPlanImg}`}>
+                        <h1 className="text-lg text-black underline font-bold mb-2">
+                          Brochure{" "}
+                        </h1>
+                        <div>
+                          <iframe
+                            src={
+                              !BrochureData.includes("https")
+                                ? `${imgApiUrl}/${BrochureData}`
+                                : BrochureData
+                            }
+                            // src={`${imgApiUrl}/${BrochureData}`}
+                            className="h-48 w-64 border border-black rounded-lg"
+                          />
+                        </div>
+                        <div className="mt-4">
+                          <button
+                            type="button"
+                            onClick={handleDownload}
+                            className="text-grey border border-gray-600 bg-white-700 hover:text-white focus:text-white hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-500 dark:hover:bg-blue-500 dark:focus:ring-blue-500"
+                          >
+                            Download Brochure
+                          </button>
                         </div>
                       </div>
-                    </div>
-                    {listPropertiesData?.Fencing == "" ? (
-                      <div className="flex">
-                        <h1 className="font-semibold mr-2">Fencing :</h1>
-                        <div>{listPropertiesData?.Fencing?.Fencing}</div>
-                      </div>
-                    ) : null}
-                    {listPropertiesData?.ProeprtyType == "Commercial" ? (
-                      listPropertiesData?.SuitableFor ? (
-                        <div className="flex">
-                          <h1 className="font-semibold mr-2">Suitable For :</h1>
-                          <div>{listPropertiesData?.SuitableFor}</div>
-                        </div>
-                      ) : null
-                    ) : null}
+                    ) : (
+                      <h1 className={` ${styles.noDataHead}`}>No Brochure</h1>
+                    )}
                   </div>
+                  {/* payment tab */}
+
                   <div
                     className="hidden p-4 rounded-lg dark:bg-gray-800"
                     id="Payment"
@@ -1106,35 +1365,283 @@ const PropertyDetail = ({ params }) => {
                     aria-labelledby="Payment-tab"
                   >
                     <div className={`${styles.configureFloorPlanImg}`}>
+                      <h1 className="text-lg text-black underline font-bold mb-2">
+                        Payment Plan
+                      </h1>
                       <div>
                         {isImage(PaymentPlanData) ? (
                           <>
                             <img
-                              src={`${imgApiUrl}/${PaymentPlanData}`}
+                              src={
+                                !PaymentPlanData.includes("https")
+                                  ? `${imgApiUrl}/${PaymentPlanData}`
+                                  : PaymentPlanData
+                              }
                               className="h-48 w-64 border border-black rounded-lg"
-                              alt="Selected Floor Plan"
+                              alt="Selected Payment Plan"
                             />
                           </>
                         ) : (
                           <>
                             <iframe
-                              src={`${imgApiUrl}/${PaymentPlanData}`}
+                              src={
+                                !PaymentPlanData.includes("https")
+                                  ? `${imgApiUrl}/${PaymentPlanData}`
+                                  : PaymentPlanData
+                              }
                               className="h-48 w-64 border border-black rounded-lg"
-                              alt="Selected Floor Plan"
+                              alt="Selected Payment Plan"
                             />
+                            <div className="mt-4">
+                              <button
+                                type="button"
+                                onClick={handleDownloadPlan}
+                                className="text-grey border border-gray-600 bg-white-700 hover:text-white focus:text-white hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-500 dark:hover:bg-blue-500 dark:focus:ring-blue-500"
+                              >
+                                Download Plan
+                              </button>
+                            </div>
                           </>
                         )}
                       </div>
-                      <div className="mt-4">
-                        <button
-                          type="button"
-                          onClick={handleDownloadPlan}
-                          className="text-grey border border-gray-600 bg-white-700 hover:text-white focus:text-white hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-6 py-3 text-center dark:bg-blue-500 dark:hover:bg-blue-500 dark:focus:ring-blue-500"
-                        >
-                          Download Plan
-                        </button>
-                      </div>
                     </div>
+                  </div>
+                  {/* facilities tab */}
+                  <div
+                    className="hidden p-4 rounded-lg dark:bg-gray-800"
+                    id="generall"
+                    role="tabpanel"
+                    aria-labelledby="generall-tab"
+                  >
+                    {listPropertiesData ? (
+                      <div
+                        className={`${styles.generalContent} grid md:grid-cols-2 gap-4 justify-center items-center`}
+                      >
+                        {listPropertiesData?.ProeprtyType === "Commercial" ? (
+                          <>
+                            <div className="">
+                              <h1 className="font-semibold mr-2">
+                                Tax & Govt. Charge
+                              </h1>
+                              {listPropertiesData?.TaxCharge ? (
+                                <p className="text-gray-500 font-semibold">
+                                  Included
+                                </p>
+                              ) : (
+                                <p className="text-gray-500 font-semibold">
+                                  Not included
+                                </p>
+                              )}
+                            </div>
+                            {listPropertiesData?.PropertySubtype?.Name ===
+                              "Office" && (
+                              <div className="">
+                                <h1 className="font-semibold mr-2">
+                                  DG & UPS charge
+                                </h1>
+                                {listPropertiesData?.DgUpsCharge ? (
+                                  <p className="text-gray-500 font-semibold">
+                                    Included
+                                  </p>
+                                ) : (
+                                  <p className="text-gray-500 font-semibold">
+                                    Not included
+                                  </p>
+                                )}
+                              </div>
+                            )}
+                            <div className="">
+                              <h1 className="font-semibold mr-2">Pre-Rented</h1>
+                              {listPropertiesData?.LeasedOrRented ? (
+                                <p className="text-gray-500 font-semibold">
+                                  Yes
+                                </p>
+                              ) : (
+                                <p className="text-gray-500 font-semibold">
+                                  No
+                                </p>
+                              )}
+                            </div>
+                            {listPropertiesData?.LeasedOrRented ? (
+                              <>
+                                {" "}
+                                <div className="">
+                                  <h1 className="font-semibold mr-2">
+                                    Rent per Month
+                                  </h1>
+                                  {listPropertiesData?.CurentRent ? (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.CurentRent}
+                                    </p>
+                                  ) : (
+                                    <p className="text-gray-500 font-semibold">
+                                      -
+                                    </p>
+                                  )}
+                                </div>
+                                <div className="">
+                                  <h1 className="font-semibold mr-2">
+                                    Lease Years
+                                  </h1>
+                                  {listPropertiesData?.LeaseYears ? (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.LeaseYears}
+                                    </p>
+                                  ) : (
+                                    <p className="text-gray-500 font-semibold">
+                                      -
+                                    </p>
+                                  )}
+                                </div>
+                              </>
+                            ) : (
+                              <div className="">
+                                <h1 className="font-semibold mr-2">
+                                  Expected Return
+                                </h1>
+                                {listPropertiesData?.ExpectedReturn ? (
+                                  <p className="text-gray-500 font-semibold">
+                                    {listPropertiesData?.ExpectedReturn}
+                                  </p>
+                                ) : (
+                                  <p className="text-gray-500 font-semibold">
+                                    -
+                                  </p>
+                                )}
+                              </div>
+                            )}
+                            <div className="">
+                              <h1 className="font-semibold mr-2">
+                                Public Parking{" "}
+                              </h1>
+                              {listPropertiesData?.PublicParking ? (
+                                <p className="text-gray-500 font-semibold">
+                                  {listPropertiesData?.PublicParking}
+                                </p>
+                              ) : (
+                                <p className="text-gray-500 font-semibold">-</p>
+                              )}
+                            </div>
+                            <div className="">
+                              <h1 className="font-semibold mr-2">
+                                Private Parking
+                              </h1>
+                              {listPropertiesData?.PrivateParking ? (
+                                <p className="text-gray-500 font-semibold">
+                                  {listPropertiesData?.PrivateParking}
+                                </p>
+                              ) : (
+                                <p className="text-gray-500 font-semibold">-</p>
+                              )}
+                            </div>
+
+                            {listPropertiesData?.PropertySubtype?.Name ===
+                            "Office" ? (
+                              <>
+                                <div className="">
+                                  <h1 className="font-semibold mr-2">
+                                    DG & UPS charge
+                                  </h1>
+                                  {listPropertiesData?.DgUpsCharge ? (
+                                    <p className="text-gray-500 font-semibold">
+                                      Included
+                                    </p>
+                                  ) : (
+                                    <p className="text-gray-500 font-semibold">
+                                      Not included
+                                    </p>
+                                  )}
+                                </div>
+                                <div className="">
+                                  <h1 className="font-semibold mr-2">
+                                    No. of StairCase
+                                  </h1>
+                                  {listPropertiesData?.Staircase ? (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.Staircase}
+                                    </p>
+                                  ) : (
+                                    <p className="text-gray-500 font-semibold">
+                                      -
+                                    </p>
+                                  )}
+                                </div>
+                                <div className="">
+                                  <h1 className="font-semibold mr-2">
+                                    Passengers Lift
+                                  </h1>
+                                  {listPropertiesData?.passengerLifts ? (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.passengerLifts}
+                                    </p>
+                                  ) : (
+                                    <p className="text-gray-500 font-semibold">
+                                      -
+                                    </p>
+                                  )}
+                                </div>
+                                <div className="">
+                                  <h1 className="font-semibold mr-2">
+                                    Service Lift
+                                  </h1>
+                                  {listPropertiesData?.ServiceLifts ? (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.ServiceLifts}
+                                    </p>
+                                  ) : (
+                                    <p className="text-gray-500 font-semibold">
+                                      -
+                                    </p>
+                                  )}
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <div className="">
+                                  <h1 className="font-semibold mr-2">
+                                    Public Washroom
+                                  </h1>
+                                  {listPropertiesData?.PublicWashroom ? (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.PublicWashroom}
+                                    </p>
+                                  ) : (
+                                    <p className="text-gray-500 font-semibold">
+                                      -
+                                    </p>
+                                  )}
+                                </div>
+                                <div className="">
+                                  <h1 className="font-semibold mr-2">
+                                    Private Washroom
+                                  </h1>
+                                  {listPropertiesData?.PrivateWashroom ? (
+                                    <p className="text-gray-500 font-semibold">
+                                      {listPropertiesData?.PrivateWashroom}
+                                    </p>
+                                  ) : (
+                                    <p className="text-gray-500 font-semibold">
+                                      -
+                                    </p>
+                                  )}
+                                </div>
+                              </>
+                            )}
+                          </>
+                        ) : (
+                          <div className="">
+                            <h1 className="font-semibold mr-2">Owner Name </h1>
+                            {listPropertiesData?.OwnerName ? (
+                              <p className="text-gray-500 font-semibold">
+                                {listPropertiesData?.OwnerName}
+                              </p>
+                            ) : null}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <LoadingText />
+                    )}{" "}
                   </div>
                 </div>
               </div>
@@ -1150,26 +1657,86 @@ const PropertyDetail = ({ params }) => {
               <div className={`${styles.overviewBox}`}>
                 {listPropertiesData ? (
                   <div className={`${styles.overviewBoxMain}`}>
-                    {listPropertiesData?.PropertySubtype?.Name == "Plot" ? (
-                      <div className={`${styles.overviewBoxMainContent}`}>
-                        <h2 className={`${styles.overviewBoxMainContentHead}`}>
-                          Plot Area
-                        </h2>
-                        <p className={`${styles.overviewBoxMainContentText}`}>
-                          {listPropertiesData.PlotArea} sq.ft.
-                        </p>
-                      </div>
-                    ) : (
-                      <div className={`${styles.overviewBoxMainContent}`}>
-                        <h2 className={`${styles.overviewBoxMainContentHead}`}>
-                          Project Area
-                        </h2>
-                        <p className={`${styles.overviewBoxMainContentText}`}>
-                          {listPropertiesData.LandArea}{" "}
-                          {listPropertiesData.LandAreaUnit}
-                        </p>
-                      </div>
-                    )}
+                    {listPropertiesData?.PropertySubtype?.Name !== "Plot" ? (
+                      <>
+                        <div className={`${styles.overviewBoxMainContent}`}>
+                          <h2
+                            className={`${styles.overviewBoxMainContentHead}`}
+                          >
+                            Land Area
+                          </h2>
+                          <p className={`${styles.overviewBoxMainContentText}`}>
+                            {listPropertiesData.LandArea}{" "}
+                            {listPropertiesData.LandAreaUnit}
+                          </p>
+                        </div>
+                        <div className={`${styles.overviewBoxMainContent}`}>
+                          <h2
+                            className={`${styles.overviewBoxMainContentHead}`}
+                          >
+                            Carpet Area
+                          </h2>
+                          {listPropertiesData.CarpetArea ? (
+                            <p
+                              className={`${styles.overviewBoxMainContentText}`}
+                            >
+                              {listPropertiesData.CarpetArea}{" "}
+                              {listPropertiesData.LandAreaUnit}
+                            </p>
+                          ) : (
+                            "-"
+                          )}
+                        </div>
+                        <div className={`${styles.overviewBoxMainContent}`}>
+                          <h2
+                            className={`${styles.overviewBoxMainContentHead}`}
+                          >
+                            Entrance Width
+                          </h2>
+                          {listPropertiesData.EntranceWidth ? (
+                            <p
+                              className={`${styles.overviewBoxMainContentText}`}
+                            >
+                              {listPropertiesData.EntranceWidth}.ft
+                            </p>
+                          ) : (
+                            "-"
+                          )}
+                        </div>
+                        <div className={`${styles.overviewBoxMainContent}`}>
+                          <h2
+                            className={`${styles.overviewBoxMainContentHead}`}
+                          >
+                            Celling height
+                          </h2>
+                          {listPropertiesData.CellingHeight ? (
+                            <p
+                              className={`${styles.overviewBoxMainContentText}`}
+                            >
+                              {listPropertiesData.CellingHeight}.ft
+                            </p>
+                          ) : (
+                            "-"
+                          )}
+                        </div>
+                        <div className={`${styles.overviewBoxMainContent}`}>
+                          <h2
+                            className={`${styles.overviewBoxMainContentHead}`}
+                          >
+                            Age of Property
+                          </h2>
+                          {listPropertiesData.AgeofProperty ? (
+                            <p
+                              className={`${styles.overviewBoxMainContentText}`}
+                            >
+                              {listPropertiesData.AgeofProperty}
+                            </p>
+                          ) : (
+                            "-"
+                          )}
+                        </div>
+                      </>
+                    ) : null}
                     {/*
                     <div className={`${styles.overviewBoxMainContent}`}>
                       <h2 className={`${styles.overviewBoxMainContentHead}`}>
@@ -1182,7 +1749,7 @@ const PropertyDetail = ({ params }) => {
                       </p>
                     </div>
                     */}
-                    {listPropertiesData?.CurentRent ? (
+                    {/* {listPropertiesData?.CurentRent ? (
                       <div className={`${styles.overviewBoxMainContent}`}>
                         <h2 className={`${styles.overviewBoxMainContentHead}`}>
                           Avg. Price
@@ -1192,7 +1759,7 @@ const PropertyDetail = ({ params }) => {
                           month
                         </p>
                       </div>
-                    ) : null}
+                    ) : null} */}
                     <div className={`${styles.overviewBoxMainContent}`}>
                       <h2 className={`${styles.overviewBoxMainContentHead}`}>
                         Posession Date
@@ -1209,13 +1776,13 @@ const PropertyDetail = ({ params }) => {
                         {listPropertiesData.ProeprtyFor}
                       </p>
                     </div>
-                    {listPropertiesData?.Flooring?.Flooring ? (
+                    {listPropertiesData?.PropertyStatus?.Status ? (
                       <div className={`${styles.overviewBoxMainContent}`}>
                         <h2 className={`${styles.overviewBoxMainContentHead}`}>
-                          Flooring
+                          Property Status
                         </h2>
                         <p className={`${styles.overviewBoxMainContentText}`}>
-                          {listPropertiesData?.Flooring?.Flooring}
+                          {listPropertiesData?.PropertyStatus?.Status}
                         </p>
                       </div>
                     ) : null}
@@ -1239,10 +1806,10 @@ const PropertyDetail = ({ params }) => {
                     ) : null}
                     <div className={`${styles.overviewBoxMainContent}`}>
                       <h2 className={`${styles.overviewBoxMainContentHead}`}>
-                        Property Type
+                        Possession Status
                       </h2>
                       <p className={`${styles.overviewBoxMainContentText}`}>
-                        {listPropertiesData?.PropertySubtype?.Name}
+                        {listPropertiesData?.PosessionStatus?.Possession}
                       </p>
                     </div>
                     {/*
@@ -1314,77 +1881,104 @@ const PropertyDetail = ({ params }) => {
           </div>
 
           {/* amenities */}
-          <div id="amenities" className={`${styles.amenities} amenities page`}>
-            <div className="amenitiesMain">
-              <h2 className={`${styles.amenitiesMainHead}`}>
-                {listPropertiesData.Title} Amenities & Features
-              </h2>
-              <div className={`${styles.amenitiesBox}`}>
-                <Accordion className="border-none">
-                  <AccordionPanel>
-                    <AccordionTitle>Amenities</AccordionTitle>
-                    {listPropertiesData ? (
+          {listPropertiesData &&
+          (listPropertiesData?.Aminities.length > 0 ||
+            listPropertiesData?.Features.length > 0) ? (
+            <div
+              id="amenities"
+              className={`${styles.amenities} amenities page`}
+            >
+              <div className="amenitiesMain">
+                <h2 className={`${styles.amenitiesMainHead}`}>
+                  {listPropertiesData.Title} Amenities & Features
+                </h2>
+                <div className={`${styles.amenitiesBox}`}>
+                  <Accordion className="border-none">
+                    <AccordionPanel>
+                      <AccordionTitle>Amenities</AccordionTitle>
+
                       <AccordionContent
                         className={` ${styles.AccordionContent}`}
                       >
-                        <div
-                          className={`grid gap-4 mb-4 sm:grid-cols-5 md:grid-cols-4  ${styles.AccordionContentInner}`}
-                        >
-                          {listPropertiesData?.Aminities?.map((item, index) => (
-                            <div key={index} className=" p-4">
-                              <img
-                                className={`${styles.amenitiesIconBox}`}
-                                src={
-                                  !item.Icon.includes("https")
-                                    ? `${imgApiUrl}/${item.Icon}`
-                                    : item.Icon
-                                }
-                                width="22"
-                                height="22"
-                              />
-                              <p className="wrap text-center text-sm pt-2">
-                                {item.Aminity}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      </AccordionContent>
-                    ) : (
-                      <div className={`${styles.loaderSize}`}>
-                        <LoadingText className={`${styles.loaderSize}`} />
-                      </div>
-                    )}
-                  </AccordionPanel>
-                  <AccordionPanel>
-                    <AccordionTitle>Features</AccordionTitle>
-                    <AccordionContent className={`${styles.AccordionContent}`}>
-                      <div
-                        className={`grid gap-4 mb-4 sm:grid-cols-5 md:grid-cols-4  ${styles.AccordionContentInner2}`}
-                      >
-                        {listPropertiesData?.Features?.map((item, index) => (
-                          <div key={index} className="p-4 justify-between">
-                            <img
-                              className={`${styles.amenitiesIconBox}`}
-                              src={
-                                !item.Icon.includes("https")
-                                  ? `${imgApiUrl}/${item.Icon}`
-                                  : item.Icon
-                              }
-                              width="22"
-                              height="22"
-                            />
-                            <p className="wrap text-center text-sm pt-2">
-                              {item.Feature}
-                            </p>
+                        {listPropertiesData &&
+                        listPropertiesData?.Aminities.length > 0 ? (
+                          <div
+                            className={`grid gap-4 mb-4 sm:grid-cols-5 md:grid-cols-4  ${styles.AccordionContentInner}`}
+                          >
+                            {listPropertiesData?.Aminities?.map(
+                              (item, index) => (
+                                <div key={index} className=" p-4">
+                                  <img
+                                    className={`${styles.amenitiesIconBox}`}
+                                    src={
+                                      !item.Icon.includes("https")
+                                        ? `${imgApiUrl}/${item.Icon}`
+                                        : item.Icon
+                                    }
+                                    width="22"
+                                    height="22"
+                                  />
+                                  <p className="wrap text-center text-sm pt-2">
+                                    {item.Aminity}
+                                  </p>
+                                </div>
+                              )
+                            )}
                           </div>
-                        ))}
-                      </div>
-                    </AccordionContent>
-                  </AccordionPanel>
-                </Accordion>
+                        ) : (
+                          <h1 className={` ${styles.noDataHead}`}>
+                            No Amenities
+                          </h1>
+                        )}
+                      </AccordionContent>
+                    </AccordionPanel>
+
+                    <AccordionPanel>
+                      <AccordionTitle>Features</AccordionTitle>
+
+                      <AccordionContent
+                        className={`${styles.AccordionContent}`}
+                      >
+                        {listPropertiesData &&
+                        listPropertiesData?.Features.length > 0 ? (
+                          <div
+                            className={`grid gap-4 mb-4 sm:grid-cols-5 md:grid-cols-4  ${styles.AccordionContentInner2}`}
+                          >
+                            {listPropertiesData?.Features?.map(
+                              (item, index) => (
+                                <div
+                                  key={index}
+                                  className="p-4 justify-between"
+                                >
+                                  <img
+                                    className={`${styles.amenitiesIconBox}`}
+                                    src={
+                                      !item.Icon.includes("https")
+                                        ? `${imgApiUrl}/${item.Icon}`
+                                        : item.Icon
+                                    }
+                                    width="22"
+                                    height="22"
+                                  />
+                                  <p className="wrap text-center text-sm pt-2">
+                                    {item.Feature}
+                                  </p>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        ) : (
+                          <h1 className={` ${styles.noDataHead}`}>
+                            No Features
+                          </h1>
+                        )}
+                      </AccordionContent>
+                    </AccordionPanel>
+                  </Accordion>
+                </div>
               </div>
             </div>
-          </div>
+          ) : null}
 
           {/* bank */}
           {/*
@@ -1738,7 +2332,7 @@ const PropertyDetail = ({ params }) => {
         </div>
       </div>
       {/* Similar */}
-      {listDataConst?.count > 0 ? (
+      {listDataConst && listDataConst?.data.length > 0 ? (
         <div className={`${styles.similarMainType}`}>
           <div id="similar" className={`${styles.similar} similar`}>
             <div className="similarMain">

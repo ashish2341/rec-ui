@@ -498,7 +498,61 @@
 .stickyButton:hover {
   background-color: #0056b3; /* Change this to a darker shade if desired */
 }
+.btnNameforTab{
+  display: none;
+}
+.cardBoxPopularTop{
+  width: 100%;
+  margin-right: 1rem;
+  padding-right: 1rem;
+}
+@media screen and  (max-width: 769px) {
+  
+  .cardBoxPopularTop{
+    padding-right: 1rem;
+  }
+  .btnNameforLap{
+    display: none;
+  }
+  .btnNameforTab{
+    display: block;
+  }
+}
+@media screen and  (max-width: 426px) {
+  .cardBoxPopularTop{
+    padding-right: 1rem;
+  }
+  .populerPropertiesBoxHead{
+    font-size: 0.8rem;
 
+  }
+  .popularPropertyMoreBtn{
+    display: none;
+  }
+  .populerPropertiesBoxPrice{
+    font-size: 0.7rem;
+    font-weight: bold;
+  }
+  .cardImgTop{
+height: 9rem;
+  }
+  .btnNameforTab{
+    display: none;
+  }
+}
+@media screen and  (max-width: 321px) {
+  .populerPropertiesBoxHead{
+    font-size: 0.6rem;
+
+  }
+  .cardImgTop{
+    height: 7rem;
+      }
+  .populerPropertiesBoxPrice{
+    font-size: 0.5rem;
+    font-weight: bold;
+  }
+}
 @media screen and (max-width: 600px) {
 .configureFlex {
   flex-direction: column;
@@ -535,10 +589,19 @@
     padding: 0 2rem 0 2rem;
   }
 }
+
 @media screen and (max-width: 500px) {
   .BottomBoxcontenet {
-    flex-direction: column;
+    flex-direction: column-reverse;
     justify-content: start !important;
+  }
+  .heroSectionBottomBoxHead{
+    margin-top: 1rem;
+  }
+  .generalContent{
+    grid-template-columns: auto auto;
+    font-size: 0.8rem;
+    justify-content: space-evenly !important;
   }
   .heroSectionBottomBox {
     height: 100%;
@@ -550,6 +613,7 @@
     justify-content: center; /* Centers the grid items horizontally */
     align-items: center;
     gap: 20px;
+    
   }
   .overviewBoxMain {
     display: grid;
@@ -559,7 +623,8 @@
     align-items: center;
     gap: 20px;
     padding-left: 1rem;
-    padding-right: 1rem;;
+    padding-right: 1rem;
+    font-size: 0.85rem;
   }
   .heroSectionVL {
     display: none;
@@ -698,6 +763,24 @@
     margin-left: 1rem;
   }
   .cardBoxPopularTop {
+    margin-right: 1rem;
+padding-right: 1rem;
     width: 96%;
   }
+}
+@media screen and (max-width: 426px) {
+.AccordionContentInner{
+  display: flex !important;
+  justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    width: 100% !important;
+}
+.AccordionContentInner2{
+  display: flex !important;
+  justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    width: 100% !important;
+}
 }

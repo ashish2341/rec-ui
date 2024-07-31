@@ -80,10 +80,10 @@ export default function ApiButtons({
             showPageName === currentPageName && <EditedTag />}
         </label>
         {itemArray?.data?.length > 0 ? (
-          <div className={`flex flex-wrap space-x-2 mt-4`}>
+          <div className={`flex flex-wrap  mt-4`}>
             {/* <div className={`grid grid-cols-5 gap-2 `}> */}
             {itemArray?.data?.map((item, index) => (
-              <div key={index}>
+              <div className="mr-2 mb-2" key={index}>
                 <RenderButtons
                   newid={stateItem?._id}
                   apiId={item?._id}

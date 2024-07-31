@@ -37,7 +37,9 @@ export default function ArrayButtons({
         {/* Amenity Box */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <h2 className="block mb-2 text-xl font-lg underline font-bold text-gray-500 dark:text-white">
-            {labelName}{" "}
+            {labelName}{" "}<span className="text-xs font-bold ml-1 pb-2 text-red-600">
+                  (Optional)
+                </span>
             {changedKeyArray?.includes(specifiedKey) &&
               showPageName === currentPageName && <EditedTag />}
           </h2>

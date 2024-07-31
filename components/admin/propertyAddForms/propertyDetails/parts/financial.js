@@ -13,7 +13,10 @@ import { conditionalArray } from "@/utils/constants";
 import ContinueButton from "@/components/common/propertyContinueButton/continueButton";
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
 import NumberInput from "@/components/common/admin/numberInput/numberInput";
-export default function FinancialDetailsPage({ setPropertyPageValue,setInsidePropertyPageNameArray }) {
+export default function FinancialDetailsPage({
+  setPropertyPageValue,
+  setInsidePropertyPageNameArray,
+}) {
   const sessionStoragePropertyData = JSON.parse(
     sessionStorage.getItem("propertyData")
   );
@@ -57,7 +60,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue,setInsidePro
     const sessionStoragePropertyData = JSON.parse(
       sessionStorage.getItem("propertyData")
     );
-   
+
     // Update state values if data exists in localStorage
     if (sessionStoragePropertyData) {
       setStartPrice(
@@ -79,12 +82,14 @@ export default function FinancialDetailsPage({ setPropertyPageValue,setInsidePro
       setPriceUnit(
         {
           minPriceUnit: {
-            value: sessionStoragePropertyData?.TotalPrice?.MinPriceUnit||"Lacs",
-            label: sessionStoragePropertyData?.TotalPrice?.MinPriceUnit||"Lacs",
+            value:
+              sessionStoragePropertyData?.TotalPrice?.MinPriceUnit || "Lacs",
+            label:
+              sessionStoragePropertyData?.TotalPrice?.MinPriceUnit || "Lacs",
           },
           maxPriceUnit: {
-            value: sessionStoragePropertyData?.TotalPrice?.MaxPriceUnit||"Cr",
-            label: sessionStoragePropertyData?.TotalPrice?.MaxPriceUnit|| "Cr",
+            value: sessionStoragePropertyData?.TotalPrice?.MaxPriceUnit || "Cr",
+            label: sessionStoragePropertyData?.TotalPrice?.MaxPriceUnit || "Cr",
           },
         } || {
           minPriceUnit: { value: "Lacs", label: "Lacs" },
@@ -158,7 +163,6 @@ export default function FinancialDetailsPage({ setPropertyPageValue,setInsidePro
       var requiredFields = [startPrice, endPrice, curentRent, leaseYears];
     }
 
-
     // Check if any required field is empty
     const isEmpty = requiredFields.some(
       (field) => field === "" || field === null || field === undefined
@@ -170,19 +174,26 @@ export default function FinancialDetailsPage({ setPropertyPageValue,setInsidePro
     const allFieldsFilled = checkRequiredFields();
 
     if (allFieldsFilled) {
+      const minValue =
+        startPrice *
+        (priceUnit?.minPriceUnit?.value == "Lacs" ? 100000 : 10000000);
+      const maxValue =
+        endPrice *
+        (priceUnit?.maxPriceUnit?.value == "Lacs" ? 100000 : 10000000);
 
-      const  minValue=startPrice *(priceUnit?.minPriceUnit?.value == "Lacs" ? 100000 : 10000000);
-      const maxValue= endPrice *(priceUnit?.maxPriceUnit?.value == "Lacs" ? 100000 : 10000000);
-   
-      if(minValue>maxValue){
-        toast.error("End Price Should be Greater then Start Price.")
-        return false
+      if (minValue > maxValue) {
+        toast.error("End Price Should be Greater then Start Price.");
+        return false;
       }
       const fourthPropertyData = {
         TotalPrice: {
-          DisplayValue: `${parseFloat(startPrice).toFixed(2)} ${priceUnit?.minPriceUnit?.value} - ${parseFloat(endPrice).toFixed(2)} ${priceUnit?.maxPriceUnit?.value}`,
-          MinValue:minValue,
-          MaxValue:maxValue,
+          DisplayValue: `${parseFloat(startPrice).toFixed(2)} ${
+            priceUnit?.minPriceUnit?.value
+          } - ${parseFloat(endPrice).toFixed(2)} ${
+            priceUnit?.maxPriceUnit?.value
+          }`,
+          MinValue: minValue,
+          MaxValue: maxValue,
           MinPriceUnit: priceUnit?.minPriceUnit?.value,
           MaxPriceUnit: priceUnit?.maxPriceUnit?.value,
         },
@@ -206,9 +217,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue,setInsidePro
           }
         }
         if (propertTypWithSubTypeValue == "Office") {
-          fourthPropertyData.DgUpsCharge = dgUpsCharge
-            ? dgUpsCharge
-            : false;
+          fourthPropertyData.DgUpsCharge = dgUpsCharge ? dgUpsCharge : false;
         }
       }
       const localStorageData = JSON.parse(
@@ -216,7 +225,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue,setInsidePro
       );
       const newProjectData = { ...localStorageData, ...fourthPropertyData };
       sessionStorage.setItem("propertyData", JSON.stringify(newProjectData));
-      setInsidePropertyPageNameArray(prev => {
+      setInsidePropertyPageNameArray((prev) => {
         // Check if the newPage already exists in the array
         if (!prev.includes("Financial")) {
           return [...prev, "Financial"];
@@ -231,11 +240,10 @@ export default function FinancialDetailsPage({ setPropertyPageValue,setInsidePro
 
   return (
     <>
-      
       <div className="grid gap-4 mb-4 sm:grid-cols-2">
-         {/* Start Price */}
+        {/* Start Price */}
         <div className="w-full mx-auto">
-          <div >
+          <div>
             <label
               for="search-dropdown"
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
@@ -243,15 +251,15 @@ export default function FinancialDetailsPage({ setPropertyPageValue,setInsidePro
               Start Price
             </label>
             <div className="relative w-full">
-            <input
-              type="number"
-              name="startPrice"
-              id="startPrice"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Start Price"
-              value={startPrice}
-              onChange={(e) => setStartPrice(e.target.value)}
-            />
+              <input
+                type="number"
+                name="startPrice"
+                id="startPrice"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Start Price"
+                value={startPrice}
+                onChange={(e) => setStartPrice(e.target.value)}
+              />
               <div className="absolute top-0 end-0 text-sm font-medium h-full text-black  rounded-e-lg border-none m-0.5 ">
                 <Select
                   options={priceUnitArray.map((element) => ({
@@ -276,7 +284,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue,setInsidePro
         </div>
         {/* End Price */}
         <div className="w-full mx-auto">
-          <div >
+          <div>
             <label
               for="search-dropdown"
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white required"
@@ -284,39 +292,37 @@ export default function FinancialDetailsPage({ setPropertyPageValue,setInsidePro
               End Price
             </label>
             <div className="relative w-full">
-            <input
-              type="number"
-              name="endPrice"
-              id="endPrice"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="End Price"
-              value={endPrice}
-              onChange={(e) => setEndPrice(e.target.value)}
-            />
+              <input
+                type="number"
+                name="endPrice"
+                id="endPrice"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="End Price"
+                value={endPrice}
+                onChange={(e) => setEndPrice(e.target.value)}
+              />
               <div className="absolute top-0 end-0 text-sm font-medium h-full text-black  rounded-e-lg border-none m-0.5 ">
-              <Select
-              options={priceUnitArray.map((element) => ({
-                value: element.value,
-                label: element.label,
-              }))}
-              value={priceUnit.maxPriceUnit}
-              onChange={(e) =>
-                setPriceUnit((prev) => {
-                  return {
-                    ...prev,
-                    maxPriceUnit: e,
-                  };
-                })
-              }
-              placeholder="Select Price Unit"
-              required={true}
-            />
+                <Select
+                  options={priceUnitArray.map((element) => ({
+                    value: element.value,
+                    label: element.label,
+                  }))}
+                  value={priceUnit.maxPriceUnit}
+                  onChange={(e) =>
+                    setPriceUnit((prev) => {
+                      return {
+                        ...prev,
+                        maxPriceUnit: e,
+                      };
+                    })
+                  }
+                  placeholder="Select Price Unit"
+                  required={true}
+                />
               </div>
             </div>
           </div>
         </div>
-       
-      
 
         {/* is negotiable */}
         <PropertyBigButtons
@@ -384,7 +390,7 @@ export default function FinancialDetailsPage({ setPropertyPageValue,setInsidePro
           )}
         </>
       )}
-     <ContinueButton
+      <ContinueButton
         modalSubmit={SubmitForm}
         butonSubName={"add Possession Details"}
       />

@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { API_BASE_URL_FOR_MASTER,imgApiUrl } from "@/utils/constants";
+import { API_BASE_URL_FOR_MASTER, imgApiUrl } from "@/utils/constants";
 import useFetch from "@/customHooks/useFetch";
 import { ImageString } from "@/api-functions/auth/authAction";
 import { GetBuilderApi } from "@/api-functions/builder/getBuilder";
@@ -14,13 +14,16 @@ import ApiButtons from "@/components/common/admin/propertyapiButtons/ApiButtons"
 import PropertyBigButtons from "@/components/common/admin/propertyBigButton/propertyBigButtons";
 import LoaderForMedia from "@/components/common/admin/loaderforMedia/loaderForMedia";
 import NextButton from "@/components/common/admin/nextButton/nextButton";
-import { UpdateStepsStatus ,findNextStep } from "@/utils/commonHelperFn";
+import { UpdateStepsStatus, findNextStep } from "@/utils/commonHelperFn";
 export default function PossessionDetailsPage({
   setPropertyPageValue,
   valueForNextfromSix,
   valueForNextPagefromSix,
-  setPropertyBackvalue,setFormPageNumberArray,setInsidePropertyPageNameArray,setPageStatusArray,
-  mainFormPageStatusData
+  setPropertyBackvalue,
+  setFormPageNumberArray,
+  setInsidePropertyPageNameArray,
+  setPageStatusArray,
+  mainFormPageStatusData,
 }) {
   // fetching Data for posessionStatusData
   const { data: posessionStatusData } = useFetch(
@@ -77,7 +80,6 @@ export default function PossessionDetailsPage({
     }
   }, []);
   const handleDocumentChange = async (event) => {
-  
     const acceptedFileTypes = [
       "application/pdf",
       "application/doc",
@@ -92,7 +94,7 @@ export default function PossessionDetailsPage({
     // Check file type
     if (!acceptedFileTypes.includes(file.type)) {
       toast.error(
-        "Invalid image type. Please upload only JPEG or PNG or JPG files."
+        "Invalid image type. Please upload only Pdf or doc or docx or txt files."
       );
       if (brochureInputRef.current) {
         brochureInputRef.current.value = "";
@@ -121,11 +123,7 @@ export default function PossessionDetailsPage({
       sessionStoragePropertyData?.PropertyStatus &&
       PropertyStatusValue.Status != "Under Contruction"
     ) {
-      var requiredFields = [
-        posessionStatus,
-        posessionDate,
-        ageofProperty,
-      ];
+      var requiredFields = [posessionStatus, posessionDate, ageofProperty];
     }
 
     // Check if any required field is empty
@@ -157,40 +155,44 @@ export default function PossessionDetailsPage({
         propertTypeValue == "Commercial" &&
         propertTypWithSubTypeValue != "Plot"
       ) {
-     
-        
-        setInsidePropertyPageNameArray(prev => {
+        setInsidePropertyPageNameArray((prev) => {
           // Check if the newPage already exists in the array
           if (!prev.includes("Possession")) {
             return [...prev, "Possession"];
           }
           return prev; // If it already exists, return the previous state
         });
-         setPropertyPageValue((prev) => prev + 1);
+        setPropertyPageValue((prev) => prev + 1);
       } else {
-        setFormPageNumberArray(prev => {
+        setFormPageNumberArray((prev) => {
           // Check if the newPage already exists in the array
           if (!prev.includes("Property details")) {
             return [...prev, "Property details"];
           }
           return prev; // If it already exists, return the previous state
         });
-        setInsidePropertyPageNameArray(prev => {
+        setInsidePropertyPageNameArray((prev) => {
           // Check if the newPage already exists in the array
           if (!prev.includes("Possession")) {
-          
             return [...prev, "Possession"];
           }
           return prev; // If it already exists, return the previous state
         });
-        setPageStatusArray(UpdateStepsStatus(mainFormPageStatusData,valueForNextPagefromSix))
-      const finalIndexValue=findNextStep(mainFormPageStatusData,valueForNextPagefromSix)
-      if(finalIndexValue.finalIndex <= valueForNextPagefromSix && finalIndexValue.currentStepStatus===false){
-        valueForNextfromSix(finalIndexValue.finalIndex + 1);
-      }else{
-        
-        valueForNextfromSix(finalIndexValue.finalIndex);
-      }
+        setPageStatusArray(
+          UpdateStepsStatus(mainFormPageStatusData, valueForNextPagefromSix)
+        );
+        const finalIndexValue = findNextStep(
+          mainFormPageStatusData,
+          valueForNextPagefromSix
+        );
+        if (
+          finalIndexValue.finalIndex <= valueForNextPagefromSix &&
+          finalIndexValue.currentStepStatus === false
+        ) {
+          valueForNextfromSix(finalIndexValue.finalIndex + 1);
+        } else {
+          valueForNextfromSix(finalIndexValue.finalIndex);
+        }
         // valueForNextfromSix(valueForNextPagefromSix + 1);
         // setPropertyBackvalue((prev) => prev - 1);
       }
@@ -253,7 +255,6 @@ export default function PossessionDetailsPage({
     const file = event.target.files[0]; // Get the first file only
     const formData = new FormData();
     formData.append("profilePic", file);
-    
 
     // Check file type
     if (!acceptedFileTypes.includes(file.type)) {
@@ -267,9 +268,8 @@ export default function PossessionDetailsPage({
       setFloorPlanLoader(true);
       // Upload logic (assuming ImageString is a function that handles the upload)
       let res = await ImageString(formData);
-      
+
       if (res.successMessage) {
-        
         setFloorPlan(res.successMessage.imageUrl); // Assuming the response contains the image URL
         setFloorPlanLoader(false);
       } else {
@@ -285,17 +285,23 @@ export default function PossessionDetailsPage({
     return url.match(/\.(jpeg|jpg|png)$/);
   };
   const removeFloorPlan = () => {
-    setFloorPlan("")
+    setFloorPlan("");
     if (floorPlanInputRef.current) {
       floorPlanInputRef.current.value = "";
     }
-  }
+  };
   const removePaymentPlan = () => {
-    setPaymentPlan("")
+    setPaymentPlan("");
     if (paymentPlanInputRef.current) {
       paymentPlanInputRef.current.value = "";
     }
-  }
+  };
+  const removeBrochure = () => {
+    setBrochure("");
+    if (brochureInputRef.current) {
+      brochureInputRef.current.value = "";
+    }
+  };
   return (
     <>
       <div className="grid gap-4 mb-4 sm:grid-cols-1">
@@ -375,10 +381,11 @@ export default function PossessionDetailsPage({
             htmlFor="document"
             className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
           >
-            Brochure <span className="text-xs font-bold ml-1 pb-2 text-red-600">
-                  (Optional)
-                </span>
-          </label> 
+            Brochure{" "}
+            <span className="text-xs font-bold ml-1 pb-2 text-red-600">
+              (Optional)
+            </span>
+          </label>
           <input
             type="file"
             name="Document"
@@ -402,6 +409,15 @@ export default function PossessionDetailsPage({
                       src={`${imgApiUrl}/${brochure}`}
                       className="h-48 w-64 border border-black rounded-lg"
                     />
+                    <button
+                      className="absolute top-0 right-0 p-1"
+                      onClick={() => removeBrochure()}
+                    >
+                      <i
+                        className="bi bi-x-circle-fill"
+                        style={{ color: "red" }}
+                      ></i>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -415,9 +431,10 @@ export default function PossessionDetailsPage({
               htmlFor="Payement"
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
             >
-              Payement Plan <span className="text-xs font-bold ml-1 pb-2 text-red-600">
-                  (Optional)
-                </span>
+              Payement Plan{" "}
+              <span className="text-xs font-bold ml-1 pb-2 text-red-600">
+                (Optional)
+              </span>
             </label>
             <input
               type="file"
@@ -430,7 +447,7 @@ export default function PossessionDetailsPage({
             />
             {paymentPlanLoader && <LoaderForMedia />}
             <div>
-            {paymentPlan ? (
+              {paymentPlan ? (
                 <div>
                   <div className="ml-2 mt-3 underline font-bold">
                     <h3>Selected Pyment Plan</h3>
@@ -440,7 +457,7 @@ export default function PossessionDetailsPage({
                       {isImage(paymentPlan) ? (
                         <>
                           <img
-                             src={`${imgApiUrl}/${paymentPlan}`}
+                            src={`${imgApiUrl}/${paymentPlan}`}
                             alt="Selected Pyment Plan"
                             className="h-48 w-64 border border-black rounded-lg"
                           />
@@ -457,7 +474,7 @@ export default function PossessionDetailsPage({
                       ) : (
                         <>
                           <iframe
-                             src={`${imgApiUrl}/${paymentPlan}`}
+                            src={`${imgApiUrl}/${paymentPlan}`}
                             className="h-48 w-64 border border-black rounded-lg"
                           />
                           <button
@@ -484,9 +501,10 @@ export default function PossessionDetailsPage({
               htmlFor="floor"
               className="block mb-2 text-md font-medium font-bold text-gray-500 dark:text-white"
             >
-              Floor Plan <span className="text-xs font-bold ml-1 pb-2 text-red-600">
-                  (Optional)
-                </span>
+              Floor Plan{" "}
+              <span className="text-xs font-bold ml-1 pb-2 text-red-600">
+                (Optional)
+              </span>
             </label>
             <input
               type="file"
@@ -499,7 +517,7 @@ export default function PossessionDetailsPage({
             />
             {floorPlanLoader && <LoaderForMedia />}
             <div>
-            {floorPlan ? (
+              {floorPlan ? (
                 <div>
                   <div className="ml-2 mt-3 underline font-bold">
                     <h3>Selected Floor Plan</h3>
@@ -509,7 +527,7 @@ export default function PossessionDetailsPage({
                       {isImage(floorPlan) ? (
                         <>
                           <img
-                             src={`${imgApiUrl}/${floorPlan}`}
+                            src={`${imgApiUrl}/${floorPlan}`}
                             alt="Selected Floor Plan"
                             className="h-48 w-64 border border-black rounded-lg"
                           />
@@ -549,20 +567,20 @@ export default function PossessionDetailsPage({
         </div>
       </div>
 
-      {(documentLoader === true ||
-        paymentPlanLoader === true ||
-        floorPlanLoader === true) ?(null):
-        propertTypeValue && propertTypeValue === "Commercial" ? (
-          <ContinueButton
-            modalSubmit={SubmitForm}
-            butonSubName={"add Facilities Details"}
-          />
-        ) : (
-          <NextButton
-            onSubmit={SubmitForm}
-            butonSubName={"add Amenity Details"}
-          />
-        )}
+      {documentLoader === true ||
+      paymentPlanLoader === true ||
+      floorPlanLoader === true ? null : propertTypeValue &&
+        propertTypeValue === "Commercial" ? (
+        <ContinueButton
+          modalSubmit={SubmitForm}
+          butonSubName={"add Facilities Details"}
+        />
+      ) : (
+        <NextButton
+          onSubmit={SubmitForm}
+          butonSubName={"add Amenity Details"}
+        />
+      )}
     </>
   );
 }

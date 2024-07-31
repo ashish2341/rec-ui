@@ -14,7 +14,7 @@ const MultiCarousel = ({ UI }) => {
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
-      items: 1,
+      items: 1.4,
       partialVisibilityGutter: 30
     },
     tablet: {

@@ -312,7 +312,7 @@ const BuilderHomePage = (params) => {
                               {item?.Title}
                             </h2>
                             <div className={` ${styles.populerPropertiesBoxDetail} flex mt-2 text-gray-500 font-bold`}>
-                              {item?.ProeprtyType}
+                              {item?.ProeprtyFor}
                             </div>
                           </div>
                         </Link>
